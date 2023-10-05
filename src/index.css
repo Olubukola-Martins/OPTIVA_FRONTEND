@@ -2,7 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 :root {
- 
+  --app-color-primary: #012269;
+  --app-color-secondary: #801d22;
+  --app-color-accent: #3a3a3a;
+  /* --app-color-neutral: #fcfcfd; */
 }
 
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+.Container {
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+}
+
+@media (min-width: 768px) {
+  .Container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
