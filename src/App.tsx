@@ -1,13 +1,24 @@
-import { SimpleCard } from "./components/cards/SimpleCard";
+import { AuthProvider } from "react-auth-kit";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { AllRoutes } from "./config/routeMgt/AllRoutes";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: false,
+      refetchIntervalInBackground: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
-    <div className="Container">
-      <h2 className="text-center text-red-400">Hello Daniel</h2>
-      <div className="grid grid-cols-4">
-      <SimpleCard />
-      </div>
-    </div>
+    <AuthProvider authType="localstorage" authName="optiva-app">
+      <QueryClientProvider client={queryClient}>
+        <AllRoutes />
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }
 
