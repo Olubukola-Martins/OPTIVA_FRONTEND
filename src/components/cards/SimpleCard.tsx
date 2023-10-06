@@ -1,11 +1,5 @@
 import { Icon } from "@iconify/react";
-
-export interface simpleCardProps {
-  title: string;
-  count: number;
-  cardColor: "blue" | "green" | "yellow" | "oxblood";
-  icon: string;
-}
+import { simpleCardProps } from "src/types";
 
 export const SimpleCard = ({
   title,

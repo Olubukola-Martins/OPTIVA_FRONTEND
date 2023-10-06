@@ -15,3 +15,9 @@ export type IAppBtnProps = {
     linkBack?: string;
   }
   
+  export interface simpleCardProps {
+    title: string;
+    count: number;
+    cardColor: "blue" | "green" | "yellow" | "oxblood";
+    icon: string;
+  }
