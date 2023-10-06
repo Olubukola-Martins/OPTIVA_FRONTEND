@@ -9,3 +9,9 @@ export type IAppBtnProps = {
     bgColor?: string;
   };
   
+  export interface pageIntroProps {
+    title: string;
+    description?: string;
+    linkBack?: string;
+  }
+  
