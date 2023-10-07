@@ -1,0 +1,51 @@
+.sidebar_link {
+    @apply flex items-center gap-x-5 text-sm my-3 py-2 px-2 rounded text-accent;
+  }
+  
+  .nav_icon {
+    @apply text-xl;
+  }
+  
+  .sidebar_link:hover,
+  .sidebar_link.active {
+    @apply w-full text-primary font-medium;
+    background: #0121681a;
+  }
+  
+  .sidebar_link_mobile {
+    @apply flex items-center gap-x-7 cursor-pointer text-base hover:text-secondary;
+  }
+  
+  .sidebar_link_mobile.active {
+    @apply text-secondary;
+  }
+  
+  .sidebar {
+    transition: width 0.3s ease;
+  }
+  
+  .sidebar_link {
+    transition: opacity 0.3s ease;
+  }
+  
+  .sidebar_toggle {
+    transition: transform 0.3s ease;
+  }
+  
+
+  .toggle-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(100%); /* Initially position it outside the sidebar */
+    transition: transform 0.3s ease; /* Add a smooth transition effect */
+  }
+  
+  /* Adjust the transform property when the sidebar is open */
+  .sidebar.isOpen .toggle-container {
+    transform: translateX(0);
+  }
+
+  .menuStyle {
+    @apply flex items-center gap-x-4 text-base border-t pt-2 px-5 cursor-pointer hover:text-secondary;
+  }
