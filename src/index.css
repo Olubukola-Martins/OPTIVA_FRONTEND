@@ -7,7 +7,7 @@
 :root {
   --app-color-primary: #012269;
   --app-color-secondary: #801d22;
-  --app-color-accent: #3a3a3a;
+  --app-color-accent: #333333;
   /* --app-color-neutral: #fcfcfd; */
 }
 
@@ -37,3 +37,8 @@ body {
   padding: 6px 10px;
   border: 1.5px solid var(--app-color-primary);
 }
+
+main.Container {
+  transition: max-width 0.3s ease; 
+}
+

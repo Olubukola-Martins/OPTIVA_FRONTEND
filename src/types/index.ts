@@ -13,6 +13,7 @@ export type IAppBtnProps = {
     title: string;
     description?: string;
     linkBack?: string;
+    arrowBack?: boolean;
   }
   
   export interface simpleCardProps {

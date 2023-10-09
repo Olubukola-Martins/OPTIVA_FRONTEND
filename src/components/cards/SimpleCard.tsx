@@ -20,19 +20,19 @@ export const SimpleCard = ({
 
   return (
     <div
-      className={`border border-${cardColor}-600 rounded-md py-2 px-3`}
+      className={`border border-${cardColor}-600 rounded-lg py-2 px-3 relative`}
       style={{ borderColor: selectedColor }}
     >
-      <div className="flex items-start gap-x-4">
+      <div className="flex gap-x-4">
         <div
           className={`bg-${cardColor}-600 rounded-full h-8 w-8 flex justify-center items-center`}
           style={{ backgroundColor: selectedColor }}
         >
           <Icon icon={icon} className="text-xl text-white" />
         </div>
-        <div>
-          <h3 className="font-medium text-accent">{title}</h3>
-          <h2 className="font-bold text-2xl pt-3">{count}</h2>
+        <div className="flex flex-col">
+          <h3 className="font-semibold text-accent text-sm pb-12">{title}</h3>
+          <h2 className="font-bold text-2xl flex-end absolute bottom-0">{count}</h2>
         </div>
       </div>
     </div>
