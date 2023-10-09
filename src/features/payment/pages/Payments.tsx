@@ -1,4 +1,4 @@
-import { DatePicker, Dropdown, Menu, MenuProps, Select, Table } from "antd";
+import { DatePicker, Dropdown, Menu, Select, Table } from "antd";
 import Search from "antd/es/input/Search";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
@@ -48,10 +48,6 @@ const Payments = () => {
         selectedRows
       );
     },
-    // getCheckboxProps: (record: DataSourceItem) => ({
-    // disabled: record.name === "Disabled User",
-    // name: record.name,
-    // }),
   };
 
 
@@ -269,6 +265,7 @@ const Payments = () => {
         }}
         columns={columns}
         dataSource={dataSource}
+        scroll={{ x: 600 }}
         className="border-gray-100 border-t-0 border-2 rounded-b-md"
       />
     </DashboardLayout>
