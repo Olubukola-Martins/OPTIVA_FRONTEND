@@ -1,0 +1,3 @@
+#financialStatementTable .ant-table-thead :nth-child(2){
+    display: none;
+}
