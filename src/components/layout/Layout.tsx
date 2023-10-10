@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { Navbar } from "./Navbar";
 import { SideBar } from "./SideBar";
+import { Outlet } from "react-router-dom";
 
-export interface IProps {
-  children: React.ReactNode;
-}
-
-export const DashboardLayout: React.FC<IProps> = ({ children }: IProps) => {
+export const DashboardLayout = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -19,7 +16,7 @@ export const DashboardLayout: React.FC<IProps> = ({ children }: IProps) => {
           className={isOpen ? "w-full lg:ml-52 pb-10" : "lg:ml-16 pb-10 w-full"}
         >
           <Navbar />
-          <main className="Container">{children}</main>
+          <main className="Container"> <Outlet /></main>
         </div>
       </div>
     </div>

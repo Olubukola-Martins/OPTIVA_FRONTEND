@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react";
+
 import { Tabs } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 
