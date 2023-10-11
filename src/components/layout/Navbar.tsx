@@ -1,14 +1,18 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Input } from "antd";
+import { Drawer, Input } from "antd";
 import { Icon } from "@iconify/react";
 import { Badge, Select, Dropdown } from "antd";
 import logo from "src/assets/miniLogo.png";
+import { useState } from "react";
+import { SideBar } from "./SideBar";
 
 export const Navbar = () => {
+  const [openSideBar, setOpenSideBar] = useState(false)
   return (
+    <>
     <div className="w-full sticky top-0 shadow-sm border-b py-3 Container flex justify-between items-center">
       <div className="flex items-center gap-x-2">
-        <Icon icon="lucide:menu" className="text-xl lg:hidden flex" />
+        <Icon icon="lucide:menu" className="text-xl lg:hidden flex" onClick={() => setOpenSideBar(true)}/>
         <img src={logo} alt="logo" className="lg:hidden flex h-6" />
         <Input
           placeholder="Search here..."
@@ -58,5 +62,11 @@ export const Navbar = () => {
         </Dropdown>
       </div>
     </div>
+
+    {/* sidebar mobile */}
+        <Drawer title="Sidebar" open={openSideBar} onClose={() => setOpenSideBar(false)}>
+          <SideBar isOpen={true} setIsOpen={undefined} />
+        </Drawer>
+    </>
   );
 };

@@ -4,6 +4,9 @@ import { SimpleCard } from "src/components/cards/SimpleCard";
 import { DashboardLayout } from "src/components/layout/Layout";
 import welcomeVector from ".././assets/welcomeVector.svg";
 import introBg from ".././assets/introBg.png";
+import { LatestActivities } from "../components/LatestActivities";
+import { AppStatus } from "../components/AppStatus";
+import { PopularCountries } from "../components/PopularCountries";
 
 const Dashboard = () => {
   return (
@@ -54,6 +57,12 @@ const Dashboard = () => {
           title="Prospects"
           count={0}
         />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
+        <PopularCountries />
+        <AppStatus />
+        <LatestActivities />
       </div>
     </DashboardLayout>
   );
