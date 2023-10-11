@@ -36,7 +36,7 @@ export const SideBar = ({ isOpen, setIsOpen }: sideBarProps) => {
           </Tooltip>
           <span className={isOpen ? "" : "hidden"}>Dashboard</span>
         </NavLink>
-        <NavLink to="/all-users" className="sidebar_link">
+        <NavLink to={appRoute.applications} className="sidebar_link">
           <Tooltip title="Applications" placement="right">
             <Icon icon="mdi:application-edit" className="nav_icon" />
           </Tooltip>
