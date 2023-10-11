@@ -36,7 +36,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">City</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag"> State</p>
               </div>
             </div>
@@ -44,7 +44,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">Country</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Zip/postal code</p>
               </div>
             </div>
@@ -52,7 +52,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">From</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">To</p>
               </div>
             </div>
@@ -75,7 +75,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">City</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag"> State</p>
               </div>
             </div>
@@ -83,7 +83,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">Country</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Zip/postal code</p>
               </div>
             </div>
@@ -91,7 +91,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">From</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">To</p>
               </div>
             </div>
@@ -112,7 +112,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">City</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag"> State</p>
               </div>
             </div>
@@ -120,7 +120,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">Country</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Zip/postal code</p>
               </div>
             </div>
@@ -128,7 +128,7 @@ export const ContactDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">From</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">To</p>
               </div>
             </div>

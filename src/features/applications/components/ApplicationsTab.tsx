@@ -6,7 +6,7 @@ import { InactiveApplications } from "./InactiveApplications";
 
 export const ApplicationsTab = () => {
   const operations = (
-    <div className="flex gap-4 w-full">
+    <div className="hidden lg:flex gap-4 w-full">
       <Input.Search placeholder="Search" className="w-1/2"></Input.Search>
       <Select placeholder="Filter" className="w-1/2" />
     </div>

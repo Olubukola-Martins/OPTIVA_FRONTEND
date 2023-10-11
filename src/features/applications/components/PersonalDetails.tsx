@@ -22,7 +22,7 @@ export const PersonalDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag"> Middle Name (2)</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag"> Last Name</p>
               </div>
             </div>
@@ -71,7 +71,7 @@ export const PersonalDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag"> Eye Colour</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Hair Colour</p>
               </div>
             </div>
