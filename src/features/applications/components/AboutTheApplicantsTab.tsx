@@ -37,11 +37,11 @@ export const AboutTheApplicantsTab = () => {
       label: "Children Details",
       key: "Children Details",
     },
-    {
-      children: <OtherDependentDetails />,
-      label: "Other Dependent Details",
-      key: "Other Dependent Details",
-    },
+    // {
+    //   children: <OtherDependentDetails />,
+    //   label: "Other Dependent Details",
+    //   key: "Other Dependent Details",
+    // },
     {
       children: <PEP />,
       label: "PEP",
@@ -52,11 +52,11 @@ export const AboutTheApplicantsTab = () => {
       label: "Employment Details",
       key: "Employment Details",
     },
-    // {
-    //   children: <BusinessIncomeAndNetwork />,
-    //   label: "Business, Income And Network",
-    //   key: "Business, Income And Network",
-    // },
+    {
+      children: <BusinessIncomeAndNetwork />,
+      label: "Business, Income And Network",
+      key: "Business, Income And Network",
+    },
     // {
     //   children: <AcademicHistory />,
     //   label: "Academic History",

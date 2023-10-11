@@ -33,7 +33,7 @@ export const MarriageDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">Middle Name (2)</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Last Name</p>
               </div>
             </div>
@@ -85,7 +85,7 @@ export const MarriageDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag"> Eye Colour</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Hair Colour</p>
               </div>
             </div>
@@ -103,8 +103,8 @@ export const MarriageDetails = () => {
         <div className="w-full my-2">
           <h2 className="p-1">Language</h2>
           <div className="flex gap-2">
-            <p className="applicantDetailsSinglePTag lg:w-1/2"></p>
-            <p className="applicantDetailsSinglePTag lg:w-1/2"></p>
+            <p className="applicantDetailsSinglePTag w-full lg:w-1/2"></p>
+            <p className="applicantDetailsSinglePTag w-full lg:w-1/2"></p>
           </div>
         </div>
         <div className="w-full my-2">
@@ -130,7 +130,7 @@ export const MarriageDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">First Name</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Middle Name</p>
               </div>
             </div>
@@ -138,7 +138,7 @@ export const MarriageDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">Middle Name (2)</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Last Name</p>
               </div>
             </div>
@@ -146,7 +146,7 @@ export const MarriageDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">Date of Birth</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Gender</p>
               </div>
             </div>
@@ -154,7 +154,7 @@ export const MarriageDetails = () => {
               <div className=" lg:w-1/2">
                 <p className="applicantDetailsPTag">State of Birth</p>
               </div>
-              <div className="w-1/2">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">Country of Birth</p>
               </div>
             </div>
