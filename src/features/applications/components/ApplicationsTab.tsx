@@ -1,9 +1,16 @@
-import { Tabs } from "antd";
+import { Input, Select, Tabs } from "antd";
 import { ActiveApplications } from "./ActiveApplications";
 import { InactiveApplications } from "./InactiveApplications";
-import { SearchApplicants } from "./SearchApplicants";
+// import { SearchApplicants } from "./SearchApplicants";
+// import Input from "antd";
 
 export const ApplicationsTab = () => {
+  const operations = (
+    <div className="flex gap-4 w-full">
+      <Input.Search placeholder="Search" className="w-1/2"></Input.Search>
+      <Select placeholder="Filter" className="w-1/2" />
+    </div>
+  );
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -19,15 +26,14 @@ export const ApplicationsTab = () => {
       children: <InactiveApplications />,
       key: "Inactive Applications",
     },
-    {
-      label: "Search",
-      children: <SearchApplicants />,
-      key: "",
-    },
   ];
   return (
     <>
-      <Tabs items={tabItems} />
+      <Tabs
+        items={tabItems}
+        className="hover:bg-caramel active:text-primary"
+        tabBarExtraContent={operations}
+      />
     </>
   );
 };

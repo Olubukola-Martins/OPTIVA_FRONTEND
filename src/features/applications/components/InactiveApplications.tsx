@@ -16,12 +16,12 @@ export const InactiveApplications = () => {
     },
     {
       title: " Applicant Name",
-      dataIndex: " applicantName",
+      dataIndex: "applicantName",
       key: "3",
     },
     {
       title: "Country",
-      dataIndex: " country",
+      dataIndex: "country",
       key: "4",
     },
     {
@@ -71,7 +71,7 @@ export const InactiveApplications = () => {
   for (let i = 0; i < 8; i++) {
     dataSource.push({
       key: i,
-      sn: 1,
+      sn: i + 1,
       applicantId: "230000-01",
       applicantName: "John Brown",
       country: "Grenada",
@@ -81,11 +81,35 @@ export const InactiveApplications = () => {
       comment: "Neque consectetur sit commodo ipsum sed.",
     });
   }
+
+  const titleRowBg = (record: DataSourceItem) => {
+    if (record.key === 0) {
+      return "bg-caramel";
+    }
+    return "";
+  };
   return (
     <>
-      {" "}
       {/* TABLE */}
-      <Table columns={columns} dataSource={dataSource} scroll={{ x: 600 }} />
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        scroll={{ x: 600 }}
+        rowSelection={{
+          type: "checkbox",
+          onChange: (
+            selectedRowKeys: React.Key[],
+            selectedRows: DataSourceItem[]
+          ) => {
+            console.log(
+              `selectedRowKeys: ${selectedRowKeys}`,
+              "selectedRows: ",
+              selectedRows
+            );
+          },
+        }}
+        rowClassName={titleRowBg}
+      />
     </>
   );
 };

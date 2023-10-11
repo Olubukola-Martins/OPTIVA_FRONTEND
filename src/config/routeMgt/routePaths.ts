@@ -5,6 +5,7 @@ export const appRoute = {
   reset_password: `/reset-password`,
 
   // Applications
-  applications: `/applications`,
+  applications: `/all-users`,
   applicantDetails: `/applicant-details`,
+  applicantBrief: `/applicant-brief`
 };

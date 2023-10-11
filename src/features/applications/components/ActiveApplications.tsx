@@ -1,5 +1,6 @@
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+
 export type DataSourceItem = {
   key: React.Key;
   sn: number;
@@ -18,6 +19,7 @@ export const ActiveApplications = () => {
       key: "1",
       title: "SN",
       dataIndex: "sn",
+
     },
     {
       title: "Applicant ID",
@@ -26,12 +28,12 @@ export const ActiveApplications = () => {
     },
     {
       title: " Applicant Name",
-      dataIndex: " applicantName",
+      dataIndex: "applicantName",
       key: "3",
     },
     {
       title: "Country",
-      dataIndex: " country",
+      dataIndex: "country",
       key: "4",
     },
     {
@@ -81,7 +83,7 @@ export const ActiveApplications = () => {
   for (let i = 0; i < 8; i++) {
     dataSource.push({
       key: i,
-      sn: 1,
+      sn: i + 1,
       applicantId: "230000-01",
       applicantName: "John Brown",
       country: "Grenada",
@@ -93,7 +95,24 @@ export const ActiveApplications = () => {
   return (
     <>
       {/* TABLE */}
-      <Table columns={columns} dataSource={dataSource} scroll={{ x: 600 }} />
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        scroll={{ x: 600 }}
+        rowSelection={{
+          type: "checkbox",
+          onChange: (
+            selectedRowKeys: React.Key[],
+            selectedRows: DataSourceItem[]
+          ) => {
+            console.log(
+              `selectedRowKeys: ${selectedRowKeys}`,
+              "selectedRows: ",
+              selectedRows
+            );
+          },
+        }}
+      />
     </>
   );
 };
