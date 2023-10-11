@@ -16,7 +16,10 @@ export const DashboardLayout = () => {
           className={isOpen ? "w-full lg:ml-52 pb-10" : "lg:ml-16 pb-10 w-full"}
         >
           <Navbar />
-          <main className="Container"> <Outlet /></main>
+          <main className="Container">
+            {" "}
+            <Outlet />
+          </main>
         </div>
       </div>
     </div>
