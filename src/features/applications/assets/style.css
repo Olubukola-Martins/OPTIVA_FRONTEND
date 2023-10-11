@@ -1,0 +1,10 @@
+.applicantDetailsPTag {
+  @apply h-28 border rounded-md p-3 bg-[#f5f5f5];
+}
+.applicantDetailsDiv {
+  @apply flex flex-col lg:flex-row gap-5 w-full bg-[#f5f5f5];
+}
+
+.applicantDetailsSinglePTag{
+  @apply h-10 border rounded-md bg-[#f5f5f5];
+}
