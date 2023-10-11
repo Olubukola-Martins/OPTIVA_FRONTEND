@@ -1,3 +1,4 @@
-export interface IType {
-    
+export interface settingsLinkProps {
+    name: string;
+    link: string;
 }

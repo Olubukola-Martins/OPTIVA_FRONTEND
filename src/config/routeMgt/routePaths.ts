@@ -3,6 +3,8 @@ export const appRoute = {
   login_in: `/login`,
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
+  settings: `/settings`,
+  dependents: `/settings/dependents`,
 
   // Applications
   applications: `/all-users`,

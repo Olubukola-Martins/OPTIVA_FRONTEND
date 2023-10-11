@@ -10,7 +10,7 @@ import { PopularCountries } from "../components/PopularCountries";
 
 const Dashboard = () => {
   return (
-    <DashboardLayout>
+    <>
       <div className="flex items-center justify-between">
         <PageIntro title="Dashboard" arrowBack={false} />
         <AppButton label="Add Applicants" />
@@ -64,7 +64,7 @@ const Dashboard = () => {
         <AppStatus />
         <LatestActivities />
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 
