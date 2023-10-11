@@ -9,6 +9,7 @@ const Settings = () => {
       <PageIntro
         title="Settings"
         description="Complete all necessary settings"
+         arrowBack={false}
       />
       <div className="mt-5">
         {settingsLink.map((item) => (

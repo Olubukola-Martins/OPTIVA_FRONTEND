@@ -3,8 +3,8 @@ import { appRoute } from "./routePaths";
 import Login from "src/features/authentication/pages/Login";
 import Dashboard from "src/features/dashboard/pages/Dashboard";
 import Settings from "src/features/settings/pages/Settings";
-import Dependents from "src/features/settings/features/delegation/pages/Dependents";
 import { DashboardLayout } from "src/components/layout/Layout";
+import Dependents from "src/features/settings/features/dependents/pages/Dependents";
 
 export const AllRoutes = () => {
   return (
