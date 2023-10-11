@@ -17,7 +17,7 @@ export const PageIntro = ({
         )}
         <span>{title}</span>
       </h3>
-      {description && <p className="text-sm pt-1 pl-7">{description}</p>}
+      {description && <p className={`text-sm pt-1 ${!arrowBack ? "" : "pl-7"}`}>{description}</p>}
     </div>
   );
 };

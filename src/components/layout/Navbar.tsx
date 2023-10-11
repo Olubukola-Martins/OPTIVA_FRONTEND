@@ -10,7 +10,7 @@ export const Navbar = () => {
   const [openSideBar, setOpenSideBar] = useState(false)
   return (
     <>
-    <div className="w-full sticky top-0 shadow-sm border-b py-3 Container flex justify-between items-center">
+    <div className="w-full bg-white sticky top-0 z-50 shadow-sm border-b py-3 Container flex justify-between items-center">
       <div className="flex items-center gap-x-2">
         <Icon icon="lucide:menu" className="text-xl lg:hidden flex" onClick={() => setOpenSideBar(true)}/>
         <img src={logo} alt="logo" className="lg:hidden flex h-6" />
