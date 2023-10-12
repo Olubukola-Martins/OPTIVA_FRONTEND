@@ -1,7 +1,5 @@
 import { Steps } from "antd";
 import { PageIntro } from "src/components/PageIntro";
-import { AppButton } from "src/components/button/AppButton";
-import { DashboardLayout } from "src/components/layout/Layout";
 import ApplicantBrief from "./ApplicantBrief";
 import AboutTheApplicant from "./AboutTheApplicant";
 import { useState } from "react";
@@ -15,7 +13,6 @@ const ApplicantDetails = () => {
   };
   const steps = [<ApplicantBrief />, <AboutTheApplicant />];
   return (
-    <DashboardLayout>
       <div className="Container">
         <div className="flex items-center justify-between">
           <PageIntro title="Applicant Details" />
@@ -52,7 +49,6 @@ const ApplicantDetails = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
   );
 };
 
