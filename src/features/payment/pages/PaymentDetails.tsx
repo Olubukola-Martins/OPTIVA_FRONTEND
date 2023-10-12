@@ -30,17 +30,6 @@ const PaymentDetails = () => {
     console.log("form values",values);
   };
 
-  // ///// prefix example in case i use
-  // const { Option } = Select;
-  // const prefixSelector = (
-  //   <Form.Item name="prefix" noStyle>
-  //     <Select style={{ width: 70 }}>
-  //       <Option value="86">+86</Option>
-  //       <Option value="87">+87</Option>
-  //     </Select>
-  //   </Form.Item>
-  // );
-
   // TABLES
   type DataSource = {
     key: React.Key;
@@ -435,21 +424,19 @@ const PaymentDetails = () => {
             <div className="flex flex-row gap-10 w-full pt-4">
               {/* table 1 */}
               <Table
-                id="financialStatementTable"
                 bordered={true}
                 columns={headColumnFirstTable}
                 dataSource={dataSourceFirst}
-                className="w-full"
+                className="financialStatementTable w-full"
                 pagination={false}
               />
 
               {/* table 2 */}
               <Table
-                id="financialStatementTable"
                 bordered={true}
                 columns={headColumnSecondTable}
                 dataSource={dataSourceSecond}
-                className="w-full"
+                className="financialStatementTable w-full"
                 pagination={false}
               />
             </div>
@@ -475,17 +462,17 @@ const PaymentDetails = () => {
 
           {/* buttons */}
           <div className="place-self-end pt-6 flex flex-row gap-7">
-              <AppButton
-                variant="transparent"
-                label="Cancel"
-                type="button"
-                containerStyle="px-4 py-3.5 text-base"
-              />
-              <AppButton
-                label="Save"
-                type="submit"
-                containerStyle="px-4 py-3.5 text-base"
-              />
+            <AppButton
+              variant="transparent"
+              label="Cancel"
+              type="button"
+              containerStyle="px-4 py-3.5 text-base"
+            />
+            <AppButton
+              label="Save"
+              type="submit"
+              containerStyle="px-4 py-3.5 text-base"
+            />
           </div>
         </Form>
       </div>

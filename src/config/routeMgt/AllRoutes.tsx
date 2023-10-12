@@ -5,6 +5,9 @@ import { GlobalContextProvider } from "src/stateManagement/GlobalContext";
 import Dashboard from "src/features/dashboard/pages/Dashboard";
 import Payments from "src/features/payment/pages/Payments";
 import PaymentDetails from "src/features/payment/pages/PaymentDetails";
+import GenerateReceipt from "src/features/payment/pages/GenerateReceipt";
+import GenerateInvoice from "src/features/payment/pages/GenerateInvoice";
+import GenerateFinancialStatement from "src/features/payment/pages/GenerateFinancialStatement";
 
 export const AllRoutes = () => {
   return (
@@ -14,18 +17,18 @@ export const AllRoutes = () => {
           <Route path={appRoute.home} element={<Dashboard />} />
           <Route path={appRoute.login_in} element={<Login />} />
           <Route path={appRoute.payments} element={<Payments />} />
-          {/* <Route
+          <Route
             path={appRoute.financialStatement().format}
-            element={<Payments />}
+            element={<GenerateFinancialStatement />}
           />
           <Route
             path={appRoute.generateInvoice().format}
-            element={<Payments />}
+            element={<GenerateInvoice />}
           />
           <Route
             path={appRoute.generateReciept().format}
-            element={<Payments />}
-          />*/}
+            element={<GenerateReceipt />}
+          />
           <Route
             path={appRoute.paymentDetails().format}
             element={<PaymentDetails />}

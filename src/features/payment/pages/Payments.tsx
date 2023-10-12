@@ -50,8 +50,6 @@ const Payments = () => {
     },
   };
 
-
-
   // COLUMS OF TABLE
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -171,7 +169,16 @@ const Payments = () => {
           overlay={
             <Menu>
               <Menu.Item key="1">View Proof of Payment</Menu.Item>
-              <Menu.Item key="2">Generate Invoice</Menu.Item>
+              <Menu.Item key="2">
+                <Link
+                  to={
+                    appRoute.generateInvoice(record.key as unknown as number)
+                      .path
+                  }
+                >
+                  Generate Invoice
+                </Link>
+              </Menu.Item>
               <Menu.Item key="3">
                 <Link
                   to={
@@ -182,8 +189,26 @@ const Payments = () => {
                   Update Payment Details
                 </Link>
               </Menu.Item>
-              <Menu.Item key="4">Generate Financial Statement</Menu.Item>
-              <Menu.Item key="5">Generate Receipt</Menu.Item>
+              <Menu.Item key="4">
+                <Link
+                  to={
+                    appRoute.financialStatement(record.key as unknown as number)
+                      .path
+                  }
+                >
+                  Generate Financial Statement
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="5">
+                <Link
+                  to={
+                    appRoute.generateReciept(record.key as unknown as number)
+                      .path
+                  }
+                >
+                  Generate Receipt
+                </Link>
+              </Menu.Item>
               <Menu.Item key="6">Move to Master List</Menu.Item>
             </Menu>
           }
