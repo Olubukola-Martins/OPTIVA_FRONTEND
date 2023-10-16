@@ -44,12 +44,12 @@ export const SideBar = ({ isOpen, setIsOpen }: sideBarProps) => {
           <span className={isOpen ? "" : "hidden"}>Payments</span>
         </NavLink>
 
-        <NavLink to="/sales-records" className="sidebar_link">
+        <NavLink to="/reports" className="sidebar_link">
           <Tooltip title="Records" placement="right">
             <Icon icon="bi:pie-chart-fill" className="nav_icon" />
           </Tooltip>
 
-          <span className={isOpen ? "" : "hidden"}>Records</span>
+          <span className={isOpen ? "" : "hidden"}>Reports</span>
         </NavLink>
 
         <NavLink to="/account" className="sidebar_link">

@@ -9,6 +9,7 @@ import GenerateReceipt from "src/features/payment/pages/GenerateReceipt";
 import GenerateInvoice from "src/features/payment/pages/GenerateInvoice";
 import GenerateFinancialStatement from "src/features/payment/pages/GenerateFinancialStatement";
 import GenerateContract from "src/features/payment/pages/GenerateContract";
+import Reports from "src/features/report/pages/Reports";
 
 export const AllRoutes = () => {
   return (
@@ -37,6 +38,10 @@ export const AllRoutes = () => {
           <Route
             path={appRoute.paymentDetails().format}
             element={<PaymentDetails />}
+          />
+          <Route
+            path={appRoute.reports}
+            element={<Reports />}
           />
           {/* <Route path={appRoute.paymentProof().format} element={<Payments />} /> */}
         </Routes>

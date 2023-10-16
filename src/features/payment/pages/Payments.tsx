@@ -1,15 +1,6 @@
-import {
-  Checkbox,
-  DatePicker,
-  Dropdown,
-  Menu,
-  Select,
-  Table,
-  TreeSelect,
-} from "antd";
+import { DatePicker, Dropdown, Input, Menu, Table, TreeSelect } from "antd";
 import Search from "antd/es/input/Search";
 import { ColumnsType } from "antd/es/table";
-import { Children } from "react";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -18,6 +9,7 @@ import { DashboardLayout } from "src/components/layout/Layout";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 const Payments = () => {
+  const { TreeNode } = TreeSelect;
   const { RangePicker } = DatePicker;
   const cardColors: ("blue" | "green" | "yellow" | "oxblood")[] = [
     "green",
@@ -120,12 +112,7 @@ const Payments = () => {
     {
       value: "Filter by Amount",
       title: "Filter by Amount",
-      children: [
-        {
-          value: "parent 1-0",
-          title: "parent 1-0",
-        },
-      ],
+      isInput: true,
     },
   ];
 
@@ -195,63 +182,6 @@ const Payments = () => {
       key: "10",
     },
 
-    // {
-    //   title: "Action",
-    //   dataIndex: "action",
-    //   render: (_, record) => (
-    //       <Dropdown
-    //         trigger={["click"]}
-    //         menu={[
-    //           {
-    //             key: "1",
-    //             label: <div>View Proof of Payment</div>,
-    //           },
-    //           {
-    //             key: "2",
-    //             label: <div>Generate Invoice</div>,
-    //           },
-    //           {
-    //             key: "3",
-    //             label: (
-    //               <Link
-    //                 to={
-    //                   appRoute.paymentDetails(record.key as unknown as number)
-    //                     .path
-    //                 }
-    //               >
-    //                 Update Payment Details
-    //               </Link>
-    //             ),
-    //           },
-    //           {
-    //             key: "4",
-    //             label: <div>Generate Financial Statement</div>,
-    //           },
-    //           {
-    //             key: "5",
-    //             label: <div>Generate Receipt</div>,
-    //           },
-    //           {
-    //             key: "6",
-    //             label: <div>Move to Master List</div>,
-    //           },
-    //         ] as MenuProps}
-    //         //   <Menu>
-    //         //     <Menu.Item key="val.key">
-    //         //       {/* <Link
-    //         //                     to=
-    //         //                     {
-    //         //             }
-    //         //           >
-    //         //             View Candidate
-    //         //           </Link> */}
-    //         //     </Menu.Item>
-    //         //   </Menu>
-    //       >
-    //         <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-    //       </Dropdown>
-    //   ),
-    // },
     {
       title: "Action",
       dataIndex: "action",
@@ -378,10 +308,19 @@ const Payments = () => {
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
               }}
-              // multiple={true}
               treeCheckable={true}
-              treeData={treeData}
-            />
+            >
+              {treeData.map((node) => (
+                <TreeNode
+                  key={node.value}
+                  value={node.value}
+                  title={node.title}
+                  selectable={!node.isInput}
+                >
+                  {node.isInput && <Input />}
+                </TreeNode>
+              ))}
+            </TreeSelect>
           </div>
           <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
             <RangePicker style={{ width: 300 }} />

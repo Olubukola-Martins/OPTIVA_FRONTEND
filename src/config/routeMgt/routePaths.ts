@@ -4,6 +4,7 @@ export const appRoute = {
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
   payments: `/payments`,
+  reports: `/reports`,
   generateInvoice: (id?: number) => ({
     format: `/payments/:id/generateInvoice`,
     path: `/payments/${id}/generateInvoice`,
