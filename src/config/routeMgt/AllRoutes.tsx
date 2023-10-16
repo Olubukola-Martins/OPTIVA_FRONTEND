@@ -8,21 +8,41 @@ import Dependents from "src/features/settings/features/dependents/pages/Dependen
 import Applications from "src/features/applications/pages/Applications";
 import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
 import ApplicantBrief from "src/features/applications/pages/ApplicantBrief";
+import { RequireAuth } from "react-auth-kit";
+
+const routesArray = [
+  {
+    path: appRoute.home,
+    element: <Dashboard />,
+  },
+  { path: appRoute.dependents, element: <Dependents /> },
+  { path: appRoute.settings, element: <Settings /> },
+  { path: appRoute.applications, element: <Applications /> },
+  { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
+  { path: appRoute.applicantBrief, element: <ApplicantBrief /> },
+];
 
 export const AllRoutes = () => {
   return (
+ 
     <Router>
       <Routes>
         <Route element={<DashboardLayout />}>
-          <Route path={appRoute.home} element={<Dashboard />} />
-          <Route path={appRoute.dependents} element={<Dependents />} />
-          <Route path={appRoute.settings} element={<Settings />} />
-            <Route path={appRoute.applications} element={<Applications />} />
-          <Route
-            path={appRoute.applicantDetails}
-            element={<ApplicantDetails />}
-          /> 
-          <Route path={appRoute.applicantBrief} element={<ApplicantBrief/>}/>
+          {routesArray.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                route.path === appRoute.login_in ? (
+                  route.element
+                ) : (
+                  <RequireAuth loginPath={appRoute.login_in}>
+                    {route.element}
+                  </RequireAuth>
+                )
+              }
+            />
+          ))}
         </Route>
         <Route path={appRoute.login_in} element={<Login />} />
       </Routes>

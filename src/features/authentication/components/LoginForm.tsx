@@ -25,7 +25,9 @@ export const LoginForm = () => {
           });
         },
         onSuccess: (res: any) => {
-          const result = res.data;
+          console.log(res);
+          
+          const result = res.data.data;
           if (
             signIn({
               token: result.token,

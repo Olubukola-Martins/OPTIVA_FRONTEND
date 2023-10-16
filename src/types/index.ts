@@ -22,3 +22,15 @@ export type IAppBtnProps = {
     cardColor: "blue" | "green" | "yellow" | "oxblood";
     icon: string;
   }
+
+  export interface SidebarLink {
+    to: string;
+    title: string;
+    icon: string;
+  }
+  
+  export interface SidebarProps {
+    isOpen: boolean;
+    setIsOpen: (isOpen: boolean) => void;
+    links: SidebarLink[];
+  }
