@@ -1,6 +1,15 @@
-import { DatePicker, Dropdown, Menu, Select, Table } from "antd";
+import {
+  Checkbox,
+  DatePicker,
+  Dropdown,
+  Menu,
+  Select,
+  Table,
+  TreeSelect,
+} from "antd";
 import Search from "antd/es/input/Search";
 import { ColumnsType } from "antd/es/table";
+import { Children } from "react";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -36,6 +45,89 @@ const Payments = () => {
     lastUpdated: string;
     updatedBy: string;
   };
+
+  const treeData = [
+    {
+      value: "Filter by Columns",
+      title: "Filter by Columns",
+      children: [
+        {
+          value: "Applicant ID",
+          title: "Applicant ID",
+        },
+        {
+          value: "Applicant Name",
+          title: "Applicant Name",
+        },
+        {
+          value: "Country",
+          title: "Country",
+        },
+        {
+          value: "Investment Route",
+          title: "Investment Route",
+        },
+        {
+          value: "Number of Dependents",
+          title: "Number of Dependents",
+        },
+        {
+          value: "Date Created",
+          title: "Date Created",
+        },
+        {
+          value: "Created By",
+          title: "Created By",
+        },
+      ],
+    },
+    {
+      value: "Filter by Country",
+      title: "Filter by Country",
+      children: [
+        {
+          value: "Antigua & Barbuda",
+          title: "Antigua & Barbuda",
+        },
+        {
+          value: "Dominica",
+          title: "Dominica",
+        },
+        {
+          value: "Grenada",
+          title: "Grenada",
+        },
+        {
+          value: "St. Kitts & Levis",
+          title: "St. Kitts & Levis",
+        },
+        {
+          value: "St. Lucia",
+          title: "St. Lucia",
+        },
+      ],
+    },
+    {
+      value: "Filter by Investment Route",
+      title: "Filter by Investment Route",
+      children: [
+        {
+          value: "CBI",
+          title: "CBI",
+        },
+      ],
+    },
+    {
+      value: "Filter by Amount",
+      title: "Filter by Amount",
+      children: [
+        {
+          value: "parent 1-0",
+          title: "parent 1-0",
+        },
+      ],
+    },
+  ];
 
   const rowSelection = {
     onChange: (
@@ -276,19 +368,19 @@ const Payments = () => {
               style={{ width: 150 }}
               // onSearch={onSearch}
             />
-            <Select
+            <TreeSelect
+              // mode="multiple"
               placeholder="Filter"
-              style={{ width: 150 }}
-              options={[
-                {
-                  value: "optionA",
-                  label: "Option A",
-                },
-                {
-                  value: "OptionB",
-                  label: "Option B",
-                },
-              ]}
+              style={{
+                width: 150,
+                overflow: "auto",
+                height: 30,
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+              // multiple={true}
+              treeCheckable={true}
+              treeData={treeData}
             />
           </div>
           <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
