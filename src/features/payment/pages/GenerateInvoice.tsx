@@ -24,7 +24,7 @@ const columnsFirstTable: ColumnsType<DataTypeFirstTable> = [
     }),
     render: () => {
       return (
-        <p className=" text-lg font-medium text-[#012168]">
+        <p className=" sm:text-lg font-medium text-[#012168]">
           Grenada Citizenship By Investment
         </p>
       );
@@ -145,11 +145,12 @@ const GenerateInvoice = () => {
         <div>
           <Table
             id="TemplateTable"
-            className="redHead"
+            className="redHead max-sm:text-sm"
             columns={columnsFirstTable}
             dataSource={dataFirstTable}
             pagination={false}
             bordered
+            scroll={{ x: 450 }}
             summary={() => {
               let totalAmount = 0;
 
@@ -159,7 +160,7 @@ const GenerateInvoice = () => {
 
               return (
                 <>
-                  <Table.Summary.Row className="font-bold text-lg">
+                  <Table.Summary.Row className="font-bold sm:text-lg">
                     <Table.Summary.Cell
                       index={0}
                       colSpan={2}
@@ -175,7 +176,7 @@ const GenerateInvoice = () => {
                       $ {totalAmount}
                     </Table.Summary.Cell>
                   </Table.Summary.Row>
-                  <Table.Summary.Row className="font-bold text-lg">
+                  <Table.Summary.Row className="font-bold sm:text-lg">
                     <Table.Summary.Cell
                       index={2}
                       className="border border-gray-800 border-solid"
@@ -193,7 +194,7 @@ const GenerateInvoice = () => {
               );
             }}
           />
-          <p className="text-red-500">
+          <p className="text-red-500 max-sm:text-sm">
             Inflow $1 = ₦865 <br /> Kindly send us evidence of payment so that a
             receipt can be issued accordingly.
             <br /> Naira payment is subject to the exchange rate, which expires
@@ -201,7 +202,7 @@ const GenerateInvoice = () => {
           </p>
         </div>
 
-        <p className="text-xl font-semibold">
+        <p className="sm:text-xl font-semibold">
           Please make payment in favor of:
         </p>
 
@@ -212,8 +213,9 @@ const GenerateInvoice = () => {
           columns={columnsSecondTable}
           bordered
           pagination={false}
+          scroll={{ x: 700 }}
         />
-        <p className="text-red-500">
+        <p className="text-red-500 max-sm:text-sm">
           ***For dollar payments, please select all bank charges to be borne by
           the payer when paying.
         </p>

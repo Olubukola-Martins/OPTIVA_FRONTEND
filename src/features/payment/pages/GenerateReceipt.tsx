@@ -22,7 +22,7 @@ const columns: ColumnsType<DataType> = [
     }),
     render: () => {
       return (
-        <p className=" text-base font-medium">
+        <p className="  font-medium">
           Grenada Citizenship By Investment
         </p>
       );
@@ -58,9 +58,10 @@ const GenerateReceipt = () => {
       <GenerateTemplate title="PAYMENT RECIEPT" templateNumber="00892">
         <Table
           id="TemplateTable"
-          className="blueHead "
+          className="blueHead max-sm:text-sm"
           columns={columns}
           dataSource={data}
+          scroll={{ x: 450 }}
           pagination={false}
           bordered
           summary={() => {
@@ -72,7 +73,7 @@ const GenerateReceipt = () => {
 
             return (
               <>
-                <Table.Summary.Row className="font-bold text-lg">
+                <Table.Summary.Row className="font-bold sm:text-lg">
                   <Table.Summary.Cell index={0}></Table.Summary.Cell>
                   <Table.Summary.Cell index={1}>
                     Total Amount Paid
@@ -85,7 +86,7 @@ const GenerateReceipt = () => {
             );
           }}
         />
-        <p className="text-center">
+        <p className="text-center max-sm:text-sm">
           THANK YOU FOR CHOOSING OPTIVA CAPITAL PARTNERS LIMITED.
         </p>
       </GenerateTemplate>

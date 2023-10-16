@@ -20,6 +20,11 @@ export const appRoute = {
     format: `/payments/:id/generateReciept`,
     path: `/payments/${id}/generateReciept`,
   }),
+  generateContract: (id?: number) => ({
+    format: `/payments/:id/generateContract`,
+    path: `/payments/${id}/generateContract`,
+  }),
+
   paymentProof: (id?: number) => ({
     format: `/payments/:id/paymentProof`,
     path: `/payments/${id}/paymentProof`,

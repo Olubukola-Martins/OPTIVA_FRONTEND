@@ -209,7 +209,18 @@ const Payments = () => {
                   Generate Receipt
                 </Link>
               </Menu.Item>
-              <Menu.Item key="6">Move to Master List</Menu.Item>
+              <Menu.Item key="6">
+                <Link
+                  to={
+                    appRoute.generateContract(record.key as unknown as number)
+                      .path
+                  }
+                >
+                  Generate Contract
+                </Link>
+              </Menu.Item>
+
+              <Menu.Item key="7">Move to Master List</Menu.Item>
             </Menu>
           }
         >
@@ -243,7 +254,7 @@ const Payments = () => {
         title="Payments"
         description="View & Update Clients Payments"
       />
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-full">
         {Array.from({ length: 4 }).map((_, i) => (
           <SimpleCard
             icon="iconoir:page"
@@ -254,32 +265,36 @@ const Payments = () => {
         ))}
       </div>
 
-      <div className="border-gray-100 border-t-2 border-r-2 border-l-2 border-b-0 rounded-t-md w-full mt-[52px] px-4 flex flex-row items-center justify-between">
-        <h3 className="font-bold">Payment List</h3>
+      <div className="border-gray-100 border-t-2 border-r-2 border-l-2 border-b-0 rounded-t-md w-full mt-[52px] px-4 flex sm:flex-row flex-col items-center justify-around">
+        <h3 className="font-bold pt-2 sm:pt-0">Payment List</h3>
 
-        <div className="my-3 flex flex-row items-center gap-x-2.5">
-          <Search
-            placeholder="Search"
-            allowClear
-            style={{ width: 150 }}
-            // onSearch={onSearch}
-          />
-          <Select
-            placeholder="Filter"
-            style={{ width: 150 }}
-            options={[
-              {
-                value: "optionA",
-                label: "Option A",
-              },
-              {
-                value: "OptionB",
-                label: "Option B",
-              },
-            ]}
-          />
-          <RangePicker style={{ width: 300 }} />
-          <AppButton />
+        <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
+          <div className="flex flex-row items-center gap-x-2">
+            <Search
+              placeholder="Search"
+              allowClear
+              style={{ width: 150 }}
+              // onSearch={onSearch}
+            />
+            <Select
+              placeholder="Filter"
+              style={{ width: 150 }}
+              options={[
+                {
+                  value: "optionA",
+                  label: "Option A",
+                },
+                {
+                  value: "OptionB",
+                  label: "Option B",
+                },
+              ]}
+            />
+          </div>
+          <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
+            <RangePicker style={{ width: 300 }} />
+            <AppButton containerStyle="w-fit" />
+          </div>
         </div>
       </div>
 
@@ -290,7 +305,7 @@ const Payments = () => {
         }}
         columns={columns}
         dataSource={dataSource}
-        scroll={{ x: 600 }}
+        scroll={{ x: 900 }}
         className="border-gray-100 border-t-0 border-2 rounded-b-md"
       />
     </DashboardLayout>

@@ -281,7 +281,7 @@ const PaymentDetails = () => {
     <DashboardLayout>
       <PageIntro title="Update Payment Details" linkBack={appRoute.payments} />
 
-      <div className="border-2 rounded-xl border-gray-100 p-12 w-11/12">
+      <div className="border-2 rounded-xl border-gray-100 p-2 md:p-6 xl:p-12 md:w-11/12">
         <Form
           layout="vertical"
           name="updatePaymentDetails"
@@ -289,7 +289,7 @@ const PaymentDetails = () => {
           // component={false}
           onFinish={onFinish}
         >
-          <div className="flex flex-row gap-10 w-full">
+          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
             <Form.Item
               label="Applicant ID"
               name="applicantID"
@@ -311,7 +311,7 @@ const PaymentDetails = () => {
             </Form.Item>
           </div>
 
-          <div className="flex flex-row gap-10 w-full">
+          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
             <Form.Item
               label="Applicant Name"
               name="applicantName"
@@ -328,7 +328,7 @@ const PaymentDetails = () => {
             </Form.Item>
           </div>
 
-          <div className="flex flex-row gap-10 w-full">
+          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
             <Form.Item
               label="Number of Dependent(s)"
               name="noDependents"
@@ -341,7 +341,7 @@ const PaymentDetails = () => {
             </Form.Item>
           </div>
 
-          <div className="flex flex-row gap-10 w-full ">
+          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full ">
             <Form.Item
               label="Applicant Address"
               name="applicantAddress"
@@ -419,9 +419,9 @@ const PaymentDetails = () => {
           </div>
 
           {/* financial statement */}
-          <div>
+          <div className="pt-2 sm:pt-0">
             <h3 className="font-medium text-lg ">Financial Statement</h3>
-            <div className="flex flex-row gap-10 w-full pt-4">
+            <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 w-full pt-4">
               {/* table 1 */}
               <Table
                 bordered={true}
@@ -443,7 +443,7 @@ const PaymentDetails = () => {
           </div>
 
           {/* editable table */}
-          <div>
+          <div className="mt-3 sm:mt-5">
             <Table
               components={{
                 body: {
@@ -454,6 +454,7 @@ const PaymentDetails = () => {
               dataSource={data}
               columns={mergedColumns}
               rowClassName="editable-row"
+              scroll={{ x: 900 }}
               // pagination={{
               //   onChange: cancel,
               // }}

@@ -11,14 +11,14 @@ const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemp
         <div className=" w-[28%] border-b-2 border-[#801D23] pb-6">
           <img src={logo} alt="logo" />
         </div>
-        <p className=" h-[inherit] w-[inherit] mt-auto text-right border-b-2 border-gray-200 pb-6">
+        <p className=" h-[inherit] w-[inherit] mt-auto text-right max-sm:text-[10px] border-b-2 border-gray-200 pb-6">
           No.: {templateNumber}
         </p>
       </div>
 
       <div className=" flex flex-row align-bottom justify-between">
-        <p className="leading-loose">
-          <span className="font-semibold text-lg"> Mr John Doe & Family</span>
+        <address className="leading-loose max-sm:text-sm">
+          <span className="font-semibold sm:text-lg text-base"> Mr John Doe & Family</span>
           <br />
           14th Floor, Churchgate Towers 2,
           <br />
@@ -37,11 +37,11 @@ const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemp
             <Icon icon="clarity:email-solid" />
             johndoe@gmail.com
           </div>
-        </p>
-        <p className="mt-auto">7th July, 2023</p>
+        </address>
+        <p className="mt-auto max-sm:text-sm">7th July, 2023</p>
       </div>
 
-      <p className="underline decoration-gray-200 underline-offset-2 decoration-2 text-gray-500 font-semibold text-2xl text-center">
+      <p className="underline decoration-gray-200 underline-offset-2 decoration-2 text-gray-500 font-semibold text-lg sm:text-2xl text-center">
         {title}
       </p>
 
@@ -52,25 +52,25 @@ const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemp
         <p className="border-t-2 pt-2 border-gray-600  ml-auto w-fit">
           Authorized Signatory
         </p>
-        <p className="text-center italic">
+        <p className="text-center italic max-sm:text-sm">
           If you have any questions concerning this invoice, please contact us
           directly via phone or email. Thank you for your business!
         </p>
         <div className="flex flex-row flex-wrap gap-10 min-[400px]:justify-center mx-auto w-full justify-items-center">
           <div className="flex flex-row justify-center gap-2">
             <Icon icon="carbon:location-filled" className="text-red-500" />
-            <p className="text-xs">
+            <address className="text-xs">
               <span className="font-semibold">Head Office:</span>
               <br /> 11th – 14th Floor,
               <br /> Churchgate Towers 2,
               <br /> Churchgate street,
               <br /> Victoria Island, Lagos
               <br /> Nigeria.
-            </p>
+            </address>
           </div>
           <div className="flex flex-row justify-center gap-2">
             <Icon icon="carbon:location-filled" className="text-red-500" />
-            <p className="text-xs">
+            <address className="text-xs">
               <span className="font-semibold">Abuja Office:</span>
               <br />
               8th Floor,
@@ -78,32 +78,32 @@ const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemp
               <br /> 1113 Constitutional Ave.,
               <br /> Central Business District, Abuja <br />
               Nigeria.
-            </p>
+            </address>
           </div>
           <div className="flex flex-row justify-center gap-2">
             <Icon icon="carbon:location-filled" className="text-red-500" />
-            <p className="text-xs">
+            <address className="text-xs">
               <span className="font-semibold">Lekki Office:</span>
               <br /> 3rd Floor, CAPPA House,
               <br /> 1, Udeco Medical Road,
               <br /> Off Chevron Drive, <br />
               By Chevy View Estate, Lekki, Lagos
               <br /> Nigeria.
-            </p>
+            </address>
           </div>
           <div className="flex flex-row justify-center gap-2">
             <Icon icon="carbon:location-filled" className="text-red-500" />
-            <p className="text-xs">
+            <address className="text-xs">
               <span className="font-semibold">Enugu Office:</span>
               <br /> Centers 57 & 59,
               <br /> Palms Polo Park Mall,
               <br /> Abakaliki Road, Enugu,
               <br /> Nigeria.
-            </p>
+            </address>
           </div>
           <div className="flex flex-row justify-center gap-2">
             <Icon icon="carbon:location-filled" className="text-red-500" />
-            <p className="text-xs">
+            <address className="text-xs">
               <span className="font-semibold">
                 East Africa Regional Office:
               </span>
@@ -113,7 +113,7 @@ const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemp
               <br /> Off Rhapta Road,
               <br /> Westlands, Nairobi
               <br /> Kenya.
-            </p>
+            </address>
           </div>
         </div>
         <div className="flex flex-row flex-wrap justify-items-center mx-auto w-full justify-center gap-6">

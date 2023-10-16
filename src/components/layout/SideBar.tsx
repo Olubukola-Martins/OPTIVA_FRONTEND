@@ -37,7 +37,7 @@ export const SideBar = ({ isOpen, setIsOpen }: sideBarProps) => {
           <span className={isOpen ? "" : "hidden"}>Applications</span>
         </NavLink>
 
-        <NavLink to="/properties" className="sidebar_link">
+        <NavLink to="/payments" className="sidebar_link">
           <Tooltip title="Payment" placement="right">
             <Icon icon="fluent:payment-32-filled" className="nav_icon" />
           </Tooltip>

@@ -171,7 +171,7 @@ const GenerateFinancialStatement = () => {
       />
       <GenerateTemplate title="FINANCIAL STATEMENT" templateNumber="00892">
         <>
-          <div className="flex flex-row gap-10 w-full pt-4">
+          <div className="flex flex-col md:flex-row gap-2 lg:gap-10 w-full pt-4">
             {/* table 1 */}
             <Table
               id="TemplateTable"
@@ -198,6 +198,7 @@ const GenerateFinancialStatement = () => {
             className="blueHead"
             columns={thirdTableColumn}
             dataSource={dataSourceThird}
+            scroll={{ x: 450 }}
             pagination={false}
             bordered
             summary={() => {
@@ -232,7 +233,9 @@ const GenerateFinancialStatement = () => {
             }}
           />
 
-          <p className="text-center">THANK YOU FOR CHOOSING OPTIVA CAPITAL PARTNERS LIMITED.</p>
+          <p className="text-center max-sm:text-sm">
+            THANK YOU FOR CHOOSING OPTIVA CAPITAL PARTNERS LIMITED.
+          </p>
         </>
       </GenerateTemplate>
     </DashboardLayout>
