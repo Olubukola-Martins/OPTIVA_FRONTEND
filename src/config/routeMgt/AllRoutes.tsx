@@ -22,11 +22,16 @@ const routesArray = [
   { path: appRoute.settings, element: <Settings /> },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
+  { path: appRoute.timeline_extensions, element: <TimelineExtensions /> },
+  {
+    path: appRoute.processing_strategy_steps,
+    element: <ProcessingStrategyAndSteps />,
+  },
+  { path: appRoute.comments, element: <Comments /> },
 ];
 
 export const AllRoutes = () => {
   return (
- 
     <Router>
       <Routes>
         <Route element={<DashboardLayout />}>

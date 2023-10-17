@@ -1,4 +1,4 @@
-import { appRoute } from "src/config/routeMgt/routePaths";
+
 
 const Comments = () => {
   return (
