@@ -1,4 +1,3 @@
-import { appRoute } from "src/config/routeMgt/routePaths";
 
 const Comments = () => {
   return (
@@ -7,3 +6,4 @@ const Comments = () => {
 }
 
 export default Comments
+
