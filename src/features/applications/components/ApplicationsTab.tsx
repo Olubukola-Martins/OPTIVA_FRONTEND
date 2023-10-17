@@ -1,8 +1,6 @@
 import { Input, Select, Tabs } from "antd";
 import { ActiveApplications } from "./ActiveApplications";
 import { InactiveApplications } from "./InactiveApplications";
-// import { SearchApplicants } from "./SearchApplicants";
-// import Input from "antd";
 
 export const ApplicationsTab = () => {
   const operations = (

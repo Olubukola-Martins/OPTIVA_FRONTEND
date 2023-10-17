@@ -1,6 +1,8 @@
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { DataSourceItem } from "./ActiveApplications";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const InactiveApplications = () => {
   const columns: ColumnsType<DataSourceItem> = [
@@ -53,7 +55,11 @@ export const InactiveApplications = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">View Applicant Details</Menu.Item>
+                <Menu.Item key="1">
+                  <Link to={appRoute.applicant_details().path}>
+                    View Applicant Details
+                  </Link>
+                </Menu.Item>
                 <Menu.Item key="2">View Uploaded Documents</Menu.Item>
                 <Menu.Item key="3">View Comment</Menu.Item>
                 <Menu.Item key="4">Move to Active</Menu.Item>
@@ -82,18 +88,19 @@ export const InactiveApplications = () => {
     });
   }
 
-  const titleRowBg = (record: DataSourceItem) => {
-    if (record.key === 0) {
-      return "bg-caramel";
-    }
-    return "";
-  };
+  // const titleRowBg = (record: DataSourceItem) => {
+  //   if (record.key === 0) {
+  //     return "bg-caramel";
+  //   }
+  //   return "";
+  // };
   return (
     <>
       {/* TABLE */}
       <Table
         columns={columns}
         dataSource={dataSource}
+        className="bg-white rounded-md shadow border mt-8"
         scroll={{ x: 600 }}
         rowSelection={{
           type: "checkbox",
@@ -108,7 +115,7 @@ export const InactiveApplications = () => {
             );
           },
         }}
-        rowClassName={titleRowBg}
+        // rowClassName={titleRowBg}
       />
     </>
   );

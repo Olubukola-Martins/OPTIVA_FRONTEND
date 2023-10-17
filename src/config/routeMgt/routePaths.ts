@@ -8,6 +8,11 @@ export const appRoute = {
 
   // Applications
   applications: `/applications`,
-  applicantDetails: `/applicant-details`,
-  applicantBrief: `/applicant-brief`,
+  // applicantDetails: `/applicant-details`,
+  applicant_details: (id?: number) => ({
+    format: `/applicant-details/:id`,
+    path: `/applicant-details/${id}`,
+  }),
+  timeline_extensions: `/applications/timeline-extensions`,
+  processing_strategy_steps: `/applications/processing_strategy_steps`,
 };
