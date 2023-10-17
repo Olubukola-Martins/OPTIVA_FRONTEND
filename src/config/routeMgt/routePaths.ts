@@ -10,8 +10,19 @@ export const appRoute = {
   applications: `/applications`,
   applicantDetails: `/applicant-details`,
   applicantBrief: `/applicant-brief`,
+  // applicantDetails: `/applicant-details`,
+  applicant_details: (id?: number) => ({
+    format: `/applicant-details/:id`,
+    path: `/applicant-details/${id}`,
+  }),
+  timeline_extensions: `/applications/timeline-extensions`,
+  processing_strategy_steps: `/applications/processing_strategy_steps`,
+  comments: `/applications/comments`,
 
+  // Reports
   reports: `/reports`,
+
+  // Payments
   payments: `/payments`,
   generateInvoice: (id?: number) => ({
     format: `/payments/:id/generateInvoice`,
@@ -38,13 +49,8 @@ export const appRoute = {
     format: `/payments/:id/paymentProof`,
     path: `/payments/${id}/paymentProof`,
   }),
-  // applicantDetails: `/applicant-details`,
-  applicant_details: (id?: number) => ({
-    format: `/applicant-details/:id`,
-    path: `/applicant-details/${id}`,
-  }),
-  timeline_extensions: `/applications/timeline-extensions`,
-  processing_strategy_steps: `/applications/processing_strategy_steps`,
-  comments: `/applications/comments`
+
+  // Meetings
+  meetings: `/meetings`,
   
 };

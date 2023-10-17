@@ -1,7 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { DatePicker, Select } from "antd";
 import { PageIntro } from "src/components/PageIntro";
-import { appRoute } from "src/config/routeMgt/routePaths";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -22,8 +21,8 @@ const Reports = () => {
       <div className="flex flex-row justify-between">
         <PageIntro
           title="Report"
-          linkBack={appRoute.reports}
           description={`Hello Ruth! Welcome to your dashboard `}
+          arrowBack={false}
         />
 
         <Icon

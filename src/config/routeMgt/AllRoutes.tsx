@@ -20,6 +20,7 @@ import ProcessingStrategyAndSteps from "src/features/applications/pages/Processi
 import Comments from "src/features/applications/pages/Comments";
 
 import { RequireAuth } from "react-auth-kit";
+import Meetings from "src/features/meetings/pages/Meetings";
 
 const routesArray = [
   {
@@ -31,11 +32,15 @@ const routesArray = [
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
   { path: appRoute.applicantBrief, element: <ApplicantBrief /> },
+  { path: appRoute.meetings, element: <Meetings /> },
   { path: appRoute.payments, element: <Payments /> },
   { path: appRoute.paymentDetails().format, element: <PaymentDetails /> },
   { path: appRoute.generateReciept().format, element: <GenerateReceipt /> },
   { path: appRoute.generateInvoice().format, element: <GenerateInvoice /> },
-  { path: appRoute.financialStatement().format, element: <GenerateFinancialStatement /> },
+  {
+    path: appRoute.financialStatement().format,
+    element: <GenerateFinancialStatement />,
+  },
   { path: appRoute.generateContract().format, element: <GenerateContract /> },
   { path: appRoute.reports, element: <Reports /> },
   { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
