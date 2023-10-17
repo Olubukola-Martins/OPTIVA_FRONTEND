@@ -32,5 +32,11 @@ export type IAppBtnProps = {
   export interface SidebarProps {
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
-    links: SidebarLink[];
   }
+
+  export interface IdentifierProps {
+    id?: number | string;
+    open: boolean;
+    handleClose: Function;
+  }
+  
