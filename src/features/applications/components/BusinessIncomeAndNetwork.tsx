@@ -1,5 +1,3 @@
-
-
 export const BusinessIncomeAndNetwork = () => {
   return (
     <>

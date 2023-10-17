@@ -7,7 +7,10 @@ import { DashboardLayout } from "src/components/layout/Layout";
 import Dependents from "src/features/settings/features/dependents/pages/Dependents";
 import Applications from "src/features/applications/pages/Applications";
 import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
-import ApplicantBrief from "src/features/applications/pages/ApplicantBrief";
+import TimelineExtensions from "src/features/applications/pages/TimelineExtensions";
+import ProcessingStrategyAndSteps from "src/features/applications/pages/ProcessingStrategyAndSteps";
+import Comments from "src/features/applications/pages/Comments";
+
 import { RequireAuth } from "react-auth-kit";
 
 const routesArray = [
@@ -18,8 +21,7 @@ const routesArray = [
   { path: appRoute.dependents, element: <Dependents /> },
   { path: appRoute.settings, element: <Settings /> },
   { path: appRoute.applications, element: <Applications /> },
-  { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
-  { path: appRoute.applicantBrief, element: <ApplicantBrief /> },
+  { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
 ];
 
 export const AllRoutes = () => {

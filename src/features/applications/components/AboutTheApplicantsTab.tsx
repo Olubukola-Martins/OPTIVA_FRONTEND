@@ -1,6 +1,6 @@
-import { Tabs, Input, Select } from "antd";
-import { PersonalDetails } from "./PersonalDetails";
 import React from "react";
+import { Tabs } from "antd";
+import { PersonalDetails } from "./PersonalDetails";
 import { ContactDetails } from "./ContactDetails";
 import { MarriageDetails } from "./MarriageDetails";
 import { ChildrenDetails } from "./ChildrenDetails";
@@ -37,11 +37,11 @@ export const AboutTheApplicantsTab = () => {
       label: "Children Details",
       key: "Children Details",
     },
-    // {
-    //   children: <OtherDependentDetails />,
-    //   label: "Other Dependent Details",
-    //   key: "Other Dependent Details",
-    // },
+    {
+      children: <OtherDependentDetails />,
+      label: "Other Dependent Details",
+      key: "Other Dependent Details",
+    },
     {
       children: <PEP />,
       label: "PEP",
@@ -57,20 +57,18 @@ export const AboutTheApplicantsTab = () => {
       label: "Business, Income And Network",
       key: "Business, Income And Network",
     },
-    // {
-    //   children: <AcademicHistory />,
-    //   label: "Academic History",
-    //   key: "Academy History",
-    // },
-    // {
-    //   children: <TravelDetailsAndHistory />,
-    //   label: "Travel Details And History",
-    //   key: "Travel Details And History",
-    // },
+    {
+      children: <AcademicHistory />,
+      label: "Academic History",
+      key: "Academy History",
+    },
+    {
+      children: <TravelDetailsAndHistory />,
+      label: "Travel Details And History",
+      key: "Travel Details And History",
+    },
   ];
-  return (
-    <>
-      <Tabs items={tabItems} />
-    </>
-  );
+  return <Tabs items={tabItems}
+    // tabBarStyle={{ width: "800px" }}
+  />;
 };
