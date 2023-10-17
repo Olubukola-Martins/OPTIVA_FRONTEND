@@ -1,7 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { DatePicker, Select } from "antd";
 import { PageIntro } from "src/components/PageIntro";
-import { DashboardLayout } from "src/components/layout/Layout";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 const reportOptions = [
@@ -19,7 +18,7 @@ const Reports = () => {
   const { RangePicker } = DatePicker;
 
   return (
-    <DashboardLayout>
+    <>
       <div className="flex flex-row justify-between">
         <PageIntro
           title="Report"
@@ -60,7 +59,7 @@ const Reports = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

@@ -1,7 +1,6 @@
 import Table, { ColumnsType } from "antd/es/table";
 import GenerateTemplate from "../components/GenerateTemplate";
 import { PageIntro } from "src/components/PageIntro";
-import { DashboardLayout } from "src/components/layout/Layout";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 interface DataType {
@@ -52,7 +51,7 @@ PaymentsList.map((item, index) => {
 
 const GenerateReceipt = () => {
   return (
-    <DashboardLayout>
+    <>
       <PageIntro title="Generate Reciept" linkBack={appRoute.payments} />
 
       <GenerateTemplate title="PAYMENT RECIEPT" templateNumber="00892">
@@ -90,7 +89,7 @@ const GenerateReceipt = () => {
           THANK YOU FOR CHOOSING OPTIVA CAPITAL PARTNERS LIMITED.
         </p>
       </GenerateTemplate>
-    </DashboardLayout>
+    </>
   );
 };
 

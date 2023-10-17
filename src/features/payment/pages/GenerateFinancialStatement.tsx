@@ -1,4 +1,3 @@
-import { DashboardLayout } from "src/components/layout/Layout";
 import GenerateTemplate from "../components/GenerateTemplate";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -164,7 +163,7 @@ const GenerateFinancialStatement = () => {
   ];
 
   return (
-    <DashboardLayout>
+    <>
       <PageIntro
         title="Generate Financial Statement"
         linkBack={appRoute.payments}
@@ -238,7 +237,7 @@ const GenerateFinancialStatement = () => {
           </p>
         </>
       </GenerateTemplate>
-    </DashboardLayout>
+    </>
   );
 };
 export default GenerateFinancialStatement;

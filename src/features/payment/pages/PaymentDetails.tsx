@@ -1,10 +1,9 @@
-import { Form, Input, InputNumber, Popconfirm, Select, Typography } from "antd";
+import { Form, Input, InputNumber, Popconfirm, Typography } from "antd";
 import "../style.css";
 import Table, { ColumnsType } from "antd/es/table";
 import React, { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
-import { DashboardLayout } from "src/components/layout/Layout";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 const PaymentDetails = () => {
@@ -278,7 +277,7 @@ const PaymentDetails = () => {
   };
 
   return (
-    <DashboardLayout>
+    <>
       <PageIntro title="Update Payment Details" linkBack={appRoute.payments} />
 
       <div className="border-2 rounded-xl border-gray-100 p-2 md:p-6 xl:p-12 md:w-11/12">
@@ -477,7 +476,7 @@ const PaymentDetails = () => {
           </div>
         </Form>
       </div>
-    </DashboardLayout>
+    </>
   );
 };
 

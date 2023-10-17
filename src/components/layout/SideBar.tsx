@@ -1,5 +1,5 @@
 import { Tooltip } from "antd";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "src/assets/logoSvg.svg";
 import miniLogo from "src/assets/miniLogo.png";
 import { Icon } from "@iconify/react";
@@ -13,6 +13,7 @@ export interface sideBarProps {
 
 export const SideBar = ({ isOpen, setIsOpen }: sideBarProps) => {
   const toggle = () => setIsOpen(!isOpen);
+  const { pathname } = useLocation();
   return (
     <div
       className={`h-screen px-3 py-5 bg-[#F5F5F5] sidebar ${
@@ -24,13 +25,18 @@ export const SideBar = ({ isOpen, setIsOpen }: sideBarProps) => {
       </Link>
 
       <div className={"mt-16"}>
-        <NavLink to={appRoute.home} className="sidebar_link">
+        <NavLink
+          to={appRoute.home}
+          className={`sidebar_link ${
+            pathname === appRoute.home && "active"
+          }`}
+        >
           <Tooltip title="Dashboard" placement="right">
             <Icon icon="mingcute:grid-fill" className="nav_icon" />
           </Tooltip>
           <span className={isOpen ? "" : "hidden"}>Dashboard</span>
         </NavLink>
-        <NavLink to="/all-users" className="sidebar_link">
+        <NavLink to={appRoute.applications} className="sidebar_link">
           <Tooltip title="Applications" placement="right">
             <Icon icon="mdi:application-edit" className="nav_icon" />
           </Tooltip>
@@ -52,7 +58,9 @@ export const SideBar = ({ isOpen, setIsOpen }: sideBarProps) => {
           <span className={isOpen ? "" : "hidden"}>Reports</span>
         </NavLink>
 
-        <NavLink to="/account" className="sidebar_link">
+        <NavLink to={appRoute.settings}  className={`sidebar_link ${
+            pathname.toLowerCase().indexOf(appRoute.settings) !== -1 && "active"
+          }`}>
           <Tooltip title="settings" placement="right">
             <Icon icon="material-symbols:settings" className="nav_icon" />
           </Tooltip>

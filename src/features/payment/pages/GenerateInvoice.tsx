@@ -1,4 +1,3 @@
-import { DashboardLayout } from "src/components/layout/Layout";
 import GenerateTemplate from "../components/GenerateTemplate";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -135,7 +134,7 @@ const columnsSecondTable: ColumnsType<DataTypeSecondTable> = [
 const GenerateInvoice = () => {
 
   return (
-    <DashboardLayout>
+    <>
       <PageIntro title="Generate Invoice" linkBack={appRoute.payments} />
 
       <GenerateTemplate
@@ -220,7 +219,7 @@ const GenerateInvoice = () => {
           the payer when paying.
         </p>
       </GenerateTemplate>
-    </DashboardLayout>
+    </>
   );
 };
 

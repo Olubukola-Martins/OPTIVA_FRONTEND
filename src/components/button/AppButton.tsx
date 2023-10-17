@@ -10,7 +10,7 @@ export const AppButton: React.FunctionComponent<IAppBtnProps> = ({
   label = "Submit",
   isLoading,
   bgColor = "bg-secondary",
-}) => {
+}) => { 
   return (
     <button
       disabled={isDisabled}

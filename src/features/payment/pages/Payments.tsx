@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
-import { DashboardLayout } from "src/components/layout/Layout";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 const Payments = () => {
@@ -271,10 +270,11 @@ const Payments = () => {
   }
 
   return (
-    <DashboardLayout>
+    <>
       <PageIntro
         title="Payments"
         description="View & Update Clients Payments"
+        arrowBack={false}
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-full">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -324,7 +324,7 @@ const Payments = () => {
           </div>
           <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
             <RangePicker style={{ width: 300 }} />
-            <AppButton containerStyle="w-fit" />
+            <AppButton />
           </div>
         </div>
       </div>
@@ -339,7 +339,7 @@ const Payments = () => {
         scroll={{ x: 900 }}
         className="border-gray-100 border-t-0 border-2 rounded-b-md"
       />
-    </DashboardLayout>
+    </>
   );
 };
 

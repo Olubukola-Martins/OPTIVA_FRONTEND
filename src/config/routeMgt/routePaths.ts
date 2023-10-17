@@ -3,8 +3,16 @@ export const appRoute = {
   login_in: `/login`,
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
-  payments: `/payments`,
+  settings: `/settings`,
+  dependents: `/settings/dependents`,
+
+  // Applications
+  applications: `/applications`,
+  applicantDetails: `/applicant-details`,
+  applicantBrief: `/applicant-brief`,
+
   reports: `/reports`,
+  payments: `/payments`,
   generateInvoice: (id?: number) => ({
     format: `/payments/:id/generateInvoice`,
     path: `/payments/${id}/generateInvoice`,
