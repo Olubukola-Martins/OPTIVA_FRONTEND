@@ -1,3 +1,3 @@
 export const END_POINT = {
-    BASE_URL: `${import.meta.env.REACT_APP_BASE_URL}`,
+    BASE_URL: `${import.meta.env.VITE_BASE_URL}`,
 };

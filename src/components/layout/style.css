@@ -47,5 +47,5 @@
   }
 
   .menuStyle {
-    @apply flex items-center gap-x-4 text-base border-t pt-2 px-5 cursor-pointer hover:text-secondary;
+    @apply flex items-center gap-x-2 text-base pt-2 px-5 cursor-pointer hover:text-primary;
   }

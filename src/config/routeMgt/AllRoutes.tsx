@@ -10,28 +10,41 @@ import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
 import TimelineExtensions from "src/features/applications/pages/TimelineExtensions";
 import ProcessingStrategyAndSteps from "src/features/applications/pages/ProcessingStrategyAndSteps";
 import Comments from "src/features/applications/pages/Comments";
+
+import { RequireAuth } from "react-auth-kit";
+
+const routesArray = [
+  {
+    path: appRoute.home,
+    element: <Dashboard />,
+  },
+  { path: appRoute.dependents, element: <Dependents /> },
+  { path: appRoute.settings, element: <Settings /> },
+  { path: appRoute.applications, element: <Applications /> },
+  { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
+];
+
 export const AllRoutes = () => {
   return (
+ 
     <Router>
       <Routes>
         <Route element={<DashboardLayout />}>
-          <Route path={appRoute.home} element={<Dashboard />} />
-          <Route path={appRoute.dependents} element={<Dependents />} />
-          <Route path={appRoute.settings} element={<Settings />} />
-          <Route path={appRoute.applications} element={<Applications />} />
-          <Route
-            path={appRoute.applicant_details().format}
-            element={<ApplicantDetails />}
-          />
-          <Route
-            path={appRoute.timeline_extensions}
-            element={<TimelineExtensions />}
-          />
-          <Route
-            path={appRoute.processing_strategy_steps}
-            element={<ProcessingStrategyAndSteps />}
-          />
-          <Route path={appRoute.comments} element={<Comments />} />
+          {routesArray.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                route.path === appRoute.login_in ? (
+                  route.element
+                ) : (
+                  <RequireAuth loginPath={appRoute.login_in}>
+                    {route.element}
+                  </RequireAuth>
+                )
+              }
+            />
+          ))}
         </Route>
         <Route path={appRoute.login_in} element={<Login />} />
       </Routes>
