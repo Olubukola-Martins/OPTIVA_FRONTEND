@@ -15,44 +15,48 @@ import GenerateInvoice from "src/features/payment/pages/GenerateInvoice";
 import GenerateFinancialStatement from "src/features/payment/pages/GenerateFinancialStatement";
 import GenerateContract from "src/features/payment/pages/GenerateContract";
 import Reports from "src/features/report/pages/Reports";
+import { RequireAuth } from "react-auth-kit";
+
+const routesArray = [
+  {
+    path: appRoute.home,
+    element: <Dashboard />,
+  },
+  { path: appRoute.dependents, element: <Dependents /> },
+  { path: appRoute.settings, element: <Settings /> },
+  { path: appRoute.applications, element: <Applications /> },
+  { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
+  { path: appRoute.applicantBrief, element: <ApplicantBrief /> },
+  { path: appRoute.payments, element: <Payments /> },
+  { path: appRoute.paymentDetails().format, element: <PaymentDetails /> },
+  { path: appRoute.generateReciept().format, element: <GenerateReceipt /> },
+  { path: appRoute.generateInvoice().format, element: <GenerateInvoice /> },
+  { path: appRoute.financialStatement().format, element: <GenerateFinancialStatement /> },
+  { path: appRoute.generateContract().format, element: <GenerateContract /> },
+  { path: appRoute.reports, element: <Reports /> },
+];
 
 export const AllRoutes = () => {
   return (
+ 
     <Router>
       <Routes>
         <Route element={<DashboardLayout />}>
-          <Route path={appRoute.home} element={<Dashboard />} />
-          <Route path={appRoute.dependents} element={<Dependents />} />
-          <Route path={appRoute.settings} element={<Settings />} />
-          <Route path={appRoute.applications} element={<Applications />} />
-          <Route
-            path={appRoute.applicantDetails}
-            element={<ApplicantDetails />}
-          />
-          <Route path={appRoute.applicantBrief} element={<ApplicantBrief />} />
-          <Route path={appRoute.payments} element={<Payments />} />
-          <Route
-            path={appRoute.financialStatement().format}
-            element={<GenerateFinancialStatement />}
-          />
-          <Route
-            path={appRoute.generateInvoice().format}
-            element={<GenerateInvoice />}
-          />
-          <Route
-            path={appRoute.generateReciept().format}
-            element={<GenerateReceipt />}
-          />
-          <Route
-            path={appRoute.generateContract().format}
-            element={<GenerateContract />}
-          />
-          <Route
-            path={appRoute.paymentDetails().format}
-            element={<PaymentDetails />}
-          />
-          <Route path={appRoute.reports} element={<Reports />} />
-          {/* <Route path={appRoute.paymentProof().format} element={<Payments />} /> */}
+          {routesArray.map((route, index) => (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                route.path === appRoute.login_in ? (
+                  route.element
+                ) : (
+                  <RequireAuth loginPath={appRoute.login_in}>
+                    {route.element}
+                  </RequireAuth>
+                )
+              }
+            />
+          ))}
         </Route>
         <Route path={appRoute.login_in} element={<Login />} />
       </Routes>
