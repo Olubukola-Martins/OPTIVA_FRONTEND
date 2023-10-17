@@ -43,11 +43,17 @@ const TimelineExtensions = () => {
   const showRequestModal = () => {
     setOpenRequestModal(true);
   };
-  //   const handleOk = () => {
-  //     setOpenModal(false);
-  //   };
   const handleRequestCancel = () => {
     setOpenRequestModal(false);
+  };
+
+  //Reject Modal
+  const [openRejectModal, setOpenRejectModal] = useState(false);
+  const showRejectModal = () => {
+    setOpenRejectModal(true);
+  };
+  const handleRejectCancel = () => {
+    setOpenRejectModal(false);
   };
 
   // DatePicker
@@ -98,7 +104,9 @@ const TimelineExtensions = () => {
                   <Link to={""}>Approve</Link>
                 </Menu.Item>
                 <Menu.Item key="3">
-                  <Link to={""}>Reject</Link>
+                  <Link to={""} onClick={showRejectModal}>
+                    Reject
+                  </Link>
                 </Menu.Item>
               </Menu>
             }
@@ -197,6 +205,27 @@ const TimelineExtensions = () => {
               handleClick={handleRequestCancel}
             />
             <AppButton label="Approve" />
+          </div>
+        </div>
+      </Modal>
+      <Modal open={openRejectModal} onCancel={handleRejectCancel} footer={null}>
+        <div>
+          <h1 className="p-4 font-bold text-center text-lg">
+            Reason for Rejection
+          </h1>
+          <Form layout="vertical">
+            <Form.Item label="Reject Extension" name="extensionReject">
+              <Input.TextArea rows={4} />
+            </Form.Item>
+          </Form>
+          <div className="flex items-center justify-center gap-4 p-4">
+            <AppButton
+              label="Cancel"
+              variant="transparent"
+              containerStyle="border border-blue"
+              handleClick={handleRejectCancel}
+            />
+            <AppButton label="Submit" />
           </div>
         </div>
       </Modal>

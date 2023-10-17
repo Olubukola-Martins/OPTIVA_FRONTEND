@@ -15,4 +15,5 @@ export const appRoute = {
   }),
   timeline_extensions: `/applications/timeline-extensions`,
   processing_strategy_steps: `/applications/processing_strategy_steps`,
+  comments: `/applications/comments`
 };

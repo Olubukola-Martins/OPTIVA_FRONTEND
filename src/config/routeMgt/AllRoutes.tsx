@@ -9,6 +9,7 @@ import Applications from "src/features/applications/pages/Applications";
 import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
 import TimelineExtensions from "src/features/applications/pages/TimelineExtensions";
 import ProcessingStrategyAndSteps from "src/features/applications/pages/ProcessingStrategyAndSteps";
+import Comments from "src/features/applications/pages/Comments";
 export const AllRoutes = () => {
   return (
     <Router>
@@ -31,6 +32,7 @@ export const AllRoutes = () => {
           path={appRoute.processing_strategy_steps}
           element={<ProcessingStrategyAndSteps />}
         />
+        <Route path={appRoute.comments} element={<Comments />} />
         <Route path={appRoute.login_in} element={<Login />} />
       </Routes>
     </Router>
