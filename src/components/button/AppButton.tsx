@@ -2,7 +2,7 @@ import { BeatLoader } from "react-spinners";
 import { IAppBtnProps } from "src/types";
 
 export const AppButton: React.FunctionComponent<IAppBtnProps> = ({
-  containerStyle,
+  containerStyle ,
   type = "button",
   isDisabled = false,
   handleClick,
