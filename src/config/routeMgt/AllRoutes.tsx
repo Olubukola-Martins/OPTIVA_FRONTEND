@@ -7,7 +7,7 @@ import { DashboardLayout } from "src/components/layout/Layout";
 import Dependents from "src/features/settings/features/dependents/pages/Dependents";
 import Applications from "src/features/applications/pages/Applications";
 import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
-import ApplicantBrief from "src/features/applications/pages/ApplicantBrief";
+import { ApplicantBrief } from "src/features/applications/components/ApplicantBrief";
 import Payments from "src/features/payment/pages/Payments";
 import PaymentDetails from "src/features/payment/pages/PaymentDetails";
 import GenerateReceipt from "src/features/payment/pages/GenerateReceipt";
@@ -15,6 +15,10 @@ import GenerateInvoice from "src/features/payment/pages/GenerateInvoice";
 import GenerateFinancialStatement from "src/features/payment/pages/GenerateFinancialStatement";
 import GenerateContract from "src/features/payment/pages/GenerateContract";
 import Reports from "src/features/report/pages/Reports";
+import TimelineExtensions from "src/features/applications/pages/TimelineExtensions";
+import ProcessingStrategyAndSteps from "src/features/applications/pages/ProcessingStrategyAndSteps";
+import Comments from "src/features/applications/pages/Comments";
+
 import { RequireAuth } from "react-auth-kit";
 
 const routesArray = [
@@ -34,6 +38,7 @@ const routesArray = [
   { path: appRoute.financialStatement().format, element: <GenerateFinancialStatement /> },
   { path: appRoute.generateContract().format, element: <GenerateContract /> },
   { path: appRoute.reports, element: <Reports /> },
+  { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
 ];
 
 export const AllRoutes = () => {
