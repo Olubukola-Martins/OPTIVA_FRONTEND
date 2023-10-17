@@ -10,4 +10,5 @@ export const appRoute = {
   applications: `/applications`,
   applicantDetails: `/applicant-details`,
   applicantBrief: `/applicant-brief`,
+  
 };
