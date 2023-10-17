@@ -1,14 +1,16 @@
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
-import { DashboardLayout } from "src/components/layout/Layout";
 import welcomeVector from ".././assets/welcomeVector.svg";
 import introBg from ".././assets/introBg.png";
 import { LatestActivities } from "../components/LatestActivities";
 import { AppStatus } from "../components/AppStatus";
 import { PopularCountries } from "../components/PopularCountries";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 
 const Dashboard = () => {
+  const { userInfo } = useGetUserInfo();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -22,7 +24,7 @@ const Dashboard = () => {
       >
         <div className="text-white flex flex-col justify-center py-4">
           <h2 className="font-semibold text-lg md:text-2xl pb-1">
-            Hello Ruth!
+            Hello {userInfo?.name}!
           </h2>
           <p className="text-sm md:text-base">Welcome to your dashboard</p>
         </div>
