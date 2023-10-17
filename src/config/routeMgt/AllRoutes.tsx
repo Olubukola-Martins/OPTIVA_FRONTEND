@@ -27,12 +27,12 @@ export const AllRoutes = () => {
             path={appRoute.timeline_extensions}
             element={<TimelineExtensions />}
           />
+          <Route
+            path={appRoute.processing_strategy_steps}
+            element={<ProcessingStrategyAndSteps />}
+          />
+          <Route path={appRoute.comments} element={<Comments />} />
         </Route>
-        <Route
-          path={appRoute.processing_strategy_steps}
-          element={<ProcessingStrategyAndSteps />}
-        />
-        <Route path={appRoute.comments} element={<Comments />} />
         <Route path={appRoute.login_in} element={<Login />} />
       </Routes>
     </Router>
