@@ -8,3 +8,7 @@
 .applicantDetailsSinglePTag {
   @apply h-10 border rounded-md bg-[#f5f5f5];
 }
+
+.applicantProcessingDiv {
+  @apply flex flex-col lg:flex-row gap-5 w-full;
+}

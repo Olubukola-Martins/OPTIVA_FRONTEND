@@ -1,9 +1,11 @@
-import { ApplicationsTab } from "../components/ApplicationsTab";
+import { ApplicationsTab } from "../components/ApplicantDetails/ApplicationsTab";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import { Form, Input, Modal, Select } from "antd";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 const Applications = () => {
   // New Applications Modal
@@ -76,7 +78,9 @@ const Applications = () => {
               containerStyle="border border-blue"
               handleClick={handleNewApplicationsCancel}
             />
-            <AppButton label="Next" />
+            <Link to={appRoute.new_application().path}>
+              <AppButton label="Next" />
+            </Link>
           </div>
         </div>
       </Modal>

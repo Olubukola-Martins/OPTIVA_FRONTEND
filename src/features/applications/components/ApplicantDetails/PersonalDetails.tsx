@@ -1,4 +1,4 @@
-import "../assets/style.css";
+import "../../assets/style.css";
 export const PersonalDetails = () => {
   return (
     <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10">

@@ -1,6 +1,6 @@
 import { Input, Select, Tabs } from "antd";
-import { ActiveApplications } from "./ActiveApplications";
-import { InactiveApplications } from "./InactiveApplications";
+import { ActiveApplications } from "../ActiveApplications";
+import { InactiveApplications } from "../InactiveApplications";
 
 export const ApplicationsTab = () => {
   const operations = (

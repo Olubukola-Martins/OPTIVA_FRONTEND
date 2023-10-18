@@ -12,6 +12,7 @@ import ProcessingStrategyAndSteps from "src/features/applications/pages/Processi
 import Comments from "src/features/applications/pages/Comments";
 
 import { RequireAuth } from "react-auth-kit";
+import NewApplication from "src/features/applications/pages/NewApplication";
 
 const routesArray = [
   {
@@ -22,12 +23,16 @@ const routesArray = [
   { path: appRoute.settings, element: <Settings /> },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
-  { path: appRoute.timeline_extensions, element: <TimelineExtensions /> },
   {
-    path: appRoute.processing_strategy_steps,
+    path: appRoute.timeline_extensions().format,
+    element: <TimelineExtensions />,
+  },
+  {
+    path: appRoute.processing_strategy_steps().format,
     element: <ProcessingStrategyAndSteps />,
   },
-  { path: appRoute.comments, element: <Comments /> },
+  { path: appRoute.comments().format, element: <Comments /> },
+  { path: appRoute.new_application().format, element: <NewApplication /> },
 ];
 
 export const AllRoutes = () => {

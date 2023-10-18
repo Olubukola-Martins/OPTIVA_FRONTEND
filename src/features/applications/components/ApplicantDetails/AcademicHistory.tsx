@@ -29,8 +29,8 @@ export const AcademicHistory = () => {
                 <p className="applicantDetailsPTag">Start date</p>
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row gap-5 w-full ">
-              <div className=" lg:w-1/2">
+            <div className="flex flex-col lg:flex-row gap-5 lg:w-[98.5%]">
+              <div className="lg:w-1/2">
                 <p className="applicantDetailsPTag">End date</p>
               </div>
             </div>

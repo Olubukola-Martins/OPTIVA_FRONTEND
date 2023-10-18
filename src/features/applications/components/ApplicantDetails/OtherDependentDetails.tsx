@@ -155,9 +155,9 @@ export const OtherDependentDetails = () => {
       dateOfDeath: "dd/mm/yy",
       cityOfDeath: "Lagos",
       countryOfDeath: "Lagos",
-      stateOfOrgin: 'Lagos',
-      lgaOfOrigin: '-',
-      hometown: '-',
+      stateOfOrgin: "Lagos",
+      lgaOfOrigin: "-",
+      hometown: "-",
       height: "15cm",
       eyeColor: "Brown",
       hairColor: "Brown",
@@ -178,11 +178,13 @@ export const OtherDependentDetails = () => {
     });
   }
   return (
-    <Table
-      columns={columns}
-      dataSource={dataSource}
-      className="bg-white rounded-md shadow border mt-2"
-      scroll={{ x: 1300 }}
-    />
+    <div className="p-4 lg:w-[1150px]">
+      <Table
+        columns={columns}
+        dataSource={dataSource}
+        className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 200 }}
+      />
+    </div>
   );
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import { Tabs } from "antd";
 import { PersonalDetails } from "./PersonalDetails";
 import { ContactDetails } from "./ContactDetails";
@@ -14,61 +13,67 @@ import { TravelDetailsAndHistory } from "./TravelDetailsAndHistory";
 export const AboutTheApplicantsTab = () => {
   const tabItems: {
     label: string;
-    children: React.ReactNode;
     key: string;
+    children: React.ReactNode;
   }[] = [
     {
-      children: <PersonalDetails />,
       label: "Personal Details",
       key: "Personal Details",
+      children: <PersonalDetails />,
     },
     {
-      children: <ContactDetails />,
       label: "Contact Details",
       key: "Contact Details",
+      children: <ContactDetails />,
     },
     {
-      children: <MarriageDetails />,
       label: "Marriage Details",
       key: "Marriage Details",
+      children: <MarriageDetails />,
     },
     {
-      children: <ChildrenDetails />,
       label: "Children Details",
       key: "Children Details",
+      children: <ChildrenDetails />,
     },
     {
-      children: <OtherDependentDetails />,
       label: "Other Dependent Details",
       key: "Other Dependent Details",
+      children: <OtherDependentDetails />,
     },
     {
-      children: <PEP />,
       label: "PEP",
       key: "PEP",
+      children: <PEP />,
     },
     {
-      children: <EmploymentDetails />,
       label: "Employment Details",
       key: "Employment Details",
+      children: <EmploymentDetails />,
     },
     {
+      label: "Business, Income & Network",
+      key: "Business, Income and Network",
       children: <BusinessIncomeAndNetwork />,
-      label: "Business, Income And Network",
-      key: "Business, Income And Network",
     },
     {
-      children: <AcademicHistory />,
       label: "Academic History",
-      key: "Academy History",
+      key: "Academic History",
+      children: <AcademicHistory />,
     },
     {
+      label: "Travel Details & History",
+      key: "Travel Details &History",
       children: <TravelDetailsAndHistory />,
-      label: "Travel Details And History",
-      key: "Travel Details And History",
     },
   ];
-  return <Tabs items={tabItems}
-    // tabBarStyle={{ width: "800px" }}
-  />;
+  return (
+    <Tabs
+      items={tabItems}
+        tabBarGutter={5.9}
+      // tabBarStyle={{
+      //   width: 1200,
+      // }}
+    />
+  );
 };

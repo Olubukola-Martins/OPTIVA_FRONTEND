@@ -81,10 +81,14 @@ export const ActiveApplications = () => {
                     View Applicant Details
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="3">Processing Strategy/Steps</Menu.Item>
+                <Menu.Item key="3">
+                  <Link to={appRoute.processing_strategy_steps().path}>
+                    Processing Strategy/Steps
+                  </Link>
+                </Menu.Item>
                 <Menu.Item key="4">View Uploaded Documents</Menu.Item>
                 <Menu.Item key="5">
-                  <Link to={appRoute.timeline_extensions}>
+                  <Link to={appRoute.timeline_extensions().path}>
                     Timeline Extensions
                   </Link>
                 </Menu.Item>

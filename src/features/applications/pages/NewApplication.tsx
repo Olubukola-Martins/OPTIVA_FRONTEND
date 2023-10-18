@@ -1,13 +1,13 @@
 import { Steps } from "antd";
 import { PageIntro } from "src/components/PageIntro";
-import { ApplicantBrief } from "../components/ApplicantDetails/ApplicantBrief";
-import { AboutTheApplicant } from "../components/ApplicantDetails/AboutTheApplicant";
+import { NewApplicantBrief } from "../components/NewApplication/NewApplicantBrief";
+import { NewAboutTheApplicant } from "../components/NewApplication/NewAboutTheApplicant";
 import { useState } from "react";
-import { ApplicantPeculiarites } from "../components/ApplicantDetails/ApplicantPeculiarites";
-import { Others } from "../components/ApplicantDetails/Others";
+// import { ApplicantPeculiarites } from "../components/ApplicantPeculiarites";
+// import { Others } from "../components/Others";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
-const ApplicantDetails = () => {
+const NewApplication = () => {
   const { Step } = Steps;
   const [currentStep, setCurrentStep] = useState<number>(0);
 
@@ -15,20 +15,18 @@ const ApplicantDetails = () => {
     setCurrentStep(step);
   };
   const steps = [
-    <ApplicantBrief />,
-    <AboutTheApplicant />,
-    <ApplicantPeculiarites />,
-    <Others />,
+    <NewApplicantBrief />,
+    <NewAboutTheApplicant />,
+    // <ApplicantPeculiarites />,
+    // <Others />,
   ];
   return (
-    <div className="Container">
-      <div className="flex flex-col md:flex-row items-center justify-between p-2">
-        <PageIntro title="Applicant Details" linkBack={appRoute.applications} />
-        <p>
-          Application Count down:
-          <span className="text-[#28A745] text-lg"> 81 days</span>
-        </p>
-      </div>
+    <>
+      <PageIntro
+        title="New Application"
+        description="Please fill in the following information"
+        linkBack={appRoute.applications}
+      />
 
       {/* STEPPER */}
       <div className="border rounded-lg mx-auto p-5">
@@ -47,8 +45,8 @@ const ApplicantDetails = () => {
       <div className="border rounded-lg my-3 p-8">
         <div>{steps[currentStep]}</div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default ApplicantDetails;
+export default NewApplication;
