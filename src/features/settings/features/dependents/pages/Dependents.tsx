@@ -1,10 +1,11 @@
 import { ColumnsType } from "antd/es/table";
 import { Dropdown, Menu, Table } from "antd/lib";
-import React from "react";
+import React, { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { Icon } from "@iconify/react";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import { AddDependent } from "../components/AddDependent";
 
 interface DataType {
   key: React.Key;
@@ -59,8 +60,10 @@ for (let i = 0; i < 6; i++) {
   });
 }
 const Dependents = () => {
+  const [addNewD, setAddNewD] = useState(false);
   return (
     <>
+      <AddDependent open={addNewD} handleClose={() => setAddNewD(false)} />
       <div className="flex justify-between items-center">
         <PageIntro
           title="Eligible Dependents"
@@ -70,10 +73,16 @@ const Dependents = () => {
 
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Icon icon="uil:file-import" className="text-3xl cursor-pointer hover:text-primary" />
-            <Icon icon="mingcute:file-import-line" className="text-3xl cursor-pointer hover:text-primary"/>
+            <Icon
+              icon="uil:file-import"
+              className="text-3xl cursor-pointer hover:text-primary"
+            />
+            <Icon
+              icon="mingcute:file-import-line"
+              className="text-3xl cursor-pointer hover:text-primary"
+            />
           </div>
-          <AppButton label="Add New" />
+          <AppButton label="Add New" handleClick={() => setAddNewD(true)} />
         </div>
       </div>
 
