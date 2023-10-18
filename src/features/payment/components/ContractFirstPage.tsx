@@ -1,7 +1,17 @@
+import watermarkLogo from "src/assets/watermarkLogo.png";
+
 const ContractFirstPage = () => {
   return (
-    <div className="border-2 border-gray-200 rounded-md p-5 text-sm sm:text-base sm:px-14 sm:py-16 ">
-      <div className="border-2 border-gray-500 flex flex-col px-4 sm:px-8 place-items-center gap-6">
+    <div className="border-2 border-gray-200 rounded-2xl p-5 text-sm sm:text-base sm:px-14 sm:py-16 ">
+      <div
+        className="border-2 border-gray-500 flex flex-col px-4 sm:px-8 place-items-center gap-6"
+        style={{
+          background: `url(${watermarkLogo})`,
+          backgroundSize: "100% 100%",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="flex flex-col place-items-center py-20 sm:py-24 md:py-32 md:gap-32 sm:gap-28 gap-16">
           <p>ENGAGEMENT CONTRACT</p>
           <div className="flex flex-col place-items-center gap-4">
