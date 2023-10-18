@@ -1,0 +1,20 @@
+.financialStatementTable .ant-table-thead :nth-child(2) {
+  display: none;
+}
+.blueHead .ant-table-thead tr > .ant-table-cell {
+  background-color: #012168;
+  color: white;
+}
+.redHead .ant-table-thead tr > .ant-table-cell {
+  background-color: #801d23;
+  color: white;
+}
+
+/* #TemplateTable, */
+#TemplateTable .ant-table-summary > tr > td,
+#TemplateTable .ant-table-thead > tr > th,
+#TemplateTable .ant-table-tbody > tr > td {
+  border: 1px solid rgba(51, 51, 51, 1);
+}
+#TemplateTable{border: none;}
+#TemplateTable .ant-table-summary > tr:first-child > td:first-child{border-left: none; border-bottom: none;}

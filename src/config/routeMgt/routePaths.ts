@@ -8,6 +8,8 @@ export const appRoute = {
 
   // Applications
   applications: `/applications`,
+  applicantDetails: `/applicant-details`,
+  applicantBrief: `/applicant-brief`,
   // applicantDetails: `/applicant-details`,
   applicant_details: (id?: number) => ({
     format: `/applicant-details/:id`,
@@ -28,5 +30,39 @@ export const appRoute = {
   new_application: (id?: number) => ({
     format: `/applications/new_application/:id`,
     path: `/applications/new_application/${id}`,
-  })
+  }),
+
+  // Reports
+  reports: `/reports`,
+
+  // Payments
+  payments: `/payments`,
+  generateInvoice: (id?: number) => ({
+    format: `/payments/:id/generateInvoice`,
+    path: `/payments/${id}/generateInvoice`,
+  }),
+  paymentDetails: (id?: number) => ({
+    format: `/payments/:id/paymentDetails`,
+    path: `/payments/${id}/paymentDetails`,
+  }),
+  financialStatement: (id?: number) => ({
+    format: `/payments/:id/financialStatement`,
+    path: `/payments/${id}/financialStatement`,
+  }),
+  generateReciept: (id?: number) => ({
+    format: `/payments/:id/generateReciept`,
+    path: `/payments/${id}/generateReciept`,
+  }),
+  generateContract: (id?: number) => ({
+    format: `/payments/:id/generateContract`,
+    path: `/payments/${id}/generateContract`,
+  }),
+
+  paymentProof: (id?: number) => ({
+    format: `/payments/:id/paymentProof`,
+    path: `/payments/${id}/paymentProof`,
+  }),
+
+  // Meetings
+  meetings: `/meetings`,
 };

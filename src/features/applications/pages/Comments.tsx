@@ -1,5 +1,4 @@
 
-
 const Comments = () => {
   return (
     <div>Comments</div>
@@ -7,3 +6,4 @@ const Comments = () => {
 }
 
 export default Comments
+
