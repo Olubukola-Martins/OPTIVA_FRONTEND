@@ -53,13 +53,13 @@ const AdminActivity = () => {
 
   return (
     <>
+      <h2 className="font-semibold text-lg pb-5 pl-2">Admin Activity</h2>
       {/* Chart */}
-      <div></div>
-          {/* Table */}
-          <div>
-              <h2 className="font-semibold text-lg pb-5 pl-2">Admin Activity</h2>
-      <Table dataSource={dataSource} columns={columns} bordered={true}/>;
-          </div>
+      <div className="hidden"></div>
+      {/* Table */}
+      <div>
+        <Table dataSource={dataSource} columns={columns} bordered={true} />;
+      </div>
     </>
   );
 };

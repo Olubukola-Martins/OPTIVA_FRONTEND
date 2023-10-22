@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import AdminActivity from "../components/AdminActivity";
 import CBIApplication from "../components/CBIApplication";
+import ApplicantStatusOverview from "../components/ApplicantStatusOverview";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -23,7 +24,7 @@ const Reports = () => {
     changeIcon === "icon-park:chart-line"
       ? setChangeIcon("tabler:table")
       : setChangeIcon("icon-park:chart-line");
-  }
+  };
 
   return (
     <>
@@ -43,10 +44,11 @@ const Reports = () => {
       </div>
 
       <div className="border-2 rounded-md py-3 px-4 ">
-        <div className="flex flex-row justify-between mb-5">
-          <div className="flex flex-row gap-4">
+        <div className="flex flex-col sm:flex-row justify-between mb-5">
+          <div className="flex place-self-start pb-2 sm:pb-0 flex-row-reverse sm:flex-row gap-4">
             <Select
               placeholder="Select Report"
+              className="place-self-center"
               style={{ width: 200 }}
               defaultValue={{
                 label: "Admin Activity",
@@ -62,14 +64,14 @@ const Reports = () => {
               onClick={handleChangeIcon}
             />
           </div>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-col lg:flex-row gap-2">
             <Select placeholder="Lagos Branch" />
-            <RangePicker style={{ width: 300 }} />
+            <RangePicker style={{ width: 300, maxWidth: "80vw" }} />
           </div>
         </div>
 
         <div>
-          <CBIApplication />
+          <ApplicantStatusOverview />
         </div>
       </div>
     </>
