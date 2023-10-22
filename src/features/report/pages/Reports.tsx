@@ -1,6 +1,9 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { DatePicker, Select } from "antd";
+import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
+import AdminActivity from "../components/AdminActivity";
+import CBIApplication from "../components/CBIApplication";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -15,6 +18,12 @@ const reportOptions = [
 
 const Reports = () => {
   const { RangePicker } = DatePicker;
+  const [changeIcon, setChangeIcon] = useState<string>("icon-park:chart-line");
+  const handleChangeIcon = () => {
+    changeIcon === "icon-park:chart-line"
+      ? setChangeIcon("tabler:table")
+      : setChangeIcon("icon-park:chart-line");
+  }
 
   return (
     <>
@@ -31,10 +40,10 @@ const Reports = () => {
           height={30}
           className=" place-self-center"
         />
-          </div>
-          
-      <div className="border-2 rounded-md py-3 px-4">
-        <div className="flex flex-row justify-between">
+      </div>
+
+      <div className="border-2 rounded-md py-3 px-4 ">
+        <div className="flex flex-row justify-between mb-5">
           <div className="flex flex-row gap-4">
             <Select
               placeholder="Select Report"
@@ -46,16 +55,21 @@ const Reports = () => {
               options={reportOptions}
             />
             <Icon
-              icon="icon-park:chart-line"
+              icon={changeIcon}
               width={24}
               height={24}
               className=" place-self-center"
+              onClick={handleChangeIcon}
             />
           </div>
           <div className="flex flex-row gap-2">
             <Select placeholder="Lagos Branch" />
             <RangePicker style={{ width: 300 }} />
           </div>
+        </div>
+
+        <div>
+          <CBIApplication />
         </div>
       </div>
     </>
