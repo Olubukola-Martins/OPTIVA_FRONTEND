@@ -1,32 +1,43 @@
-import { ColumnsType } from "antd/es/table";
-import { Dropdown, Menu, Table } from "antd/lib";
-import React, { useState } from "react";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Dropdown, Menu } from "antd";
+import Table, { ColumnsType } from "antd/es/table";
+import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
-import { Icon } from "@iconify/react";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { AddDependent } from "../components/AddDependent";
+import { AddDocument } from "../components/AddDocument";
 
 interface DataType {
   key: React.Key;
-  dependent: string;
-  age: string;
-  conditions: string;
+  name: string;
+  category: string;
+  format: string[];
+  size: string;
+  requirements: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Dependents",
-    dataIndex: "dependent",
+    title: "Name",
+    dataIndex: "name",
   },
 
   {
-    title: "Age",
-    dataIndex: "age",
+    title: "Category",
+    dataIndex: "category",
   },
   {
-    title: "Conditions",
-    dataIndex: "conditions",
+    title: "Format",
+    dataIndex: "format",
+  },
+
+  {
+    title: "Size",
+    dataIndex: "size",
+  },
+  {
+    title: "Requirements",
+    dataIndex: "requirements",
   },
   {
     title: "Action",
@@ -54,20 +65,26 @@ const data: DataType[] = [];
 for (let i = 0; i < 6; i++) {
   data.push({
     key: i,
-    dependent: "Mother",
-    age: "<20",
-    conditions: "unmarried",
+    name: "Passport",
+    category: "Family & Education",
+    format: ["pdf", ", png"],
+    size: "10mb",
+    requirements: "Has to include font",
   });
 }
-const Dependents = () => {
-  const [addNewD, setAddNewD] = useState(false);
+
+const DocumentRequirement = () => {
+  const [newDocument, setNewDocument] = useState(false);
   return (
     <>
-      <AddDependent open={addNewD} handleClose={() => setAddNewD(false)} />
-      <div className="flex justify-between flex-col md:flex-row  md:items-center">
+      <AddDocument
+        open={newDocument}
+        handleClose={() => setNewDocument(false)}
+      />
+      <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
-          title="Eligible Dependents"
-          description="Create, View & edit eligible dependents  routes on the system"
+          title="Document Requirements"
+          description="Create, View & edit document requirements on the system"
           linkBack={appRoute.settings}
         />
 
@@ -82,7 +99,7 @@ const Dependents = () => {
               className="text-3xl cursor-pointer hover:text-primary"
             />
           </div>
-          <AppButton label="Add New" handleClick={() => setAddNewD(true)} />
+          <AppButton label="Add New" handleClick={() => setNewDocument(true)}/>
         </div>
       </div>
 
@@ -96,4 +113,4 @@ const Dependents = () => {
   );
 };
 
-export default Dependents;
+export default DocumentRequirement;

@@ -8,7 +8,7 @@ export const settingsLink: settingsLinkProps[] = [
   },
   {
     name: "Define Document Requirements",
-    link: appRoute.dependents,
+    link: appRoute.document_requirement,
   },
   {
     name: "Define Investment Routes",

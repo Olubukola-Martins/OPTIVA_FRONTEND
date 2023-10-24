@@ -21,6 +21,7 @@ import Comments from "src/features/applications/pages/Comments";
 
 import { RequireAuth } from "react-auth-kit";
 import Meetings from "src/features/meetings/pages/Meetings";
+import DocumentRequirement from "src/features/settings/features/documents/pages/DocumentRequirement";
 
 const routesArray = [
   {
@@ -44,11 +45,11 @@ const routesArray = [
   { path: appRoute.generateContract().format, element: <GenerateContract /> },
   { path: appRoute.reports, element: <Reports /> },
   { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
+  { path: appRoute.document_requirement, element: <DocumentRequirement /> },
 ];
 
 export const AllRoutes = () => {
   return (
- 
     <Router>
       <Routes>
         <Route element={<DashboardLayout />}>
