@@ -7,6 +7,7 @@ import CBIApplication from "../components/CBIApplication";
 import ApplicantStatusOverview from "../components/ApplicantStatusOverview";
 import ApplicantInteractions from "../components/ApplicantInteractions";
 import ApplicantDemographics from "../components/ApplicantDemographics";
+import DocumentReviewStatus from "../components/DocumentReviewStatus";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -37,7 +38,8 @@ const Reports = () => {
       "CBI Application Reports": <CBIApplication />,
       "Applicant Status Overview": <ApplicantStatusOverview />,
       "Applicant Interactions": <ApplicantInteractions />,
-      "Applicant Demographics": <ApplicantDemographics/>
+      "Applicant Demographics": <ApplicantDemographics />,
+      "Document Uploaded Status":<DocumentReviewStatus/>,"Applicant Type Breakdown" : <ApplicantTypeBreakdown/>
     };
     
     const selectedItem = allReports[value] || <AdminActivity />

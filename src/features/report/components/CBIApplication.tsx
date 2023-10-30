@@ -61,7 +61,6 @@ import { useState } from "react";
   // TABLE DATA STAGE 2
   interface DataType2 {
     key: number | string;
-    // adminID: number | string;
     applicantID: number | string;
     applicantName: string;
     phoneNumber: string;
