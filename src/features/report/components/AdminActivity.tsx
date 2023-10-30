@@ -53,12 +53,19 @@ const AdminActivity = () => {
 
   return (
     <>
-      <h2 className="font-semibold text-lg pb-5 pl-2">Admin Activity</h2>
+      <h2 className="font-semibold text-lg pb-5 pt-3 px-8 max-sm:text-center">Admin Activity</h2>
       {/* Chart */}
       <div className="hidden"></div>
+      
       {/* Table */}
       <div>
-        <Table dataSource={dataSource} columns={columns} bordered={true} />;
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          bordered={true}
+          scroll={{ x: 900 }}
+        />
+        ;
       </div>
     </>
   );

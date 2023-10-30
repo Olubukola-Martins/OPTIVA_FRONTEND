@@ -5,6 +5,7 @@ import { PageIntro } from "src/components/PageIntro";
 import AdminActivity from "../components/AdminActivity";
 import CBIApplication from "../components/CBIApplication";
 import ApplicantStatusOverview from "../components/ApplicantStatusOverview";
+import ApplicantInteractions from "../components/ApplicantInteractions";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -19,11 +20,26 @@ const reportOptions = [
 
 const Reports = () => {
   const { RangePicker } = DatePicker;
+  const [selectedReport, setSelectedReport] = useState<React.ReactNode>(
+    <AdminActivity />
+  );
   const [changeIcon, setChangeIcon] = useState<string>("icon-park:chart-line");
   const handleChangeIcon = () => {
     changeIcon === "icon-park:chart-line"
       ? setChangeIcon("tabler:table")
       : setChangeIcon("icon-park:chart-line");
+  };
+
+  const handleSelectReports = (value:string) => {
+    const allReports: Record<string, React.ReactNode> = {
+      "Admin Activity": <AdminActivity />,
+      "CBI Application Reports": <CBIApplication />,
+      "Applicant Status Overview": <ApplicantStatusOverview />,
+      "Applicant Interactions": <ApplicantInteractions/>
+    };
+    
+    const selectedItem = allReports[value] || <AdminActivity />
+    setSelectedReport(selectedItem);
   };
 
   return (
@@ -43,18 +59,16 @@ const Reports = () => {
         />
       </div>
 
-      <div className="border-2 rounded-md py-3 px-4 ">
-        <div className="flex flex-col sm:flex-row justify-between mb-5">
+      <div className="border-1 rounded-md  pb-3 pt-4 md:pt-8">
+        <div className="flex flex-col sm:flex-row justify-between mb-5  px-4">
           <div className="flex place-self-start pb-2 sm:pb-0 flex-row-reverse sm:flex-row gap-4">
             <Select
               placeholder="Select Report"
               className="place-self-center"
               style={{ width: 200 }}
-              defaultValue={{
-                label: "Admin Activity",
-                value: "Admin Activity",
-              }}
+              defaultValue={"Admin Activity"}
               options={reportOptions}
+              onChange={handleSelectReports}
             />
             <Icon
               icon={changeIcon}
@@ -65,14 +79,27 @@ const Reports = () => {
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <Select placeholder="Lagos Branch" />
-            <RangePicker style={{ width: 300, maxWidth: "80vw" }} />
+            <Select
+              placeholder="Lagos Branch"
+              style={{ width: 300, maxWidth: "80vw" }}
+              options={[
+                { value: "LagosBranch", label: "Lagos Branch" },
+                { value: "AbujaBranch", label: "Abuja Branch" },
+              ]}
+            />
+            <RangePicker
+              style={{ width: 300, maxWidth: "80vw" }}
+              popupStyle={{
+                height: "300px",
+                width:"fit",
+                maxWidth: "290px",
+                
+              }}
+            />
           </div>
         </div>
 
-        <div>
-          <ApplicantStatusOverview />
-        </div>
+        <div>{selectedReport}</div>
       </div>
     </>
   );

@@ -1,22 +1,22 @@
 import { Select, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { useState } from "react";
 
-const CBIApplication = () => {
-  // TABLE DATA
-  interface DataType {
+  // TABLE DATA FOR STAGE 1-16, EXCEPT 2,3,4,5,6
+  interface DataTypeOthers {
     key: number | string;
-    adminID: number | string;
+    applicantID: number | string;
     applicantName: string;
     phoneNumber: string;
     email: string;
     country: string;
     numberDependents: number;
   }
-  const columns: ColumnsType<DataType> = [
+  const columnsOthers: ColumnsType<DataTypeOthers> = [
     {
-      title: "Admin ID",
-      dataIndex: "adminID",
-      key: "adminID",
+      title: "Applicant ID",
+      dataIndex: "applicantID",
+      key: "applicantID",
     },
     {
       title: "Applicant Name",
@@ -45,12 +45,11 @@ const CBIApplication = () => {
       width: 35,
     },
   ];
-
-  const dataSource: DataType[] = [];
+  const dataSourceOthers: DataTypeOthers[] = [];
   for (let i = 0; i < 9; i++) {
-    dataSource.push({
+    dataSourceOthers.push({
       key: i,
-      adminID: "230000-01",
+      applicantID: "230000-01",
       applicantName: "John Brown",
       phoneNumber: "+234 7080 342 232",
       email: "Johnbrown@gmail.com",
@@ -59,12 +58,384 @@ const CBIApplication = () => {
     });
   }
 
+  // TABLE DATA STAGE 2
+  interface DataType2 {
+    key: number | string;
+    // adminID: number | string;
+    applicantID: number | string;
+    applicantName: string;
+    phoneNumber: string;
+    email: string;
+    country: string;
+    numberDependents: number;
+    cmaAssigned: string;
+    dmsAssigned: string;
+  }
+  const columns2: ColumnsType<DataType2> = [
+    {
+      title: "Applicant ID",
+      dataIndex: "applicantID",
+      key: "applicantID",
+    },
+    {
+      title: "Applicant Name",
+      dataIndex: "applicantName",
+      key: "applicantName",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Email Address",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+      key: "country",
+    },
+    {
+      title: "Number of Dependents",
+      dataIndex: "numberDependents",
+      key: "numberDependents",
+      width: 35,
+    },
+    {
+      title: "CMA Assigned To",
+      dataIndex: "cmaAssigned",
+      key: "cmaAssigned",
+    },
+    {
+      title: "DMS Assigned To",
+      dataIndex: "dmsAssigned",
+      key: "dmsAssigned",
+    },
+  ];
+  const dataSource2: DataType2[] = [];
+  for (let i = 0; i < 9; i++) {
+    dataSource2.push({
+      key: i,
+      applicantID: "230000-01",
+      applicantName: "John Brown",
+      phoneNumber: "+234 7080 342 232",
+      email: "Johnbrown@gmail.com",
+      country: "Grenada",
+      numberDependents: 6 * i + i ** 2,
+      cmaAssigned: "Jane Doe",
+      dmsAssigned: "Mike Smith",
+    });
+  }
+
+  // TABLE DATA FOR STAGE 3
+  interface DataType3 {
+    key: number | string;
+    applicantID: number | string;
+    applicantName: string;
+    phoneNumber: string;
+    email: string;
+    country: string;
+    numberDependents: number;
+    onboardedBy: string;
+  }
+  const columns3: ColumnsType<DataType3> = [
+    {
+      title: "Applicant ID",
+      dataIndex: "applicantID",
+      key: "applicantID",
+    },
+    {
+      title: "Applicant Name",
+      dataIndex: "applicantName",
+      key: "applicantName",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Email Address",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+      key: "country",
+    },
+    {
+      title: "Number of Dependents",
+      dataIndex: "numberDependents",
+      key: "numberDependents",
+      width: 35,
+    },
+    {
+      title: "Onboarded By",
+      dataIndex: "onboardedBy",
+      key: "onboardedBy",
+    },
+  ];
+  const dataSource3: DataType3[] = [];
+  for (let i = 0; i < 9; i++) {
+    dataSource3.push({
+      key: i,
+      applicantID: "230000-01",
+      applicantName: "John Brown",
+      phoneNumber: "+234 7080 342 232",
+      email: "Johnbrown@gmail.com",
+      country: "Grenada",
+      numberDependents: 6 * i + i ** 2,
+      onboardedBy: "John Brown",
+    });
+  }
+
+  // TABLE DATA FOR STAGE 4
+  interface DataType4 {
+    key: number | string;
+    applicantID: number | string;
+    applicantName: string;
+    phoneNumber: string;
+    email: string;
+    country: string;
+    numberDependents: number;
+    numberDocuments: string;
+    collatedBy: string;
+  }
+  const columns4: ColumnsType<DataType4> = [
+    {
+      title: "Applicant ID",
+      dataIndex: "applicantID",
+      key: "applicantID",
+    },
+    {
+      title: "Applicant Name",
+      dataIndex: "applicantName",
+      key: "applicantName",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Email Address",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+      key: "country",
+    },
+    {
+      title: "Number of Dependents",
+      dataIndex: "numberDependents",
+      key: "numberDependents",
+      width: 35,
+    },
+    {
+      title: "Number of Documents",
+      dataIndex: "numberDocuments",
+      key: "numberDocuments",
+      width: 35,
+    },
+
+    {
+      title: "Collated By",
+      dataIndex: "collatedBy",
+      key: "collatedBy",
+    },
+  ];
+  const dataSource4: DataType4[] = [];
+  for (let i = 0; i < 9; i++) {
+    dataSource4.push({
+      key: i,
+      applicantID: "230000-01",
+      applicantName: "John Brown",
+      phoneNumber: "+234 7080 342 232",
+      email: "Johnbrown@gmail.com",
+      country: "Grenada",
+      numberDependents: 6 * i + i ** 2,
+      numberDocuments: "3/10",
+      collatedBy: "John Brown",
+    });
+  }
+
+  // TABLE DATA FOR STAGE 5
+  interface DataType5 {
+    key: number | string;
+    applicantID: number | string;
+    applicantName: string;
+    phoneNumber: string;
+    email: string;
+    country: string;
+    numberDependents: number;
+    numberDocuments: string;
+    processedBy: string;
+  }
+  const columns5: ColumnsType<DataType5> = [
+    {
+      title: "Applicant ID",
+      dataIndex: "applicantID",
+      key: "applicantID",
+    },
+    {
+      title: "Applicant Name",
+      dataIndex: "applicantName",
+      key: "applicantName",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Email Address",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Country",
+      dataIndex: "country",
+      key: "country",
+    },
+    {
+      title: "Number of Dependents",
+      dataIndex: "numberDependents",
+      key: "numberDependents",
+      width: 35,
+    },
+    {
+      title: "Number of Documents",
+      dataIndex: "numberDocuments",
+      key: "numberDocuments",
+      width: 35,
+    },
+    {
+      title: "Processed By",
+      dataIndex: "processedBy",
+      key: "processedBy",
+    },
+  ];
+  const dataSource5: DataType5[] = [];
+  for (let i = 0; i < 9; i++) {
+    dataSource5.push({
+      key: i,
+      applicantID: "230000-01",
+      applicantName: "John Brown",
+      phoneNumber: "+234 7080 342 232",
+      email: "Johnbrown@gmail.com",
+      country: "Grenada",
+      numberDependents: 6 * i + i ** 2,
+      numberDocuments: "3/10",
+      processedBy: "John Brown",
+    });
+  }
+
+
+  // TABLE DATA FOR STAGE 6
+    interface DataType6 {
+      key: number | string;
+      applicantID: number | string;
+      applicantName: string;
+      phoneNumber: string;
+      email: string;
+      country: string;
+      numberDependents: number;
+      auditedBy: string
+    }
+    const columns6: ColumnsType<DataType6> = [
+      {
+        title: "Applicant ID",
+        dataIndex: "applicantID",
+        key: "applicantID",
+      },
+      {
+        title: "Applicant Name",
+        dataIndex: "applicantName",
+        key: "applicantName",
+      },
+      {
+        title: "Phone Number",
+        dataIndex: "phoneNumber",
+        key: "phoneNumber",
+      },
+      {
+        title: "Email Address",
+        dataIndex: "email",
+        key: "email",
+      },
+      {
+        title: "Country",
+        dataIndex: "country",
+        key: "country",
+      },
+      {
+        title: "Number of Dependents",
+        dataIndex: "numberDependents",
+        key: "numberDependents",
+        width: 35,
+      },
+      {
+        title: "Audited By",
+        dataIndex: "auditedBy",
+        key: "auditedBy",
+      },
+    ];
+    const dataSource6: DataType6[] = [];
+    for (let i = 0; i < 9; i++) {
+      dataSource6.push({
+        key: i,
+        applicantID: "230000-01",
+        applicantName: "John Brown",
+        phoneNumber: "+234 7080 342 232",
+        email: "Johnbrown@gmail.com",
+        country: "Grenada",
+        numberDependents: 6 * i + i ** 2,
+        auditedBy: `Edward King`,
+      });
+    }
+
+type AnyDataType = DataType2 | DataType3 | DataType4 | DataType5 | DataType6 | DataTypeOthers;
+
+const CBIApplication = () => {
+  const [columns, setColumns] =
+    useState<ColumnsType<AnyDataType>>(columnsOthers);
+  const [dataSource, setDataSource] = useState<AnyDataType[]>(dataSourceOthers);
+
+
+  const handleSelectChange = (value: string) => {
+    const stageDataMapping: Record<
+      string,
+      { columns: ColumnsType<AnyDataType>; data: AnyDataType[] }
+    > = {
+      "Stage 2 - Client Assignment": { columns: columns2 as ColumnsType<AnyDataType>, data: dataSource2 },
+      "Stage 3 - Client Onboarding": { columns: columns3 as ColumnsType<AnyDataType>, data: dataSource3 },
+      "Stage 4 - Document Collation": { columns: columns4 as ColumnsType<AnyDataType>, data: dataSource4 },
+      "Stage 5 - Document Processing": { columns: columns5 as ColumnsType<AnyDataType>, data: dataSource5 },
+      "Stage 6 - Audit Review": { columns: columns6 as ColumnsType<AnyDataType>, data: dataSource6 },
+    };
+
+    const selectedStageData = stageDataMapping[value] || {
+      columns: columnsOthers,
+      data: dataSourceOthers,
+    };
+
+    setColumns(selectedStageData.columns);
+    setDataSource(selectedStageData.data);
+  };
+
+
   return (
     <>
-      <div className="pt-2 pb-5 flex flex-row justify-between">
-        <h2 className="font-semibold text-lg ">CBI Application Report</h2>
+      <div className=" pb-5 pt-3 px-8 flex flex-col gap-2 sm:flex-row justify-between items-center">
+        <h2 className="font-semibold sm:text-lg ">CBI Application Report</h2>
         <Select
           placeholder="Select Stage Report"
+          onChange={handleSelectChange}
           popupMatchSelectWidth={false}
           options={[
             {
@@ -136,9 +507,16 @@ const CBIApplication = () => {
       </div>
       {/* Chart */}
       <div className="hidden"></div>
+
       {/* Table */}
       <div>
-        <Table dataSource={dataSource} columns={columns} bordered={true} />;
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          bordered={true}
+          scroll={{ x: 900 }}
+        />
+        ;
       </div>
     </>
   );
