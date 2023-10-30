@@ -6,6 +6,7 @@ import AdminActivity from "../components/AdminActivity";
 import CBIApplication from "../components/CBIApplication";
 import ApplicantStatusOverview from "../components/ApplicantStatusOverview";
 import ApplicantInteractions from "../components/ApplicantInteractions";
+import ApplicantDemographics from "../components/ApplicantDemographics";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -35,7 +36,8 @@ const Reports = () => {
       "Admin Activity": <AdminActivity />,
       "CBI Application Reports": <CBIApplication />,
       "Applicant Status Overview": <ApplicantStatusOverview />,
-      "Applicant Interactions": <ApplicantInteractions/>
+      "Applicant Interactions": <ApplicantInteractions />,
+      "Applicant Demographics": <ApplicantDemographics/>
     };
     
     const selectedItem = allReports[value] || <AdminActivity />
@@ -59,7 +61,7 @@ const Reports = () => {
         />
       </div>
 
-      <div className="border-1 rounded-md  pb-3 pt-4 md:pt-8">
+      <div className="border-2 rounded-md  pb-3 pt-4 md:pt-8">
         <div className="flex flex-col sm:flex-row justify-between mb-5  px-4">
           <div className="flex place-self-start pb-2 sm:pb-0 flex-row-reverse sm:flex-row gap-4">
             <Select
