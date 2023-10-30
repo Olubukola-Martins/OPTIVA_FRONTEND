@@ -8,6 +8,8 @@ import ApplicantStatusOverview from "../components/ApplicantStatusOverview";
 import ApplicantInteractions from "../components/ApplicantInteractions";
 import ApplicantDemographics from "../components/ApplicantDemographics";
 import DocumentReviewStatus from "../components/DocumentReviewStatus";
+import ApplicantTypeBreakdown from "../components/ApplicantTypeBreakdown";
+import ProcessingTimes from "../components/ProcessingTimes";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -39,7 +41,9 @@ const Reports = () => {
       "Applicant Status Overview": <ApplicantStatusOverview />,
       "Applicant Interactions": <ApplicantInteractions />,
       "Applicant Demographics": <ApplicantDemographics />,
-      "Document Uploaded Status":<DocumentReviewStatus/>,"Applicant Type Breakdown" : <ApplicantTypeBreakdown/>
+      "Document Uploaded Status": <DocumentReviewStatus />,
+      "Applicant Type Breakdown": <ApplicantTypeBreakdown />,
+      "Processing Times": <ProcessingTimes />,
     };
     
     const selectedItem = allReports[value] || <AdminActivity />
