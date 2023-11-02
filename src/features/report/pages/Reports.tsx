@@ -22,7 +22,6 @@ const reportOptions = [
   { label: "Processing Times", value: "Processing Times" },
 ];
 
-
 const Reports = () => {
   const { RangePicker } = DatePicker;
   const [report, setReport] = useState<string>("Admin Activity");
@@ -31,17 +30,13 @@ const Reports = () => {
     "icon-park:chart-line" | "tabler:table"
   >("icon-park:chart-line");
 
-
   const allReports: Record<string, React.ReactNode> = {
-    "Admin Activity": (
-      <AdminActivity
-        // changeIcon={changeIcon}
-        displayTable={displayTable}
-      />
-    ),
-    "CBI Application Reports": <CBIApplication />,
+    "Admin Activity": <AdminActivity displayTable={displayTable} />,
+    "CBI Application Reports": <CBIApplication displayTable={displayTable} />,
     "Applicant Status Overview": <ApplicantStatusOverview />,
-    "Applicant Interactions": <ApplicantInteractions />,
+    "Applicant Interactions": (
+      <ApplicantInteractions displayTable={displayTable} />
+    ),
     "Applicant Demographics": <ApplicantDemographics />,
     "Document Uploaded Status": <DocumentReviewStatus />,
     "Applicant Type Breakdown": <ApplicantTypeBreakdown />,
@@ -50,14 +45,13 @@ const Reports = () => {
 
   const [selectedReport, setSelectedReport] = useState<React.ReactNode>(
     <AdminActivity
-      // changeIcon={changeIcon}
       displayTable={displayTable}
     />
   );
   const handleSelectReports = (value: string) => {
     const selectedItem = allReports[value];
     setSelectedReport(selectedItem);
-    setReport(value)
+    setReport(value);
   };
 
   const handleChangeIcon = () => {
@@ -68,14 +62,12 @@ const Reports = () => {
       setChangeIcon("icon-park:chart-line");
       setdisplayTable(true);
     }
-    setSelectedReport(<div></div>)
+    setSelectedReport(<div></div>);
   };
 
   useEffect(() => {
-    setSelectedReport(allReports[report])
+    setSelectedReport(allReports[report]);
   }, [changeIcon]);
-
-
 
   return (
     <>

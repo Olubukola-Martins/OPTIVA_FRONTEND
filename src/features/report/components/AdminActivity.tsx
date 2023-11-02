@@ -11,7 +11,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 interface IProp {
-  // changeIcon: "icon-park:chart-line" | "tabler:table";
   displayTable: boolean;
 }
 
