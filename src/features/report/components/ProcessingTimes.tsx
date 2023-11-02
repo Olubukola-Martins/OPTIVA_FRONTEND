@@ -89,8 +89,7 @@ const ProcessingTimes = () => {
       {/* Chart */}
       <div style={{ height: "600px" }}>
         <Bar
-                  className={`md:px-11 sm:px-8 px-3`}
-                //   ${styles["chart-container"]}
+          className={`md:px-11 sm:px-8 px-3`}
           options={options}
           data={data}
         />

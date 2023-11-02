@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { DatePicker, Select } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import AdminActivity from "../components/AdminActivity";
 import CBIApplication from "../components/CBIApplication";
@@ -22,33 +22,60 @@ const reportOptions = [
   { label: "Processing Times", value: "Processing Times" },
 ];
 
+
 const Reports = () => {
   const { RangePicker } = DatePicker;
-  const [selectedReport, setSelectedReport] = useState<React.ReactNode>(
-    <AdminActivity />
-  );
-  const [changeIcon, setChangeIcon] = useState<string>("icon-park:chart-line");
-  const handleChangeIcon = () => {
-    changeIcon === "icon-park:chart-line"
-      ? setChangeIcon("tabler:table")
-      : setChangeIcon("icon-park:chart-line");
+  const [report, setReport] = useState<string>("Admin Activity");
+  const [displayTable, setdisplayTable] = useState(true);
+  const [changeIcon, setChangeIcon] = useState<
+    "icon-park:chart-line" | "tabler:table"
+  >("icon-park:chart-line");
+
+
+  const allReports: Record<string, React.ReactNode> = {
+    "Admin Activity": (
+      <AdminActivity
+        // changeIcon={changeIcon}
+        displayTable={displayTable}
+      />
+    ),
+    "CBI Application Reports": <CBIApplication />,
+    "Applicant Status Overview": <ApplicantStatusOverview />,
+    "Applicant Interactions": <ApplicantInteractions />,
+    "Applicant Demographics": <ApplicantDemographics />,
+    "Document Uploaded Status": <DocumentReviewStatus />,
+    "Applicant Type Breakdown": <ApplicantTypeBreakdown />,
+    "Processing Times": <ProcessingTimes />,
   };
 
-  const handleSelectReports = (value:string) => {
-    const allReports: Record<string, React.ReactNode> = {
-      "Admin Activity": <AdminActivity />,
-      "CBI Application Reports": <CBIApplication />,
-      "Applicant Status Overview": <ApplicantStatusOverview />,
-      "Applicant Interactions": <ApplicantInteractions />,
-      "Applicant Demographics": <ApplicantDemographics />,
-      "Document Uploaded Status": <DocumentReviewStatus />,
-      "Applicant Type Breakdown": <ApplicantTypeBreakdown />,
-      "Processing Times": <ProcessingTimes />,
-    };
-    
-    const selectedItem = allReports[value] || <AdminActivity />
+  const [selectedReport, setSelectedReport] = useState<React.ReactNode>(
+    <AdminActivity
+      // changeIcon={changeIcon}
+      displayTable={displayTable}
+    />
+  );
+  const handleSelectReports = (value: string) => {
+    const selectedItem = allReports[value];
     setSelectedReport(selectedItem);
+    setReport(value)
   };
+
+  const handleChangeIcon = () => {
+    if (changeIcon === "icon-park:chart-line") {
+      setChangeIcon("tabler:table");
+      setdisplayTable(false);
+    } else {
+      setChangeIcon("icon-park:chart-line");
+      setdisplayTable(true);
+    }
+    setSelectedReport(<div></div>)
+  };
+
+  useEffect(() => {
+    setSelectedReport(allReports[report])
+  }, [changeIcon]);
+
+
 
   return (
     <>
@@ -99,9 +126,8 @@ const Reports = () => {
               style={{ width: 300, maxWidth: "80vw" }}
               popupStyle={{
                 height: "300px",
-                width:"fit",
+                width: "fit",
                 maxWidth: "290px",
-                
               }}
             />
           </div>
