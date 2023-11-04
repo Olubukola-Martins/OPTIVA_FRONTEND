@@ -21,6 +21,7 @@ import Comments from "src/features/applications/pages/Comments";
 
 import { RequireAuth } from "react-auth-kit";
 import Meetings from "src/features/meetings/pages/Meetings";
+import Escalation from "src/features/settings/features/escalation/pages/Escalation";
 
 const routesArray = [
   {
@@ -29,6 +30,7 @@ const routesArray = [
   },
   { path: appRoute.dependents, element: <Dependents /> },
   { path: appRoute.settings, element: <Settings /> },
+  { path: appRoute.escalation, element: <Escalation /> },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
   { path: appRoute.applicantBrief, element: <ApplicantBrief /> },

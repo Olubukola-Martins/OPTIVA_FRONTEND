@@ -3,8 +3,11 @@ export const appRoute = {
   login_in: `/login`,
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
+
+  //Settings
   settings: `/settings`,
   dependents: `/settings/dependents`,
+  escalation:`/settings/escalation`,
 
   // Applications
   applications: `/applications`,
@@ -52,5 +55,4 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
-  
 };

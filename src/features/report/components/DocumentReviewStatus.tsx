@@ -1,7 +1,110 @@
 import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 
-const DocumentReviewStatus = () => {
+interface IProp {
+  displayTable: boolean;
+}
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+// CHART DATA
+const options = {
+  maintainAspectRatio: false,
+  responsive: true,
+  scales: {
+    x: {
+      beginAtZero: true,
+    },
+    y: {
+      beginAtZero: true,
+      ticks: {
+        stepSize: 20,
+      },
+      max: 100,
+      title: {
+        display: true,
+        text: "Percentage (%)",
+        font: {
+          size: 14,
+        },
+      },
+    },
+  },
+
+  plugins: {
+    legend: {
+      position: "top" as const,
+    },
+    title: {
+      display: true,
+      text: "Applicant Status Overview",
+    },
+  },
+};
+
+const labels = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "July",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+const data = {
+  labels,
+  datasets: [
+    {
+      label: "Pending",
+      data: [36, 40, 53, 70, 57, 50, 76, 49, 67, 64, 73, 46],
+      lineTension: 0.4,
+      borderColor: "#EC5252",
+      backgroundColor: "#EC5252",
+    },
+    {
+      label: "Uploaded",
+      data: [52, 54, 61, 41, 68, 72, 56, 82, 45, 59, 83, 60],
+      lineTension: 0.4,
+      borderColor: "#E8CC81",
+      backgroundColor: "#E8CC81",
+    },
+    {
+      label: "Reviewed",
+      data: [67, 70, 85, 64, 77, 75, 76, 66, 81, 70, 84, 63],
+      lineTension: 0.4,
+      borderColor: "#7CE5C1",
+      backgroundColor: "#7CE5C1",
+    },
+  ],
+};
+
+
+const DocumentReviewStatus = ({ displayTable }: IProp) => {
   // TABLE DATA
   interface DataType {
     key: number;
@@ -60,8 +163,12 @@ const DocumentReviewStatus = () => {
         return (
           <p
             className={`${
-              status === "Pending" ? "text-[#012168]" : status === "Uploaded"
-            ? "text-yellow-500" : "text-green-500"}`}
+              status === "Pending"
+                ? "text-[#012168]"
+                : status === "Uploaded"
+                ? "text-yellow-500"
+                : "text-green-500"
+            }`}
           >
             {status}
           </p>
@@ -88,18 +195,27 @@ const DocumentReviewStatus = () => {
         Document Review Status
       </h2>
       {/* Chart */}
-      <div className="hidden"></div>
+      {!displayTable && (
+        <div className="h-[350px] sm:h-[500px]">
+          <Line
+            options={options}
+            data={data}
+            className={`md:px-11 sm:px-8 px-1 `}
+          />
+        </div>
+      )}
 
       {/* Table */}
-      <div>
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          bordered={true}
-          scroll={{ x: 900 }}
-        />
-        ;
-      </div>
+      {displayTable && (
+        <div>
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            bordered={true}
+            scroll={{ x: 900 }}
+          />
+        </div>
+      )}
     </>
   );
 };

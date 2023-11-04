@@ -92,7 +92,6 @@ for (let i = 1; i <= 3; i++) {
   });
 }
 const rows = dataSourceThird ? dataSourceThird.length : 0;
-console.log("rows", rows);
 
 const thirdTableColumn: ColumnsType<Item> = [
   {
@@ -103,7 +102,7 @@ const thirdTableColumn: ColumnsType<Item> = [
           return {
             rowSpan: rows ,
           };
-        } else if (index > 0) {
+        } else if (index as number > 0) {
           return {
             rowSpan: 0,
           };

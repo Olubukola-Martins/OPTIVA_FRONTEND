@@ -10,6 +10,7 @@ import ApplicantDemographics from "../components/ApplicantDemographics";
 import DocumentReviewStatus from "../components/DocumentReviewStatus";
 import ApplicantTypeBreakdown from "../components/ApplicantTypeBreakdown";
 import ProcessingTimes from "../components/ProcessingTimes";
+import { Tooltip } from "antd";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -33,27 +34,28 @@ const Reports = () => {
   const allReports: Record<string, React.ReactNode> = {
     "Admin Activity": <AdminActivity displayTable={displayTable} />,
     "CBI Application Reports": <CBIApplication displayTable={displayTable} />,
-    "Applicant Status Overview": <ApplicantStatusOverview />,
+    "Applicant Status Overview": (
+      <ApplicantStatusOverview displayTable={displayTable} />
+    ),
     "Applicant Interactions": (
       <ApplicantInteractions displayTable={displayTable} />
     ),
     "Applicant Demographics": <ApplicantDemographics />,
-    "Document Uploaded Status": <DocumentReviewStatus />,
+    "Document Uploaded Status": (
+      <DocumentReviewStatus displayTable={displayTable} />
+    ),
     "Applicant Type Breakdown": <ApplicantTypeBreakdown />,
     "Processing Times": <ProcessingTimes />,
   };
 
   const [selectedReport, setSelectedReport] = useState<React.ReactNode>(
-    <AdminActivity
-      displayTable={displayTable}
-    />
+    <AdminActivity displayTable={displayTable} />
   );
   const handleSelectReports = (value: string) => {
     const selectedItem = allReports[value];
     setSelectedReport(selectedItem);
     setReport(value);
   };
-
   const handleChangeIcon = () => {
     if (changeIcon === "icon-park:chart-line") {
       setChangeIcon("tabler:table");
@@ -68,7 +70,6 @@ const Reports = () => {
   useEffect(() => {
     setSelectedReport(allReports[report]);
   }, [changeIcon]);
-
   return (
     <>
       <div className="flex flex-row justify-between">
@@ -97,13 +98,28 @@ const Reports = () => {
               options={reportOptions}
               onChange={handleSelectReports}
             />
-            <Icon
-              icon={changeIcon}
-              width={24}
-              height={24}
-              className=" place-self-center"
-              onClick={handleChangeIcon}
-            />
+            <Tooltip
+              color="rgba(1, 33, 104, 1)"
+              title={`${
+                changeIcon === "icon-park:chart-line"
+                  ? "Click to view the report in a chart presentation"
+                  : "Click to access the report in a tabular format"
+              }`}
+            >
+              <Icon
+                icon={
+                  report === "Processing Times" ||
+                  report === "Applicant Demographics" ||
+                  report === "Applicant Type Breakdown"
+                    ? ""
+                    : changeIcon
+                }
+                width={24}
+                height={24}
+                className={` place-self-center`}
+                onClick={handleChangeIcon}
+              />
+            </Tooltip>
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
             <Select

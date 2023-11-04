@@ -533,7 +533,7 @@ const CBIApplication = ({ displayTable }: IProp) => {
       {
         label: "%",
         data: chartData,
-        fill: "start",
+        fill: true,
         lineTension: 0.4,
         backgroundColor: "rgba(0, 106, 255, 0.15)",
         borderColor: "#006AFF",
@@ -617,7 +617,7 @@ const CBIApplication = ({ displayTable }: IProp) => {
   return (
     <>
       <div className=" pb-5 pt-3 px-8 flex flex-col gap-2 sm:flex-row justify-between items-center">
-        <h2 className="font-semibold sm:text-lg ">CBI Application Report</h2>
+        <h2 className="font-semibold sm:text-lg ">CBI Application Report ~ {selectedStage}</h2>
         <Select
           placeholder="Select Stage Report"
           onChange={handleSelectChange}

@@ -82,6 +82,7 @@ const AdminActivity = ({  displayTable }: IProp) => {
             size: 14,
           },
         },
+        // barPercentage: 0.2,
       },
     },
     plugins: {
