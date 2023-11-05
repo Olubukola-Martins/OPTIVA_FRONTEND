@@ -7,7 +7,8 @@ export const appRoute = {
   //Settings
   settings: `/settings`,
   dependents: `/settings/dependents`,
-  escalation:`/settings/escalation`,
+  escalation: `/settings/escalation`,
+  defineEscalation: `/settings/escalation/defineEscalation`,
 
   // Applications
   applications: `/applications`,

@@ -1,10 +1,113 @@
-import { Icon } from '@iconify/react/dist/iconify.js';
-import React from 'react'
-import { PageIntro } from 'src/components/PageIntro';
-import { AppButton } from 'src/components/button/AppButton';
-import { appRoute } from 'src/config/routeMgt/routePaths';
+import { Icon } from "@iconify/react/dist/iconify.js";
+import React from "react";
+import { PageIntro } from "src/components/PageIntro";
+import { AppButton } from "src/components/button/AppButton";
+import { appRoute } from "src/config/routeMgt/routePaths";
+
+import type { ColumnsType } from "antd/es/table";
+import { Dropdown, Menu, Table } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+
+interface DataType {
+  key: React.Key;
+  sn: number;
+  role: string;
+  task: string;
+  taskDeadline: string;
+  reminder: string;
+  escalationLevels: string;
+}
 
 const Escalation = () => {
+  const navigate = useNavigate();
+
+  const columns: ColumnsType<DataType> = [
+    {
+      title: "SN",
+      dataIndex: "sn",
+      key: "sn",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+    },
+    {
+      title: "Task",
+      dataIndex: "task",
+      key: "task",
+    },
+    {
+      title: "Task Deadline",
+      dataIndex: "taskDeadline",
+      key: "taskDeadline",
+    },
+    {
+      title: "Reminder",
+      dataIndex: "reminder",
+      key: "reminder",
+    },
+    {
+      title: "Escalation Levels",
+      dataIndex: "escalationLevels",
+      key: "escalationLevels",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                <Menu.Item key="1">
+                  {/* <Link to={ }> */}
+                  Edit
+                  {/* </Link> */}
+                </Menu.Item>
+                <Menu.Item key="2">Delete</Menu.Item>
+              </Menu>
+            }
+          >
+            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
+          </Dropdown>
+        </div>
+      ),
+    },
+  ];
+
+  const data: DataType[] = [];
+  for (let i = 1; i <= 4; i++) {
+    data.push({
+      key: i,
+      sn: i,
+      role: "Service Manager",
+      task: "Accept Client",
+      taskDeadline: "8 Hours",
+      reminder: "After 3 Hours",
+      escalationLevels: "4 Levels",
+    });
+  }
+
+  // rowSelection object
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+      // console.log(
+      //   `selectedRowKeys: ${selectedRowKeys}`,
+      //   "selectedRows: ",
+      //   selectedRows
+      // );
+    },
+    getCheckboxProps: (record: DataType) => ({
+      //   name: record.name,
+    }),
+  };
+
+  // Handle Add New/ Define Escalation
+  const handleDefineEscalation = () => {
+    navigate(appRoute.defineEscalation);
+  };
   return (
     <>
       <div className="flex justify-between items-center">
@@ -25,18 +128,27 @@ const Escalation = () => {
               className="text-3xl cursor-pointer hover:text-primary"
             />
           </div>
-          <AppButton label="Add New" />
+          <AppButton
+            label="Add New"
+            handleClick={() => {
+              handleDefineEscalation()
+            }}
+          />
         </div>
       </div>
 
-      {/* <Table
+      <Table
+        rowSelection={{
+          type: "checkbox",
+          ...rowSelection,
+        }}
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
         dataSource={data}
         scroll={{ x: 768 }}
-      /> */}
+      />
     </>
   );
-}
+};
 
-export default Escalation
+export default Escalation;
