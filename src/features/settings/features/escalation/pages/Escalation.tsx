@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import React from "react";
+import React, { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -7,6 +7,7 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import type { ColumnsType } from "antd/es/table";
 import { Dropdown, Menu, Table } from "antd";
 import { Link, useNavigate } from "react-router-dom";
+import DeleteModal from "src/features/settings/components/DeleteModal";
 
 interface DataType {
   key: React.Key;
@@ -20,6 +21,7 @@ interface DataType {
 
 const Escalation = () => {
   const navigate = useNavigate();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const columns: ColumnsType<DataType> = [
     {
@@ -66,7 +68,7 @@ const Escalation = () => {
                   Edit
                   {/* </Link> */}
                 </Menu.Item>
-                <Menu.Item key="2">Delete</Menu.Item>
+                <Menu.Item key="2" onClick={()=>{setShowDeleteModal(true)}}>Delete</Menu.Item>
               </Menu>
             }
           >
@@ -111,6 +113,15 @@ const Escalation = () => {
   return (
     <>
       <div className="flex justify-between items-center">
+        <DeleteModal
+          open={showDeleteModal}
+          heading="Delete Escalation"
+          description="Are you sure you would like to delete this escalation?"
+          handleClose={() => {
+            setShowDeleteModal(false);
+          }}
+          handleDelete={() => {}}
+        />
         <PageIntro
           title="Escalation "
           description="Define, Edit and delete escalation rules on the system"
@@ -131,7 +142,7 @@ const Escalation = () => {
           <AppButton
             label="Add New"
             handleClick={() => {
-              handleDefineEscalation()
+              handleDefineEscalation();
             }}
           />
         </div>
