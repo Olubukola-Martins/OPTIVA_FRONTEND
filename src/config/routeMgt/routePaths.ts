@@ -13,6 +13,14 @@ export const appRoute = {
     format: `/settings/escalation/editEscalation/:id`,
     path: `/settings/escalation/editEscalation/${id}`,
   }),
+  contractsEmailTemplates: `/settings/contractsEmailTemplates`,
+  contractsTemplate: `/settings/contractsEmailTemplates/Contract`,
+  onboardingWelcomeTempl: `/settings/contractsEmailTemplates/onboardingWelcome`,
+  collationAppointmentConfirmTempl: `/settings/contractsEmailTemplates/collationAppointmentConfirmation`,
+  cbiBankDDclearance: `/settings/contractsEmailTemplates/CBIBankDDclearance`,
+  cbiBAsoftPassportReceipt: `/settings/contractsEmailTemplates/CBIbankAppSoftPassportReceipt`,
+  cbiBAapprovalMailTemp: `/settings/contractsEmailTemplates/CBIbankAppApprovalMailTemplate`,
+  cbiApplicationSubmissionMailTemp: `/settings/contractsEmailTemplates/CBIapplicationSubmissioneEMailTemplate`,
 
   // Applications
   applications: `/applications`,

@@ -24,6 +24,7 @@ import Meetings from "src/features/meetings/pages/Meetings";
 import Escalation from "src/features/settings/features/escalation/pages/Escalation";
 import NewEscalation from "src/features/settings/features/escalation/pages/NewEscalation";
 import EditEscalation from "src/features/settings/features/escalation/pages/EditEscalation";
+import AllContractsEmailTemplates from "src/features/settings/features/contractsEmailTemplates/pages/AllContractsEmailTemplates";
 
 const routesArray = [
   {
@@ -35,6 +36,10 @@ const routesArray = [
   { path: appRoute.escalation, element: <Escalation /> },
   { path: appRoute.defineEscalation, element: <NewEscalation /> },
   { path: appRoute.editEscalation().format, element: <EditEscalation /> },
+  {
+    path: appRoute.contractsEmailTemplates,
+    element: <AllContractsEmailTemplates />,
+  },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
   { path: appRoute.applicantBrief, element: <ApplicantBrief /> },

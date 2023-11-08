@@ -57,18 +57,30 @@ const Escalation = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, record:DataType) => (
+      render: (_, record: DataType) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                  <Link to={appRoute.editEscalation(record.key as unknown as number).path }>
-                  Edit
+                  <Link
+                    to={
+                      appRoute.editEscalation(record.key as unknown as number)
+                        .path
+                    }
+                  >
+                    Edit
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="2" onClick={()=>{setShowDeleteModal(true)}}>Delete</Menu.Item>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    setShowDeleteModal(true);
+                  }}
+                >
+                  Delete
+                </Menu.Item>
               </Menu>
             }
           >
@@ -91,10 +103,11 @@ const Escalation = () => {
       escalationLevels: "4 Levels",
     });
   }
-
+ const [hideDeleteBtn, setHideDeleteBtn] = useState<boolean>(true)
   // rowSelection object
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+      selectedRows.length === 0 || !selectedRows ? setHideDeleteBtn(true) : setHideDeleteBtn(false)
       // console.log(
       //   `selectedRowKeys: ${selectedRowKeys}`,
       //   "selectedRows: ",
@@ -116,7 +129,7 @@ const Escalation = () => {
         <DeleteModal
           open={showDeleteModal}
           heading="Delete Escalation"
-          description="Are you sure you would like to delete this escalation?"
+          description="Are you sure you would like to delete escalation?"
           handleClose={() => {
             setShowDeleteModal(false);
           }}
@@ -147,7 +160,9 @@ const Escalation = () => {
           />
         </div>
       </div>
-
+      <div className={`${hideDeleteBtn ? "hidden" : ""}`}>
+        <AppButton type="button" variant="transparent" label="Delete" handleClick={()=>{setShowDeleteModal(true)}}/>
+      </div>
       <Table
         rowSelection={{
           type: "checkbox",

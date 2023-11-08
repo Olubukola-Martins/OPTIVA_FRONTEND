@@ -32,6 +32,6 @@ export const settingsLink: settingsLinkProps[] = [
   },
   {
     name: "Contract & Email Templates",
-    link: appRoute.dependents,
+    link: appRoute.contractsEmailTemplates,
   },
 ];
