@@ -9,6 +9,10 @@ export const appRoute = {
   dependents: `/settings/dependents`,
   escalation: `/settings/escalation`,
   defineEscalation: `/settings/escalation/defineEscalation`,
+  editEscalation: (id?: number) => ({
+    format: `/settings/escalation/editEscalation/:id`,
+    path: `/settings/escalation/editEscalation/${id}`,
+  }),
 
   // Applications
   applications: `/applications`,

@@ -27,6 +27,7 @@ const NewEscalation = () => {
         style={{ paddingBottom: 0, marginBottom: 0 }}
       >
         <Select
+          popupMatchSelectWidth={false}
           placeholder="Select Role"
           options={[
             { value: "Service Manager 1", label: "Service Manager 1" },
@@ -45,6 +46,7 @@ const NewEscalation = () => {
         style={{ paddingBottom: 0, marginBottom: 0 }}
       >
         <Select
+          popupMatchSelectWidth={false}
           placeholder="Select Employee"
           options={[
             { value: "George Boyd", label: "George Boyd" },
@@ -63,6 +65,7 @@ const NewEscalation = () => {
       >
         <Select
           placeholder="Select Duration"
+          popupMatchSelectWidth={false}
           options={[
             { value: "8 Hours", label: "8 Hours" },
             { value: "2 Hours", label: "2 Hours" },
@@ -132,7 +135,7 @@ const NewEscalation = () => {
       title: "Delete",
       render: (record: DataRow) => (
         <DeleteOutlined
-          className="text-red-500"
+          className="text-red-500 flex  justify-center"
           onClick={() => handleDelete(record)}
         />
       ),
@@ -239,7 +242,7 @@ const NewEscalation = () => {
                     columns={columns}
                     dataSource={data}
                     pagination={false}
-                    size="middle"
+                    size="small"
                     bordered
                     scroll={{ x: 300 }}
                   />
@@ -252,8 +255,17 @@ const NewEscalation = () => {
             </div>
           </div>
           <div className="flex flex-row gap-8 w-full justify-end pt-10">
-            <AppButton variant="transparent" type="button" label="Cancel" handleClick={()=>navigate(appRoute.escalation)}/>
-            <AppButton type="submit" label="Save" handleClick={()=>setShowSuccessModal(true)}/>
+            <AppButton
+              variant="transparent"
+              type="button"
+              label="Cancel"
+              handleClick={() => navigate(appRoute.escalation)}
+            />
+            <AppButton
+              type="submit"
+              label="Save"
+              handleClick={() => setShowSuccessModal(true)}
+            />
           </div>
         </Form>
       </div>

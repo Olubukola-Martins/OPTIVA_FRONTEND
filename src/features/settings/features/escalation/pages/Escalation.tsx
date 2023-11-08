@@ -57,16 +57,16 @@ const Escalation = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: (_, record:DataType) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                  {/* <Link to={ }> */}
+                  <Link to={appRoute.editEscalation(record.key as unknown as number).path }>
                   Edit
-                  {/* </Link> */}
+                  </Link>
                 </Menu.Item>
                 <Menu.Item key="2" onClick={()=>{setShowDeleteModal(true)}}>Delete</Menu.Item>
               </Menu>
