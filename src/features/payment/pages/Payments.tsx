@@ -1,6 +1,7 @@
 import { DatePicker, Dropdown, Input, Menu, Table, TreeSelect } from "antd";
 import Search from "antd/es/input/Search";
 import { ColumnsType } from "antd/es/table";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -8,6 +9,7 @@ import { SimpleCard } from "src/components/cards/SimpleCard";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 const Payments = () => {
+  const { inputValue, setInputValue } = useState();
   const { TreeNode } = TreeSelect;
   const { RangePicker } = DatePicker;
   const cardColors: ("blue" | "green" | "yellow" | "oxblood")[] = [
@@ -110,8 +112,30 @@ const Payments = () => {
     },
     {
       value: "Filter by Amount",
-      title: "Filter by Amount",
+      title: (
+        <div>
+          <p>Filter by Amount</p>
+          {/* <Input
+            onChange={(value) => {
+              setInputValue(value);
+            }}
+          /> */}
+        </div>
+      ),
       isInput: true,
+      // children: [
+      //   {
+      //     value: { inputValue },
+      //     title: {inputValue}
+      //     // title: (
+      //     //   <Input
+      //     //     onChange={(value) => {
+      //     //       setInputValue(value);
+      //     //     }}
+      //     //   />
+      //     // ),
+      //   },
+      // ],
     },
   ];
 
@@ -189,8 +213,7 @@ const Payments = () => {
           trigger={["click"]}
           overlay={
             <Menu>
-              <Menu.Item key="1">View Proof of Payment</Menu.Item>
-              <Menu.Item key="2">
+              <Menu.Item key="1">
                 <Link
                   to={
                     appRoute.generateInvoice(record.key as unknown as number)
@@ -200,27 +223,17 @@ const Payments = () => {
                   Generate Invoice
                 </Link>
               </Menu.Item>
-              <Menu.Item key="3">
+              <Menu.Item key="2">
                 <Link
                   to={
                     appRoute.paymentDetails(record.key as unknown as number)
                       .path
                   }
                 >
-                  Update Payment Details
+                   Payment Details
                 </Link>
               </Menu.Item>
-              <Menu.Item key="4">
-                <Link
-                  to={
-                    appRoute.financialStatement(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Financial Statement
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="5">
+              <Menu.Item key="3">
                 <Link
                   to={
                     appRoute.generateReciept(record.key as unknown as number)
@@ -230,7 +243,7 @@ const Payments = () => {
                   Generate Receipt
                 </Link>
               </Menu.Item>
-              <Menu.Item key="6">
+              <Menu.Item key="4">
                 <Link
                   to={
                     appRoute.generateContract(record.key as unknown as number)
@@ -241,7 +254,7 @@ const Payments = () => {
                 </Link>
               </Menu.Item>
 
-              <Menu.Item key="7">Move to Master List</Menu.Item>
+              <Menu.Item key="5">Move to Master List</Menu.Item>
             </Menu>
           }
         >
@@ -292,25 +305,23 @@ const Payments = () => {
 
         <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
           <div className="flex flex-row items-center gap-x-2">
-            <Search
-              placeholder="Search"
-              allowClear
-              style={{ width: 150 }}
-              // onSearch={onSearch}
-            />
+            <Search placeholder="Search" allowClear style={{ width: 150 }} />
             <TreeSelect
               // mode="multiple"
+              treeData={treeData}
+              popupMatchSelectWidth={false}
               placeholder="Filter"
               style={{
                 width: 150,
-                overflow: "auto",
+                // overflow: "auto",
+                overflow:"hidden",
                 height: 30,
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
               }}
               treeCheckable={true}
             >
-              {treeData.map((node) => (
+              {/* {treeData.map((node) => (
                 <TreeNode
                   key={node.value}
                   value={node.value}
@@ -319,12 +330,12 @@ const Payments = () => {
                 >
                   {node.isInput && <Input />}
                 </TreeNode>
-              ))}
+              ))} */}
             </TreeSelect>
           </div>
           <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
             <RangePicker style={{ width: 300 }} />
-            <AppButton />
+            <AppButton label="View All" />
           </div>
         </div>
       </div>

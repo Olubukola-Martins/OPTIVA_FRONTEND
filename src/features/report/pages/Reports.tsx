@@ -11,6 +11,7 @@ import DocumentReviewStatus from "../components/DocumentReviewStatus";
 import ApplicantTypeBreakdown from "../components/ApplicantTypeBreakdown";
 import ProcessingTimes from "../components/ProcessingTimes";
 import { Tooltip } from "antd";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -70,6 +71,9 @@ const Reports = () => {
   useEffect(() => {
     setSelectedReport(allReports[report]);
   }, [changeIcon]);
+
+  const { userInfo } = useGetUserInfo();
+  console.log("user",userInfo)
   return (
     <>
       <div className="flex flex-row justify-between">

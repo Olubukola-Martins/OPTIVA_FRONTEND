@@ -182,13 +182,6 @@ const EditEscalation = () => {
         >
           <div className="flex flex-col lg:flex-row gap-2 justify-between lg:gap-10">
             <div className="w-full">
-              {/* <FormItem
-                label="Escalation Name"
-                name="escalationName"
-                className="sm:w-1/2 lg:w-full"
-              >
-                <Input placeholder="e.g (Accept Client)" />
-              </FormItem> */}
               <FormItem
                 label="Select Role"
                 name="selectRole"
