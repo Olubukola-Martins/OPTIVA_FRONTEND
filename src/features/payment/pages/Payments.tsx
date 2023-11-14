@@ -221,7 +221,6 @@ const Payments = () => {
           form={modalForm}
           layout="vertical"
           className="pt-8 px-4"
-          // onChange={handleFilterValuesChange}
           onValuesChange={handleFilterValuesChange}
           onFinish={handleFilter}
         >
