@@ -1,99 +1,92 @@
-import { Icon } from '@iconify/react/dist/iconify.js';
-import { Dropdown, Menu } from 'antd';
-import Table, { ColumnsType } from 'antd/es/table';
-import React from 'react'
-import { PageIntro } from 'src/components/PageIntro'
-import { AppButton } from 'src/components/button/AppButton';
-import { appRoute } from 'src/config/routeMgt/routePaths';
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
+import { ColumnsType } from "antd/es/table";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { PageIntro } from "src/components/PageIntro";
+import { AppButton } from "src/components/button/AppButton";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
-interface DataType {
-    key: React.Key;
-    name: string;
-    createdDate: string;
-    updatedDate: string;
-  }
-  
-  const columns: ColumnsType<DataType> = [
-    {
-      title: "Template Name",
-      dataIndex: "name",
-    },
-  
-    {
-      title: "Date Created",
-      dataIndex: "dateCreated",
-    },
-    {
-      title: "Updated Date",
-      dataIndex: "format",
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
+interface DataSourceItem {
+  key: React.Key;
+  sn: number;
+  templateName: string;
+  datecreated: string;
+  lastModified: string;
+}
 
-      render: (_, val) => (
-        <div>
-          <Dropdown
-            trigger={["click"]}
-            overlay={
-              <Menu>
-                <Menu.Item key="1">Edit</Menu.Item>
+const columns: ColumnsType<DataSourceItem> = [
+  {
+    title: "Template Name",
+    dataIndex: "name",
+  },
 
-                <Menu.Item key="2">Duplicate</Menu.Item>
-                <Menu.Item key="3">Delete</Menu.Item>
+  {
+    title: "Date Created",
+    dataIndex: "dateCreated",
+  },
+  {
+    title: "Updated Date",
+    dataIndex: "format",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    render: (_, val) => (
+      <div>
+        <Dropdown
+          trigger={["click"]}
+          overlay={
+            <Menu>
+              <Menu.Item key="1">Edit</Menu.Item>
 
-                <Menu.Item key="2">Delete</Menu.Item>
+              <Menu.Item key="2">Duplicate</Menu.Item>
+              <Menu.Item key="3">Delete</Menu.Item>
 
-              </Menu>
-            }
-          >
-            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-          </Dropdown>
-        </div>
-      ),
-    },
-  ];
+              <Menu.Item key="2">Delete</Menu.Item>
+            </Menu>
+          }
+        >
+          <i className="ri-more-2-fill text-lg cursor-pointer"></i>
+        </Dropdown>
+      </div>
+    ),
+  },
+];
 
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      templateName: "Template",
-      dateCreated: "dd/mm/yyyy",
-      lastModified: "dd/mm/yyyy",
-    });
-  }
+const dataSource: DataSourceItem[] = [];
+for (let i = 0; i < 4; i++) {
+  dataSource.push({
+    key: i,
+    sn: i + 1,
+    templateName: "Template",
+    datecreated: "dd/mm/yyyy",
+    lastModified: "dd/mm/yyyy",
+  });
+}
 
-  // Import Modal
-  const [openImportModal, setOpenImportModal] = useState(false);
-  const showImportModal = () => {
-    setOpenImportModal(true);
-  };
-  const handleImportCancel = () => {
-    setOpenImportModal(false);
-  };
+// Import Modal
+const [openImportModal, setOpenImportModal] = useState(false);
+const showImportModal = () => {
+  setOpenImportModal(true);
+};
+const handleImportCancel = () => {
+  setOpenImportModal(false);
+};
 
-  // Upload Document
-  const [exportModal, setExportModal] = useState(false);
-  const showExportModal = () => {
-    setExportModal(true);
-  };
-  const handleExportCancel = () => {
-    setExportModal(false);
-  };
-  return (
-    <>
-      <div className=" flex flex-col md:flex-row justify-between p-3">
-
-  
+// Upload Document
+const [exportModal, setExportModal] = useState(false);
+const showExportModal = () => {
+  setExportModal(true);
+};
+const handleExportCancel = () => {
+  setExportModal(false);
+};
 
 const ApplicationTemplate = () => {
   return (
-    <div>
-
-<div className="flex justify-between flex-col md:flex-row md:items-center">
-
+    <>
+      <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
           title="Application Templates"
           description="Create, View & edit assessment templates on the system"
@@ -105,14 +98,11 @@ const ApplicationTemplate = () => {
             <Icon
               icon="uil:file-import"
               className="text-3xl cursor-pointer hover:text-primary"
-
               onClick={showImportModal}
-
             />
             <Icon
               icon="mingcute:file-import-line"
               className="text-3xl cursor-pointer hover:text-primary"
-
               onClick={showExportModal}
             />
           </div>
