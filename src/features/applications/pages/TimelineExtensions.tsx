@@ -31,9 +31,6 @@ const TimelineExtensions = () => {
   const showExtensionModal = () => {
     setOpenExtensionModal(true);
   };
-  //   const handleOk = () => {
-  //     setOpenModal(false);
-  //   };
   const handleExtensionCancel = () => {
     setOpenExtensionModal(false);
   };
@@ -91,7 +88,7 @@ const TimelineExtensions = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: (_) => (
         <div>
           <Dropdown
             trigger={["click"]}

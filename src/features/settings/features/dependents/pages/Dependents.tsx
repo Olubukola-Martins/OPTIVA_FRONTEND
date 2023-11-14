@@ -10,7 +10,7 @@ import { AddDependent } from "../components/AddDependent";
 interface DataType {
   key: React.Key;
   dependent: string;
-  age: string;
+  ageBracket: string;
   conditions: string;
 }
 
@@ -21,8 +21,8 @@ const columns: ColumnsType<DataType> = [
   },
 
   {
-    title: "Age",
-    dataIndex: "age",
+    title: "Age Bracket",
+    dataIndex: "ageBracket",
   },
   {
     title: "Conditions",
@@ -55,7 +55,7 @@ for (let i = 0; i < 6; i++) {
   data.push({
     key: i,
     dependent: "Mother",
-    age: "<20",
+    ageBracket: "<20",
     conditions: "unmarried",
   });
 }

@@ -7,7 +7,6 @@ import { DashboardLayout } from "src/components/layout/Layout";
 import Dependents from "src/features/settings/features/dependents/pages/Dependents";
 import Applications from "src/features/applications/pages/Applications";
 import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
-import { ApplicantBrief } from "src/features/applications/components/ApplicantBrief";
 import Payments from "src/features/payment/pages/Payments";
 import PaymentDetails from "src/features/payment/pages/PaymentDetails";
 import GenerateReceipt from "src/features/payment/pages/GenerateReceipt";
@@ -18,9 +17,18 @@ import Reports from "src/features/report/pages/Reports";
 import TimelineExtensions from "src/features/applications/pages/TimelineExtensions";
 import ProcessingStrategyAndSteps from "src/features/applications/pages/ProcessingStrategyAndSteps";
 import Comments from "src/features/applications/pages/Comments";
+import Meetings from "src/features/meetings/pages/Meetings";
 
 import { RequireAuth } from "react-auth-kit";
-import Meetings from "src/features/meetings/pages/Meetings";
+import NewApplication from "src/features/applications/pages/NewApplication";
+import ApplicantDocument from "src/features/applications/pages/ApplicantDocument";
+import DocumentRequirements from "src/features/settings/features/documents/pages/DocumentRequirements";
+import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
+import NewApplicationTemplate from "src/features/settings/features/appTemplate/pages/NewApplicationTemplate";
+import CountryMilestonesAndPrograms from "src/features/settings/features/program-types/pages/CountryMilestonesAndPrograms";
+import CreateProgramType from "src/features/settings/features/program-types/pages/CreateProgramType";
+import DefineFeesAndAuthorizedPersons from "src/features/settings/features/authorizedPersons/pages/DefineFeesAndAuthorizedPersons";
+import { AddFees } from "src/features/settings/features/authorizedPersons/pages/AddFees";
 
 import DocumentRequirement from "src/features/settings/features/documents/pages/DocumentRequirement";
 import InvestmentRoute from "src/features/settings/features/investment/pages/InvestmentRoute";
@@ -80,7 +88,6 @@ const routesArray = [
   },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
-  { path: appRoute.applicantBrief, element: <ApplicantBrief /> },
   { path: appRoute.meetings, element: <Meetings /> },
   { path: appRoute.payments, element: <Payments /> },
   { path: appRoute.paymentDetails().format, element: <PaymentDetails /> },
@@ -93,9 +100,54 @@ const routesArray = [
   { path: appRoute.generateContract().format, element: <GenerateContract /> },
   { path: appRoute.reports, element: <Reports /> },
   { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
+
+  {
+    path: appRoute.timeline_extensions().format,
+    element: <TimelineExtensions />,
+  },
+  {
+    path: appRoute.processing_strategy_steps().format,
+    element: <ProcessingStrategyAndSteps />,
+  },
+  { path: appRoute.comments().format, element: <Comments /> },
+  { path: appRoute.new_application, element: <NewApplication /> },
+  {
+    path: appRoute.applicant_documents().format,
+    element: <ApplicantDocument />,
+  },
+  {
+    path: appRoute.documentRequirements,
+    element: <DocumentRequirements />,
+  },
+  {
+    path: appRoute.applicationTemplate,
+    element: <ApplicationTemplate />,
+  },
+  {
+    path: appRoute.newApplicationTemplate,
+    element: <NewApplicationTemplate />,
+  },
+  {
+    path: appRoute.countryMilestonesProgram,
+    element: <CountryMilestonesAndPrograms />,
+  },
+  {
+    path: appRoute.createProgramType,
+    element: <CreateProgramType />,
+  },
+  {
+    path: appRoute.defineFeesAndAuthorizedPersons,
+    element: <DefineFeesAndAuthorizedPersons />,
+  },
+  {
+    path: appRoute.addFees,
+    element: <AddFees />,
+  },
+
   { path: appRoute.document_requirement, element: <DocumentRequirement /> },
   { path: appRoute.investment_route, element: <InvestmentRoute /> },
   { path: appRoute.app_template, element: <ApplicationTemplate /> },
+
 ];
 
 export const AllRoutes = () => {

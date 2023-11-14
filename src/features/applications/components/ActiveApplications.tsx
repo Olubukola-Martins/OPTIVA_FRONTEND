@@ -56,7 +56,6 @@ export const ActiveApplications = () => {
       dataIndex: "assignedTo",
       key: "7",
     },
-
     {
       title: "Action",
       dataIndex: "action",
@@ -66,25 +65,24 @@ export const ActiveApplications = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">
-                  <Link
-                    to={
-                      appRoute.applicant_details(itemId as unknown as number)
-                        .path
-                    }
-                  >
-                    Accept Applicant
-                  </Link>
-                </Menu.Item>
+                <Menu.Item key="1">Accept Applicant</Menu.Item>
                 <Menu.Item key="2">
                   <Link to={appRoute.applicant_details().path}>
                     View Applicant Details
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="3">Processing Strategy/Steps</Menu.Item>
-                <Menu.Item key="4">View Uploaded Documents</Menu.Item>
+                <Menu.Item key="3">
+                  <Link to={appRoute.processing_strategy_steps().path}>
+                    Processing Strategy/Steps
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="4">
+                  <Link to={appRoute.applicant_documents().path}>
+                    View Uploaded Documents
+                  </Link>
+                </Menu.Item>
                 <Menu.Item key="5">
-                  <Link to={appRoute.timeline_extensions}>
+                  <Link to={appRoute.timeline_extensions().path}>
                     Timeline Extensions
                   </Link>
                 </Menu.Item>

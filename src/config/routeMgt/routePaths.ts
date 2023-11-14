@@ -32,16 +32,27 @@ export const appRoute = {
   // Applications
   applications: `/applications`,
   applicantDetails: `/applicant-details`,
-  applicantBrief: `/applicant-brief`,
-  // applicantDetails: `/applicant-details`,
   applicant_details: (id?: number) => ({
     format: `/applicant-details/:id`,
     path: `/applicant-details/${id}`,
   }),
-  timeline_extensions: `/applications/timeline-extensions`,
-  processing_strategy_steps: `/applications/processing_strategy_steps`,
-  comments: `/applications/comments`,
-
+  timeline_extensions: (id?: number) => ({
+    format: `/applications/timeline-extensions/:id`,
+    path: `/applications/timeline-extensions/${id}`,
+  }),
+  processing_strategy_steps: (id?: number) => ({
+    format: `/applications/processing_strategy_steps/:id`,
+    path: `/applications/processing_strategy_steps/${id}`,
+  }),
+  comments: (id?: number) => ({
+    format: `/applications/comments/:id`,
+    path: `/applications/comments/${id}`,
+  }),
+  new_application: `/applications/new_application`,
+  applicant_documents: (id?: number) => ({
+    format: `/applications/applicant_documents/:id`,
+    path: `/applications/applicant_documents/${id}`,
+  }),
   // Reports
   reports: `/reports`,
 
@@ -75,4 +86,19 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
+
+
+  // SETTINGS
+  documentRequirements: `/settings/documentsRequirements`,
+  applicationTemplate: `/settings/applicationTemplate`,
+  newApplicationTemplate: `/settings/newApplicationTemplate`,
+  countryMilestonesProgram: `/settings/ countryMilestonesProgram`,
+  createProgramType: `/settings/createProgramRoute`,
+  defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
+  addFees: `/settings/addfees`,
+  editProgramType: (id?: number) => ({
+    format: `/settings/editProgramType/:id`,
+    path: `/settings/editProgramType/${id}`,
+  }),
+
 };
