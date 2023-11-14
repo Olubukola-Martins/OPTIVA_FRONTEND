@@ -22,6 +22,8 @@ import Comments from "src/features/applications/pages/Comments";
 import { RequireAuth } from "react-auth-kit";
 import Meetings from "src/features/meetings/pages/Meetings";
 import DocumentRequirement from "src/features/settings/features/documents/pages/DocumentRequirement";
+import InvestmentRoute from "src/features/settings/features/investment/pages/InvestmentRoute";
+import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
 
 const routesArray = [
   {
@@ -46,6 +48,8 @@ const routesArray = [
   { path: appRoute.reports, element: <Reports /> },
   { path: appRoute.applicant_details().format, element: <ApplicantDetails /> },
   { path: appRoute.document_requirement, element: <DocumentRequirement /> },
+  { path: appRoute.investment_route, element: <InvestmentRoute /> },
+  { path: appRoute.app_template, element: <ApplicationTemplate /> },
 ];
 
 export const AllRoutes = () => {

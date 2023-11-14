@@ -25,24 +25,46 @@ export const AddDocument = ({ handleClose, open }: IdentifierProps) => {
         <Form.Item name="name" label="Name" rules={textInputValidationRules}>
           <Input placeholder="Document name" />
         </Form.Item>
-        <Form.Item
-          name="category"
-          label="Category"
-          rules={generalValidationRules}
-        >
-          <Select
-            options={[
-              {
-                label: "Family & Education",
-                value: "Family & Education",
-              },
-            ]}
-            className="w-full"
-            placeholder="Select"
-            allowClear
-          />
-        </Form.Item>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Form.Item
+            name="category"
+            label="Category"
+            rules={generalValidationRules}
+          >
+            <Select
+              options={[
+                {
+                  label: "Family & Education",
+                  value: "Family & Education",
+                },
+              ]}
+              className="w-full"
+              placeholder="Select"
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item
+            name="type"
+            label="Document type"
+            rules={generalValidationRules}
+          >
+            <Select
+              options={[
+                {
+                  label: "Supporting Document",
+                  value: 1,
+                },
+                {
+                  label: "Required Document",
+                  value: 2,
+                },
+              ]}
+              className="w-full"
+              placeholder="Select"
+              allowClear
+            />
+          </Form.Item>
           <Form.Item
             name="format"
             label="Format"

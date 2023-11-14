@@ -1,48 +1,32 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Dropdown, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
-import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { AddDocument } from "../components/AddDocument";
+import { AddInvestment } from "../components/AddInvestment";
+import { useState } from "react";
 
 interface DataType {
   key: React.Key;
   name: string;
-  category: string;
-  format: string[];
-  size: string;
-  requirements: string;
-  type: string;
+  createdDate: string;
+  updatedDate: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Name",
+    title: "Invest Name",
     dataIndex: "name",
   },
 
   {
-    title: "Category",
-    dataIndex: "category",
+    title: "Date Created",
+    dataIndex: "dateCreated",
   },
   {
-    title: "Format",
+    title: "Updated Date",
     dataIndex: "format",
-  },
-
-  {
-    title: "Size",
-    dataIndex: "size",
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-  },
-  {
-    title: "Other Requirements",
-    dataIndex: "requirements",
   },
   {
     title: "Action",
@@ -66,31 +50,18 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [];
-for (let i = 0; i < 6; i++) {
-  data.push({
-    key: i,
-    name: "Passport",
-    category: "Family & Education",
-    format: ["pdf", ", png"],
-    size: "10mb",
-    requirements: "Has to include font",
-    type: "Supporting",
-  });
-}
-
-const DocumentRequirement = () => {
-  const [newDocument, setNewDocument] = useState(false);
+const InvestmentRoute = () => {
+  const [addInvRoute, setAddInvRoute] = useState(false);
   return (
     <>
-      <AddDocument
-        open={newDocument}
-        handleClose={() => setNewDocument(false)}
+      <AddInvestment
+        open={addInvRoute}
+        handleClose={() => setAddInvRoute(false)}
       />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
-          title="Document Requirements"
-          description="Create, View & edit document requirements on the system"
+          title="Investment Routes"
+          description="Create, View & edit investment routes on the system"
           linkBack={appRoute.settings}
         />
 
@@ -105,18 +76,18 @@ const DocumentRequirement = () => {
               className="text-3xl cursor-pointer hover:text-primary"
             />
           </div>
-          <AppButton label="Add New" handleClick={() => setNewDocument(true)} />
+          <AppButton label="Add New" handleClick={() => setAddInvRoute(true)} />
         </div>
       </div>
 
       <Table
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
-        dataSource={data}
-        scroll={{ x: 768 }}
+        dataSource={[]}
+        // scroll={{ x: 768 }}
       />
     </>
   );
 };
 
-export default DocumentRequirement;
+export default InvestmentRoute;

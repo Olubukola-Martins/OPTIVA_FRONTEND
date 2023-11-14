@@ -8,6 +8,8 @@ export const appRoute = {
   settings: `/settings`,
   dependents: `/settings/dependents`,
   document_requirement: `/settings/document-requirement`,
+  investment_route: `settings/investment-route`,
+  app_template: `/settings/application-template`,
 
   // Applications
   applications: `/applications`,
@@ -55,5 +57,4 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
-  
 };
