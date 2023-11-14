@@ -4,6 +4,13 @@ export const appRoute = {
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
 
+
+  // Settings
+  settings: `/settings`,
+  dependents: `/settings/dependents`,
+  document_requirement: `/settings/document-requirement`,
+  investment_route: `settings/investment-route`,
+  app_template: `/settings/application-template`,
   //Settings
   settings: `/settings`,
   dependents: `/settings/dependents`,

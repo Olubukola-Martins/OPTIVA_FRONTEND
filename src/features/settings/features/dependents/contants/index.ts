@@ -1,0 +1,1 @@
+export const dependentsAgeList = ["Any age", ">18", "<18", "<30", ">30", "<45", ">45", "<55", ">55",]

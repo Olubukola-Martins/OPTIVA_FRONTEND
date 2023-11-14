@@ -3,20 +3,20 @@ import { settingsLinkProps } from "../types";
 
 export const settingsLink: settingsLinkProps[] = [
   {
-    name: "Define Eligible  Dependents",
+    name: "Define Eligible Dependents",
     link: appRoute.dependents,
   },
   {
     name: "Define Document Requirements",
-    link: appRoute.dependents,
+    link: appRoute.document_requirement,
   },
   {
     name: "Define Investment Routes",
-    link: appRoute.dependents,
+    link: appRoute.investment_route,
   },
   {
     name: "Application Template",
-    link: appRoute.dependents,
+    link: appRoute.app_template,
   },
   {
     name: "Country, Milestones and Program types Configuration",
