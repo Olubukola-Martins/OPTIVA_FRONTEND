@@ -3,6 +3,7 @@ import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { useParams } from "react-router-dom";
 
 type DataSource = {
   key: React.Key;
@@ -92,7 +93,6 @@ for (let i = 1; i <= 3; i++) {
   });
 }
 const rows = dataSourceThird ? dataSourceThird.length : 0;
-console.log("rows", rows);
 
 const thirdTableColumn: ColumnsType<Item> = [
   {
@@ -103,7 +103,7 @@ const thirdTableColumn: ColumnsType<Item> = [
           return {
             rowSpan: rows ,
           };
-        } else if (index > 0) {
+        } else if (index as number > 0) {
           return {
             rowSpan: 0,
           };
@@ -151,6 +151,7 @@ const thirdTableColumn: ColumnsType<Item> = [
 ];
 
 const GenerateFinancialStatement = () => {
+  const { id } = useParams();
   const totalNGNList = [
     { payments: 150000 },
     { payments: 150000 },
@@ -166,7 +167,7 @@ const GenerateFinancialStatement = () => {
     <>
       <PageIntro
         title="Generate Financial Statement"
-        linkBack={appRoute.payments}
+        linkBack={appRoute.paymentDetails(Number(id) as number).path}
       />
       <GenerateTemplate title="FINANCIAL STATEMENT" templateNumber="00892">
         <>

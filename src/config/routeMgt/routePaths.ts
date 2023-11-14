@@ -4,12 +4,30 @@ export const appRoute = {
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
 
+
   // Settings
   settings: `/settings`,
   dependents: `/settings/dependents`,
   document_requirement: `/settings/document-requirement`,
   investment_route: `settings/investment-route`,
   app_template: `/settings/application-template`,
+  //Settings
+  settings: `/settings`,
+  dependents: `/settings/dependents`,
+  escalation: `/settings/escalation`,
+  defineEscalation: `/settings/escalation/defineEscalation`,
+  editEscalation: (id?: number) => ({
+    format: `/settings/escalation/editEscalation/:id`,
+    path: `/settings/escalation/editEscalation/${id}`,
+  }),
+  contractsEmailTemplates: `/settings/contractsEmailTemplates`,
+  contractsTemplate: `/settings/contractsEmailTemplates/Contract`,
+  onboardingWelcomeTempl: `/settings/contractsEmailTemplates/onboardingWelcome`,
+  collationAppointmentConfirmTempl: `/settings/contractsEmailTemplates/collationAppointmentConfirmation`,
+  cbiBankDDclearance: `/settings/contractsEmailTemplates/CBIBankDDclearance`,
+  cbiBAsoftPassportReceipt: `/settings/contractsEmailTemplates/CBIbankAppSoftPassportReceipt`,
+  cbiBAapprovalMailTemp: `/settings/contractsEmailTemplates/CBIbankAppApprovalMailTemplate`,
+  cbiApplicationSubmissionMailTemp: `/settings/contractsEmailTemplates/CBIapplicationSubmissioneEMailTemplate`,
 
   // Applications
   applications: `/applications`,

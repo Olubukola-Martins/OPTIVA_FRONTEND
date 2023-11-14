@@ -21,9 +21,23 @@ import Comments from "src/features/applications/pages/Comments";
 
 import { RequireAuth } from "react-auth-kit";
 import Meetings from "src/features/meetings/pages/Meetings";
+
 import DocumentRequirement from "src/features/settings/features/documents/pages/DocumentRequirement";
 import InvestmentRoute from "src/features/settings/features/investment/pages/InvestmentRoute";
 import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
+
+import Escalation from "src/features/settings/features/escalation/pages/Escalation";
+import NewEscalation from "src/features/settings/features/escalation/pages/NewEscalation";
+import EditEscalation from "src/features/settings/features/escalation/pages/EditEscalation";
+import AllContractsEmailTemplates from "src/features/settings/features/contractsEmailTemplates/pages/AllContractsEmailTemplates";
+import ContractTemplate from "src/features/settings/features/contractsEmailTemplates/pages/ContractTemplate";
+import OnboardingWelcomeEmailTemplate from "src/features/settings/features/contractsEmailTemplates/pages/OnboardingWelcomeEmailTemplate";
+import CollationAppointConfirmationTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CollationAppointConfirmationTemplate";
+import CBIBankDDClearanceTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankDDClearanceTemplate";
+import CBIBankAppECopyPassportReceiptTemp from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppECopyPassportReceiptTemp";
+import CBIBankAppApprovalTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppApprovalTemplate";
+import CBIAppSubmissionTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIAppSubmissionTemplate";
+
 
 const routesArray = [
   {
@@ -32,6 +46,38 @@ const routesArray = [
   },
   { path: appRoute.dependents, element: <Dependents /> },
   { path: appRoute.settings, element: <Settings /> },
+  { path: appRoute.escalation, element: <Escalation /> },
+  { path: appRoute.defineEscalation, element: <NewEscalation /> },
+  { path: appRoute.editEscalation().format, element: <EditEscalation /> },
+  {
+    path: appRoute.contractsEmailTemplates,
+    element: <AllContractsEmailTemplates />,
+  },
+  { path: appRoute.contractsTemplate, element: <ContractTemplate /> },
+  {
+    path: appRoute.onboardingWelcomeTempl,
+    element: <OnboardingWelcomeEmailTemplate />,
+  },
+  {
+    path: appRoute.collationAppointmentConfirmTempl,
+    element: <CollationAppointConfirmationTemplate />,
+  },
+  {
+    path: appRoute.cbiBankDDclearance,
+    element: <CBIBankDDClearanceTemplate />,
+  },
+  {
+    path: appRoute.cbiBAsoftPassportReceipt,
+    element: <CBIBankAppECopyPassportReceiptTemp />,
+  },
+  {
+    path: appRoute.cbiBAapprovalMailTemp,
+    element: <CBIBankAppApprovalTemplate />,
+  },
+  {
+    path: appRoute.cbiApplicationSubmissionMailTemp,
+    element: <CBIAppSubmissionTemplate />,
+  },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
   { path: appRoute.applicantBrief, element: <ApplicantBrief /> },

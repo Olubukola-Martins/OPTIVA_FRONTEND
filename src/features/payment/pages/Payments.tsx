@@ -1,6 +1,16 @@
-import { DatePicker, Dropdown, Input, Menu, Table, TreeSelect } from "antd";
+import {
+  DatePicker,
+  Dropdown,
+  Form,
+  InputNumber,
+  Menu,
+  Modal,
+  Select,
+  Table,
+} from "antd";
 import Search from "antd/es/input/Search";
 import { ColumnsType } from "antd/es/table";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -8,8 +18,25 @@ import { SimpleCard } from "src/components/cards/SimpleCard";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 const Payments = () => {
-  const { TreeNode } = TreeSelect;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalForm] = Form.useForm();
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const { RangePicker } = DatePicker;
+  const handleFilter = (formValues) => {
+    setIsModalOpen(false);
+    modalForm.resetFields();
+  };
+  const handleFilterValuesChange = (values:any) => {
+    const allFieldValues = modalForm.getFieldsValue();
+    const allEmpty = Object.values(allFieldValues).every((value) => {
+      if (Array.isArray(value)) {
+        return value.length === 0;
+      } else {
+        return !value;
+      }
+    });
+    setIsSubmitDisabled(allEmpty);
+  };
   const cardColors: ("blue" | "green" | "yellow" | "oxblood")[] = [
     "green",
     "yellow",
@@ -36,84 +63,6 @@ const Payments = () => {
     lastUpdated: string;
     updatedBy: string;
   };
-
-  const treeData = [
-    {
-      value: "Filter by Columns",
-      title: "Filter by Columns",
-      children: [
-        {
-          value: "Applicant ID",
-          title: "Applicant ID",
-        },
-        {
-          value: "Applicant Name",
-          title: "Applicant Name",
-        },
-        {
-          value: "Country",
-          title: "Country",
-        },
-        {
-          value: "Investment Route",
-          title: "Investment Route",
-        },
-        {
-          value: "Number of Dependents",
-          title: "Number of Dependents",
-        },
-        {
-          value: "Date Created",
-          title: "Date Created",
-        },
-        {
-          value: "Created By",
-          title: "Created By",
-        },
-      ],
-    },
-    {
-      value: "Filter by Country",
-      title: "Filter by Country",
-      children: [
-        {
-          value: "Antigua & Barbuda",
-          title: "Antigua & Barbuda",
-        },
-        {
-          value: "Dominica",
-          title: "Dominica",
-        },
-        {
-          value: "Grenada",
-          title: "Grenada",
-        },
-        {
-          value: "St. Kitts & Levis",
-          title: "St. Kitts & Levis",
-        },
-        {
-          value: "St. Lucia",
-          title: "St. Lucia",
-        },
-      ],
-    },
-    {
-      value: "Filter by Investment Route",
-      title: "Filter by Investment Route",
-      children: [
-        {
-          value: "CBI",
-          title: "CBI",
-        },
-      ],
-    },
-    {
-      value: "Filter by Amount",
-      title: "Filter by Amount",
-      isInput: true,
-    },
-  ];
 
   const rowSelection = {
     onChange: (
@@ -189,8 +138,7 @@ const Payments = () => {
           trigger={["click"]}
           overlay={
             <Menu>
-              <Menu.Item key="1">View Proof of Payment</Menu.Item>
-              <Menu.Item key="2">
+              <Menu.Item key="1">
                 <Link
                   to={
                     appRoute.generateInvoice(record.key as unknown as number)
@@ -200,27 +148,17 @@ const Payments = () => {
                   Generate Invoice
                 </Link>
               </Menu.Item>
-              <Menu.Item key="3">
+              <Menu.Item key="2">
                 <Link
                   to={
                     appRoute.paymentDetails(record.key as unknown as number)
                       .path
                   }
                 >
-                  Update Payment Details
+                  Payment Details
                 </Link>
               </Menu.Item>
-              <Menu.Item key="4">
-                <Link
-                  to={
-                    appRoute.financialStatement(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Financial Statement
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="5">
+              <Menu.Item key="3">
                 <Link
                   to={
                     appRoute.generateReciept(record.key as unknown as number)
@@ -230,7 +168,7 @@ const Payments = () => {
                   Generate Receipt
                 </Link>
               </Menu.Item>
-              <Menu.Item key="6">
+              <Menu.Item key="4">
                 <Link
                   to={
                     appRoute.generateContract(record.key as unknown as number)
@@ -241,7 +179,7 @@ const Payments = () => {
                 </Link>
               </Menu.Item>
 
-              <Menu.Item key="7">Move to Master List</Menu.Item>
+              <Menu.Item key="5">Move to Master List</Menu.Item>
             </Menu>
           }
         >
@@ -271,6 +209,108 @@ const Payments = () => {
 
   return (
     <>
+      <Modal
+        title="New Payment Details"
+        footer={null}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        {/* make everything compulsory */}
+        <Form
+          name="modalPaymentDetails"
+          form={modalForm}
+          layout="vertical"
+          className="pt-8 px-4"
+          // onChange={handleFilterValuesChange}
+          onValuesChange={handleFilterValuesChange}
+          onFinish={handleFilter}
+        >
+          <Form.Item label="Filter by Columns" name="filterColumns">
+            <Select
+              mode="multiple"
+              options={[
+                {
+                  value: "Applicant ID",
+                  label: "Applicant ID",
+                },
+                {
+                  value: "Applicant Name",
+                  label: "Applicant Name",
+                },
+                {
+                  value: "Country",
+                  label: "Country",
+                },
+                {
+                  value: "Investment Route",
+                  label: "Investment Route",
+                },
+                {
+                  value: "Number of Dependents",
+                  label: "Number of Dependents",
+                },
+                {
+                  value: "Date Created",
+                  label: "Date Created",
+                },
+                {
+                  value: "Created By",
+                  label: "Created By",
+                },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item label="Filter by Country" name="filterCountry">
+            <Select
+              mode="multiple"
+              options={[
+                {
+                  value: "Antigua & Barbuda",
+                  label: "Antigua & Barbuda",
+                },
+                {
+                  value: "Dominica",
+                  label: "Dominica",
+                },
+                {
+                  value: "Grenada",
+                  label: "Grenada",
+                },
+                {
+                  value: "St. Kitts & Levis",
+                  label: "St. Kitts & Levis",
+                },
+                {
+                  value: "St. Lucia",
+                  label: "St. Lucia",
+                },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item
+            label="Filter by Investment Route"
+            name="filterInvestmentRoute"
+          >
+            <Select
+              mode="multiple"
+              options={[
+                {
+                  value: "CBI",
+                  label: "CBI",
+                },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item name="filterAmount" label="Filter Amount">
+            <InputNumber addonAfter="$" />
+          </Form.Item>
+          <AppButton
+            type="submit"
+            label="Apply Filter"
+            isDisabled={isSubmitDisabled}
+          />
+        </Form>
+      </Modal>
       <PageIntro
         title="Payments"
         description="View & Update Clients Payments"
@@ -286,49 +326,24 @@ const Payments = () => {
           />
         ))}
       </div>
-
       <div className="border-gray-100 border-t-2 border-r-2 border-l-2 border-b-0 rounded-t-md w-full mt-[52px] px-4 flex sm:flex-row flex-col items-center justify-around">
         <h3 className="font-bold pt-2 sm:pt-0">Payment List</h3>
 
         <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
           <div className="flex flex-row items-center gap-x-2">
-            <Search
-              placeholder="Search"
-              allowClear
-              style={{ width: 150 }}
-              // onSearch={onSearch}
+            <Search placeholder="Search" allowClear style={{ width: 150 }} />
+            <AppButton
+              label="Filter"
+              type="button"
+              handleClick={() => setIsModalOpen(true)}
             />
-            <TreeSelect
-              // mode="multiple"
-              placeholder="Filter"
-              style={{
-                width: 150,
-                overflow: "auto",
-                height: 30,
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-              treeCheckable={true}
-            >
-              {treeData.map((node) => (
-                <TreeNode
-                  key={node.value}
-                  value={node.value}
-                  title={node.title}
-                  selectable={!node.isInput}
-                >
-                  {node.isInput && <Input />}
-                </TreeNode>
-              ))}
-            </TreeSelect>
           </div>
           <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
             <RangePicker style={{ width: 300 }} />
-            <AppButton />
+            <AppButton label="View All" />
           </div>
         </div>
       </div>
-
       <Table
         rowSelection={{
           type: "checkbox",

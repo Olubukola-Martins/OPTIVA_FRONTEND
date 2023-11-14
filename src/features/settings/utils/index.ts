@@ -27,7 +27,11 @@ export const settingsLink: settingsLinkProps[] = [
     link: appRoute.dependents,
   },
   {
-    name: "Escalation & Delegation",
-    link: appRoute.dependents,
+    name: "Escalation",
+    link: appRoute.escalation,
+  },
+  {
+    name: "Contract & Email Templates",
+    link: appRoute.contractsEmailTemplates,
   },
 ];
