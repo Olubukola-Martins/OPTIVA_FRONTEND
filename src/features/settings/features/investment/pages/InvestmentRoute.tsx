@@ -1,32 +1,32 @@
-import { ColumnsType } from "antd/es/table";
-import { Dropdown, Menu, Table } from "antd/lib";
-import React, { useState } from "react";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Dropdown, Menu } from "antd";
+import Table, { ColumnsType } from "antd/es/table";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
-import { Icon } from "@iconify/react";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { AddDependent } from "../components/AddDependent";
+import { AddInvestment } from "../components/AddInvestment";
+import { useState } from "react";
 
 interface DataType {
   key: React.Key;
-  dependent: string;
-  ageBracket: string;
-  conditions: string;
+  name: string;
+  createdDate: string;
+  updatedDate: string;
 }
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Dependents",
-    dataIndex: "dependent",
+    title: "Invest Name",
+    dataIndex: "name",
   },
 
   {
-    title: "Age Bracket",
-    dataIndex: "ageBracket",
+    title: "Date Created",
+    dataIndex: "dateCreated",
   },
   {
-    title: "Conditions",
-    dataIndex: "conditions",
+    title: "Updated Date",
+    dataIndex: "format",
   },
   {
     title: "Action",
@@ -50,24 +50,18 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const data: DataType[] = [];
-for (let i = 0; i < 6; i++) {
-  data.push({
-    key: i,
-    dependent: "Mother",
-    ageBracket: "<20",
-    conditions: "unmarried",
-  });
-}
-const Dependents = () => {
-  const [addNewD, setAddNewD] = useState(false);
+const InvestmentRoute = () => {
+  const [addInvRoute, setAddInvRoute] = useState(false);
   return (
     <>
-      <AddDependent open={addNewD} handleClose={() => setAddNewD(false)} />
-      <div className="flex justify-between flex-col md:flex-row  md:items-center">
+      <AddInvestment
+        open={addInvRoute}
+        handleClose={() => setAddInvRoute(false)}
+      />
+      <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
-          title="Eligible Dependents"
-          description="Create, View & edit eligible dependents  routes on the system"
+          title="Investment Routes"
+          description="Create, View & edit investment routes on the system"
           linkBack={appRoute.settings}
         />
 
@@ -82,18 +76,18 @@ const Dependents = () => {
               className="text-3xl cursor-pointer hover:text-primary"
             />
           </div>
-          <AppButton label="Add New" handleClick={() => setAddNewD(true)} />
+          <AppButton label="Add New" handleClick={() => setAddInvRoute(true)} />
         </div>
       </div>
 
       <Table
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
-        dataSource={data}
-        scroll={{ x: 768 }}
+        dataSource={[]}
+        // scroll={{ x: 768 }}
       />
     </>
   );
 };
 
-export default Dependents;
+export default InvestmentRoute;

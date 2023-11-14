@@ -1,46 +1,36 @@
-import { PageIntro } from "src/components/PageIntro";
-import { AppButton } from "src/components/button/AppButton";
-import { appRoute } from "src/config/routeMgt/routePaths";
-import { Icon } from "@iconify/react";
-import { ColumnsType } from "antd/es/table";
-import { Dropdown, Input, Menu, Modal, Table, Form } from "antd";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Dropdown, Menu } from 'antd';
+import Table, { ColumnsType } from 'antd/es/table';
+import React from 'react'
+import { PageIntro } from 'src/components/PageIntro'
+import { AppButton } from 'src/components/button/AppButton';
+import { appRoute } from 'src/config/routeMgt/routePaths';
 
-type DataSourceItem = {
-  key: React.Key;
-  sn: number;
-  templateName: string;
-  dateCreated: string;
-  lastModified: string;
-};
-
-const ApplicationTemplate = () => {
-  const columns: ColumnsType<DataSourceItem> = [
-    {
-      key: "1",
-      title: "SN",
-      dataIndex: "sn",
-    },
+interface DataType {
+    key: React.Key;
+    name: string;
+    createdDate: string;
+    updatedDate: string;
+  }
+  
+  const columns: ColumnsType<DataType> = [
     {
       title: "Template Name",
-      dataIndex: "templateName",
-      key: "2",
+      dataIndex: "name",
     },
+  
     {
       title: "Date Created",
       dataIndex: "dateCreated",
-      key: "3",
     },
     {
-      title: "Last Modified",
-      dataIndex: "lastModified",
-      key: "4",
+      title: "Updated Date",
+      dataIndex: "format",
     },
-
     {
       title: "Action",
       dataIndex: "action",
+
       render: (_, val) => (
         <div>
           <Dropdown
@@ -48,8 +38,12 @@ const ApplicationTemplate = () => {
             overlay={
               <Menu>
                 <Menu.Item key="1">Edit</Menu.Item>
+
                 <Menu.Item key="2">Duplicate</Menu.Item>
                 <Menu.Item key="3">Delete</Menu.Item>
+
+                <Menu.Item key="2">Delete</Menu.Item>
+
               </Menu>
             }
           >
@@ -59,6 +53,7 @@ const ApplicationTemplate = () => {
       ),
     },
   ];
+
   const dataSource: DataSourceItem[] = [];
   for (let i = 0; i < 4; i++) {
     dataSource.push({
@@ -90,21 +85,34 @@ const ApplicationTemplate = () => {
   return (
     <>
       <div className=" flex flex-col md:flex-row justify-between p-3">
+
+  
+
+const ApplicationTemplate = () => {
+  return (
+    <div>
+
+<div className="flex justify-between flex-col md:flex-row md:items-center">
+
         <PageIntro
           title="Application Templates"
           description="Create, View & edit assessment templates on the system"
           linkBack={appRoute.settings}
         />
+
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Icon
               icon="uil:file-import"
               className="text-3xl cursor-pointer hover:text-primary"
+
               onClick={showImportModal}
+
             />
             <Icon
               icon="mingcute:file-import-line"
               className="text-3xl cursor-pointer hover:text-primary"
+
               onClick={showExportModal}
             />
           </div>

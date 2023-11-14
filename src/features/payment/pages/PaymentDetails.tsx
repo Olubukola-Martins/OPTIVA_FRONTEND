@@ -1,32 +1,103 @@
-import { Form, Input, InputNumber, Popconfirm, Typography } from "antd";
+import {
+  DatePicker,
+  Dropdown,
+  Form,
+  Input,
+  InputNumber,
+  Menu,
+  Modal,
+  Typography,
+} from "antd";
 import "../style.css";
 import Table, { ColumnsType } from "antd/es/table";
 import React, { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import { useNavigate, useParams } from "react-router-dom";
 
+interface IPaymentItem {
+  key: React.Key;
+  narration: JSX.Element;
+  paidBy: JSX.Element;
+  fxRate: JSX.Element;
+  dateCreated: JSX.Element;
+  datePaid: JSX.Element;
+  paymentsUSD: JSX.Element;
+  paymentsNGN: JSX.Element;
+  balanceDue: JSX.Element;
+}
 const PaymentDetails = () => {
-    const originData: Item[] = [];
-    for (let i = 0; i < 3; i++) {
-      originData.push({
-        key: i.toString(),
-        sn: i + 1,
-        narration: "xyz narration",
-        paidBy: "John Doe",
-        fxRate: "$1 = ₦751, Eur 000",
-        paymentsUSD: 20,
-        paymentsNGN: 11100,
-        balanceDue: 35,
-      });
-    }
-
+  const { TextArea } = Input;
+  const { Text } = Typography;
+  const { id } = useParams();
+  const [modalForm] = Form.useForm();
+  const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState("");
-
+  const [data, setData] = useState<IPaymentItem[]>([]);
   const onFinish = (values: any) => {
-    console.log("form values",values);
+    console.log("form values", values);
+  };
+
+  // MODAL
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleAddNewPayment = (values) => {
+    const newdateCreated = values.dateCreated;
+    const newdatePaid = values.datePaid;
+    const key = data.length + 1;
+    const newDetail: IPaymentItem = {
+      key,
+      narration: (
+        <Form.Item name={`${key}narration`} initialValue={values.narration}>
+          <Text className="max-w-[200px]">{values.narration}</Text>
+        </Form.Item>
+      ),
+      paidBy: (
+        <Form.Item name={`${key}paidBy`} initialValue={values.paidBy}>
+          <Text>{values.paidBy}</Text>
+        </Form.Item>
+      ),
+      fxRate: (
+        <Form.Item name={`${key}fxRate`} initialValue={"$1 = ₦751, Eur 000"}>
+          <Text>$1 = ₦751, Eur 000</Text>
+        </Form.Item>
+      ),
+      dateCreated: (
+        <Form.Item name={`${key}dateCreated`} initialValue={newdateCreated}>
+          <Text>
+            {newdateCreated.$D}/{newdateCreated.$M}/{newdateCreated.$y}
+          </Text>
+        </Form.Item>
+      ),
+      datePaid: (
+        <Form.Item name={`${key}datePaid`} initialValue={newdatePaid}>
+          <Text>
+            {newdatePaid.$D}/{newdatePaid.$M}/{newdatePaid.$y}
+          </Text>
+        </Form.Item>
+      ),
+      paymentsUSD: (
+        <Form.Item name={`${key}paymentsUSD`} initialValue={values.paymentUSD}>
+          <Text>{values.paymentUSD} USD</Text>
+        </Form.Item>
+      ),
+      paymentsNGN: (
+        <Form.Item name={`${key}paymentsNGN`} initialValue={values.paymentNGN}>
+          <Text>{values.paymentNGN} NGN</Text>
+        </Form.Item>
+      ),
+      balanceDue: (
+        <Form.Item name={`${key}balanceDue`} initialValue={values.balanceDue}>
+          <Text className="text-red-600">
+            {values.balanceDue} <span className="text-gray-800">USD</span>
+          </Text>
+        </Form.Item>
+      ),
+    };
+    setData((prev) => [...prev, newDetail]);
+    setIsModalOpen(false);
+    modalForm.resetFields();
+    console.log("new", newDetail);
   };
 
   // TABLES
@@ -94,45 +165,23 @@ const PaymentDetails = () => {
   ];
 
   // EDITABLE TABLE
-  interface Item {
-    key: string;
-    sn: number;
-    narration: string;
-    paidBy: string;
-    fxRate: string;
-    paymentsUSD: number;
-    paymentsNGN: number;
-    balanceDue: number;
-  }
 
-  interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-    editing: boolean;
-    dataIndex: string;
-    title: string;
-    inputType: "number" | "text";
-    record: Item;
-    index: number;
-    children: React.ReactNode;
-  }
-  const editableColumns = [
+  const editableColumns: ColumnsType<IPaymentItem> = [
     {
       title: "SN",
-      dataIndex: "sn",
+      render: (_: any, record: IPaymentItem, index: number) => {
+        return index + 1;
+      },
     },
+    { title: "Date Created", dataIndex: "dateCreated" },
     {
       title: "Narration",
       dataIndex: "narration",
-      editable: true,
     },
+    { title: "Date Paid", dataIndex: "datePaid" },
     {
       title: "Paid By",
       dataIndex: "paidBy",
-      editable: true,
-    },
-    {
-      title: "Fx Rate",
-      dataIndex: "fxRate",
-      editable: true,
     },
     {
       title: "Fx Rate",
@@ -141,341 +190,270 @@ const PaymentDetails = () => {
     {
       title: "Payments USD",
       dataIndex: "paymentsUSD",
-      editable: true,
     },
     {
       title: "Payments NGN",
       dataIndex: "paymentsNGN",
-      editable: true,
     },
     {
       title: "Balance Due",
       dataIndex: "balanceDue",
-      editable: true,
     },
     {
-      title: "operation",
-      dataIndex: "operation",
-      render: (_: any, record: Item) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <span>
-            <Typography.Link
-              onClick={() => save(record.key)}
-              style={{ marginRight: 8 }}
-            >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
-            </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record)}
+      title: "Action",
+      dataIndex: "action",
+      render: (_, record: IPaymentItem) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                <Menu.Item key="1">View Payment Proof</Menu.Item>
+
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    const getPaymentDetails = {
+                      key: record.key,
+                      narration: record.narration.props.initialValue,
+                      paidBy: record.paidBy.props.initialValue,
+                      fxRate: record.fxRate.props.initialValue,
+                      dateCreated: record.dateCreated.props.initialValue,
+                      datePaid: record.datePaid.props.initialValue,
+                      paymentsUSD: record.paymentsUSD.props.initialValue,
+                      paymentsNGN: record.paymentsNGN.props.initialValue,
+                      balanceDue: record.balanceDue.props.initialValue,
+                    };
+                    modalForm.setFieldsValue(getPaymentDetails);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  Edit
+                </Menu.Item>
+              </Menu>
+            }
           >
-            Edit
-          </Typography.Link>
-        );
-      },
+            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
+          </Dropdown>
+        </div>
+      ),
     },
   ];
-  const EditableCell: React.FC<EditableCellProps> = ({
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            // style={{ margin: 0 }}
-            // rules={[
-            //   {
-            //     required: true,
-            //     message: `Please Input ${title}!`,
-            //   },
-            // ]}
-          >
-            {inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-  const mergedColumns = editableColumns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record: Item) => ({
-        record,
-        inputType:
-          col.dataIndex === ("paymentsUSD" || "paymentsNGN" || "balanceDue")
-            ? "number"
-            : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-  const isEditing = (record: Item) => record.key === editingKey;
-
-  const edit = (record: Partial<Item> & { key: React.Key }) => {
-    form.setFieldsValue({
-      // sn: "",
-      narration: "",
-      paidBy: "",
-      // fxRate: "",
-      paymentsUSD: "",
-      paymentsNGN: "",
-      balanceDue: "",
-      ...record,
-    });
-    setEditingKey(record.key);
-  };
-
-  const cancel = () => {
-    setEditingKey("");
-  };
-
-  const save = async (key: React.Key) => {
-    try {
-      const row = (await form.validateFields()) as Item;
-
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey("");
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey("");
-      }
-    } catch (errInfo) {
-      console.log("Validate Failed:", errInfo);
-    }
-  };
 
   return (
     <>
       <PageIntro title="Update Payment Details" linkBack={appRoute.payments} />
 
       <div className="border-2 rounded-xl border-gray-100 p-2 md:p-6 xl:p-12 md:w-11/12">
+        <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
+          <div className="w-full pb-4">
+            <p className="pb-2">Applicant ID</p>
+            <Input value={"230000-01"} disabled allowClear className="p-2.5 " />
+          </div>
+          <div className="w-full pb-4">
+            {/* addonBefore={prefixSelector} */}
+            <p className="pb-2">Phone Number</p>
+            <Input
+              value={"+1 (000) 000-0000"}
+              disabled
+              allowClear
+              className="p-2.5"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
+          <div className="w-full pb-4">
+            <p className="pb-2">Applicant Name</p>
+            <Input
+              value={"Ruth Godwin"}
+              disabled
+              allowClear
+              className="p-2.5"
+            />
+          </div>
+          <div className="w-full pb-4">
+            <p className="pb-2">Email</p>
+            <Input value={"ruthgodwin@gmail.com"} disabled className="p-2.5" />
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
+          <div className="w-full pb-4">
+            <p className="pb-2">Number of Dependent(s)</p>
+            <InputNumber value={4} disabled className="p-1.5 w-full" />
+          </div>
+          <div className="w-full pb-4">
+            <p className="pb-2">Country</p>
+            <Input value={"Grenada"} disabled className="p-2.5" />
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full ">
+          <div className="w-full pb-4">
+            <p className="pb-2">Applicant Address</p>
+            <div className="gap-x-4 grid grid-cols-2 ">
+              <div>
+                <p className="pb-2 text-xs">Street</p>
+                <Input value={16} disabled className="p-2.5" />
+              </div>
+              <div>
+                <p className="pb-2 text-xs">Apt/Floor/Suite</p>
+                <Input value={"2B"} disabled className="p-2.5" />
+              </div>
+              <div>
+                <p className="pb-2 text-xs">City</p>
+                <Input value={"Ikoyi"} disabled className="p-2.5" />
+              </div>
+              <div>
+                <p className="pb-2 text-xs">State</p>
+                <Input value={"Lagos"} disabled className="p-2.5" />
+              </div>
+              <div>
+                <p className="pb-2 text-xs">Country</p>
+                <Input value={"Nigeria"} disabled className="p-2.5" />
+              </div>
+              <div>
+                <p className="pb-2 text-xs">Zip/postal code</p>
+                <Input value={100244} disabled className="p-2.5" />
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full">
+            <div className="pb-4 w-full">
+              <p className="pb-2">Program Name</p>
+              <Input
+                value="Citizenship By Investment"
+                disabled
+                className="p-2.5"
+              />
+            </div>
+
+            <div className="pb-4 w-full">
+              <p className="pb-2">Investment Route</p>
+              <Input
+                value="Real Estate Investment"
+                disabled
+                className="p-2.5 "
+              />
+            </div>
+          </div>
+        </div>
+        {/* financial statement */}
+        <div className="pt-4 sm:pt-0">
+          <h3 className="font-medium text-lg ">Financial Statement</h3>
+          <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 w-full pt-4">
+            {/* table 1 */}
+            <Table
+              bordered={true}
+              columns={headColumnFirstTable}
+              dataSource={dataSourceFirst}
+              className={`financialStatementTable w-full `}
+              pagination={false}
+              size="middle"
+            />
+
+            {/* table 2 */}
+            <Table
+              bordered={true}
+              columns={headColumnSecondTable}
+              dataSource={dataSourceSecond}
+              className="financialStatementTable w-full"
+              pagination={false}
+              size="middle"
+            />
+          </div>
+        </div>
+        <AppButton
+          type="button"
+          label="Add New Payment Detail"
+          containerStyle=" mt-6 ml-auto flex"
+          handleClick={() => setIsModalOpen(true)}
+        />
         <Form
           layout="vertical"
           name="updatePaymentDetails"
-          className="flex flex-col"
-          // component={false}
           onFinish={onFinish}
+          className="flex flex-col"
         >
-          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
-            <Form.Item
-              label="Applicant ID"
-              name="applicantID"
-              className="w-full"
-            >
-              <Input placeholder="e.g 230000-01" allowClear className="p-2.5" />
-            </Form.Item>
-            <Form.Item
-              label="Phone Number"
-              name="phoneNumber"
-              className="w-full"
-            >
-              {/* addonBefore={prefixSelector} */}
-              <Input
-                placeholder="+1 (000) 000-0000"
-                allowClear
-                className="p-2.5"
-              />
-            </Form.Item>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
-            <Form.Item
-              label="Applicant Name"
-              name="applicantName"
-              className="w-full"
-            >
-              <Input placeholder="Ruth Godwin" allowClear className="p-2.5" />
-            </Form.Item>
-            <Form.Item label="Email" name="email" className="w-full">
-              <Input
-                placeholder="ruthgodwin@gmail.com"
-                allowClear
-                className="p-2.5"
-              />
-            </Form.Item>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full">
-            <Form.Item
-              label="Number of Dependent(s)"
-              name="noDependents"
-              className="w-full"
-            >
-              <InputNumber placeholder="4" className="p-1.5 w-full" />
-            </Form.Item>
-            <Form.Item label="Country" name="country" className="w-full">
-              <Input placeholder="Grenada" allowClear className="p-2.5" />
-            </Form.Item>
-          </div>
-
-          <div className="flex flex-col sm:flex-row sm:gap-7 md:gap-10 w-full ">
-            <Form.Item
-              label="Applicant Address"
-              name="applicantAddress"
-              className="w-full"
-            >
-              <Input.Group className="gap-x-4 grid grid-cols-2 ">
-                <Form.Item
-                  name="street"
-                  // rules={[{ required: true, message: "street is required" }]}
-                >
-                  <Input placeholder="Street" allowClear className="p-2.5" />
-                </Form.Item>
-                <Form.Item
-                  name="floorSuite"
-                  // rules={[
-                  //   { required: true, message: "Apt/Floor/Suite is required" },
-                  // ]}
-                >
-                  <Input
-                    placeholder="Apt/Floor/Suite"
-                    allowClear
-                    className="p-2.5"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="city"
-                  // rules={[{ required: true, message: "City is required" }]}
-                >
-                  <Input placeholder="City" allowClear className="p-2.5" />
-                </Form.Item>
-                <Form.Item
-                  name="state"
-                  // rules={[{ required: true, message: "State is required" }]}
-                >
-                  <Input placeholder="State" allowClear className="p-2.5" />
-                </Form.Item>
-                <Form.Item
-                  name="country"
-                  // rules={[{ required: true, message: "Country is required" }]}
-                >
-                  <Input placeholder="Country" allowClear className="p-2.5" />
-                </Form.Item>
-                <Form.Item
-                  name="zipCode"
-                  // rules={[
-                  //   { required: true, message: "Zip/postal code is required" },
-                  // ]}
-                >
-                  <Input
-                    placeholder="Zip/postal code"
-                    allowClear
-                    className="p-2.5"
-                  />
-                </Form.Item>
-              </Input.Group>
-            </Form.Item>
-
-            <div className="w-full">
-              <Form.Item label="Program Name" name="programName">
-                <Input
-                  placeholder="Citizenship By Investment"
-                  allowClear
-                  className="p-2.5"
-                />
-              </Form.Item>
-
-              <Form.Item label="Investment Route" name="investmentRoute">
-                <Input
-                  placeholder="Real Estate Investment"
-                  allowClear
-                  className="p-2.5"
-                />
-              </Form.Item>
-            </div>
-          </div>
-
-          {/* financial statement */}
-          <div className="pt-2 sm:pt-0">
-            <h3 className="font-medium text-lg ">Financial Statement</h3>
-            <div className="flex flex-col lg:flex-row gap-5 lg:gap-10 w-full pt-4">
-              {/* table 1 */}
-              <Table
-                bordered={true}
-                columns={headColumnFirstTable}
-                dataSource={dataSourceFirst}
-                className="financialStatementTable w-full"
-                pagination={false}
-              />
-
-              {/* table 2 */}
-              <Table
-                bordered={true}
-                columns={headColumnSecondTable}
-                dataSource={dataSourceSecond}
-                className="financialStatementTable w-full"
-                pagination={false}
-              />
-            </div>
-          </div>
-
           {/* editable table */}
-          <div className="mt-3 sm:mt-5">
+          <div className={`mt-3 sm:mt-5 ${data.length > 0 ? "" : "hidden"} `}>
             <Table
-              components={{
-                body: {
-                  cell: EditableCell,
-                },
-              }}
               bordered
               dataSource={data}
-              columns={mergedColumns}
-              rowClassName="editable-row"
-              scroll={{ x: 900 }}
-              // pagination={{
-              //   onChange: cancel,
-              // }}
+              columns={editableColumns}
+              scroll={{ x: 1200 }}
             />
           </div>
 
           {/* buttons */}
-          <div className="place-self-end pt-6 flex flex-row gap-7">
+          <div className="flex justify-end mt-4 gap-7 ">
             <AppButton
               variant="transparent"
               label="Cancel"
               type="button"
               containerStyle="px-4 py-3.5 text-base"
+              handleClick={() => setData([])}
+              isDisabled={data.length > 0 ? false : true}
+            />
+            <AppButton
+              variant="transparent"
+              type="button"
+              label="Generate Financial Statement"
+              containerStyle="px-4 py-3.5 text-base"
+              handleClick={() =>
+                navigate(appRoute.financialStatement(Number(id) as number).path)
+              }
             />
             <AppButton
               label="Save"
               type="submit"
               containerStyle="px-4 py-3.5 text-base"
+              isDisabled={data.length > 0 ? false : true}
             />
           </div>
         </Form>
       </div>
+      <Modal
+        title="New Payment Details"
+        footer={null}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        {/* make everything compulsory */}
+        <Form
+          name="modalPaymentDetails"
+          form={modalForm}
+          layout="vertical"
+          className="pt-8 px-4"
+          onFinish={handleAddNewPayment}
+        >
+          <div className="flex gap-8">
+            <Form.Item label={"Date Created"} name="dateCreated">
+              <DatePicker />
+            </Form.Item>
+            <Form.Item label={"Date Paid"} name="datePaid">
+              <DatePicker />
+            </Form.Item>
+          </div>
+          <Form.Item label="Paid By" name="paidBy">
+            <Input />
+          </Form.Item>
+          <Form.Item name="narration" label={"Narration"}>
+            <TextArea placeholder="Enter Narration" rows={4} />
+          </Form.Item>
+          <div className="flex gap-8">
+            <Form.Item label={"Payments USD"} name="paymentsUSD">
+              <InputNumber addonAfter="$" />
+            </Form.Item>
+            <Form.Item label={"Payments NGN"} name="paymentsNGN">
+              <InputNumber addonAfter="₦" />
+            </Form.Item>
+          </div>
+          <Form.Item label={"Balance Due USD"} name="balanceDue">
+            <InputNumber addonAfter="$" />
+          </Form.Item>
+          <AppButton type="submit" />
+        </Form>
+      </Modal>
     </>
   );
 };
