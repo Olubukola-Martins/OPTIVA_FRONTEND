@@ -10,7 +10,7 @@ import {
 } from "antd";
 import "../style.css";
 import Table, { ColumnsType } from "antd/es/table";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -62,7 +62,6 @@ const PaymentDetails = () => {
           <Text>$1 = ₦751, Eur 000</Text>
         </Form.Item>
       ),
-      // dateCreated: `${newdateCreated.$D}/${newdateCreated.$M}/${newdateCreated.$y}`,
       dateCreated: (
         <Form.Item name={`${key}dateCreated`} initialValue={newdateCreated}>
           <Text>
@@ -70,7 +69,6 @@ const PaymentDetails = () => {
           </Text>
         </Form.Item>
       ),
-      // datePaid: `${newdatePaid.$D}/${newdatePaid.$M}/${newdatePaid.$y}`,
       datePaid: (
         <Form.Item name={`${key}datePaid`} initialValue={newdatePaid}>
           <Text>
@@ -98,8 +96,8 @@ const PaymentDetails = () => {
     };
     setData((prev) => [...prev, newDetail]);
     setIsModalOpen(false);
-    modalForm.resetFields()
-    console.log("new",newDetail)
+    modalForm.resetFields();
+    console.log("new", newDetail);
   };
 
   // TABLES
@@ -244,49 +242,6 @@ const PaymentDetails = () => {
 
   return (
     <>
-      <Modal
-        title="New Payment Details"
-        footer={null}
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-      >
-        {/* make everything compulsory */}
-        <Form
-          name="modalPaymentDetails"
-          form={modalForm}
-          layout="vertical"
-          className="pt-8 px-4"
-          onFinish={handleAddNewPayment}
-        >
-          <div className="flex gap-8">
-            <Form.Item label={"Date Created"} name="dateCreated">
-              <DatePicker />
-            </Form.Item>
-            <Form.Item label={"Date Paid"} name="datePaid">
-              <DatePicker />
-            </Form.Item>
-          </div>
-          <Form.Item label="Paid By" name="paidBy">
-            <Input />
-          </Form.Item>
-          <Form.Item name="narration" label={"Narration"}>
-            <TextArea placeholder="Enter Narration" rows={4} />
-          </Form.Item>
-          <div className="flex gap-8">
-            <Form.Item label={"Payments USD"} name="paymentsUSD">
-              <InputNumber addonAfter="$" />
-            </Form.Item>
-            <Form.Item label={"Payments NGN"} name="paymentsNGN">
-              <InputNumber addonAfter="₦" />
-            </Form.Item>
-          </div>
-          <Form.Item label={"Balance Due USD"} name="balanceDue">
-            <InputNumber addonAfter="$" />
-          </Form.Item>
-          <AppButton type="submit" />
-        </Form>
-      </Modal>
-
       <PageIntro title="Update Payment Details" linkBack={appRoute.payments} />
 
       <div className="border-2 rounded-xl border-gray-100 p-2 md:p-6 xl:p-12 md:w-11/12">
@@ -457,6 +412,48 @@ const PaymentDetails = () => {
           </div>
         </Form>
       </div>
+      <Modal
+        title="New Payment Details"
+        footer={null}
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        {/* make everything compulsory */}
+        <Form
+          name="modalPaymentDetails"
+          form={modalForm}
+          layout="vertical"
+          className="pt-8 px-4"
+          onFinish={handleAddNewPayment}
+        >
+          <div className="flex gap-8">
+            <Form.Item label={"Date Created"} name="dateCreated">
+              <DatePicker />
+            </Form.Item>
+            <Form.Item label={"Date Paid"} name="datePaid">
+              <DatePicker />
+            </Form.Item>
+          </div>
+          <Form.Item label="Paid By" name="paidBy">
+            <Input />
+          </Form.Item>
+          <Form.Item name="narration" label={"Narration"}>
+            <TextArea placeholder="Enter Narration" rows={4} />
+          </Form.Item>
+          <div className="flex gap-8">
+            <Form.Item label={"Payments USD"} name="paymentsUSD">
+              <InputNumber addonAfter="$" />
+            </Form.Item>
+            <Form.Item label={"Payments NGN"} name="paymentsNGN">
+              <InputNumber addonAfter="₦" />
+            </Form.Item>
+          </div>
+          <Form.Item label={"Balance Due USD"} name="balanceDue">
+            <InputNumber addonAfter="$" />
+          </Form.Item>
+          <AppButton type="submit" />
+        </Form>
+      </Modal>
     </>
   );
 };
