@@ -4,7 +4,7 @@ export const ContactDetails = () => {
       <div className="w-full lg:w-1/2">
         <div className="w-full my-2">
           <h2 className="p-1">Mobile Phone Number</h2>
-          <p className="applicantDetailsSinglePTag"></p>
+          <p className="applicantDetailsSinglePTag">text</p>
         </div>
         <div className="w-full my-2">
           <h2 className="p-1">Home Phone Number</h2>
@@ -26,34 +26,51 @@ export const ContactDetails = () => {
           <div className="flex flex-col gap-5 my-2">
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag"> Street</p>
+                <div className="applicantDetailsPTag">
+                  Street <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag"> Apt/Floor/Suite</p>
+                <div className="applicantDetailsPTag">
+                  Apt/Floor/Suite <p className="my-3"></p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">City</p>
+                <div className="applicantDetailsPTag">
+                  City <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag"> State</p>
+                <div className="applicantDetailsPTag">
+                  {" "}
+                  State <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">Country</p>
+                <div className="applicantDetailsPTag">
+                  Country <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">Zip/postal code</p>
+                <div className="applicantDetailsPTag">
+                  Zip/postal code <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">From</p>
+                <div className="applicantDetailsPTag">
+                  From <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">To</p>
+                <div className="applicantDetailsPTag">
+                  To <p className="my-3"> </p>
+                </div>
               </div>
             </div>
           </div>
@@ -65,34 +82,50 @@ export const ContactDetails = () => {
           <div className="flex flex-col gap-5 my-2">
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag"> Street</p>
+                <div className="applicantDetailsPTag">
+                  Street <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag"> Apt/Floor/Suite</p>
+                <div className="applicantDetailsPTag">
+                  Apt/Floor/Suite <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">City</p>
+                <div className="applicantDetailsPTag">
+                  City <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag"> State</p>
+                <div className="applicantDetailsPTag">
+                  State <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">Country</p>
+                <div className="applicantDetailsPTag">
+                  Country <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">Zip/postal code</p>
+                <div className="applicantDetailsPTag">
+                  Zip/postal code <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">From</p>
+                <div className="applicantDetailsPTag">
+                  From <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">To</p>
+                <div className="applicantDetailsPTag">
+                  To <p className="my-3"> </p>
+                </div>
               </div>
             </div>
           </div>
@@ -102,34 +135,50 @@ export const ContactDetails = () => {
           <div className="flex flex-col gap-5 my-2">
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag"> Street</p>
+                <div className="applicantDetailsPTag">
+                  Street <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag"> Apt/Floor/Suite</p>
+                <div className="applicantDetailsPTag">
+                  Apt/Floor/Suite <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">City</p>
+                <div className="applicantDetailsPTag">
+                  City <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag"> State</p>
+                <div className="applicantDetailsPTag">
+                  State<p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">Country</p>
+                <div className="applicantDetailsPTag">
+                  Country <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">Zip/postal code</p>
+                <div className="applicantDetailsPTag">
+                  Zip/postal code <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">From</p>
+                <div className="applicantDetailsPTag">
+                  From <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">To</p>
+                <div className="applicantDetailsPTag">
+                  To <p className="my-3"> text</p>
+                </div>
               </div>
             </div>
           </div>

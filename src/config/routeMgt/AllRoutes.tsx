@@ -21,6 +21,14 @@ import Meetings from "src/features/meetings/pages/Meetings";
 
 import { RequireAuth } from "react-auth-kit";
 import NewApplication from "src/features/applications/pages/NewApplication";
+import ApplicantDocument from "src/features/applications/pages/ApplicantDocument";
+import DocumentRequirements from "src/features/settings/features/documents/pages/DocumentRequirements";
+import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
+import NewApplicationTemplate from "src/features/settings/features/appTemplate/pages/NewApplicationTemplate";
+import CountryMilestonesAndPrograms from "src/features/settings/features/program-types/pages/CountryMilestonesAndPrograms";
+import CreateProgramType from "src/features/settings/features/program-types/pages/CreateProgramType";
+import DefineFeesAndAuthorizedPersons from "src/features/settings/features/authorizedPersons/pages/DefineFeesAndAuthorizedPersons";
+import { AddFees } from "src/features/settings/features/authorizedPersons/pages/AddFees";
 
 const routesArray = [
   {
@@ -52,7 +60,39 @@ const routesArray = [
     element: <ProcessingStrategyAndSteps />,
   },
   { path: appRoute.comments().format, element: <Comments /> },
-  { path: appRoute.new_application().format, element: <NewApplication /> },
+  { path: appRoute.new_application, element: <NewApplication /> },
+  {
+    path: appRoute.applicant_documents().format,
+    element: <ApplicantDocument />,
+  },
+  {
+    path: appRoute.documentRequirements,
+    element: <DocumentRequirements />,
+  },
+  {
+    path: appRoute.applicationTemplate,
+    element: <ApplicationTemplate />,
+  },
+  {
+    path: appRoute.newApplicationTemplate,
+    element: <NewApplicationTemplate />,
+  },
+  {
+    path: appRoute.countryMilestonesProgram,
+    element: <CountryMilestonesAndPrograms />,
+  },
+  {
+    path: appRoute.createProgramType,
+    element: <CreateProgramType />,
+  },
+  {
+    path: appRoute.defineFeesAndAuthorizedPersons,
+    element: <DefineFeesAndAuthorizedPersons />,
+  },
+  {
+    path: appRoute.addFees,
+    element: <AddFees />,
+  },
 ];
 
 export const AllRoutes = () => {

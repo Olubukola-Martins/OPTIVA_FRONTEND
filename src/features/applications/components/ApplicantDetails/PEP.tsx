@@ -1,47 +1,82 @@
 import { ColumnsType } from "antd/es/table";
-import { Table } from "antd";
+import { Checkbox, Table } from "antd";
 
-type DataSourceItem = {
+export type DataSourceItem = {
   key: React.Key;
   relatedTo: string;
   militaryOfficial: string;
   governmentOfficial: string;
   politicalOfficial: string;
 };
-
+export const dataSource: DataSourceItem[] = [];
+for (let i = 0; i < 4; i++) {
+  dataSource.push({
+    key: i,
+    relatedTo: "Yourself",
+    militaryOfficial: "No",
+    governmentOfficial: "No",
+    politicalOfficial: "No",
+  });
+}
 export const PEP = () => {
   const columns: ColumnsType<DataSourceItem> = [
     {
       title: "Related/Closely associated to",
       dataIndex: "relatedTo",
       key: "1",
+      render: () => (
+        <div>
+          <h2>Yourself</h2>
+        </div>
+      ),
     },
     {
       title: "(A) Military Official (s)",
       dataIndex: "militaryOfficial",
       key: "2",
+      render: () => (
+        <div className="flex gap-5">
+          <Checkbox disabled name="militaryOfficialYes">
+            Yes
+          </Checkbox>
+          <Checkbox disabled name="militaryOfficialNo">
+            No
+          </Checkbox>
+        </div>
+      ),
     },
     {
       title: "(A) Government Official (s)",
       dataIndex: "govermentOfficial",
       key: "3",
+      render: () => (
+        <div className="flex gap-5">
+          <Checkbox disabled name="govermentOfficialYes">
+            Yes
+          </Checkbox>
+          <Checkbox disabled name="govermentOfficialNo">
+            No
+          </Checkbox>
+        </div>
+      ),
     },
     {
       title: "(A) Political Official (s)",
       dataIndex: "politicalOfficial",
       key: "4",
+      render: () => (
+        <div className="flex gap-5">
+          <Checkbox disabled name="politicalOfficialYes">
+            Yes
+          </Checkbox>
+          <Checkbox disabled name="politicalOfficialNo">
+            No
+          </Checkbox>
+        </div>
+      ),
     },
   ];
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      relatedTo: "Yourself",
-      militaryOfficial: "No",
-      governmentOfficial: "No",
-      politicalOfficial: "No",
-    });
-  }
+
   return (
     <div>
       <div className="p-4 my-4">
@@ -65,7 +100,9 @@ export const PEP = () => {
         <p className="my-2">If “Yes” to any of the above, please explain:</p>
 
         <div>
-          <p className="applicantDetailsDiv h-24 rounded-md"></p>
+          <div className="applicantDetailsDiv h-24 rounded-md">
+            <p className="p-4"> text</p>
+          </div>
         </div>
       </div>
     </div>

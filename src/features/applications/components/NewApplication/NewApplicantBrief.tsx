@@ -1,6 +1,6 @@
-import { Form, Input, InputNumber, Select } from "antd";
+import { Form, Input, InputNumber, Select, FormInstance } from "antd";
 
-export const NewApplicantBrief = () => {
+export const NewApplicantBrief = ({ form }: { form: FormInstance }) => {
   const { Option } = Select;
   const selectBefore = (
     <Select defaultValue="$" style={{ width: 100 }}>
@@ -16,87 +16,78 @@ export const NewApplicantBrief = () => {
   );
 
   return (
-    <div>
-      <Form
-        layout="vertical"
-        className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full"
-      >
-        <div className="w-1/2">
-          <Form.Item
-            label="Why is the applicant applying for the program?"
-            name="applicantProgram"
-            className="w-full"
-            required
-          >
-            <Input.TextArea rows={5} />
-          </Form.Item>
-          <Form.Item
-            label="Has the applicant started a CBI/RBI application
-            previously?"
-            name="previousApplication"
-            className="w-full"
-            required
-          >
-            <Select
-              size="large"
-              options={[
-                {
-                  value: "Yes",
-                  label: "Yes",
-                },
-                {
-                  value: "No",
-                  label: "No",
-                },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Which Country?"
-            name="whichCountry"
-            className="w-full"
-            required
-          >
-            <Input size="large" />
-          </Form.Item>
+    <>
+      <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full">
+        <div className="lg:w-1/2">
+          <div>
+            <h2>Why is the applicant applying for the program?</h2>
+            <Form.Item name="applicantProgram" className="w-full" required>
+              <Input.TextArea rows={5} />
+            </Form.Item>
+          </div>
+
+          <div>
+            <h2>Has the applicant started a CBI/RBI application previously?</h2>
+            <Form.Item name="previousApplication" className="w-full" required>
+              <Select
+                size="large"
+                options={[
+                  {
+                    value: "Yes",
+                    label: "Yes",
+                  },
+                  {
+                    value: "No",
+                    label: "No",
+                  },
+                ]}
+              />
+            </Form.Item>
+          </div>
+
+          <div>
+            <h2>Which Country?</h2>
+            <Form.Item name="whichCountry" className="w-full" required>
+              <Input size="large" />
+            </Form.Item>
+          </div>
         </div>
-        <div className="w-1/2">
-          <Form.Item
-            label="Did the Applicant mention a budget amount that 
-            they are willing to spend? "
-            name="applicantBudget"
-            className="w-full"
-            required
-          >
-            <Select
-              size="large"
-              options={[
-                {
-                  value: "Yes",
-                  label: "Yes",
-                },
-                {
-                  value: "No",
-                  label: "No",
-                },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item
-            label="How much is the Applicant willing to invest?"
-            name="applicantInvest"
-            className="w-full"
-            required
-          >
-            <InputNumber
-              addonBefore={selectBefore}
-              addonAfter={selectAfter}
-              size="large"
-              className="w-full"
-            />
-          </Form.Item>
+        <div className="lg:w-1/2">
+          <div>
+            <h2>
+              Did the Applicant mention a budget amount that they are willing to
+              spend?{" "}
+            </h2>
+            <Form.Item name="applicantBudget" className="w-full" required>
+              <Select
+                size="large"
+                options={[
+                  {
+                    value: "Yes",
+                    label: "Yes",
+                  },
+                  {
+                    value: "No",
+                    label: "No",
+                  },
+                ]}
+              />
+            </Form.Item>
+          </div>
+
+          <div>
+            <h2>How much is the Applicant willing to invest?</h2>
+            <Form.Item name="applicantInvest" className="w-full" required>
+              <InputNumber
+                addonBefore={selectBefore}
+                addonAfter={selectAfter}
+                size="large"
+                className="w-full"
+              />
+            </Form.Item>
+          </div>
         </div>
-      </Form>
-    </div>
+      </div>
+    </>
   );
 };

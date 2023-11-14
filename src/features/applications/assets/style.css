@@ -2,13 +2,38 @@
   @apply h-28 border rounded-md p-3 bg-[#f5f5f5];
 }
 .applicantDetailsDiv {
-  @apply flex flex-col lg:flex-row gap-5 w-full bg-[#f5f5f5];
+  @apply flex flex-col lg:flex-row gap-5 w-full bg-[#f5f5f5] p-3;
 }
 
 .applicantDetailsSinglePTag {
-  @apply h-10 border rounded-md bg-[#f5f5f5];
+  @apply h-10 border rounded-md bg-[#f5f5f5] py-2 px-4;
 }
 
 .applicantProcessingDiv {
   @apply flex flex-col lg:flex-row gap-5 w-full;
+}
+
+.newApplicantTextArea {
+  @apply w-full flex flex-col lg:flex-row justify-evenly gap-6;
+}
+
+/* Stepper color */
+.ant-steps .ant-steps-item-process .ant-steps-item-icon {
+  background-color: var(--app-color-primary);
+  border-color:  var(--app-color-primary);
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon{
+  background-color: var(--app-color-primary);
+  border-color:  var(--app-color-primary);
+}
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon svg{
+  color: var(--app-color-secondary);
+}
+.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after{
+  background-color: var(--app-color-secondary);
+}
+
+/* Tab color */
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+  color: var(--app-color-primary);
 }

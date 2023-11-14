@@ -3,18 +3,18 @@ import { Input, Select, Form, DatePicker } from "antd";
 export const NewPersonalDetails = () => {
   return (
     <div>
-      <Form
-        layout="vertical"
-        className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full"
-        requiredMark
-      >
-        <div className="w-1/2">
-          <Form.Item label="Title" name="title" className="w-full" required>
-            <Input size="large" />
-          </Form.Item>
+      <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full">
+        <div className="lg:w-1/2">
+          <div>
+            <h2 className="p-2">Title</h2>
+            <Form.Item name="title" className="w-full" required>
+              <Input size="large" />
+            </Form.Item>
+          </div>
+
           <div>
             <h2 className="p-2">Name(s)</h2>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item name="firstName" className="w-full" required>
                 <Input.TextArea
                   rows={4}
@@ -30,7 +30,7 @@ export const NewPersonalDetails = () => {
                 />
               </Form.Item>
             </div>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item name="middleName" className="w-full" required>
                 <Input.TextArea
                   rows={4}
@@ -43,17 +43,26 @@ export const NewPersonalDetails = () => {
               </Form.Item>
             </div>
           </div>
-          <Form.Item label="Gender" name="gender" className="w-full" required>
-            <Input size="large" />
-          </Form.Item>
+          <div>
+            <h2 className="p-2">Gender</h2>
+            <Form.Item name="gender" className="w-full" required>
+              <Input size="large" />
+            </Form.Item>
+          </div>
+
           <div>
             <h2 className="p-2">Birth Details</h2>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item name="dob" className="w-full" required>
-                <DatePicker placeholder="Date of Birth" className="w-full" />
+                <DatePicker
+                  placeholder="Date of Birth"
+                  className="w-full"
+                  size="large"
+                />
               </Form.Item>
               <Form.Item name="countryOfBirth" className="w-full" required>
                 <Select
+                  size="large"
                   options={[
                     {
                       value: "Nigeria",
@@ -64,9 +73,10 @@ export const NewPersonalDetails = () => {
                 />
               </Form.Item>
             </div>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item name="cityOfBirth" className="w-full" required>
                 <Select
+                  size="large"
                   options={[
                     {
                       value: "Lagos",
@@ -78,6 +88,7 @@ export const NewPersonalDetails = () => {
               </Form.Item>
               <Form.Item name="lgaOfBirth" className="w-full" required>
                 <Select
+                  size="large"
                   options={[
                     {
                       value: "Lagos",
@@ -90,10 +101,10 @@ export const NewPersonalDetails = () => {
             </div>
           </div>
         </div>
-        <div className="w-1/2">
+        <div className="lg:w-1/2">
           <div>
             <h2 className="p-2">Physical Attributes</h2>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item name="height" className="w-full" required>
                 <Input.TextArea rows={4} size="large" placeholder="Height" />
               </Form.Item>
@@ -101,7 +112,7 @@ export const NewPersonalDetails = () => {
                 <Input.TextArea rows={4} size="large" placeholder="weight" />
               </Form.Item>
             </div>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item name="eyeColor" className="w-full" required>
                 <Input.TextArea rows={4} size="large" placeholder="Eye Color" />
               </Form.Item>
@@ -113,7 +124,7 @@ export const NewPersonalDetails = () => {
                 />
               </Form.Item>
             </div>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item
                 name="distinguishingFacialMarks"
                 className="w-full"
@@ -129,7 +140,7 @@ export const NewPersonalDetails = () => {
           </div>
           <div>
             <h2 className="p-2">Language</h2>
-            <div className="w-full flex justify-evenly gap-6">
+            <div className="newApplicantTextArea">
               <Form.Item name="nativeLanguage" className="w-full" required>
                 <Input.TextArea
                   rows={4}
@@ -147,7 +158,7 @@ export const NewPersonalDetails = () => {
             </div>
           </div>
         </div>
-      </Form>
+      </div>
     </div>
   );
 };

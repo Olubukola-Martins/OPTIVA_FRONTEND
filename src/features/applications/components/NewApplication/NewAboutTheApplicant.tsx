@@ -1,18 +1,11 @@
-import { AppButton } from "src/components/button/AppButton";
 import { NewAboutTheApplicantsTab } from "./NewAboutTheApplicantsTab";
+import { FormInstance } from "antd";
 
-export const NewAboutTheApplicant = () => {
+export const NewAboutTheApplicant = ({ form }: { form: FormInstance }) => {
   return (
-    <div>
+    <>
       <NewAboutTheApplicantsTab />
-      <div className="w-full flex justify-end gap-4 items-center my-5">
-        <AppButton
-          label="Previous"
-          variant="transparent"
-          containerStyle="border border-primary text-primary"
-        />
-        <AppButton label="Next" />
-      </div>
-    </div>
+    
+    </>
   );
 };

@@ -15,7 +15,7 @@ export const appRoute = {
   }),
   timeline_extensions: (id?: number) => ({
     format: `/applications/timeline-extensions/:id`,
-    path: `/applications/timeline-extensions${id}`,
+    path: `/applications/timeline-extensions/${id}`,
   }),
   processing_strategy_steps: (id?: number) => ({
     format: `/applications/processing_strategy_steps/:id`,
@@ -25,11 +25,11 @@ export const appRoute = {
     format: `/applications/comments/:id`,
     path: `/applications/comments/${id}`,
   }),
-  new_application: (id?: number) => ({
-    format: `/applications/new_application/:id`,
-    path: `/applications/new_application/${id}`,
+  new_application: `/applications/new_application`,
+  applicant_documents: (id?: number) => ({
+    format: `/applications/applicant_documents/:id`,
+    path: `/applications/applicant_documents/${id}`,
   }),
-
   // Reports
   reports: `/reports`,
 
@@ -63,4 +63,17 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
+
+  // SETTINGS
+  documentRequirements: `/settings/documentsRequirements`,
+  applicationTemplate: `/settings/applicationTemplate`,
+  newApplicationTemplate: `/settings/newApplicationTemplate`,
+  countryMilestonesProgram: `/settings/ countryMilestonesProgram`,
+  createProgramType: `/settings/createProgramRoute`,
+  defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
+  addFees: `/settings/addfees`,
+  editProgramType: (id?: number) => ({
+    format: `/settings/editProgramType/:id`,
+    path: `/settings/editProgramType/${id}`,
+  }),
 };

@@ -1,8 +1,10 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { DataSourceItem } from "./ActiveApplications";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import { AppButton } from "src/components/button/AppButton";
+import { useState } from "react";
 
 export const InactiveApplications = () => {
   const columns: ColumnsType<DataSourceItem> = [
@@ -61,8 +63,13 @@ export const InactiveApplications = () => {
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="2">View Uploaded Documents</Menu.Item>
-                <Menu.Item key="3">View Comment</Menu.Item>
-                <Menu.Item key="4">Move to Active</Menu.Item>
+                <Menu.Item key="3">
+                  {" "}
+                  <Link to={appRoute.comments().path}>View Comment</Link>
+                </Menu.Item>
+                <Menu.Item key="4" onClick={showActiveModal}>
+                  Move to Active
+                </Menu.Item>
               </Menu>
             }
           >
@@ -87,15 +94,35 @@ export const InactiveApplications = () => {
       comment: "Neque consectetur sit commodo ipsum sed.",
     });
   }
-
-  // const titleRowBg = (record: DataSourceItem) => {
-  //   if (record.key === 0) {
-  //     return "bg-caramel";
-  //   }
-  //   return "";
-  // };
+  // Inactive Modal
+  const [openActiveModal, setOpenActiveModal] = useState(false);
+  const showActiveModal = () => {
+    setOpenActiveModal(true);
+  };
+  const handleActiveCancel = () => {
+    setOpenActiveModal(false);
+  };
   return (
     <>
+      {/* INACTIVE MODAL */}
+      <Modal open={openActiveModal} onCancel={handleActiveCancel} footer={null}>
+        <div>
+          <h1 className="p-4 font-bold text-center text-lg">Make Active</h1>
+          <Form layout="vertical" name="">
+            <Form.Item label="Reason for Activity" name="activityReason">
+              <Input.TextArea rows={4} />
+            </Form.Item>
+          </Form>
+          <div className="flex items-center justify-center gap-4 p-4">
+            <AppButton
+              label="Cancel"
+              variant="transparent"
+              containerStyle="border border-blue"
+            />
+            <AppButton label="Submit" />
+          </div>
+        </div>
+      </Modal>
       {/* TABLE */}
       <Table
         columns={columns}

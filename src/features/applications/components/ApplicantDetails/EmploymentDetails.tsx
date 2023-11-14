@@ -9,50 +9,74 @@ export const EmploymentDetails = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Job Title</p>
+                  <div className="applicantDetailsPTag">
+                    Job Title <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Name of Employer </p>
+                  <div className="applicantDetailsPTag">
+                    Name of Employer <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Nature of Business</p>
+                  <div className="applicantDetailsPTag">
+                    Nature of Business <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Apt/Floor/Suite</p>
+                  <div className="applicantDetailsPTag">
+                    Apt/Floor/Suite <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Street</p>
+                  <div className="applicantDetailsPTag">
+                    Street <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">State</p>
+                  <div className="applicantDetailsPTag">
+                    State <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Country</p>
+                  <div className="applicantDetailsPTag">
+                    Country <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Zip/Postcode</p>
+                  <div className="applicantDetailsPTag">
+                    Zip/Postcode <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Website</p>
+                  <div className="applicantDetailsPTag">
+                    Website <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Phone Number</p>
+                  <div className="applicantDetailsPTag">
+                    Phone Number <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Start of Employment</p>
+                  <div className="applicantDetailsPTag">
+                    Start of Employment <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">End of employment</p>
+                  <div className="applicantDetailsPTag">
+                    End of employment <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -66,18 +90,26 @@ export const EmploymentDetails = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Certificate</p>
+                  <div className="applicantDetailsPTag">
+                    Certificate <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Issuing Body</p>
+                  <div className="applicantDetailsPTag">
+                    Issuing Body <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Date Obtained</p>
+                  <div className="applicantDetailsPTag">
+                    Date Obtained <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Expiration Date</p>
+                  <div className="applicantDetailsPTag">
+                    Expiration Date <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -90,39 +122,57 @@ export const EmploymentDetails = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Job Title</p>
+                  <div className="applicantDetailsPTag">
+                    Job Title <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Name of Employer </p>
+                  <div className="applicantDetailsPTag">
+                    Name of Employer <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Nature of Business</p>
+                  <div className="applicantDetailsPTag">
+                    Nature of Business <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Apt/Floor/Suite</p>
+                  <div className="applicantDetailsPTag">
+                    Apt/Floor/Suite <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Street</p>
+                  <div className="applicantDetailsPTag">
+                    Street <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">State</p>
+                  <div className="applicantDetailsPTag">
+                    State <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Country</p>
+                  <div className="applicantDetailsPTag">
+                    Country <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Zip/Postcode</p>
+                  <div className="applicantDetailsPTag">
+                    Zip/Postcode <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Website</p>
+                  <div className="applicantDetailsPTag">
+                    Website <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
                   <p className="applicantDetailsPTag">Phone Number</p>
@@ -130,10 +180,14 @@ export const EmploymentDetails = () => {
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Start of Employment</p>
+                  <div className="applicantDetailsPTag">
+                    Start of Employment <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">End of employment</p>
+                  <div className="applicantDetailsPTag">
+                    End of employment <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -147,18 +201,26 @@ export const EmploymentDetails = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Certificate</p>
+                  <div className="applicantDetailsPTag">
+                    Certificate <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Issuing Body</p>
+                  <div className="applicantDetailsPTag">
+                    Issuing Body <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Date Obtained</p>
+                  <div className="applicantDetailsPTag">
+                    Date Obtained <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Expiration Date</p>
+                  <div className="applicantDetailsPTag">
+                    Expiration Date <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -170,7 +232,7 @@ export const EmploymentDetails = () => {
           Has the applicant or spouse ever worked in any country without
           permission? If “Yes”, please explain, if no leave blank:
         </h2>
-        <p className="applicantDetailsSinglePTag h-20"></p>
+        <p className="applicantDetailsSinglePTag h-20"> text</p>
       </div>
       <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10">
         <div className="w-full lg:w-1/2">
@@ -180,42 +242,54 @@ export const EmploymentDetails = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Branch of service</p>
+                  <div className="applicantDetailsPTag">
+                    Branch of service <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Country</p>
+                  <div className="applicantDetailsPTag">
+                    Country <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">
+                  <div className="applicantDetailsPTag">
                     Name of commanding officers (1)
-                  </p>
+                    <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">
+                  <div className="applicantDetailsPTag">
                     Name of commanding officers (2)
-                  </p>
+                    <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">
+                  <div className="applicantDetailsPTag">
                     Name of commanding officers (3)
-                  </p>
+                    <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">
+                  <div className="applicantDetailsPTag">
                     Name of commanding officers (4)
-                  </p>
+                    <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -228,41 +302,59 @@ export const EmploymentDetails = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Location</p>
+                  <div className="applicantDetailsPTag">
+                    Location <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Location</p>
+                  <div className="applicantDetailsPTag">
+                    Location <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Location</p>
+                  <div className="applicantDetailsPTag">
+                    Location <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -271,7 +363,7 @@ export const EmploymentDetails = () => {
       </div>
       <div className="p-4">
         <h2 className="p-1">Reason for end of service</h2>
-        <p className="applicantDetailsSinglePTag h-20"></p>
+        <p className="applicantDetailsSinglePTag h-20"> text</p>
       </div>
     </>
   );

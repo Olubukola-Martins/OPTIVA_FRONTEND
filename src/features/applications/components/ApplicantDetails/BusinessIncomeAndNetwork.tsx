@@ -8,87 +8,127 @@ export const BusinessIncomeAndNetwork = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Name of Company</p>
+                  <div className="applicantDetailsPTag">
+                    Name of Company <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Nature of business</p>
+                  <div className="applicantDetailsPTag">
+                    Nature of business <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Apt/Floor/Suite</p>
+                  <div className="applicantDetailsPTag">
+                    Apt/Floor/Suite <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Street</p>
+                  <div className="applicantDetailsPTag">
+                    Street <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">City</p>
+                  <div className="applicantDetailsPTag">
+                    City <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">State</p>
+                  <div className="applicantDetailsPTag">
+                    State <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Country</p>
+                  <div className="applicantDetailsPTag">
+                    Country <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Zip/Postcode</p>
+                  <div className="applicantDetailsPTag">
+                    Zip/Postcode <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Country Incorporated</p>
+                  <div className="applicantDetailsPTag">
+                    Country Incorporated <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Year Incorporated</p>
+                  <div className="applicantDetailsPTag">
+                    Year Incorporated <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Percentage Ownership</p>
+                  <div className="applicantDetailsPTag">
+                    Percentage Ownership <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Company Annual income</p>
+                  <div className="applicantDetailsPTag">
+                    Company Annual income <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Position in the company</p>
+                  <div className="applicantDetailsPTag">
+                    Position in the company
+                    <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Role in the Company</p>
+                  <div className="applicantDetailsPTag">
+                    Role in the Company <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Amount of your investment</p>
+                  <div className="applicantDetailsPTag">
+                    Amount of your investment <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Your Share of profits/earnings</p>
+                  <div className="applicantDetailsPTag">
+                    Your Share of profits/earnings <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Countries in Operation</p>
+                  <div className="applicantDetailsPTag">
+                    Countries in Operation <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Industry</p>
+                  <div className="applicantDetailsPTag">
+                    Industry <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Website</p>
+                  <div className="applicantDetailsPTag">
+                    Website <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Phone Number</p>
+                  <div className="applicantDetailsPTag">
+                    Phone Number <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-         
         </div>
         <div className="w-full lg:w-1/2">
           <div className="my-2">
@@ -96,26 +136,38 @@ export const BusinessIncomeAndNetwork = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Name of Company</p>
+                  <div className="applicantDetailsPTag">
+                    Name of Company <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Nature of business</p>
+                  <div className="applicantDetailsPTag">
+                    Nature of business <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Apt/Floor/Suite</p>
+                  <div className="applicantDetailsPTag">
+                    Apt/Floor/Suite <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Street</p>
+                  <div className="applicantDetailsPTag">
+                    Street <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">City</p>
+                  <div className="applicantDetailsPTag">
+                    City <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">State</p>
+                  <div className="applicantDetailsPTag">
+                    State <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
@@ -123,60 +175,85 @@ export const BusinessIncomeAndNetwork = () => {
                   <p className="applicantDetailsPTag">Country</p>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Zip/Postcode</p>
+                  <div className="applicantDetailsPTag">
+                    Zip/Postcode <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Country Incorporated</p>
+                  <div className="applicantDetailsPTag">
+                    Country Incorporated <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Year Incorporated</p>
+                  <div className="applicantDetailsPTag">
+                    Year Incorporated <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Percentage Ownership</p>
+                  <div className="applicantDetailsPTag">
+                    Percentage Ownership <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Company Annual income</p>
+                  <div className="applicantDetailsPTag">
+                    Company Annual income <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Position in the company</p>
+                  <div className="applicantDetailsPTag">
+                    Position in the company <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Role in the Company</p>
+                  <div className="applicantDetailsPTag">
+                    Role in the Company <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Amount of your investment</p>
+                  <div className="applicantDetailsPTag">
+                    Amount of your investment <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Your Share of profits/earnings</p>
+                  <div className="applicantDetailsPTag">
+                    Your Share of profits/earnings <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Countries in Operation</p>
+                  <div className="applicantDetailsPTag">
+                    Countries in Operation <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Industry</p>
+                  <div className="applicantDetailsPTag">
+                    Industry <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Website</p>
+                  <div className="applicantDetailsPTag">
+                    Website <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Phone Number</p>
+                  <div className="applicantDetailsPTag">
+                    Phone Number <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-         
         </div>
       </div>
       <div className="w-full p-4">
@@ -194,42 +271,50 @@ export const BusinessIncomeAndNetwork = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Branch of service</p>
+                  <div className="applicantDetailsPTag">
+                    Branch of service <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">Country</p>
+                  <div className="applicantDetailsPTag">
+                    Country <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">
-                    Name of commanding officers (1)
-                  </p>
+                  <div className="applicantDetailsPTag">
+                    Name of commanding officers (1) <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">
-                    Name of commanding officers (2)
-                  </p>
+                  <div className="applicantDetailsPTag">
+                    Name of commanding officers (2) <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">
-                    Name of commanding officers (3)
-                  </p>
+                  <div className="applicantDetailsPTag">
+                    Name of commanding officers (3) <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">
-                    Name of commanding officers (4)
-                  </p>
+                  <div className="applicantDetailsPTag">
+                    Name of commanding officers (4) <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -242,41 +327,59 @@ export const BusinessIncomeAndNetwork = () => {
             <div className="flex flex-col gap-5 my-2">
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Location</p>
+                  <div className="applicantDetailsPTag">
+                    Location <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Location</p>
+                  <div className="applicantDetailsPTag">
+                    Location <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">From</p>
+                  <div className="applicantDetailsPTag">
+                    From <p className="my-3"> </p>
+                  </div>
                 </div>
                 <div className="lg:w-1/2">
-                  <p className="applicantDetailsPTag">To</p>
+                  <div className="applicantDetailsPTag">
+                    To <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-5 w-full ">
                 <div className=" lg:w-1/2">
-                  <p className="applicantDetailsPTag">Location</p>
+                  <div className="applicantDetailsPTag">
+                    Location <p className="my-3"> </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -285,7 +388,7 @@ export const BusinessIncomeAndNetwork = () => {
       </div>
       <div className="p-4">
         <h2 className="p-1">Reason for end of service</h2>
-        <p className="applicantDetailsSinglePTag h-20"></p>
+        <p className="applicantDetailsSinglePTag h-20">text</p>
       </div>
     </>
   );

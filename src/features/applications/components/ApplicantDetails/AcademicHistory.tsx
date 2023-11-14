@@ -7,18 +7,26 @@ export const AcademicHistory = () => {
           <div className="flex flex-col gap-5 my-2">
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">Course of Study</p>
+                <div className="applicantDetailsPTag">
+                  Course of Study <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">Name of Institution</p>
+                <div className="applicantDetailsPTag">
+                  Name of Institution <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
               <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">City</p>
+                <div className="applicantDetailsPTag">
+                  City <p className="my-3"> </p>
+                </div>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">Country</p>
+                <div className="applicantDetailsPTag">
+                  Country <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 w-full ">
@@ -26,12 +34,16 @@ export const AcademicHistory = () => {
                 <p className="applicantDetailsPTag">Qualification Obtained </p>
               </div>
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">Start date</p>
+                <div className="applicantDetailsPTag">
+                  Start date <p className="my-3"> </p>
+                </div>
               </div>
             </div>
             <div className="flex flex-col lg:flex-row gap-5 lg:w-[98.5%]">
               <div className="lg:w-1/2">
-                <p className="applicantDetailsPTag">End date</p>
+                <div className="applicantDetailsPTag">
+                  End date <p className="my-3">text </p>
+                </div>
               </div>
             </div>
           </div>

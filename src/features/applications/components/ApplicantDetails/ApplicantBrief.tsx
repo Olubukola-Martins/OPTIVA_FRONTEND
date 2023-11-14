@@ -62,9 +62,6 @@ export const ApplicantBrief = () => {
           </div>
         </div>
       </div>
-      <div className="w-full flex justify-end">
-        <AppButton label="Next" />
-      </div>
     </>
   );
 };

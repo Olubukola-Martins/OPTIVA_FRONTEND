@@ -9,13 +9,10 @@ import { EmploymentDetails } from "./EmploymentDetails";
 import { BusinessIncomeAndNetwork } from "./BusinessIncomeAndNetwork";
 import { AcademicHistory } from "./AcademicHistory";
 import { TravelDetailsAndHistory } from "./TravelDetailsAndHistory";
+import type { TabsProps } from "antd";
 
 export const AboutTheApplicantsTab = () => {
-  const tabItems: {
-    label: string;
-    key: string;
-    children: React.ReactNode;
-  }[] = [
+  const tabItems: TabsProps["items"] = [
     {
       label: "Personal Details",
       key: "Personal Details",
@@ -52,7 +49,7 @@ export const AboutTheApplicantsTab = () => {
       children: <EmploymentDetails />,
     },
     {
-      label: "Business, Income & Network",
+      label: "Business, Income amd Network",
       key: "Business, Income and Network",
       children: <BusinessIncomeAndNetwork />,
     },
@@ -62,18 +59,21 @@ export const AboutTheApplicantsTab = () => {
       children: <AcademicHistory />,
     },
     {
-      label: "Travel Details & History",
-      key: "Travel Details &History",
+      label: "Travel Details and History",
+      key: "Travel Details and History",
       children: <TravelDetailsAndHistory />,
     },
   ];
   return (
+    <div className="w-full">
     <Tabs
       items={tabItems}
-        tabBarGutter={5.9}
-      // tabBarStyle={{
-      //   width: 1200,
-      // }}
+      defaultActiveKey="1"  
+      size="small"
+      moreIcon
+      tabBarStyle={{ display: "flex", flexWrap: "wrap", maxWidth: "1150px", }}
     />
+  </div>
+  
   );
 };

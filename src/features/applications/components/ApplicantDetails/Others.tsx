@@ -8,11 +8,11 @@ export const Others = () => {
           Please enter below any other information gleaned from discusion with
           the Applicant
         </h2>
-        <p className="applicantDetailsDiv h-48 rounded-md"></p>
+        <div className="applicantDetailsDiv h-48 rounded-md p-2">
+          <p className="my-3"> </p>
+        </div>
       </div>
-      <div className="w-full flex justify-end py-3">
-        <AppButton label="Previous" variant="transparent" />
-      </div>
+     
     </div>
   );
 };

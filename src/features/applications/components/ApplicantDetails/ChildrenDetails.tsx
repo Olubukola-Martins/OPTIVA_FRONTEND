@@ -1,4 +1,4 @@
-import { Checkbox, Table } from "antd";
+import { Checkbox, Select, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 
 export type DataSourceItem = {
@@ -35,7 +35,7 @@ export type DataSourceItem = {
   residentialAddressDate: string;
   onApplication: string;
 };
-export const columns: ColumnsType<DataSourceItem> = [
+ const columns: ColumnsType<DataSourceItem> = [
   {
     title: "Child's Name (First, Middle & Last Name) ",
     dataIndex: "childName",
@@ -94,6 +94,7 @@ export const columns: ColumnsType<DataSourceItem> = [
       "Countries of  Citizenship (Leave blank if the  child is not a citizen  of another country)",
     dataIndex: "countriesOfCitizenship",
     key: "10",
+    render: () => <Select mode="multiple" disabled/>
   },
   {
     title: "Passport No.",
@@ -220,7 +221,7 @@ export const ChildrenDetails = () => {
           </div>
         </div>
       </div>
-      <div className="p-4 lg:w-[1150px]">
+      <div className="p-4 lg:w-[1200px]">
         <Table
           columns={columns}
           dataSource={dataSource}

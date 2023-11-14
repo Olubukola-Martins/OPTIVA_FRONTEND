@@ -8,7 +8,7 @@ export const settingsLink: settingsLinkProps[] = [
   },
   {
     name: "Define Document Requirements",
-    link: appRoute.dependents,
+    link: appRoute.documentRequirements,
   },
   {
     name: "Define Investment Routes",
@@ -17,15 +17,15 @@ export const settingsLink: settingsLinkProps[] = [
 
   {
     name: "Application Template",
-    link: appRoute.dependents,
+    link: appRoute.applicationTemplate,
   },
   {
     name: "Country, Milestones and Program types Configuration",
-    link: appRoute.dependents,
+    link: appRoute.countryMilestonesProgram,
   },
   {
     name: "Define Fees & Authorized Persons",
-    link: appRoute.dependents,
+    link: appRoute.defineFeesAndAuthorizedPersons,
   },
   {
     name: "Escalation & Delegation",

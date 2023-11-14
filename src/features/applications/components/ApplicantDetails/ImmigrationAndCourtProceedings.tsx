@@ -7,7 +7,7 @@ export const ImmigrationAndCourtProceedings = () => {
             Have you or your spouse ever been deported or subject to deportation
             from any country? If yes, please explain
           </h2>
-          <p className="applicantDetailsDiv h-20 rounded-md"></p>
+          <div className="applicantDetailsDiv h-20 rounded-md"></div>
         </div>
         <div className="w-full my-2">
           <h2 className="p-1">
