@@ -16,7 +16,6 @@ import {
 } from "antd";
 import { useState } from "react";
 import DeleteIcon from "../assets/delete-icon.png";
-import { Icon } from "@iconify/react";
 
 type DataSourceItem = {
   sn: number;
@@ -176,8 +175,8 @@ const Comments = () => {
       <Modal open={openDeleteModal} onCancel={handleDeleteCancel} footer={null}>
         <div className="p-3 flex flex-col items-center gap-5">
           <img src={DeleteIcon} alt="" />
-          <h2 className="font-bold text-lg">Delete Comment</h2>
-          <p>Are you sure you would like to delete this Comment?</p>
+          <h2 className="font-bold text-lg">Delete Application Template</h2>
+          <p>Are you sure you would like to delete this application template?</p>
           <div className="flex gap-5">
             <AppButton
               variant="transparent"

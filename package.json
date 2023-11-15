@@ -11,15 +11,9 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
-
     "@types/react-big-calendar": "^1.8.3",
-    "antd": "^5.9.4",
-    "axios": "^1.4.0",
     "dayjs": "^1.11.10",
-    "react": "^18.2.0",
-    "react-auth-kit": "^2.12.7",
     "react-big-calendar": "^1.8.5",
-
     "@types/chart.js": "^2.9.39",
     "antd": "^5.9.4",
     "axios": "^1.4.0",
@@ -28,7 +22,6 @@
     "react": "^18.2.0",
     "react-auth-kit": "^2.12.7",
     "react-chartjs-2": "^5.2.0",
-
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.16.0",
