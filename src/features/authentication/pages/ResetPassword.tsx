@@ -22,15 +22,10 @@ const ResetPassword = () => {
 
           <ResetPasswordForm />
 
-          <div className="flex items-center justify-end gap-x-3 mt-5 mb-6">
-            <span className="text-sm">or</span>
-            <div className="bg-gray-600 h-[1.3px] w-[48%]" />
-          </div>
-
           <img
             src={office}
             alt="0365"
-            className="cursor-pointer hover:shadow-lg"
+            className="cursor-pointer hover:shadow-lg invisible"
           />
         </div>
       </div>
