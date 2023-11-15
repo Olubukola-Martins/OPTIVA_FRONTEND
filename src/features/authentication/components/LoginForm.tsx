@@ -7,6 +7,8 @@ import {
 import { useLogin } from "../hooks/useLogin";
 import { openNotification } from "src/utils/notification";
 import { useSignIn } from "react-auth-kit";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const LoginForm = () => {
   const signIn = useSignIn();
@@ -26,7 +28,7 @@ export const LoginForm = () => {
         },
         onSuccess: (res: any) => {
           console.log(res);
-          
+
           const result = res.data.data;
           if (
             signIn({
@@ -60,9 +62,12 @@ export const LoginForm = () => {
       >
         <Input.Password />
       </Form.Item>
-      <span className="text-sm flex justify-end -mt-3 text-green-700 font-medium cursor-pointer hover:text-primary">
+      <Link
+        to={appRoute.forgot_password}
+        className="text-sm flex justify-end -mt-3 text-green-700 font-medium cursor-pointer hover:text-primary"
+      >
         Forgot Password?
-      </span>
+      </Link>
 
       <AppButton
         type="submit"

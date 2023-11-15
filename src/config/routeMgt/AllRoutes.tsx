@@ -41,6 +41,7 @@ import CBIBankDDClearanceTemplate from "src/features/settings/features/contracts
 import CBIBankAppECopyPassportReceiptTemp from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppECopyPassportReceiptTemp";
 import CBIBankAppApprovalTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppApprovalTemplate";
 import CBIAppSubmissionTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIAppSubmissionTemplate";
+import ForgotPassword from "src/features/authentication/pages/ForgotPassword";
 
 const routesArray = [
   {
@@ -166,6 +167,7 @@ export const AllRoutes = () => {
           ))}
         </Route>
         <Route path={appRoute.login_in} element={<Login />} />
+        <Route path={appRoute.forgot_password} element={<ForgotPassword />} />
       </Routes>
     </Router>
   );
