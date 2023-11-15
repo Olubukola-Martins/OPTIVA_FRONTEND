@@ -32,7 +32,7 @@ import { AddFees } from "src/features/settings/features/authorizedPersons/pages/
 
 import DocumentRequirement from "src/features/settings/features/documents/pages/DocumentRequirement";
 import InvestmentRoute from "src/features/settings/features/investment/pages/InvestmentRoute";
-import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
+// import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
 
 import Escalation from "src/features/settings/features/escalation/pages/Escalation";
 import NewEscalation from "src/features/settings/features/escalation/pages/NewEscalation";

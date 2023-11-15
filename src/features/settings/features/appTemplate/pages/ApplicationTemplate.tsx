@@ -65,25 +65,26 @@ for (let i = 0; i < 4; i++) {
   });
 }
 
-// Import Modal
-const [openImportModal, setOpenImportModal] = useState(false);
-const showImportModal = () => {
-  setOpenImportModal(true);
-};
-const handleImportCancel = () => {
-  setOpenImportModal(false);
-};
-
-// Upload Document
-const [exportModal, setExportModal] = useState(false);
-const showExportModal = () => {
-  setExportModal(true);
-};
-const handleExportCancel = () => {
-  setExportModal(false);
-};
 
 const ApplicationTemplate = () => {
+  // Import Modal
+  const [openImportModal, setOpenImportModal] = useState(false);
+  const showImportModal = () => {
+    setOpenImportModal(true);
+  };
+  const handleImportCancel = () => {
+    setOpenImportModal(false);
+  };
+
+  // Upload Document
+  const [exportModal, setExportModal] = useState(false);
+  const showExportModal = () => {
+    setExportModal(true);
+  };
+  const handleExportCancel = () => {
+    setExportModal(false);
+  };
+
   return (
     <>
       <div className="flex justify-between flex-col md:flex-row md:items-center">

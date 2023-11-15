@@ -11,9 +11,6 @@ export const appRoute = {
   document_requirement: `/settings/document-requirement`,
   investment_route: `settings/investment-route`,
   app_template: `/settings/application-template`,
-  //Settings
-  settings: `/settings`,
-  dependents: `/settings/dependents`,
   escalation: `/settings/escalation`,
   defineEscalation: `/settings/escalation/defineEscalation`,
   editEscalation: (id?: number) => ({
