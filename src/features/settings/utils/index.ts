@@ -9,7 +9,6 @@ export const settingsLink: settingsLinkProps[] = [
   {
     name: "Define Document Requirements",
     link: appRoute.documentRequirements,
-
   },
   {
     name: "Define Investment Routes",
@@ -18,7 +17,6 @@ export const settingsLink: settingsLinkProps[] = [
   {
     name: "Application Template",
     link: appRoute.applicationTemplate,
-
   },
   {
     name: "Country, Milestones and Program types Configuration",

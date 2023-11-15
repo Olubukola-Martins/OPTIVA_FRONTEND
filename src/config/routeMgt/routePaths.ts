@@ -4,16 +4,12 @@ export const appRoute = {
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
 
-
   // Settings
   settings: `/settings`,
   dependents: `/settings/dependents`,
   document_requirement: `/settings/document-requirement`,
-  investment_route: `settings/investment-route`,
+  investment_route: `/settings/investment-route`,
   app_template: `/settings/application-template`,
-  //Settings
-  settings: `/settings`,
-  dependents: `/settings/dependents`,
   escalation: `/settings/escalation`,
   defineEscalation: `/settings/escalation/defineEscalation`,
   editEscalation: (id?: number) => ({
@@ -28,6 +24,17 @@ export const appRoute = {
   cbiBAsoftPassportReceipt: `/settings/contractsEmailTemplates/CBIbankAppSoftPassportReceipt`,
   cbiBAapprovalMailTemp: `/settings/contractsEmailTemplates/CBIbankAppApprovalMailTemplate`,
   cbiApplicationSubmissionMailTemp: `/settings/contractsEmailTemplates/CBIapplicationSubmissioneEMailTemplate`,
+  documentRequirements: `/settings/documentsRequirements`,
+  applicationTemplate: `/settings/applicationTemplate`,
+  newApplicationTemplate: `/settings/newApplicationTemplate`,
+  countryMilestonesProgram: `/settings/ countryMilestonesProgram`,
+  createProgramType: `/settings/createProgramRoute`,
+  defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
+  addFees: `/settings/addfees`,
+  editProgramType: (id?: number) => ({
+    format: `/settings/editProgramType/:id`,
+    path: `/settings/editProgramType/${id}`,
+  }),
 
   // Applications
   applications: `/applications`,
@@ -86,19 +93,4 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
-
-
-  // SETTINGS
-  documentRequirements: `/settings/documentsRequirements`,
-  applicationTemplate: `/settings/applicationTemplate`,
-  newApplicationTemplate: `/settings/newApplicationTemplate`,
-  countryMilestonesProgram: `/settings/ countryMilestonesProgram`,
-  createProgramType: `/settings/createProgramRoute`,
-  defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
-  addFees: `/settings/addfees`,
-  editProgramType: (id?: number) => ({
-    format: `/settings/editProgramType/:id`,
-    path: `/settings/editProgramType/${id}`,
-  }),
-
 };
