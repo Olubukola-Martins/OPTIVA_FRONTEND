@@ -19,9 +19,7 @@ const ResetPassword = () => {
           <h2 className="font-semibold text-xl pt-3 pb-4 text-accent text-center">
             Reset Password
           </h2>
-
           <ResetPasswordForm />
-
           <img
             src={office}
             alt="0365"
