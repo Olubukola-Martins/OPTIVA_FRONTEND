@@ -22,13 +22,11 @@ export const LoginForm = () => {
           openNotification({
             title: "Error",
             state: "error",
-            description: err.response.data.msg,
+            description: err.response.data.message,
             duration: 8.0,
           });
         },
         onSuccess: (res: any) => {
-          console.log(res);
-
           const result = res.data.data;
           if (
             signIn({

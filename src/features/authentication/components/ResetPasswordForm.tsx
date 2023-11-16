@@ -5,18 +5,22 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import { passwordValidationRules } from "src/utils/formHelpers/validations";
 import { useResetPassword } from "../hooks/useResetPassword";
 import { openNotification } from "src/utils/notification";
+import { useLogin } from "../hooks/useLogin";
+import { useSignIn } from "react-auth-kit";
 
 export const ResetPasswordForm = () => {
   const { isLoading, mutate } = useResetPassword();
+  const { mutate: loginMutate } = useLogin();
+  const signIn = useSignIn();
   let [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
-  const email = searchParams.get("email");
+  const token = searchParams.get("token") ?? "";
+  const email = searchParams.get("email") ?? "";
 
   const handleSubmit = (data: any) => {
     mutate(
       {
-        token: token,
-        email: email,
+        token,
+        email,
         password: data.password,
         password_confirmation: data.password_confirmation,
       },
@@ -36,7 +40,40 @@ export const ResetPasswordForm = () => {
             description: res.data.message,
             duration: 6.0,
           });
-          // form.resetFields();
+          loginMutate(
+            {
+              email,
+              password: data.password,
+            },
+            {
+              onError: (err: any) => {
+                openNotification({
+                  title: "Error",
+                  state: "error",
+                  description: err.response.data.message,
+                  duration: 8.0,
+                });
+              },
+              onSuccess: (res: any) => {
+                const result = res.data.data;
+                if (
+                  signIn({
+                    token: result.token,
+                    tokenType: "Bearer",
+                    authState: result,
+                    expiresIn: 180,
+                  })
+                ) {
+                  openNotification({
+                    title: "Success",
+                    state: "success",
+                    description: "Logged in successfully",
+                    duration: 4.5,
+                  });
+                }
+              },
+            }
+          );
         },
       }
     );
@@ -49,14 +86,14 @@ export const ResetPasswordForm = () => {
       </Form.Item>
       <Form.Item
         name="password"
-        label="Password"
+        label="New Password"
         rules={passwordValidationRules}
       >
         <Input.Password />
       </Form.Item>
       <Form.Item
         name="password_confirmation"
-        label="Confirm Password"
+        label="Confirm New Password"
         dependencies={["password"]}
         rules={[
           {

@@ -13,8 +13,6 @@ export const ForgotPasswordForm = () => {
       { ...values },
       {
         onError: (err: any) => {
-            console.log(err.response.data.message);
-            
           openNotification({
             title: "Error",
             state: "error",
