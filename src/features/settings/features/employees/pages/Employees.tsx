@@ -1,35 +1,30 @@
-import React, { useState } from "react";
-import { NewDepartment } from "../documents/NewDepartment";
-import { PageIntro } from "src/components/PageIntro";
-import { appRoute } from "src/config/routeMgt/routePaths";
-import { AppButton } from "src/components/button/AppButton";
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-
-export interface DataType {
-  key: React.Key;
-  dependent: string;
-  ageBracket: string;
-  conditions: string;
-}
+import { PageIntro } from "src/components/PageIntro";
+import { AppButton } from "src/components/button/AppButton";
+import { DataType } from "../../department/pages/Department";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 const columns: ColumnsType<DataType> = [
   {
-    title: "Id",
+    title: "Employee Id",
     dataIndex: "id",
   },
-
   {
-    title: "Name",
+    title: "Full Name",
     dataIndex: "name",
   },
   {
-    title: "head",
-    dataIndex: "head",
+    title: "email",
+    dataIndex: "email",
   },
   {
-    title: "description",
-    dataIndex: "description",
+    title: "Department",
+    dataIndex: "department",
+  },
+  {
+    title: "Role",
+    dataIndex: "role",
   },
   {
     title: "Action",
@@ -53,25 +48,24 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const Department = () => {
-  const [addDepartment, setAddDepartment] = useState(false);
+const Employees = () => {
   return (
     <>
-      <NewDepartment
+      {/* <NewDepartment
         open={addDepartment}
         handleClose={() => setAddDepartment(false)}
-      />
+      /> */}
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
-          title="Department"
-          description="Create, View & edit departments on the system"
+          title="Employees"
+          description="Create, View & edit employees on the system"
           linkBack={appRoute.settings}
         />
 
         <div>
           <AppButton
             label="Add New"
-            handleClick={() => setAddDepartment(true)}
+            // handleClick={() => setAddDepartment(true)}
           />
         </div>
       </div>
@@ -85,5 +79,5 @@ const Department = () => {
     </>
   );
 };
-2;
-export default Department;
+
+export default Employees;
