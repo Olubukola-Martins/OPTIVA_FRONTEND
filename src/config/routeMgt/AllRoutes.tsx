@@ -29,11 +29,7 @@ import CountryMilestonesAndPrograms from "src/features/settings/features/program
 import CreateProgramType from "src/features/settings/features/program-types/pages/CreateProgramType";
 import DefineFeesAndAuthorizedPersons from "src/features/settings/features/authorizedPersons/pages/DefineFeesAndAuthorizedPersons";
 import { AddFees } from "src/features/settings/features/authorizedPersons/pages/AddFees";
-
-import DocumentRequirement from "src/features/settings/features/documents/pages/DocumentRequirement";
 import InvestmentRoute from "src/features/settings/features/investment/pages/InvestmentRoute";
-// import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
-
 import Escalation from "src/features/settings/features/escalation/pages/Escalation";
 import NewEscalation from "src/features/settings/features/escalation/pages/NewEscalation";
 import EditEscalation from "src/features/settings/features/escalation/pages/EditEscalation";
@@ -45,7 +41,6 @@ import CBIBankDDClearanceTemplate from "src/features/settings/features/contracts
 import CBIBankAppECopyPassportReceiptTemp from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppECopyPassportReceiptTemp";
 import CBIBankAppApprovalTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppApprovalTemplate";
 import CBIAppSubmissionTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIAppSubmissionTemplate";
-
 
 const routesArray = [
   {
@@ -144,10 +139,9 @@ const routesArray = [
     element: <AddFees />,
   },
 
-  { path: appRoute.document_requirement, element: <DocumentRequirement /> },
+  { path: appRoute.document_requirement, element: <DocumentRequirements /> },
   { path: appRoute.investment_route, element: <InvestmentRoute /> },
   { path: appRoute.app_template, element: <ApplicationTemplate /> },
-
 ];
 
 export const AllRoutes = () => {

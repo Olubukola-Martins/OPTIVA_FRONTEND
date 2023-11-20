@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import DeleteIcon from "../assets/img/delete-icon.png";
 
 interface DataSourceItem {
   key: React.Key;
@@ -15,58 +16,55 @@ interface DataSourceItem {
   lastModified: string;
 }
 
-const columns: ColumnsType<DataSourceItem> = [
-  {
-    title: "Template Name",
-    dataIndex: "name",
-  },
-
-  {
-    title: "Date Created",
-    dataIndex: "dateCreated",
-  },
-  {
-    title: "Updated Date",
-    dataIndex: "format",
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    render: (_, val) => (
-      <div>
-        <Dropdown
-          trigger={["click"]}
-          overlay={
-            <Menu>
-              <Menu.Item key="1">Edit</Menu.Item>
-
-              <Menu.Item key="2">Duplicate</Menu.Item>
-              <Menu.Item key="3">Delete</Menu.Item>
-
-              <Menu.Item key="2">Delete</Menu.Item>
-            </Menu>
-          }
-        >
-          <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-        </Dropdown>
-      </div>
-    ),
-  },
-];
-
-const dataSource: DataSourceItem[] = [];
-for (let i = 0; i < 4; i++) {
-  dataSource.push({
-    key: i,
-    sn: i + 1,
-    templateName: "Template",
-    datecreated: "dd/mm/yyyy",
-    lastModified: "dd/mm/yyyy",
-  });
-}
-
-
 const ApplicationTemplate = () => {
+  const columns: ColumnsType<DataSourceItem> = [
+    {
+      title: "Template Name",
+      dataIndex: "templateName",
+    },
+    {
+      title: "Date Created",
+      dataIndex: "datecreated",
+    },
+    {
+      title: "Last Modified",
+      dataIndex: "lastModified",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                <Menu.Item key="1">Edit</Menu.Item>
+
+                <Menu.Item key="2">Duplicate</Menu.Item>
+                <Menu.Item key="3" onClick={showDeleteModal}>Delete</Menu.Item>
+
+              </Menu>
+            }
+          >
+            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
+          </Dropdown>
+        </div>
+      ),
+    },
+  ];
+
+  const dataSource: DataSourceItem[] = [];
+  for (let i = 0; i < 4; i++) {
+    dataSource.push({
+      key: i,
+      sn: i + 1,
+      templateName: "Template",
+      datecreated: "dd/mm/yyyy",
+      lastModified: "dd/mm/yyyy",
+    });
+  }
+
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
   const showImportModal = () => {
@@ -85,6 +83,14 @@ const ApplicationTemplate = () => {
     setExportModal(false);
   };
 
+  // Delete Modal
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const showDeleteModal = () => {
+    setOpenDeleteModal(true);
+  };
+  const handleDeleteCancel = () => {
+    setOpenDeleteModal(false);
+  };
   return (
     <>
       <div className="flex justify-between flex-col md:flex-row md:items-center">
@@ -239,6 +245,22 @@ const ApplicationTemplate = () => {
             type="reset"
           />
           <AppButton label="Export" type="submit" />
+        </div>
+      </Modal>
+       {/* Delete Modal */}
+       <Modal open={openDeleteModal} onCancel={handleDeleteCancel} footer={null}>
+        <div className="p-3 flex flex-col items-center gap-5">
+          <img src={DeleteIcon} alt="" />
+          <h2 className="font-bold text-lg">Delete Comment</h2>
+          <p>Are you sure you would like to delete this Comment?</p>
+          <div className="flex gap-5">
+            <AppButton
+              variant="transparent"
+              label="Cancel"
+              handleClick={handleDeleteCancel}
+            />
+            <AppButton type="button" label="Delete" />
+          </div>
         </div>
       </Modal>
       {/* TABLE */}

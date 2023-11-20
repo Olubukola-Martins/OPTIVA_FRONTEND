@@ -35,6 +35,8 @@ const PaymentDetails = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [data, setData] = useState<IPaymentItem[]>([]);
+  const [isEditingNewDetails, setIsEditingNewDetails] = useState(false);
+  const [indexEdited, setIndexEdited] = useState<undefined | number>(undefined);
   const onFinish = (values: any) => {
     console.log("form values", values);
   };
@@ -44,7 +46,7 @@ const PaymentDetails = () => {
   const handleAddNewPayment = (values) => {
     const newdateCreated = values.dateCreated;
     const newdatePaid = values.datePaid;
-    const key = data.length + 1;
+    const key = isEditingNewDetails ? values.key : data.length + 1;
     const newDetail: IPaymentItem = {
       key,
       narration: (
@@ -77,12 +79,12 @@ const PaymentDetails = () => {
         </Form.Item>
       ),
       paymentsUSD: (
-        <Form.Item name={`${key}paymentsUSD`} initialValue={values.paymentUSD}>
+        <Form.Item name={`${key}paymentsUSD`} initialValue={values.paymentsUSD}>
           <Text>{values.paymentUSD} USD</Text>
         </Form.Item>
       ),
       paymentsNGN: (
-        <Form.Item name={`${key}paymentsNGN`} initialValue={values.paymentNGN}>
+        <Form.Item name={`${key}paymentsNGN`} initialValue={values.paymentsNGN}>
           <Text>{values.paymentNGN} NGN</Text>
         </Form.Item>
       ),
@@ -94,10 +96,28 @@ const PaymentDetails = () => {
         </Form.Item>
       ),
     };
-    setData((prev) => [...prev, newDetail]);
+    // const index = data.indexOf(newDetail);
+    const replaceItemAtIndex = () => {
+      if (
+        (indexEdited as number) < 0 ||
+        (indexEdited as number) >= data.length
+      ) {
+        return data;
+      } else {
+        const newData = [...data];
+        newData[indexEdited as number] = newDetail;
+        return newData;
+      }
+    };
+    const newData = replaceItemAtIndex();
+    console.log(newData);
+    isEditingNewDetails && data.filter((item) => item.key === newDetail.key);
+    isEditingNewDetails
+      ? setData(newData)
+      : setData((prev) => [...prev, newDetail]);
+    // !isEditingNewDetails &&
     setIsModalOpen(false);
     modalForm.resetFields();
-    console.log("new", newDetail);
   };
 
   // TABLES
@@ -202,7 +222,7 @@ const PaymentDetails = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, record: IPaymentItem) => (
+      render: (_, record: IPaymentItem, index) => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -224,7 +244,14 @@ const PaymentDetails = () => {
                       paymentsNGN: record.paymentsNGN.props.initialValue,
                       balanceDue: record.balanceDue.props.initialValue,
                     };
+                    const currentItem = data.find(
+                      (item) => item.key === record.key
+                    );
+                    const currentIndex =
+                      currentItem && data.indexOf(currentItem);
                     modalForm.setFieldsValue(getPaymentDetails);
+                    setIndexEdited(currentIndex);
+                    setIsEditingNewDetails(true);
                     setIsModalOpen(true);
                   }}
                 >
@@ -366,7 +393,10 @@ const PaymentDetails = () => {
           type="button"
           label="Add New Payment Detail"
           containerStyle=" mt-6 ml-auto flex"
-          handleClick={() => setIsModalOpen(true)}
+          handleClick={() => {
+            setIsModalOpen(true);
+            setIsEditingNewDetails(false);
+          }}
         />
         <Form
           layout="vertical"
@@ -380,7 +410,7 @@ const PaymentDetails = () => {
               bordered
               dataSource={data}
               columns={editableColumns}
-              scroll={{ x: 1200 }}
+              scroll={{ x: 1000 }}
             />
           </div>
 

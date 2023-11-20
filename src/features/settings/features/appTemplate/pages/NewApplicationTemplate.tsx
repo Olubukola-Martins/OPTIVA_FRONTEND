@@ -1,11 +1,22 @@
-import { Input, Select, Form, Switch } from "antd";
+import { Input, Select, Form, Switch, Modal } from "antd";
+import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import Success from "../assets/img/success.png";
 
 const NewApplicationTemplate = () => {
   const [form] = Form.useForm();
-  const handleSubmit = (val: any) => {};
+  const handleSubmit = (val: any) => { };
+  // Add Success
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+
+  const renderSuccessModal = () => {
+    setShowSuccessModal(true);
+  };
+  const cancelSuccessModal = () => {
+    setShowSuccessModal(false);
+  };
   return (
     <>
       <PageIntro
@@ -366,11 +377,27 @@ const NewApplicationTemplate = () => {
           </div>
         </div>
 
-        <div className="flex justify-end items-center gap-4">
+        <div className="flex justify-end items-center gap-4 mt-5">
           <AppButton label="Cancel" type="reset" variant="transparent" />
-          <AppButton label="Save" type="submit" />
+          <AppButton label="Save" type="submit" handleClick={renderSuccessModal}/>
         </div>
       </Form>
+       {/* ADD SUCCESS MODAL */}
+       <Modal
+        open={showSuccessModal}
+        footer={null}
+        onCancel={cancelSuccessModal}
+      >
+        <div className="flex flex-col items-center gap-4 font-bold">
+          <img src={Success} className="mx-auto" />
+          <div className="text-center text-lg">
+            <h2>Application Template(s)</h2>
+            <h2>Added Successfully</h2>
+          </div>
+
+          <AppButton label="Back" handleClick={cancelSuccessModal} />
+        </div>
+      </Modal>
     </>
   );
 };
