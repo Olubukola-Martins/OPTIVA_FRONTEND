@@ -3,6 +3,14 @@ import { settingsLinkProps } from "../types";
 
 export const settingsLink: settingsLinkProps[] = [
   {
+    name: "Departments",
+    link: appRoute.department,
+  },
+  {
+    name: "Employees",
+    link: appRoute.employees,
+  },
+  {
     name: "Define Eligible Dependents",
     link: appRoute.dependents,
   },

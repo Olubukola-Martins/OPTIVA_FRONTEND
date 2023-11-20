@@ -8,14 +8,20 @@ import { SideBar } from "./SideBar";
 import avatar from "src/assets/user.png";
 import { SignOut } from "./SignOut";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { EditProfile } from "src/ExtraSettings/components/EditProfile";
 
 export const Navbar = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
+  const [editProfile, setEditProfile] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const { userInfo } = useGetUserInfo();
 
   return (
     <>
+      <EditProfile
+        open={editProfile}
+        handleClose={() => setEditProfile(false)}
+      />
       <div className="w-full bg-white sticky top-0 z-50 shadow-sm border-b py-3 Container flex justify-between items-center">
         <div className="flex items-center gap-x-2">
           <Icon
@@ -81,7 +87,10 @@ export const Navbar = () => {
                   </div>
                 </div>
                 <ul className="flex flex-col gap-2">
-                  <li className="menuStyle">
+                  <li
+                    className="menuStyle"
+                    onClick={() => setEditProfile(true)}
+                  >
                     <Icon icon="mingcute:user-4-line" className="text-xl" />
                     <span>Edit Profile</span>
                   </li>
@@ -89,14 +98,7 @@ export const Navbar = () => {
                     <Icon icon="mdi:user-badge-outline" className="text-xl" />
                     <span>Roles and Permission</span>
                   </li>
-                  <li className="menuStyle">
-                    <Icon icon="mingcute:department-fill" className="text-xl" />
-                    <span>Department</span>
-                  </li>
-                  <li className="menuStyle">
-                    <Icon icon="mdi:users-add" className="text-xl" />
-                    <span>Employees</span>
-                  </li>
+
                   <li className="menuStyle">
                     <Icon
                       icon="carbon:workflow-automation"
