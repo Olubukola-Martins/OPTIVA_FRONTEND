@@ -7,14 +7,14 @@ export type DataSourceItem = {
   dependentName?: string;
   relationshipApplicant?: string;
   maritalStatus?: string;
-  dateOfDeath?: string;
+  dateOfDeath?: Date | string;
   cityOfDeath?: string;
   countryOfDeath?: string;
   stateOfOrgin?: string;
   lgaOfOrigin?: string;
   hometown?: string;
   gender: string;
-  dateOfBirth?: string;
+  dateOfBirth?: Date | string;
   cityOfBirth?: string;
   countryOfBirth?: string;
   height: string;
@@ -32,7 +32,7 @@ export type DataSourceItem = {
   residentialAddressState: string;
   residentialAddressCountry: string;
   residentialAddressCode: string;
-  residentialAddressDate: string;
+  residentialAddressDate: Date | string;
   onApplication: string;
 };
  const columns: ColumnsType<DataSourceItem> = [

@@ -14,8 +14,8 @@ const ApplicantDocument = () => {
           description="Please upload the required documents"
         />
         <div className="flex p-2 gap-4 items-center">
-          <Icon icon="ri:download-fill" />
-          <Icon icon="zondicons:list" />
+          <Icon icon="ri:download-fill hover:text-primary" />
+          <Icon icon="zondicons:list hover:text-primary" />
           <Select
             defaultValue="Applicant"
             options={[
@@ -53,6 +53,7 @@ const ApplicantDocument = () => {
         </div>
       </div>
       <ApplicantDocumentTab />
+      
     </>
   );
 };

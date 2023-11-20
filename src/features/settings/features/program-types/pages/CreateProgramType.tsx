@@ -2,20 +2,14 @@ import { Form, Input, Select } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { useState } from "react";
 
 const CreateProgramType = () => {
   const [form] = Form.useForm();
-//   const [isEditMode, setIsEditMode] = useState(false);
 
   const handleSubmit = (values: any) => {
     console.log("Form values submitted:", values);
   };
 
-//   const handleUpdate = () => {
-//     const formValues = form.getFieldsValue();
-//     console.log("Form values updated:", formValues);
-//   };
   return (
     <>
       <PageIntro
