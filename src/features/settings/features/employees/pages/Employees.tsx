@@ -1,54 +1,33 @@
-import { Dropdown, Menu, Table } from "antd";
-import { ColumnsType } from "antd/es/table";
+import { Input, Select, Tabs } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
-import { DataType } from "../../department/pages/Department";
 import { appRoute } from "src/config/routeMgt/routePaths";
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Employee Id",
-    dataIndex: "id",
-  },
-  {
-    title: "Full Name",
-    dataIndex: "name",
-  },
-  {
-    title: "email",
-    dataIndex: "email",
-  },
-  {
-    title: "Department",
-    dataIndex: "department",
-  },
-  {
-    title: "Role",
-    dataIndex: "role",
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-
-    render: (_, val) => (
-      <div>
-        <Dropdown
-          trigger={["click"]}
-          overlay={
-            <Menu>
-              <Menu.Item key="1">Edit</Menu.Item>
-              <Menu.Item key="2">Delete</Menu.Item>
-            </Menu>
-          }
-        >
-          <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-        </Dropdown>
-      </div>
-    ),
-  },
-];
+import { ActiveEmployees } from "../components/ActiveEmployees";
+import { InvitedEmployees } from "../components/InvitedEmployees";
 
 const Employees = () => {
+  const operations = (
+    <div className="hidden lg:flex gap-4 w-full">
+      <Input.Search placeholder="Search" className="w-1/2"></Input.Search>
+      <Select placeholder="Filter" className="w-1/2" />
+    </div>
+  );
+  const tabItems: {
+    label: string;
+    children: React.ReactNode;
+    key: string;
+  }[] = [
+    {
+      label: "Active Employees",
+      children: <ActiveEmployees />,
+      key: "Active Employees",
+    },
+    {
+      label: "Inactive Employees",
+      children: <InvitedEmployees />,
+      key: "Inactive Employees",
+    },
+  ];
   return (
     <>
       {/* <NewDepartment
@@ -70,12 +49,13 @@ const Employees = () => {
         </div>
       </div>
 
-      <Table
-        className="bg-white rounded-md shadow border mt-8"
-        columns={columns}
-        dataSource={[]}
-        // scroll={{ x: 500 }}
+      <div>
+      <Tabs
+        items={tabItems}
+        className="hover:bg-caramel active:text-primary"
+        tabBarExtraContent={operations}
       />
+      </div>
     </>
   );
 };

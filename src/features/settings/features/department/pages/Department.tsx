@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NewDepartment } from "../documents/NewDepartment";
+import { NewDepartment } from "../components/NewDepartment";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
