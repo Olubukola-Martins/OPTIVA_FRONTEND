@@ -35,6 +35,8 @@ export const appRoute = {
     format: `/settings/editProgramType/:id`,
     path: `/settings/editProgramType/${id}`,
   }),
+  department: `/settings/department`,
+  employees: `/settings/employees`,
 
   // Applications
   applications: `/applications`,

@@ -40,3 +40,7 @@ export type IAppBtnProps = {
     handleClose: Function;
   }
   
+  export interface IUserToken {
+    token: string;
+  }
+  
