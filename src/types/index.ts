@@ -40,3 +40,8 @@ export type IAppBtnProps = {
     handleClose: Function;
   }
   
+  export interface ICurrentBranch {
+    branchId: number;
+    token: string;
+  }
+  

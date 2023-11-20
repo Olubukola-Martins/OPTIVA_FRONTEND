@@ -43,6 +43,8 @@ import CBIBankAppApprovalTemplate from "src/features/settings/features/contracts
 import CBIAppSubmissionTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIAppSubmissionTemplate";
 import ForgotPassword from "src/features/authentication/pages/ForgotPassword";
 import ResetPassword from "src/features/authentication/pages/ResetPassword";
+import { GlobalContextProvider } from "src/stateManagement/GlobalContext";
+import Department from "src/features/settings/features/department/pages/Department";
 
 const routesArray = [
   {
@@ -144,33 +146,36 @@ const routesArray = [
   { path: appRoute.document_requirement, element: <DocumentRequirements /> },
   { path: appRoute.investment_route, element: <InvestmentRoute /> },
   { path: appRoute.app_template, element: <ApplicationTemplate /> },
+  { path: appRoute.department, element: <Department /> },
 ];
 
 export const AllRoutes = () => {
   return (
     <Router>
-      <Routes>
-        <Route element={<DashboardLayout />}>
-          {routesArray.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                route.path === appRoute.login_in ? (
-                  route.element
-                ) : (
-                  <RequireAuth loginPath={appRoute.login_in}>
-                    {route.element}
-                  </RequireAuth>
-                )
-              }
-            />
-          ))}
-        </Route>
-        <Route path={appRoute.login_in} element={<Login />} />
-        <Route path={appRoute.forgot_password} element={<ForgotPassword />} />
-        <Route path={appRoute.reset_password} element={<ResetPassword />} />
-      </Routes>
+      <GlobalContextProvider>
+        <Routes>
+          <Route element={<DashboardLayout />}>
+            {routesArray.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  route.path === appRoute.login_in ? (
+                    route.element
+                  ) : (
+                    <RequireAuth loginPath={appRoute.login_in}>
+                      {route.element}
+                    </RequireAuth>
+                  )
+                }
+              />
+            ))}
+          </Route>
+          <Route path={appRoute.login_in} element={<Login />} />
+          <Route path={appRoute.forgot_password} element={<ForgotPassword />} />
+          <Route path={appRoute.reset_password} element={<ResetPassword />} />
+        </Routes>
+      </GlobalContextProvider>
     </Router>
   );
 };
