@@ -43,3 +43,9 @@ export interface IdentifierProps {
 export interface IUserToken {
   token: string;
 }
+
+export interface IGeneralProps {
+  id: number | string;
+  token: string;
+  deleteEndPointUrl?: string;
+}

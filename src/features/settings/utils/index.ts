@@ -3,6 +3,10 @@ import { settingsLinkProps } from "../types";
 
 export const settingsLink: settingsLinkProps[] = [
   {
+    name: "Branches",
+    link: appRoute.branches,
+  },
+  {
     name: "Departments",
     link: appRoute.department,
   },

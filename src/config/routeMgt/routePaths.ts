@@ -6,6 +6,7 @@ export const appRoute = {
 
   // Settings
   settings: `/settings`,
+  branches: `/branches`,
   dependents: `/settings/dependents`,
   document_requirement: `/settings/document-requirement`,
   investment_route: `/settings/investment-route`,
