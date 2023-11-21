@@ -15,11 +15,23 @@ import Popconfirm from "antd/lib/popconfirm";
 
 const Branches = () => {
   const [addBranch, setAddBranch] = useState(false);
+  const [branchId, setBranchId] = useState<number>();
   const { data, isLoading } = useFetchBranches();
   const { removeData } = useDelete({
     deleteEndPointUrl: "admin/branches/",
     queryKey: QUERY_KEY_FOR_BRANCHES,
   });
+
+  const handleBranch = (id: number) => {
+    setBranchId(id);
+    setAddBranch(true);
+  };
+
+  const handleAddBranch = () => {
+    setBranchId(undefined);
+    setAddBranch(true);
+  };
+
   const columns: ColumnsType<branchProps> = [
     {
       title: "Name",
@@ -43,7 +55,9 @@ const Branches = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">Edit</Menu.Item>
+                <Menu.Item key="1" onClick={() => handleBranch(val.id)}>
+                  Edit
+                </Menu.Item>
                 <Menu.Item key="2">
                   <Popconfirm
                     title="Delete branch"
@@ -64,7 +78,11 @@ const Branches = () => {
   ];
   return (
     <>
-      <AddBranch open={addBranch} handleClose={() => setAddBranch(false)} />
+      <AddBranch
+        id={branchId}
+        open={addBranch}
+        handleClose={() => setAddBranch(false)}
+      />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
           title="Branches"
@@ -72,15 +90,14 @@ const Branches = () => {
           linkBack={appRoute.settings}
         />
         <div>
-          <AppButton label="Add New" handleClick={() => setAddBranch(true)} />
+          <AppButton label="Add New" handleClick={() => handleAddBranch()} />
         </div>
       </div>
-
       <Table
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
         dataSource={data}
-        scroll={{ x: 500 }}
+        // scroll={{ x: 500 }}
         loading={isLoading}
       />
     </>

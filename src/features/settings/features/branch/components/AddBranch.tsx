@@ -10,12 +10,29 @@ import { AppButton } from "src/components/button/AppButton";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { useQueryClient } from "react-query";
 import { QUERY_KEY_FOR_BRANCHES } from "../hooks/useFetchBranches";
+import { useGetSingleBranch } from "../hooks/useGetSingleBranch";
+import { useEffect } from "react";
 
-export const AddBranch = ({ handleClose, open }: IdentifierProps) => {
-    const queryClient = useQueryClient();
-  const { mutate, isLoading } = useCreateBranch();
+export const AddBranch = ({ handleClose, open, id }: IdentifierProps) => {
+  const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
+  const { mutate, isLoading } = useCreateBranch();
+  const { data, isSuccess } = useGetSingleBranch({
+    token,
+    id: id as unknown as number,
+  });
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (isSuccess && id) {
+      form.setFieldsValue({
+        ...data,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [form, id, data, isSuccess]);
+
   const handleSubmit = (data: any) => {
     mutate(
       { ...data, token },
@@ -35,8 +52,8 @@ export const AddBranch = ({ handleClose, open }: IdentifierProps) => {
             description: res.data.message,
             duration: 6.0,
           });
-          form.resetFields(); 
-        queryClient.invalidateQueries([QUERY_KEY_FOR_BRANCHES]);
+          form.resetFields();
+          queryClient.invalidateQueries([QUERY_KEY_FOR_BRANCHES]);
           handleClose();
         },
       }
@@ -47,7 +64,7 @@ export const AddBranch = ({ handleClose, open }: IdentifierProps) => {
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title="New Department"
+      title={`${id ? "Edit" : "New"} Branch`}
       style={{ top: 15 }}
     >
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
@@ -65,7 +82,11 @@ export const AddBranch = ({ handleClose, open }: IdentifierProps) => {
           <Input.TextArea />
         </Form.Item>
 
-        <AppButton type="submit" isLoading={isLoading} />
+        <AppButton
+          type="submit"
+          label={id ? "Save branch" : "Submit"}
+          isLoading={isLoading}
+        />
       </Form>
     </Modal>
   );

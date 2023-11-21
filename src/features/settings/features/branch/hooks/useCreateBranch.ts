@@ -4,6 +4,10 @@ import { END_POINT } from "src/config/environment";
 import { branchProps } from "../types";
 
 const UserRequest = async (props: branchProps) => {
+
+// const updateUrl = "";
+// const addUrl = "/admin/branches";
+
   const url = `${END_POINT.BASE_URL}/admin/branches`;
 
   const config = {
