@@ -9,11 +9,13 @@ import avatar from "src/assets/user.png";
 import { SignOut } from "./SignOut";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { EditProfile } from "src/ExtraSettings/components/EditProfile";
+import { ChangePassword } from "src/ExtraSettings/components/ChangePassword";
 
 export const Navbar = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
+  const [passwordChange, setPasswordChange] = useState(false);
   const { userInfo } = useGetUserInfo();
 
   return (
@@ -21,6 +23,10 @@ export const Navbar = () => {
       <EditProfile
         open={editProfile}
         handleClose={() => setEditProfile(false)}
+      />
+      <ChangePassword
+        open={passwordChange}
+        handleClose={() => setPasswordChange(false)}
       />
       <div className="w-full bg-white sticky top-0 z-50 shadow-sm border-b py-3 Container flex justify-between items-center">
         <div className="flex items-center gap-x-2">
@@ -118,7 +124,10 @@ export const Navbar = () => {
                     <Icon icon="ion:key-outline" className="text-xl" />
                     <span>Enable 2FA</span>
                   </li>
-                  <li className="menuStyle">
+                  <li
+                    className="menuStyle"
+                    onClick={() => setPasswordChange(true)}
+                  >
                     <Icon icon="uis:padlock" className="text-xl" />
                     <span>Change Password</span>
                   </li>

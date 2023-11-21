@@ -4,8 +4,12 @@ import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { ActiveEmployees } from "../components/ActiveEmployees";
 import { InvitedEmployees } from "../components/InvitedEmployees";
+import { useState } from "react";
+import { NewEmployee } from "../components/NewEmployee";
 
 const Employees = () => {
+  const [addEmployee, setAddEmployee] = useState(false);
+
   const operations = (
     <div className="hidden lg:flex gap-4 w-full">
       <Input.Search placeholder="Search" className="w-1/2"></Input.Search>
@@ -30,10 +34,10 @@ const Employees = () => {
   ];
   return (
     <>
-      {/* <NewDepartment
-        open={addDepartment}
-        handleClose={() => setAddDepartment(false)}
-      /> */}
+      <NewEmployee
+        open={addEmployee}
+        handleClose={() => setAddEmployee(false)}
+      />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
           title="Employees"
@@ -42,19 +46,16 @@ const Employees = () => {
         />
 
         <div>
-          <AppButton
-            label="Add New"
-            // handleClick={() => setAddDepartment(true)}
-          />
+          <AppButton label="Add New" handleClick={() => setAddEmployee(true)} />
         </div>
       </div>
 
       <div>
-      <Tabs
-        items={tabItems}
-        className="hover:bg-caramel active:text-primary"
-        tabBarExtraContent={operations}
-      />
+        <Tabs
+          items={tabItems}
+          className="hover:bg-caramel active:text-primary"
+          tabBarExtraContent={operations}
+        />
       </div>
     </>
   );
