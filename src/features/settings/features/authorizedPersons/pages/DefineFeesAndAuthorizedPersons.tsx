@@ -1,4 +1,13 @@
-import { Modal, Input, Form, Select } from "antd";
+import {
+  Modal,
+  Input,
+  Form,
+  Select,
+  Menu,
+  Dropdown,
+  message,
+  Upload,
+} from "antd";
 import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -11,6 +20,27 @@ import { Link } from "react-router-dom";
 import Success from "../assets/img/success.png";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
+import { DownOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
+import type { UploadProps } from "antd";
+
+const props: UploadProps = {
+  name: "file",
+  action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+  headers: {
+    authorization: "authorization-text",
+  },
+  onChange(info) {
+    if (info.file.status !== "uploading") {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === "done") {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === "error") {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
 
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
@@ -46,16 +76,6 @@ const DefineFeesAndAuthorizedPersons = () => {
     console.log("Values of form", val);
   };
 
-  //Add New Modal
-  const [showAddModal, setShowAddModal] = useState<boolean>(false);
-
-  const renderAddNewModal = () => {
-    setShowAddModal(true);
-  };
-  const cancelAddNewModal = () => {
-    setShowAddModal(false);
-  };
-
   // Authorized Person Modal
   const [showAuthorizedModal, setShowAuthorizedModal] =
     useState<boolean>(false);
@@ -76,6 +96,17 @@ const DefineFeesAndAuthorizedPersons = () => {
   const cancelSuccessModal = () => {
     setShowSuccessModal(false);
   };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="1">
+        <Link to={appRoute.addFees}>Fees</Link>
+      </Menu.Item>
+      <Menu.Item key="2" onClick={renderAddAuthorizedModal}>
+        Authorized Person
+      </Menu.Item>
+    </Menu>
+  );
   return (
     <>
       <div className=" flex flex-col md:flex-row justify-between p-3">
@@ -102,12 +133,14 @@ const DefineFeesAndAuthorizedPersons = () => {
             variant="transparent"
             handleClick={showSetFxModal}
           />
-
-          <AppButton
-            label="Add New"
-            handleClick={renderAddNewModal}
-            //   handleClick={renderDropdown}
-          />
+<div><Dropdown.Button
+            className="bg-secondary text-white w-full "
+            overlay={menu}
+            icon={<DownOutlined />}
+          >
+            Add New
+          </Dropdown.Button></div>
+          
         </div>
       </div>
       {/* Import Modal */}
@@ -160,17 +193,6 @@ const DefineFeesAndAuthorizedPersons = () => {
           </div>
         </Form>
       </Modal>
-      {/* DROPDOWN */}
-      <Modal open={showAddModal} footer={null} onCancel={cancelAddNewModal}>
-        <h2 className="text-center font-bold p-4">Add New</h2>
-        <div className="flex flex-col gap-2 items-center">
-          <Link to={appRoute.addFees}>
-            <button className="border-0 bg-transparent">Fees</button>
-          </Link>
-
-          <button onClick={renderAddAuthorizedModal}>Authorized persons</button>
-        </div>
-      </Modal>
 
       {/* AUTHORIZED PERSON */}
       <Modal
@@ -195,13 +217,14 @@ const DefineFeesAndAuthorizedPersons = () => {
             </Form.Item>
           </div>
           <div className="mb-3">
-            <h2>Upload Signature</h2>
+            <h2 className="mb-2">Upload Signature</h2>
             <Form.Item name="chooseFile" required>
-              <Input
+              {/* <Input
                 addonBefore="Choose file"
                 placeholder="No file chosen"
                 size="large"
-              />
+              /> */}
+              <Upload {...props} className="border p-1 rounded border-zinc-950 ">Choose file to Upload</Upload>
             </Form.Item>
             <p className="my-2 text-center text-lg">
               [only xls,xlsx and csv formats are supported]
@@ -223,7 +246,6 @@ const DefineFeesAndAuthorizedPersons = () => {
               handleClick={() => {
                 renderSuccessModal();
                 cancelAddAuthorizedModal();
-                cancelAddNewModal();
               }}
             />
           </div>

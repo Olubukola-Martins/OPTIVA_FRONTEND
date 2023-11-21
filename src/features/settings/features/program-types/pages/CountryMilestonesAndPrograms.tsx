@@ -8,8 +8,19 @@ import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
+import { usePostCountry } from "../hooks/usePostCountry";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { openNotification } from "src/utils/notification";
+import { useQueryClient } from "react-query";
+import { QUERY_KEY_FOR_COUNTRY } from "../hooks/useGetCountry";
 
 const CountryMilestonesAndPrograms = () => {
+  const { token } = useGetUserInfo();
+  const queryClient = useQueryClient();
+  
+  // Add New Country
+  const { mutate, isLoading: postLoading } = usePostCountry();
+  const [form] = Form.useForm();
   // Country Modal
   const [openCountryModal, setOpenCountryModal] = useState(false);
   const showCountryModal = () => {
@@ -17,6 +28,35 @@ const CountryMilestonesAndPrograms = () => {
   };
   const handleCountryModalCancel = () => {
     setOpenCountryModal(false);
+  };
+
+  // SUBMIT COUNTRY
+  const handleCountrySubmit = (val: any) => {
+    mutate(
+      {
+        country_name: val.country,
+        program_types: val.programType,
+        token,
+      },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occured",
+            description: error,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_COUNTRY]);
+        },
+      }
+    );
   };
 
   // Add Country Success
@@ -136,7 +176,7 @@ const CountryMilestonesAndPrograms = () => {
         onCancel={handleCountryModalCancel}
       >
         <h2 className="text-center font-bold py-2">Add Country</h2>
-        <Form layout="vertical">
+        <Form layout="vertical" form={form} onFinish={handleCountrySubmit}>
           <Form.Item name="country" label="Country" required>
             <Input size="large" />
           </Form.Item>
@@ -157,6 +197,7 @@ const CountryMilestonesAndPrograms = () => {
               label="Cancel"
               type="reset"
               handleClick={handleCountryModalCancel}
+              
             />
             <AppButton label="Save" type="submit" />
           </div>

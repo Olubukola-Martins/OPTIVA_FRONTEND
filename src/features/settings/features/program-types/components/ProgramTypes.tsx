@@ -1,8 +1,10 @@
 import { Dropdown, Menu, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
 import DeleteIcon from "../assets/img/warning.png";
+import { useGetProgramType } from "../hooks/useGetProgramType";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 
 type DataSourceItem = {
   key: React.Key;
@@ -17,6 +19,30 @@ type DataSourceItem = {
 };
 
 export const ProgramTypes = () => {
+  // GET REQUEST
+  const { data, isLoading } = useGetProgramType();
+  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+  const { token } = useGetUserInfo();
+  const [id, setId] = useState<number>();
+
+  useEffect(() => {
+    if (data) {
+      const programType: DataSourceItem[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          programType: item.program_name,
+          eligibleDependent: item.eligibledependents,
+          applicationTemplate: item.program_link,
+          documentRequirements: item.documentrequirements,
+          milestones: item.milestones,
+         
+        };
+      });
+      setDataArray(programType);
+    }
+  }, [data]);
+
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -40,7 +66,7 @@ export const ProgramTypes = () => {
     },
     {
       title: "Eligible Dependents",
-      dataIndex: " eligibleDependent",
+      dataIndex: "eligibleDependent",
       key: "5",
     },
     {
@@ -68,7 +94,9 @@ export const ProgramTypes = () => {
             overlay={
               <Menu>
                 <Menu.Item key="1">Edit</Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>Delete</Menu.Item>
+                <Menu.Item key="2" onClick={showDeleteModal}>
+                  Delete
+                </Menu.Item>
               </Menu>
             }
           >
@@ -78,6 +106,7 @@ export const ProgramTypes = () => {
       ),
     },
   ];
+
   const dataSource: DataSourceItem[] = [];
   for (let i = 0; i < 4; i++) {
     dataSource.push({
@@ -91,8 +120,8 @@ export const ProgramTypes = () => {
       eligibleDependent: "Parents",
       investmentRoute: "Real Estate",
     });
-    }
-    // Delete Modal
+  }
+  // Delete Modal
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const showDeleteModal = () => {
     setOpenDeleteModal(true);
@@ -121,9 +150,9 @@ export const ProgramTypes = () => {
             );
           },
         }}
-          />
-          
-             {/* DELETE MODAL */}
+      />
+
+      {/* DELETE MODAL */}
       <Modal open={openDeleteModal} onCancel={handleDeleteCancel} footer={null}>
         <img src={DeleteIcon} className="mx-auto" />
         <h2 className="text-center font-bold p-2">Delete Program Type</h2>
@@ -142,7 +171,3 @@ export const ProgramTypes = () => {
     </>
   );
 };
-function useState<T>(arg0: boolean): [any, any] {
-    throw new Error("Function not implemented.");
-}
-

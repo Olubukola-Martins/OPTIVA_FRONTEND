@@ -1,9 +1,28 @@
-import { Dropdown, Form, Input, Menu, Modal, Select, Table } from "antd";
+import {
+  Dropdown,
+  Form,
+  Input,
+  Menu,
+  Modal,
+  Select,
+  Skeleton,
+  Table,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
 import Success from "../assets/img/success.png";
 import DeleteIcon from "../assets/img/warning.png";
+import { QUERY_KEY_FOR_COUNTRY, useGetCountry } from "../hooks/useGetCountry";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
+import { handleDelete } from "src/utils/apiHelpers/handleDelete";
+import { usePostCountry } from "../hooks/usePostCountry";
+import { openNotification } from "src/utils/notification";
+import { useQueryClient } from "react-query";
+import { useGetSingleAuthorizedPerson } from "../../authorizedPersons/hooks/useGetSingleAuthorizedPerson";
+import { useGetSingleCountry } from "../hooks/useGetSingleCountry";
+import { useUpdateCountry } from "../hooks/useUpdateCountry";
 
 type DataSourceItem = {
   key: React.Key;
@@ -14,6 +33,50 @@ type DataSourceItem = {
 };
 
 export const Country = () => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const queryClient = useQueryClient();
+  const [form] = Form.useForm();
+  // GET REQUEST
+  const { data, isLoading } = useGetCountry();
+  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+  const { token } = useGetUserInfo();
+  const [id, setId] = useState<number>();
+  useEffect(() => {
+    if (data) {
+      const country: DataSourceItem[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          country: item.country_name,
+          dateCreated: formatDate(item.created_at),
+          lastModified: formatDate(item.updated_at),
+        };
+      });
+      setDataArray(country);
+    }
+  }, [data]);
+
+  // UPDATE FORM
+  // useUpdateCountry()
+
+  // SINGLE COUNTRY
+  const { data: singleCountryData } = useGetSingleCountry(
+    id as unknown as number
+  );
+  useEffect(() => {
+    if (singleCountryData) {
+      form.setFieldsValue({
+        country: singleCountryData?.country,
+        programType: singleCountryData?.programType,
+      });
+    }
+  }, [singleCountryData ]);
+
+  // POST REQUEST
+ 
+
+  // DELETE REQUEST
+
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -45,10 +108,22 @@ export const Country = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={showCountryModal}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setId(val.key as unknown as number);
+                    showCountryModal();
+                  }}
+                >
                   Edit
                 </Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    showDeleteModal();
+                    setId(val.key as unknown as number);
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu>
@@ -60,17 +135,25 @@ export const Country = () => {
       ),
     },
   ];
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      country: "Grenada",
-      dateCreated: "dd/mm/yyyy",
-      lastModified: "dd/mm/yyyy",
-    });
-  }
 
+  const handleDeleteCheckbox = () => {
+    showDeleteModal();
+    handleDelete({
+      id: id as unknown as number,
+      deleteEndPointUrl: "/admin/countries",
+      token,
+    });
+
+    setSelectedRowKeys([]);
+  };
+
+  const handleDeleteCountry = () => {
+    handleDelete({
+      id: id as unknown as number,
+      deleteEndPointUrl: "/admin/countries",
+      token,
+    });
+  };
   // Country Modal
   const [openCountryModal, setOpenCountryModal] = useState<boolean>(false);
   const showCountryModal = () => {
@@ -79,7 +162,34 @@ export const Country = () => {
   const handleCountryModalCancel = () => {
     setOpenCountryModal(false);
   };
-  const handleEditCountrySubmit = (val: any) => {};
+  const handleEditCountrySubmit = (val: any) => {
+
+    // mutate(
+    //   {
+    //     country_name: val.country,
+    //     program_types: val.programType,
+    //     token,
+    //   },
+    //   {
+    //     onError: (error: any) => {
+    //       openNotification({
+    //         state: "error",
+    //         title: "Error Occured",
+    //         description: error,
+    //         duration: 5,
+    //       });
+    //     },
+    //     onSuccess: (res: any) => {
+    //       openNotification({
+    //         state: "success",
+    //         title: "Success",
+    //         description: res,
+    //       });
+    //       queryClient.invalidateQueries([QUERY_KEY_FOR_COUNTRY]);
+    //     },
+    //   }
+    // );
+  };
 
   // Add Success
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
@@ -101,26 +211,40 @@ export const Country = () => {
   };
   return (
     <>
+      {/* DELETE CHECKBOX BUTTON */}
+      {selectedRowKeys.length > 0 && (
+        <div>
+          <AppButton
+            variant="transparent"
+            label="Delete"
+            handleClick={handleDeleteCheckbox}
+          />
+        </div>
+      )}
+
       {/* TABLE */}
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        className="bg-white rounded-md shadow border mt-2"
-        scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
-      />
+
+      <Skeleton loading={isLoading} active>
+        <Table
+          columns={columns}
+          dataSource={dataArray}
+          className="bg-white rounded-md shadow border mt-2"
+          scroll={{ x: 600 }}
+          rowSelection={{
+            type: "checkbox",
+            onChange: (
+              selectedRowKeys: React.Key[],
+              selectedRows: DataSourceItem[]
+            ) => {
+              console.log(
+                `selectedRowKeys: ${selectedRowKeys}`,
+                "selectedRows: ",
+                selectedRows
+              );
+            },
+          }}
+        />
+      </Skeleton>
 
       {/* Country MODAL */}
       <Modal
@@ -129,7 +253,7 @@ export const Country = () => {
         onCancel={handleCountryModalCancel}
       >
         <h2 className="text-center text-lg font-bold">Edit Country</h2>
-        <Form layout="vertical" onFinish={handleEditCountrySubmit}>
+        <Form layout="vertical" onFinish={handleEditCountrySubmit} form={form}>
           <Form.Item name="country" label="Country" required>
             <Input size="large" />
           </Form.Item>
@@ -189,7 +313,11 @@ export const Country = () => {
             handleClick={handleDeleteCancel}
             variant="transparent"
           />
-          <AppButton label="Delete" type="submit" />
+          <AppButton
+            label="Delete"
+            type="submit"
+            handleClick={handleDeleteCountry}
+          />
         </div>
       </Modal>
     </>

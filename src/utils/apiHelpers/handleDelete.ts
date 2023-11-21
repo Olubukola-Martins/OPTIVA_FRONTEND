@@ -1,6 +1,6 @@
 import axios from "axios";
-import { END_POINT } from "config/environment";
-import { IGeneralProps } from "types";
+import { END_POINT } from "src/config/environment";
+import { IGeneralProps } from "src/types";
 
 export const handleDelete = async ({
   id,
