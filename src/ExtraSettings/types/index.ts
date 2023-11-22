@@ -5,3 +5,8 @@ export interface changePasswordProps extends IUserToken {
   password: string;
   password_confirmation: string;
 }
+
+export interface editProfileProps extends IUserToken {
+  name: string;
+  phone: string;
+}

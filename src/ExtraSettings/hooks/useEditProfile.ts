@@ -1,14 +1,10 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
-import { branchProps } from "../types";
+import { editProfileProps } from "../types";
 
-const UserRequest = async (props: branchProps) => {
-
-// const updateUrl = "";
-// const addUrl = "/admin/branches";
-
-  const url = `${END_POINT.BASE_URL}/admin/branches`;
+const UserRequest = async (props: editProfileProps) => {
+  const url = `${END_POINT.BASE_URL}/update-profile`;
 
   const config = {
     headers: {
@@ -18,15 +14,14 @@ const UserRequest = async (props: branchProps) => {
   };
 
   const data = {
-    name: props.name,
-    email: props.email,
-    address_details: props.address_details,
+      name: props.name,
+      phone: props.phone,
   };
 
   const response = await axios.post(url, data, config);
   return response;
 };
 
-export const useCreateBranch = () => {
+export const useEditProfile = () => {
   return useMutation(UserRequest);
 };

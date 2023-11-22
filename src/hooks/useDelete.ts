@@ -5,7 +5,6 @@ import { END_POINT } from "src/config/environment";
 import { openNotification } from "src/utils/notification";
 import { IGeneralProps } from "src/types";
 
-
 interface IDProps {
     deleteEndPointUrl: string;
     queryKey: string;
@@ -24,7 +23,7 @@ interface IDProps {
     },
   };
 
-  const response = await axios.get(url, config);
+  const response = await axios.delete(url, config);
   return response;
 };
 
@@ -49,7 +48,7 @@ export const useDelete = ({ deleteEndPointUrl, queryKey }: IDProps) => {
           openNotification({
             title: "Success",
             state: "success",
-            description: "Deleted Successfully",
+            description: res.data.message,
             duration: 4.5,
           });
 

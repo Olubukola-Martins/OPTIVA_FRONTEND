@@ -1,6 +1,6 @@
 import { Form, Input, Modal } from "antd";
 import { IdentifierProps } from "src/types";
-import { useCreateBranch } from "../hooks/useCreateBranch";
+import { useCreateAndUpdateBranch } from "../hooks/useCreateAndUpdateBranch";
 import { openNotification } from "src/utils/notification";
 import {
   emailValidationRules,
@@ -16,7 +16,7 @@ import { useEffect } from "react";
 export const AddBranch = ({ handleClose, open, id }: IdentifierProps) => {
   const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
-  const { mutate, isLoading } = useCreateBranch();
+  const { mutate, isLoading } = useCreateAndUpdateBranch();
   const { data, isSuccess } = useGetSingleBranch({
     token,
     id: id as unknown as number,
@@ -35,7 +35,7 @@ export const AddBranch = ({ handleClose, open, id }: IdentifierProps) => {
 
   const handleSubmit = (data: any) => {
     mutate(
-      { ...data, token },
+      { ...data, token, id },
       {
         onError: (err: any) => {
           openNotification({
