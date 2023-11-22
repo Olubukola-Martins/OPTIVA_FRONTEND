@@ -27,8 +27,8 @@ const getData = async (): Promise<departmentProps[]> => {
 
 export const useFetchDepartment = () => {
   const queryData = useQuery([QUERY_KEY_FOR_DEPARTMENT], () => getData(), {
-    onError: (err: any) => {},
-    onSuccess: (data) => {},
+    onError: () => {},
+    onSuccess: () => {},
   });
 
   return queryData;

@@ -2,18 +2,18 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { userProfileProps } from "../types";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { useGetToken } from "src/hooks/useGetToken";
 
 export const QUERY_KEY_FOR_USER_PROFILE = "userProfile";
 
-const getData = async (props: {
-  token: string;
-}): Promise<userProfileProps> => {
+const getData = async (): Promise<userProfileProps> => {
+ const token = useGetToken()
+
   const url = `${END_POINT.BASE_URL}/get-profile`;
   const config = {
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${props.token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
   const res = await axios.get(url, config);
@@ -25,13 +25,12 @@ const getData = async (props: {
   return data;
 };
 export const useFetchUserProfile = () => {
-  const { token } = useGetUserInfo();
   const queryData = useQuery(
     [QUERY_KEY_FOR_USER_PROFILE],
-    () => getData({ token }),
+    () => getData(),
     {
-      onError: (err: any) => {},
-      onSuccess: (data) => {},
+      onError: () => {},
+      onSuccess: () => {},
     }
   );
 
