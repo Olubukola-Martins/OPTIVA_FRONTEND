@@ -2,16 +2,17 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { branchProps } from "../types";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { useGetToken } from "src/hooks/useGetToken";
 
 export const QUERY_KEY_FOR_BRANCHES = "branches";
 
-const getData = async (props: { token: string }): Promise<branchProps[]> => {
+const getData = async (): Promise<branchProps[]> => {
+  const token = useGetToken();
   const url = `${END_POINT.BASE_URL}/admin/branches`;
   const config = {
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${props.token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
   const res = await axios.get(url, config);
@@ -23,13 +24,12 @@ const getData = async (props: { token: string }): Promise<branchProps[]> => {
 };
 
 export const useFetchBranches = () => {
-  const { token } = useGetUserInfo();
   const queryData = useQuery(
     [QUERY_KEY_FOR_BRANCHES],
-    () => getData({ token }),
+    () => getData(),
     {
       onError: (err: any) => {},
-      onSuccess: (data) => {},
+      onSuccess: (data: any) => {},
     }
   );
 

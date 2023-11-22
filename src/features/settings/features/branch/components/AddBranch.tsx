@@ -7,7 +7,6 @@ import {
   generalValidationRules,
 } from "src/utils/formHelpers/validations";
 import { AppButton } from "src/components/button/AppButton";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { useQueryClient } from "react-query";
 import { QUERY_KEY_FOR_BRANCHES } from "../hooks/useFetchBranches";
 import { useGetSingleBranch } from "../hooks/useGetSingleBranch";
@@ -15,10 +14,8 @@ import { useEffect } from "react";
 
 export const AddBranch = ({ handleClose, open, id }: IdentifierProps) => {
   const queryClient = useQueryClient();
-  const { token } = useGetUserInfo();
   const { mutate, isLoading } = useCreateAndUpdateBranch();
   const { data, isSuccess } = useGetSingleBranch({
-    token,
     id: id as unknown as number,
   });
   const [form] = Form.useForm();
@@ -35,7 +32,7 @@ export const AddBranch = ({ handleClose, open, id }: IdentifierProps) => {
 
   const handleSubmit = (data: any) => {
     mutate(
-      { ...data, token, id },
+      { ...data, id },
       {
         onError: (err: any) => {
           openNotification({

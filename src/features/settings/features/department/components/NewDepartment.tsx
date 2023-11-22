@@ -5,8 +5,42 @@ import {
   generalValidationRules,
   textInputValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
+import { QUERY_KEY_FOR_DEPARTMENT } from "../hooks/useFetchDepartment";
+import { useQueryClient } from "react-query";
+import { openNotification } from "src/utils/notification";
+import { useCreateAndUpdateDepart } from "../hooks/useCreateAndUpdateDepart";
 
-export const NewDepartment = ({ handleClose, open }: IdentifierProps) => {
+export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
+  const queryClient = useQueryClient();
+  const {mutate, isLoading} = useCreateAndUpdateDepart()
+    const [form] = Form.useForm()
+  const handleSubmit = (data: any) => {
+    mutate(
+      { ...data, id },
+      {
+        onError: (err: any) => {
+          openNotification({
+            title: "Error",
+            state: "error",
+            description: err.response.data.message,
+            duration: 8.0,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            title: "Success",
+            state: "success",
+            description: res.data.message,
+            duration: 6.0,
+          });
+          form.resetFields();
+          queryClient.invalidateQueries([QUERY_KEY_FOR_DEPARTMENT]);
+          handleClose();
+        },
+      }
+    );
+  };
+
   return (
     <Modal
       open={open}
@@ -15,7 +49,7 @@ export const NewDepartment = ({ handleClose, open }: IdentifierProps) => {
       title="New Department"
       style={{ top: 15 }}
     >
-      <Form layout="vertical" requiredMark="optional">
+      <Form layout="vertical" requiredMark="optional" onFinish={handleSubmit}>
         <Form.Item name={"name"} label="Name" rules={generalValidationRules}>
           <Input />
         </Form.Item>
@@ -39,7 +73,7 @@ export const NewDepartment = ({ handleClose, open }: IdentifierProps) => {
         >
           <Input />
         </Form.Item>
-        <AppButton type="submit" />
+        <AppButton type="submit" isLoading={isLoading} />
       </Form>
     </Modal>
   );

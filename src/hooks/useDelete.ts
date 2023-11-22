@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "react-query";
-import { useGetUserInfo } from "./useGetUserInfo";
 import axios from "axios";
 import { END_POINT } from "src/config/environment";
 import { openNotification } from "src/utils/notification";
 import { IGeneralProps } from "src/types";
+import { useGetToken } from "./useGetToken";
 
 interface IDProps {
     deleteEndPointUrl: string;
@@ -12,10 +12,10 @@ interface IDProps {
 
  const handleDelete = async ({
   id,
-  token,
   deleteEndPointUrl,
 }: IGeneralProps) => {
   const url = `${END_POINT.BASE_URL}/${deleteEndPointUrl}${id}`;
+  const token = useGetToken();
   const config = {
     headers: {
       Accept: "application/json",
@@ -30,11 +30,10 @@ interface IDProps {
 export const useDelete = ({ deleteEndPointUrl, queryKey }: IDProps) => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation(handleDelete);
-  const { token } = useGetUserInfo();
 
   const removeData = (id: number) => {
     mutate(
-      { id, token, deleteEndPointUrl },
+      { id, deleteEndPointUrl },
       {
         onError: (err: any) => {
           openNotification({

@@ -5,7 +5,10 @@ import { IdentifierProps } from "src/types";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
 import { useEditProfile } from "../hooks/useEditProfile";
-import { QUERY_KEY_FOR_USER_PROFILE, useFetchUserProfile } from "../hooks/useFetchUserProfile";
+import {
+  QUERY_KEY_FOR_USER_PROFILE,
+  useFetchUserProfile,
+} from "../hooks/useFetchUserProfile";
 import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 
@@ -14,12 +17,11 @@ export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
   const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
   const { mutate, isLoading } = useEditProfile();
-  const {data, isSuccess} = useFetchUserProfile()  
+  const { data, isSuccess } = useFetchUserProfile();
   useEffect(() => {
     if (isSuccess) {
       form.setFieldsValue({
-        name: data.name,
-        phone: data.phone,
+        ...data,
       });
     } else {
       form.resetFields();
@@ -62,11 +64,7 @@ export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
       style={{ top: 15 }}
     >
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
-        <Form.Item
-          name="name"
-          label="Full Name"
-          rules={generalValidationRules}
-        >
+        <Form.Item name="name" label="Full Name" rules={generalValidationRules}>
           <Input />
         </Form.Item>
 

@@ -1,6 +1,5 @@
-import { IUserToken } from "src/types";
 
-export interface branchProps extends IUserToken {
+export interface branchProps {
   name: string;
   email: string;
   address_details: string;
