@@ -5,11 +5,27 @@ import { IdentifierProps } from "src/types";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
 import { useEditProfile } from "../hooks/useEditProfile";
+import { QUERY_KEY_FOR_USER_PROFILE, useFetchUserProfile } from "../hooks/useFetchUserProfile";
+import { useEffect } from "react";
+import { useQueryClient } from "react-query";
 
 export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
   const { mutate, isLoading } = useEditProfile();
+  const {data, isSuccess} = useFetchUserProfile()  
+  useEffect(() => {
+    if (isSuccess) {
+      form.setFieldsValue({
+        name: data.name,
+        phone: data.phone,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [form, data, isSuccess]);
+
   const handleSubmit = (data: any) => {
     mutate(
       { ...data, token },
@@ -31,6 +47,7 @@ export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
             duration: 6.0,
           });
           form.resetFields();
+          queryClient.invalidateQueries([QUERY_KEY_FOR_USER_PROFILE]);
         },
       }
     );
@@ -54,8 +71,8 @@ export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
         </Form.Item>
 
         <Form.Item
-          name="Phone Number"
-          label="phone"
+          name="phone"
+          label="Phone Number"
           rules={generalValidationRules}
         >
           <InputNumber className="w-full" />
