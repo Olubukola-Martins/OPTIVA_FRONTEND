@@ -1,45 +1,49 @@
 import { useState } from "react";
-import { NewDepartment } from "../components/NewDepartment";
 import { PageIntro } from "src/components/PageIntro";
-import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
+import { appRoute } from "src/config/routeMgt/routePaths";
+import { AddBranch } from "../components/AddBranch";
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { branchProps } from "../types";
 import {
-  QUERY_KEY_FOR_DEPARTMENT,
-  useFetchDepartment,
-} from "../hooks/useFetchDepartment";
-import { departmentProps } from "../types";
+  QUERY_KEY_FOR_BRANCHES,
+  useFetchBranches,
+} from "../hooks/useFetchBranches";
 import { useDelete } from "src/hooks/useDelete";
 import Popconfirm from "antd/lib/popconfirm";
 
-const Department = () => {
-  const [addDepartment, setAddDepartment] = useState(false);
-  const { data, isLoading } = useFetchDepartment();
-  const [departmentId, setDepartmentId] = useState<number>();
+const Branches = () => {
+  const [addBranch, setAddBranch] = useState(false);
+  const [branchId, setBranchId] = useState<number>();
+  const { data, isLoading } = useFetchBranches();
   const { removeData } = useDelete({
-    deleteEndPointUrl: "admin/departments/",
-    queryKey: QUERY_KEY_FOR_DEPARTMENT,
+    deleteEndPointUrl: "admin/branches/",
+    queryKey: QUERY_KEY_FOR_BRANCHES,
   });
 
-  const handleDepartment = (id: number) => {
-    setDepartmentId(id);
-    setAddDepartment(true);
+  const handleBranch = (id: number) => {
+    setBranchId(id);
+    setAddBranch(true);
   };
 
-  const handleAddDepartment = () => {
-    setDepartmentId(undefined);
-    setAddDepartment(true);
+  const handleAddBranch = () => {
+    setBranchId(undefined);
+    setAddBranch(true);
   };
 
-  const columns: ColumnsType<departmentProps> = [
+  const columns: ColumnsType<branchProps> = [
     {
       title: "Name",
       dataIndex: "name",
     },
     {
-      title: "head",
-      dataIndex: "head",
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Address",
+      dataIndex: "address_details",
     },
     {
       title: "Action",
@@ -51,12 +55,12 @@ const Department = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={() => handleDepartment(val.id)}>
+                <Menu.Item key="1" onClick={() => handleBranch(val.id)}>
                   Edit
                 </Menu.Item>
                 <Menu.Item key="2">
                   <Popconfirm
-                    title="Delete department"
+                    title="Delete branch"
                     description={`Are you sure to delete ${val.name}`}
                     onConfirm={() => removeData(val.id)}
                   >
@@ -74,35 +78,30 @@ const Department = () => {
   ];
   return (
     <>
-      <NewDepartment
-        id={departmentId}
-        open={addDepartment}
-        handleClose={() => setAddDepartment(false)}
+      <AddBranch
+        id={branchId}
+        open={addBranch}
+        handleClose={() => setAddBranch(false)}
       />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
-          title="Department"
-          description="Create, View & edit departments on the system"
+          title="Branches"
+          description="Create, View & edit branch on the system"
           linkBack={appRoute.settings}
         />
-
         <div>
-          <AppButton
-            label="Add New"
-            handleClick={() => handleAddDepartment()}
-          />
+          <AppButton label="Add New" handleClick={() => handleAddBranch()} />
         </div>
       </div>
-
       <Table
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
         dataSource={data}
-        loading={isLoading}
         // scroll={{ x: 500 }}
+        loading={isLoading}
       />
     </>
   );
 };
-2;
-export default Department;
+
+export default Branches;

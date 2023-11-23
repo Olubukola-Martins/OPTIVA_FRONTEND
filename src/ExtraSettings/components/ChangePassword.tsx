@@ -7,16 +7,14 @@ import {
 import { useChangePassword } from "../hooks/useChangePassword";
 import { AppButton } from "src/components/button/AppButton";
 import { openNotification } from "src/utils/notification";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 
 export const ChangePassword = ({ handleClose, open }: IdentifierProps) => {
   const [form] = Form.useForm();
-  const { token } = useGetUserInfo();
   const { mutate, isLoading } = useChangePassword();
 
   const handleSubmit = (data: any) => {
     mutate(
-      { ...data, token },
+      { ...data },
       {
         onError: (err: any) => {
           openNotification({

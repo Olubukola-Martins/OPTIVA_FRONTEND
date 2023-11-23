@@ -39,6 +39,9 @@ body {
 }
 
 main.Container {
-  transition: max-width 0.3s ease; 
+  transition: max-width 0.3s ease;
 }
 
+.ant-popconfirm-buttons .ant-btn-primary.ant-btn-sm {
+  background: red !important;
+}
