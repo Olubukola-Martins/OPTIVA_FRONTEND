@@ -48,6 +48,7 @@ import Department from "src/features/settings/features/department/pages/Departme
 import Employees from "src/features/settings/features/employees/pages/Employees";
 import Branches from "src/features/settings/features/branch/pages/Branches";
 import Roles from "src/features/settings/features/rolesAndPermissions/pages/Roles";
+import EmployeeAccount from "src/features/authentication/pages/EmployeeAccount";
 
 const routesArray = [
   {
@@ -180,6 +181,7 @@ export const AllRoutes = () => {
           <Route path={appRoute.login_in} element={<Login />} />
           <Route path={appRoute.forgot_password} element={<ForgotPassword />} />
           <Route path={appRoute.reset_password} element={<ResetPassword />} />
+          <Route path={appRoute.employee_account} element={<EmployeeAccount />} />
         </Routes>
       </GlobalContextProvider>
     </Router>
