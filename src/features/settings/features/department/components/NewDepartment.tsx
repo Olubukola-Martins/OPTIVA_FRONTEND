@@ -58,7 +58,7 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title="New Department"
+      title={`${id ? "Edit" : "New"} Department`}
       style={{ top: 15 }}
     >
       <Form layout="vertical" form={form} onFinish={handleSubmit}>
