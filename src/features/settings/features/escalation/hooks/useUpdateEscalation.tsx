@@ -1,8 +1,8 @@
-import { QUERY_KEY_ESCALATION, escalationURL } from './useAddEscalation';
-import { editItemData } from 'src/features/settings/assets/variablesForHooks';
-import { IEscalationBody } from 'src/features/settings/types/settingsType';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from 'react-query';
+import { QUERY_KEY_ESCALATION, escalationURL } from "./useAddEscalation";
+import { editItemData } from "src/features/settings/utils/settingsAPIHelpers";
+import { IEscalationBody } from "src/features/settings/types/settingsType";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
 
 const useUpdateEscalation = () => {
   const navigate = useNavigate();
@@ -36,5 +36,4 @@ const useUpdateEscalation = () => {
   return { editEscalation };
 };
 
-
-export default useUpdateEscalation
+export default useUpdateEscalation;

@@ -4,10 +4,28 @@ import { IdentifierProps } from "src/types";
 import { dependentsAgeList } from "../contants";
 import {
   generalValidationRules,
-  textInputValidationRules,
+  textInputValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
+import { useCreateEligibleDependents } from "../hooks/useCreateEligibleDependents";
+import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
+  const { addEligibleDependents } = useCreateEligibleDependents();
+  const handleNewDependent = (values) => {
+    console.log(values);
+    const extraConditions = values.extraConditions ? values.extraConditions.map(
+      (item) => ({other_condition:item.value})
+    ) : [];
+
+      addEligibleDependents({
+        dependant: values.dependent,
+        age_dependants: values.age.map((item) => ({ age_bracket: item })),
+        dependant_conditions: values.conditions ? [
+          { other_condition: values.conditions }, ...extraConditions ] : undefined
+    });
+    handleClose();
+  };
+
   return (
     <Modal
       open={open}
@@ -15,11 +33,7 @@ export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
       footer={null}
       title="Add Dependents"
     >
-      <Form
-        layout="vertical"
-        className="mt-4"
-        onFinish={(val) => console.log(val)}
-      >
+      <Form layout="vertical" className="mt-4" onFinish={handleNewDependent}>
         <Form.Item
           name="dependent"
           label="Dependent"
@@ -45,13 +59,55 @@ export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
 
         <Form.Item
           name="conditions"
-          label="Conditions"
-          rules={textInputValidationRules}
+          label="Condition"
+          rules={textInputValidationRulesOpt}
         >
           <Input placeholder="2 childless" />
         </Form.Item>
 
-        <AppButton type="submit" />
+        <Form.List name="extraConditions">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, fieldKey, ...restField }) => (
+                <div className="flex gap-2 w-full">
+                  <Form.Item
+                    {...restField}
+                    className="w-11/12"
+                    key={key}
+                    label="Condition"
+                    name={[name, "value"]}
+                    fieldKey={[fieldKey as number, "value"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input value!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Unmarried" />
+                  </Form.Item>
+                  <DeleteOutlined
+                    className="text-red-600 text-xl "
+                    onClick={() => remove(key)}
+                  />
+                </div>
+              ))}
+              <Form.Item>
+                <div className="flex gap-2">
+                  <PlusCircleOutlined
+                    className="text-green-600 text-2xl"
+                    onClick={() => add()}
+                  />
+                  <p className="font-semibold" onClick={() => add()}>
+                    Add New Condition
+                  </p>
+                </div>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+
+        <AppButton type="submit" label="Save"/>
       </Form>
     </Modal>
   );

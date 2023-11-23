@@ -5,19 +5,21 @@ import {
   documentRequirementURL,
 } from "./useCreateDocumentRequirement";
 import { IDocRequirementBody } from "src/features/settings/types/settingsType";
-import { editItemData } from "src/features/settings/assets/variablesForHooks";
+import { editItemData } from "src/features/settings/utils/settingsAPIHelpers";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { openNotification } from "src/utils/notification";
 
 const useUpdateDocumentRequirement = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { token, companyId } = useApiAuth();
-  const { mutate, isLoading, isSuccess } = useMutation(editItemData);
+  const { token } = useGetUserInfo();
+  const { mutate, isLoading } = useMutation(editItemData);
   const editDocumentRequirement = (
     id: number,
     newData: IDocRequirementBody
   ) => {
     mutate(
-      { url: `${documentRequirementURL}/${id}`, companyId, token, newData },
+      { url: `${documentRequirementURL}/${id}`,  token, newData },
       {
         onError: (error: any) => {
           openNotification({
@@ -28,7 +30,6 @@ const useUpdateDocumentRequirement = () => {
           });
         },
         onSuccess: (response: any) => {
-          //   navigate(appRoutes.recruitmentDashboard);
           openNotification({
             state: "success",
             title: "Success",
@@ -39,7 +40,7 @@ const useUpdateDocumentRequirement = () => {
       }
     );
   };
-  return { editDocumentRequirement };
+  return { editDocumentRequirement,isLoading };
 };
 
 export default useUpdateDocumentRequirement;

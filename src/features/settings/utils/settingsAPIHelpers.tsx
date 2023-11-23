@@ -1,22 +1,22 @@
 import axios from "axios";
+import { IUserToken } from "src/types";
 // import { ICurrentCompany } from "types";
 
 
-interface IPostProps extends ICurrentCompany {
+interface IPostProps extends IUserToken {
   newData: any;
   url: string;
 }
-interface IEditProps extends ICurrentCompany {
+interface IEditProps extends IUserToken {
   newData: any;
   url: string;
 }
 
-export const postItemData = async ({ newData, url }: IPostProps) => {
+export const postItemData = async ({ newData, url ,token}: IPostProps) => {
   const config = {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
-      "x-company-id": companyId,
     },
   };
 
@@ -24,15 +24,14 @@ export const postItemData = async ({ newData, url }: IPostProps) => {
   return response;
 };
 
-export const editItemData = async (props: IEditProps) => {
+export const editItemData = async ({ newData, url, token }: IEditProps) => {
   const config = {
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${props.token}`,
-      "x-company-id": props.companyId,
+      Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.put(props.url, props.newData, config);
+  const response = await axios.put(url, newData, config);
   return response;
 };

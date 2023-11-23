@@ -1,13 +1,15 @@
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Select, Table } from "antd";
+import { Form, Input, InputNumber, Select, Table } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import SuccessModal from "src/features/settings/components/SuccessModal";
+import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 
 interface DataRow {
   key: number;
@@ -20,6 +22,22 @@ const NewEscalation = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+    const { data: allRoles, isLoading: allRolesLoading } = useFetchAllItems({
+      queryKey: "roles",
+      urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
+    });
+    const { data: allEmployees, isLoading: allEmployeesLoading } =
+      useFetchAllItems({
+        queryKey: "employees",
+        urlEndPoint: `${END_POINT.BASE_URL}/admin/employees`,
+      });
+
+      const addAfterDropdown = [
+        { value: 1, label: "Hours" },
+        { value: 2, label: "Days" },
+        { value: 3, label: "Weeks" },
+      ];
+
   const escalateToItem = (key: number) => {
     return (
       <Form.Item
@@ -29,12 +47,14 @@ const NewEscalation = () => {
         <Select
           popupMatchSelectWidth={false}
           placeholder="Select Role"
-          options={[
-            { value: "Service Manager 1", label: "Service Manager 1" },
-            { value: "Service Manager 2", label: "Service Manager 2" },
-            { value: "Client Manager 1", label: "Client Manager 1" },
-            { value: "Client Manager 2", label: "Client Manager 2" },
-          ]}
+          // loading={allRolesLoading}
+          options={
+            allRoles?.data
+              ? allRoles?.data.map((role) => {
+                  return { label: role.name, value: role.id };
+                })
+              : []
+          }
         />
       </Form.Item>
     );
@@ -48,11 +68,14 @@ const NewEscalation = () => {
         <Select
           popupMatchSelectWidth={false}
           placeholder="Select Employee"
-          options={[
-            { value: "George Boyd", label: "George Boyd" },
-            { value: "Ade Tola", label: "Ade Tola" },
-            { value: "Toni Tones", label: "Toni Tones" },
-          ]}
+          loading={allEmployeesLoading}
+          options={
+            allEmployees?.data
+              ? allEmployees?.data.map((employee) => {
+                  return { label: employee.name, value: employee.id };
+                })
+              : []
+          }
         />
       </Form.Item>
     );
@@ -62,16 +85,9 @@ const NewEscalation = () => {
       <Form.Item
         name={`${key}-escalateAfter`}
         style={{ paddingBottom: 0, marginBottom: 0 }}
+        className="text-red-500 min-w-[150px]"
       >
-        <Select
-          placeholder="Select Duration"
-          popupMatchSelectWidth={false}
-          options={[
-            { value: "8 Hours", label: "8 Hours" },
-            { value: "2 Hours", label: "2 Hours" },
-            { value: "5 Hours", label: "5 Hours" },
-          ]}
-        />
+        <InputNumber min={0} addonAfter={<Select defaultValue={1} options={addAfterDropdown} />} />
       </Form.Item>
     );
   };
@@ -178,10 +194,10 @@ const NewEscalation = () => {
           layout="vertical"
           onFinish={onFinish}
           form={form}
-          className="px-[45px] max-md:px-4 max-xl:px-8 py-10 max-md:py-3 max-xl:py-6 flex flex-col"
+          className="px-[45px] max-md:px-4 max-xl:px-6 py-10 max-md:py-3 max-xl:py-6 flex flex-col"
         >
           <div className="flex flex-col lg:flex-row gap-2 justify-between lg:gap-10">
-            <div className="w-full">
+            <div className="w-3/4">
               <FormItem
                 label="Escalation Name"
                 name="escalationName"
@@ -195,13 +211,15 @@ const NewEscalation = () => {
                 className="sm:w-1/2 lg:w-full"
               >
                 <Select
-                  defaultValue={"Service Manager 2"}
-                  options={[
-                    { value: "Service Manager 1", label: "Service Manager 1" },
-                    { value: "Service Manager 2", label: "Service Manager 2" },
-                    { value: "Client Manager 1", label: "Client Manager 1" },
-                    { value: "Client Manager 2", label: "Client Manager 2" },
-                  ]}
+                  placeholder="Select Role"
+                  loading={allRolesLoading}
+                  options={allRoles?.data ? allRoles?.data.map((role)=>{return {label:role.name,value:role.id}}) : []}
+                  // options={[
+                  //   { value: "Service Manager 1", label: "Service Manager 1" },
+                  //   { value: "Service Manager 2", label: "Service Manager 2" },
+                  //   { value: "Client Manager 1", label: "Client Manager 1" },
+                  //   { value: "Client Manager 2", label: "Client Manager 2" },
+                  // ]}
                 />
               </FormItem>
               <FormItem
@@ -211,30 +229,48 @@ const NewEscalation = () => {
               >
                 <Select defaultValue={"Accept Client"} disabled={true} />
               </FormItem>
-              <FormItem label="Task Deadline" className="sm:w-1/2 lg:w-full">
-                <Select
+              <FormItem
+                label="Task Deadline"
+                name="deadline"
+                className="sm:w-1/2 lg:w-full"
+              >
+                <InputNumber
+                  min={0}
+                  addonAfter={
+                    <Select defaultValue={1} options={addAfterDropdown} />
+                  }
+                />
+
+                {/* <Select
                   defaultValue={"2 Hours"}
                   options={[
                     { value: "8 Hours", label: "8 Hours" },
                     { value: "2 Hours", label: "2 Hours" },
                   ]}
-                />
+                /> */}
               </FormItem>
             </div>
             <div>
               <FormItem
                 label="Select Reminder Frequecy"
                 name="reminderFrequency"
-                className="sm:w-1/2 "
+                className="sm:w-fit"
               >
-                <Select
+                <InputNumber
+                  min={0}
+                  addonAfter={
+                    <Select defaultValue={1} options={addAfterDropdown} />
+                  }
+                />
+
+                {/* <Select
                   defaultValue={"8 Hours"}
                   options={[
                     { value: "8 Hours", label: "8 Hours" },
                     { value: "2 Hours", label: "2 Hours" },
                     { value: "5 Hours", label: "5 Hours" },
                   ]}
-                />
+                /> */}
               </FormItem>
               <div>
                 <FormItem label="Escalation Levels" name="escalationLevels">
@@ -244,7 +280,8 @@ const NewEscalation = () => {
                     pagination={false}
                     size="small"
                     bordered
-                    scroll={{ x: 300 }}
+                    // className="max-w-[400px]"
+                    scroll={{ x: 250 }}
                   />
                 </FormItem>
                 <PlusCircleOutlined

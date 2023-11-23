@@ -1,20 +1,22 @@
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { postItemData } from "src/features/settings/assets/variablesForHooks";
+import { postItemData } from "src/features/settings/utils/settingsAPIHelpers";
 import { IEscalationBody } from "src/features/settings/types/settingsType";
+import { END_POINT } from "src/config/environment";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { openNotification } from "src/utils/notification";
 
 export const QUERY_KEY_ESCALATION = "Escalation";
-export const escalationURL = `${BASE_URL}/admin/escalation`;
+export const escalationURL = `${END_POINT.BASE_URL}/admin/escalation`;
 
 export const useAddEscalation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { token, companyId } = useApiAuth();
+  const { token,  } = useGetUserInfo();
   const { mutate, isLoading, isSuccess } = useMutation(postItemData);
   const addDocumentRequirement = (newData: IEscalationBody) => {
     mutate(
       {
-        companyId,
         url: escalationURL,
         token,
         newData,
@@ -47,4 +49,4 @@ export const useAddEscalation = () => {
   };
 };
 
-export default useAddEscalation
+export default useAddEscalation;

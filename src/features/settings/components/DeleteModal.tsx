@@ -57,7 +57,6 @@ const DeleteModal = ({
               </defs>
             </svg>
           </div>
-          {/* {component} */}
         </div>
         <div className="mb-4">
           <h4 className="text-center text-lg mb-[10px] font-semibold">
@@ -71,7 +70,13 @@ const DeleteModal = ({
             variant="transparent"
             handleClick={() => handleClose()}
           />
-          <AppButton label="Delete" handleClick={() => handleDelete()} />
+          <AppButton
+            label="Delete"
+            handleClick={() => {
+              handleDelete();
+              handleClose();
+            }}
+          />
         </div>
       </div>
     </Modal>

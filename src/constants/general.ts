@@ -29,7 +29,11 @@ export const CONDITIONS = [
     {
       label: "CSV",
       value: "csv",
+    },    {
+      label: "JPEG",
+      value: "jpeg",
     },
+
     // You can add more document types here
   ];
   
