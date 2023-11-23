@@ -15,7 +15,7 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
   const { mutate, isLoading } = useCreateAndUpdateDepart();
   const { data: branchData, isLoading: loadBrach } = useFetchBranches();
   const [form] = Form.useForm();
-  const {data, isSuccess} = useGetSingleDepartment({id: id as unknown as number})
+  const {data, isSuccess} = useGetSingleDepartment({id: id as number})
   useEffect(() => {
     if (isSuccess && id) {
       form.setFieldsValue({
