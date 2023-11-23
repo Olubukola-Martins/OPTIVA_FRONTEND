@@ -2,7 +2,6 @@ import Table, { ColumnsType } from "antd/es/table";
 import { Dropdown, Menu } from "antd";
 import { employeesProps } from "../types";
 
-
 const data: employeesProps[] = [];
 for (let i = 0; i < 3; i++) {
   data.push({
