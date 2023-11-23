@@ -5,7 +5,7 @@ import { departmentProps } from "../types";
 import { useGetToken } from "src/hooks/useGetToken";
 
 const UserRequest = async (props: departmentProps) => {
-const token = useGetToken()
+  const token = useGetToken();
 
   const updateUrl = `/admin/departments/${props.id}`;
   const addUrl = "/admin/departments";
@@ -20,7 +20,7 @@ const token = useGetToken()
   };
 
   const data = {
-    ...props
+    ...props,
   };
   const requestType = props.id ? axios.put : axios.post;
   const response = await requestType(url, data, config);
