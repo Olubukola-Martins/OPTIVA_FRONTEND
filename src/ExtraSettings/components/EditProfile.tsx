@@ -1,6 +1,5 @@
 import { Form, Input, InputNumber, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { IdentifierProps } from "src/types";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
@@ -15,7 +14,6 @@ import { useQueryClient } from "react-query";
 export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
-  const { token } = useGetUserInfo();
   const { mutate, isLoading } = useEditProfile();
   const { data, isSuccess } = useFetchUserProfile();
   useEffect(() => {
@@ -30,7 +28,7 @@ export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
 
   const handleSubmit = (data: any) => {
     mutate(
-      { ...data, token },
+      { ...data },
       {
         onError: (err: any) => {
           openNotification({

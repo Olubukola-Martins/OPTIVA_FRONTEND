@@ -1,12 +1,11 @@
-import { IUserToken } from "src/types";
 
-export interface changePasswordProps extends IUserToken {
+export interface changePasswordProps {
   old: string;
   password: string;
   password_confirmation: string;
 }
 
-export interface editProfileProps extends IUserToken {
+export interface editProfileProps {
   name: string;
   phone: string;
 }

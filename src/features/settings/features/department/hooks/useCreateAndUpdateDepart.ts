@@ -6,7 +6,6 @@ import { useGetToken } from "src/hooks/useGetToken";
 
 const UserRequest = async (props: departmentProps) => {
   const token = useGetToken();
-
   const updateUrl = `/admin/departments/${props.id}`;
   const addUrl = "/admin/departments";
   const acceptedUrl = props.id ? updateUrl : addUrl;
