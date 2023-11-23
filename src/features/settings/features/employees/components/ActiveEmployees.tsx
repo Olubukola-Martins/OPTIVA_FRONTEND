@@ -1,13 +1,22 @@
 import Table, { ColumnsType } from "antd/es/table";
-import { DataType } from "../../department/pages/Department";
 import { Dropdown, Menu } from "antd";
+import { employeesProps } from "../types";
+
+
+const data: employeesProps[] = [];
+for (let i = 0; i < 3; i++) {
+  data.push({
+    name: "Godswill Omenuko",
+    email: "godswill@gmail.com",
+    last_sent: "10th December 2009",
+    department_id: "CSI",
+    roles: [],
+    branches: []
+  });
+}
 
 export const ActiveEmployees = () => {
-  const columns: ColumnsType<DataType> = [
-    {
-      title: "Employee Id",
-      dataIndex: "id",
-    },
+  const columns: ColumnsType<employeesProps> = [
     {
       title: "Full Name",
       dataIndex: "name",
@@ -18,17 +27,21 @@ export const ActiveEmployees = () => {
     },
     {
       title: "Department",
-      dataIndex: "department",
+      dataIndex: "department_id",
     },
     {
       title: "Role",
       dataIndex: "role",
     },
     {
+      title: "Branch",
+      dataIndex: "branches",
+    },
+    {
       title: "Action",
       dataIndex: "action",
 
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -51,7 +64,7 @@ export const ActiveEmployees = () => {
       <Table
         className="bg-white rounded-md shadow border"
         columns={columns}
-        dataSource={[]}
+        dataSource={data}
         // scroll={{ x: 500 }}
       />
     </div>

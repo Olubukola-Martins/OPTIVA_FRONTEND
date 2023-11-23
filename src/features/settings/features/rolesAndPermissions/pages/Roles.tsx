@@ -82,7 +82,7 @@ const Roles = () => {
                   </p>
                 </div>
 
-                <button className="px-4 py-[5px] text-secondary bg-[#801D231A] rounded-2xl">
+                <button onClick={() => handleRole(item.id)} className="px-4 py-[5px] text-secondary bg-[#801D231A] rounded-2xl">
                   Add Permissions
                 </button>
               </div>

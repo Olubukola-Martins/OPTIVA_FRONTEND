@@ -9,7 +9,7 @@ import { NewEmployee } from "../components/NewEmployee";
 
 const Employees = () => {
   const [addEmployee, setAddEmployee] = useState(false);
-
+  
   const operations = (
     <div className="hidden lg:flex gap-4 w-full">
       <Input.Search placeholder="Search" className="w-1/2"></Input.Search>
