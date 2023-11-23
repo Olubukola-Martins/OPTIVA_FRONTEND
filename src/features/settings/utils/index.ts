@@ -15,6 +15,10 @@ export const settingsLink: settingsLinkProps[] = [
     link: appRoute.employees,
   },
   {
+    name: "Roles & Permissions",
+    link: appRoute.roles,
+  },
+  {
     name: "Define Eligible Dependents",
     link: appRoute.dependents,
   },

@@ -38,6 +38,7 @@ export const appRoute = {
   }),
   department: `/settings/department`,
   employees: `/settings/employees`,
+  roles: `/settings/roles`,
 
   // Applications
   applications: `/applications`,
