@@ -7,18 +7,19 @@ import { useState } from "react";
 import { SideBar } from "./SideBar";
 import avatar from "src/assets/user.png";
 import { SignOut } from "./SignOut";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { EditProfile } from "src/ExtraSettings/components/EditProfile";
 import { ChangePassword } from "src/ExtraSettings/components/ChangePassword";
 import { CurrentBranch } from "src/ExtraSettings/components/CurrentBranch";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
+import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export const Navbar = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
   const [passwordChange, setPasswordChange] = useState(false);
-  const { userInfo } = useGetUserInfo();
-  // const {data, isLoading} = useFetchBranches()
+  const { data: userInfo } = useFetchUserProfile();
 
   return (
     <>
@@ -72,7 +73,7 @@ export const Navbar = () => {
 
                     <div className="flex items-center gap-2">
                       <i className="ri-phone-line text-green-600"></i>
-                      <span> 09023865543 </span>
+                      <span>{userInfo?.phone}</span>
                     </div>
                   </div>
                 </div>
@@ -84,10 +85,10 @@ export const Navbar = () => {
                     <Icon icon="mingcute:user-4-line" className="text-xl" />
                     <span>Edit Profile</span>
                   </li>
-                  <li className="menuStyle">
+                  <Link to={appRoute.roles} className="menuStyle">
                     <Icon icon="mdi:user-badge-outline" className="text-xl" />
                     <span>Roles and Permission</span>
-                  </li>
+                  </Link>
 
                   <li className="menuStyle">
                     <Icon
@@ -96,18 +97,18 @@ export const Navbar = () => {
                     />
                     <span>Workflow</span>
                   </li>
-                  <li className="menuStyle">
+                  {/* <li className="menuStyle">
                     <Icon icon="mdi:partnership" className="text-xl" />
                     <span>International Partners</span>
-                  </li>
+                  </li> */}
                   <li className="menuStyle">
                     <Icon icon="mdi:company" className="text-xl" />
                     <span>Company Profile</span>
                   </li>
-                  <li className="menuStyle">
+                  {/* <li className="menuStyle">
                     <Icon icon="ion:key-outline" className="text-xl" />
                     <span>Enable 2FA</span>
-                  </li>
+                  </li> */}
                   <li
                     className="menuStyle"
                     onClick={() => setPasswordChange(true)}

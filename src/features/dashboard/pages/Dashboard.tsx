@@ -6,11 +6,10 @@ import introBg from ".././assets/introBg.png";
 import { LatestActivities } from "../components/LatestActivities";
 import { AppStatus } from "../components/AppStatus";
 import { PopularCountries } from "../components/PopularCountries";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 const Dashboard = () => {
-  const { userInfo } = useGetUserInfo();
-
+  const { data: userInfo } = useFetchUserProfile();
   return (
     <>
       <div className="flex items-center justify-between">

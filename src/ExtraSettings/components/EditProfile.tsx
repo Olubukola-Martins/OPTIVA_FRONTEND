@@ -48,6 +48,7 @@ export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_FOR_USER_PROFILE]);
+          handleClose()
         },
       }
     );
