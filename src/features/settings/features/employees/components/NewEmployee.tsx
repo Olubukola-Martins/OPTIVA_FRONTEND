@@ -9,7 +9,7 @@ export const NewEmployee = ({ handleClose, open }: IdentifierProps) => {
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title="New Department"
+      title="New Employee"
       style={{ top: 15 }}
     >
       <Form layout="vertical" requiredMark={false} className="mt-5">
