@@ -46,6 +46,7 @@ import ResetPassword from "src/features/authentication/pages/ResetPassword";
 import { GlobalContextProvider } from "src/stateManagement/GlobalContext";
 import Department from "src/features/settings/features/department/pages/Department";
 import Employees from "src/features/settings/features/employees/pages/Employees";
+import EditProgramType from "src/features/settings/features/program-types/pages/EditProgramType";
 
 const routesArray = [
   {
@@ -136,6 +137,10 @@ const routesArray = [
     element: <CreateProgramType />,
   },
   {
+    path: appRoute.editProgramType().format,
+    element: <EditProgramType />,
+  },
+  {
     path: appRoute.defineFeesAndAuthorizedPersons,
     element: <DefineFeesAndAuthorizedPersons />,
   },
@@ -148,7 +153,7 @@ const routesArray = [
   { path: appRoute.investment_route, element: <InvestmentRoute /> },
   { path: appRoute.app_template, element: <ApplicationTemplate /> },
   { path: appRoute.department, element: <Department /> },
-  { path: appRoute.employees, element: <Employees/> },
+  { path: appRoute.employees, element: <Employees /> },
 ];
 
 export const AllRoutes = () => {

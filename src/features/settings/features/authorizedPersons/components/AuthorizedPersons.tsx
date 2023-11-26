@@ -4,9 +4,13 @@ import React, { useEffect, useState } from "react";
 import DeleteIcon from "../assets/img/warning.png";
 import { AppButton } from "src/components/button/AppButton";
 import { useGetAuthorizedPersons } from "../hooks/useGetAuthorizedPersons";
-import { useDeleteAuthorizedPerson } from "../hooks/useDeleteAuthorizedPerson";
-import { handleDelete } from "src/utils/apiHelpers/handleDelete";
+import {
+  handleDelete,
+  useDeleteHandler,
+} from "src/features/settings/hooks/handleDelete";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { QUERY_KEY_FOR_MILESTONE } from "../../program-types/hooks/useGetMilestone";
 
 type DataSourceItem = {
   key: React.Key;
@@ -32,16 +36,21 @@ export const AuthorizedPersons = () => {
   const { data, isLoading } = useGetAuthorizedPersons();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
   const { token } = useGetUserInfo();
-  const [id, setId] = useState<number>();
+  const [authorizedId, setAuthorizedId] = useState<number>();
+
+  const { removeData, deleteIsLoading } = useDeleteHandler({
+    deleteEndPointUrl: "admin/milestone",
+    queryKey: QUERY_KEY_FOR_MILESTONE,
+  });
 
   const handleDeleteCheckbox = () => {
     console.log("Deleting rows:", selectedRowKeys);
-    showDeleteModal()
-    handleDelete({ id: id as unknown as number, deleteEndPointUrl: "/admin/authorized-person", token });
+    // showDeleteModal()
+    // handleDelete({ id: id as unknown as number, deleteEndPointUrl: "/admin/authorized-person", token });
 
     setSelectedRowKeys([]);
   };
- 
+
   useEffect(() => {
     if (data) {
       const authorizedPerson: DataSourceItem[] = data.map((item, index) => {
@@ -94,8 +103,8 @@ export const AuthorizedPersons = () => {
                 <Menu.Item
                   key="1"
                   onClick={() => {
+                    setAuthorizedId(val.key as unknown as number);
                     showDeleteModal();
-                    setId(val.key as unknown as number);
                   }}
                 >
                   Delete
@@ -155,30 +164,14 @@ export const AuthorizedPersons = () => {
       </Skeleton>
 
       {/* DELETE MODAL */}
-      <Modal
+      <DeleteModal
         open={isDeleteModalOpen}
-        footer={null}
+        header="Authorized Person"
+        text="authorized person"
         onCancel={handleDeleteModalCancel}
-      >
-        <img src={DeleteIcon} className="mx-auto" />
-        <h2 className="text-center font-bold py-1">
-          Delete Authorized Person(s)
-        </h2>
-        <p className="text-center py-2">
-          Are you sure you would like to delete this authorized person(s)?
-        </p>
-        <div className="py-3 flex items-center justify-center gap-4">
-          <AppButton
-            variant="transparent"
-            label="Cancel"
-            handleClick={handleDeleteModalCancel}
-          />
-          <AppButton
-            label="Delete"
-            // handleClick={() => removeAuthorizedPerson(0)}
-          />
-        </div>
-      </Modal>
+        onDelete={() => removeData(authorizedId as unknown as number)}
+        isLoading={deleteIsLoading}
+      />
     </>
   );
 };

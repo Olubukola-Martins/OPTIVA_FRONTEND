@@ -1,27 +1,69 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Dropdown, Form, Input, Menu, Modal, Select } from "antd";
+import { Dropdown, Menu, Skeleton } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AddInvestment } from "../components/AddInvestment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
+import {
+  QUERY_KEY_FOR_INVESTMENT_ROUTE,
+  useGetInvestmentRoute,
+} from "../hooks/useGetInvestmentRoute";
+import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
+import { EditInvestment } from "../components/EditInvestment";
+import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
 
 interface DataType {
   key: React.Key;
   sn: number;
   investmentName: string;
   country: string;
-  fees: string;
   dateCreated: string;
   lastModified: string;
 }
 
 const InvestmentRoute = () => {
+  // Get Request
+  const { data, isLoading } = useGetInvestmentRoute();
+  const [dataArray, setDataArray] = useState<DataType[]>([]);
+  const [id, setId] = useState<number>();
   const [addInvRoute, setAddInvRoute] = useState<boolean>(false);
+  const [editInvRoute, setEditInvRoute] = useState<boolean>(false);
+  const { removeData, deleteIsLoading } = useDeleteHandler({
+    deleteEndPointUrl: "admin/investment-route",
+    queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
+  });
+  const [editId, setEditId] = useState<number>();
+
+  useEffect(() => {
+    if (data) {
+      const investmentRoute: DataType[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          dateCreated: formatDate(item.created_at),
+          investmentName: item.investment_name,
+          lastModified: formatDate(item.updated_at),
+          country: item.country.country_name,
+        };
+      });
+      setDataArray(investmentRoute);
+    }
+  }, [data]);
+
+  // Delete Modal
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const showDeleteModal = () => {
+    setOpenDeleteModal(true);
+  };
+  const handleDeleteCancel = () => {
+    setOpenDeleteModal(false);
+  };
+
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
   const showImportModal = () => {
@@ -40,25 +82,6 @@ const InvestmentRoute = () => {
     setExportModal(false);
   };
 
-  // Edit Dependent Modal
-  const [openEditInvestmentModal, setOpenEditInvestmentModal] =
-    useState<boolean>(false);
-  const showEditInvestmentModal = () => {
-    setOpenEditInvestmentModal(true);
-  };
-  const handleEditInvestmentModalCancel = () => {
-    setOpenEditInvestmentModal(false);
-  };
-  const handleEditInvestmentSubmit = (val: any) => {};
-
-  // Delete Modal
-  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const showDeleteModal = () => {
-    setOpenDeleteModal(true);
-  };
-  const handleDeleteCancel = () => {
-    setOpenDeleteModal(false);
-  };
   const columns: ColumnsType<DataType> = [
     {
       title: "SN",
@@ -71,10 +94,6 @@ const InvestmentRoute = () => {
     {
       title: "Country",
       dataIndex: "country",
-    },
-    {
-      title: "Fees",
-      dataIndex: "fees",
     },
     {
       title: "Date Created",
@@ -93,10 +112,22 @@ const InvestmentRoute = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={showEditInvestmentModal}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setEditId(val.key as unknown as number);
+                    setEditInvRoute(true);
+                  }}
+                >
                   Edit
                 </Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    setId(val.key as unknown as number);
+                    showDeleteModal();
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu>
@@ -108,23 +139,17 @@ const InvestmentRoute = () => {
       ),
     },
   ];
-  const data: DataType[] = [];
-  for (let i = 0; i < 6; i++) {
-    data.push({
-      key: i,
-      sn: i + 1,
-      investmentName: "Real Estate",
-      country: "Grenada",
-      fees: "fee",
-      dateCreated: "dd/mm/yyyy",
-      lastModified: "dd/mm/yyyy",
-    });
-  }
+
   return (
     <>
       <AddInvestment
         open={addInvRoute}
         handleClose={() => setAddInvRoute(false)}
+      />
+      <EditInvestment
+        investmentId={editId as unknown as number}
+        open={editInvRoute}
+        handleClose={() => setEditInvRoute(false)}
       />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
@@ -150,12 +175,14 @@ const InvestmentRoute = () => {
         </div>
       </div>
 
-      <Table
-        className="bg-white rounded-md shadow border mt-8"
-        columns={columns}
-        dataSource={data}
-        scroll={{ x: 768 }}
-      />
+      <Skeleton loading={isLoading} active>
+        <Table
+          className="bg-white rounded-md shadow border mt-8"
+          columns={columns}
+          dataSource={dataArray}
+          scroll={{ x: 768 }}
+        />
+      </Skeleton>
 
       {/* Import Modal */}
       <ImportModal
@@ -169,48 +196,15 @@ const InvestmentRoute = () => {
         onCancel={handleExportCancel}
         header="Investment Routes"
       />
-      {/*EDIT DEPENDENT MODAL */}
-      <Modal
-        open={openEditInvestmentModal}
-        footer={null}
-        onCancel={handleEditInvestmentModalCancel}
-      >
-        <h2 className="text-center text-lg font-bold">Edit Dependent</h2>
-        <Form layout="vertical" onFinish={handleEditInvestmentSubmit}>
-          <Form.Item name="dependent" label="Dependent">
-            <Input size="large" />
-          </Form.Item>
-          <Form.Item name="dependentAge" label="Dependent Age">
-            <Select mode="multiple" size="large" />
-          </Form.Item>
-          <Form.Item name="otherConditions" label="Other Conditions">
-            <Select
-              size="large"
-              options={[
-                {
-                  label: "",
-                  value: "",
-                },
-              ]}
-            />
-          </Form.Item>
-          <div className="flex items-center justify-center gap-5">
-            <AppButton
-              label="Cancel"
-              type="reset"
-              handleClick={handleEditInvestmentModalCancel}
-              variant="transparent"
-            />
-            <AppButton label="Save" type="submit" />
-          </div>
-        </Form>
-      </Modal>
+
       {/* Delete Modal */}
       <DeleteModal
         open={openDeleteModal}
         header="Investment Route"
         text="investment route"
         onCancel={handleDeleteCancel}
+        onDelete={() => removeData(id as unknown as number)}
+        isLoading={deleteIsLoading}
       />
     </>
   );

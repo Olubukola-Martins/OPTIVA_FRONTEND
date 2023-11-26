@@ -1,29 +1,30 @@
-import { Dropdown, Menu, Modal, Table } from "antd";
+import { Dropdown, Menu, Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
-import { AppButton } from "src/components/button/AppButton";
-import DeleteIcon from "../assets/img/warning.png";
 import { useGetProgramType } from "../hooks/useGetProgramType";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 type DataSourceItem = {
   key: React.Key;
   sn: number;
-  country: string;
   programType: string;
-  investmentRoute: string;
-  eligibleDependent: string;
+  eligibleDependent: string[];
   applicationTemplate: string;
-  documentRequirements: string;
-  milestones: string;
+  documentRequirements: string[];
+  milestones: string[];
 };
 
 export const ProgramTypes = () => {
   // GET REQUEST
   const { data, isLoading } = useGetProgramType();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
-  const { token } = useGetUserInfo();
-  const [id, setId] = useState<number>();
+
+  const [openProgramModal, setOpenProgramModal] = useState<boolean>(false);
+  const showProgramModal = () => {
+    setOpenProgramModal(true);
+  };
 
   useEffect(() => {
     if (data) {
@@ -32,11 +33,14 @@ export const ProgramTypes = () => {
           key: item.id,
           sn: index + 1,
           programType: item.program_name,
-          eligibleDependent: item.eligibledependents,
+          eligibleDependent: item.eligibledependents.map(
+            (item) => item.dependant
+          ),
           applicationTemplate: item.program_link,
-          documentRequirements: item.documentrequirements,
-          milestones: item.milestones,
-         
+          documentRequirements: item.documentrequirements.map(
+            (item) => item.name
+          ),
+          milestones: item.milestones.map((item) => item.milestone),
         };
       });
       setDataArray(programType);
@@ -55,34 +59,24 @@ export const ProgramTypes = () => {
       key: "2",
     },
     {
-      title: "Country",
-      dataIndex: "country",
-      key: "3",
-    },
-    {
-      title: "Investment Route",
-      dataIndex: "investmentRoute",
-      key: "4",
-    },
-    {
       title: "Eligible Dependents",
       dataIndex: "eligibleDependent",
-      key: "5",
+      key: "3",
     },
     {
       title: "Application Template",
       dataIndex: "applicationTemplate",
-      key: "6",
+      key: "4",
     },
     {
       title: "Document Requirements",
       dataIndex: "documentRequirements",
-      key: "7",
+      key: "5",
     },
     {
       title: "Milestones",
       dataIndex: "milestones",
-      key: "8",
+      key: "6",
     },
     {
       title: "Action",
@@ -93,7 +87,17 @@ export const ProgramTypes = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">Edit</Menu.Item>
+                <Menu.Item key="1">
+                  {" "}
+                  <Link
+                    to={
+                      appRoute.editProgramType(val.key as unknown as number)
+                        .path
+                    }
+                  >
+                    Edit
+                  </Link>
+                </Menu.Item>
                 <Menu.Item key="2" onClick={showDeleteModal}>
                   Delete
                 </Menu.Item>
@@ -107,20 +111,6 @@ export const ProgramTypes = () => {
     },
   ];
 
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      milestones: "Lorem Ipsum, Lorem Ipsum",
-      programType: "Citizenship By Investment",
-      applicationTemplate: "Caribbean Template ",
-      country: "Grenada",
-      documentRequirements: "Passport",
-      eligibleDependent: "Parents",
-      investmentRoute: "Real Estate",
-    });
-  }
   // Delete Modal
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const showDeleteModal = () => {
@@ -132,42 +122,36 @@ export const ProgramTypes = () => {
   return (
     <>
       {/* TABLE */}
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        className="bg-white rounded-md shadow border mt-2"
-        scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
-      />
+      <Skeleton active loading={isLoading}>
+        <Table
+          columns={columns}
+          dataSource={dataArray}
+          className="bg-white rounded-md shadow border mt-2"
+          scroll={{ x: 600 }}
+          rowSelection={{
+            type: "checkbox",
+            onChange: (
+              selectedRowKeys: React.Key[],
+              selectedRows: DataSourceItem[]
+            ) => {
+              console.log(
+                `selectedRowKeys: ${selectedRowKeys}`,
+                "selectedRows: ",
+                selectedRows
+              );
+            },
+          }}
+        />
+      </Skeleton>
+
 
       {/* DELETE MODAL */}
-      <Modal open={openDeleteModal} onCancel={handleDeleteCancel} footer={null}>
-        <img src={DeleteIcon} className="mx-auto" />
-        <h2 className="text-center font-bold p-2">Delete Program Type</h2>
-        <p className="text-center">
-          Are you sure you would like to delete this program type?
-        </p>
-        <div className="flex items-center justify-center gap-5 mt-5">
-          <AppButton
-            label="Cancel"
-            handleClick={handleDeleteCancel}
-            variant="transparent"
-          />
-          <AppButton label="Delete" type="submit" />
-        </div>
-      </Modal>
+      <DeleteModal
+        header="Program Type"
+        text="program type?"
+        open={openDeleteModal}
+        onCancel={handleDeleteCancel}
+      />
     </>
   );
 };

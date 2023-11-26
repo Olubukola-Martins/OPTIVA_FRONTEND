@@ -2,12 +2,12 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
-import { ICountry } from "../types";
+import { IInvestmentRoute } from "../types";
 
-export const QUERY_KEY_FOR_COUNTRY = "country";
+export const QUERY_KEY_FOR_INVESTMENT_ROUTE = "investmentRoute";
 
-const getData = async (props: { token: string }):Promise<ICountry[]> => {
-  const url = `${END_POINT.BASE_URL}/admin/countries`;
+const getData = async (props: { token: string }):Promise<IInvestmentRoute[]> => {
+  const url = `${END_POINT.BASE_URL}/admin/investment-route`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -16,14 +16,14 @@ const getData = async (props: { token: string }):Promise<ICountry[]> => {
   };
 
   const res = await axios.get(url, config);
-  const data:ICountry[] = res.data.data
+  const data: IInvestmentRoute[] = res.data.data
   return data
 };
 
-export const useGetCountry = () => {
+export const useGetInvestmentRoute = () => {
   const { token } = useGetUserInfo();
   const queryData = useQuery(
-    [QUERY_KEY_FOR_COUNTRY],
+    [QUERY_KEY_FOR_INVESTMENT_ROUTE],
     () => getData({ token }),
     {
       onError: (err: any) => {},

@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
+import { Dropdown, Form, Input, Menu, Modal, Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -10,6 +10,12 @@ import DeleteIcon from "../assets/img/delete-icon.png";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { DeleteModal } from "src/components/modals/DeleteModal";
+import {
+  QUERY_KEY_FOR_APPLICATION_TEMPLATE,
+  useGetApplicationTemplate,
+} from "../hooks/useGetApplicationTemplate";
+import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
+import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
 
 interface DataSourceItem {
   key: React.Key;
@@ -20,6 +26,30 @@ interface DataSourceItem {
 }
 
 const ApplicationTemplate = () => {
+  const { data, isLoading } = useGetApplicationTemplate();
+  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+  const [templateId, setTemplateId] = useState<number>();
+
+  const { removeData, deleteIsLoading } = useDeleteHandler({
+    deleteEndPointUrl: "admin/templates",
+    queryKey: QUERY_KEY_FOR_APPLICATION_TEMPLATE,
+  });
+
+  useEffect(() => {
+    if (data) {
+      const applicationTemplate: DataSourceItem[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          datecreated: formatDate(item.created_at),
+          lastModified: formatDate(item.updated_at),
+          templateName: item.template_name,
+        };
+      });
+      setDataArray(applicationTemplate);
+    }
+  }, [data]);
+
   const columns: ColumnsType<DataSourceItem> = [
     {
       title: "Template Name",
@@ -45,7 +75,13 @@ const ApplicationTemplate = () => {
                 <Menu.Item key="1">Edit</Menu.Item>
 
                 <Menu.Item key="2">Duplicate</Menu.Item>
-                <Menu.Item key="3" onClick={showDeleteModal}>
+                <Menu.Item
+                  key="3"
+                  onClick={() => {
+                    setTemplateId(val.key as unknown as number);
+                    showDeleteModal();
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu>
@@ -57,17 +93,6 @@ const ApplicationTemplate = () => {
       ),
     },
   ];
-
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      templateName: "Template",
-      datecreated: "dd/mm/yyyy",
-      lastModified: "dd/mm/yyyy",
-    });
-  }
 
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
@@ -132,40 +157,42 @@ const ApplicationTemplate = () => {
         header=" Application Template(s)"
       />
       {/* Export Modal */}
-
       <ExportModal
         open={exportModal}
         onCancel={handleExportCancel}
         header=" Application Template(s)"
       />
       {/* Delete Modal */}
-
       <DeleteModal
         open={openDeleteModal}
         onCancel={handleDeleteCancel}
         header="Application Template"
         text="template"
+        onDelete={() => removeData(templateId as unknown as number)}
+        isLoading={deleteIsLoading}
       />
       {/* TABLE */}
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        className="bg-white rounded-md shadow border mt-2"
-        scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
-      />
+      <Skeleton active loading={isLoading}>
+        <Table
+          columns={columns}
+          dataSource={dataArray}
+          className="bg-white rounded-md shadow border mt-2"
+          scroll={{ x: 600 }}
+          rowSelection={{
+            type: "checkbox",
+            onChange: (
+              selectedRowKeys: React.Key[],
+              selectedRows: DataSourceItem[]
+            ) => {
+              console.log(
+                `selectedRowKeys: ${selectedRowKeys}`,
+                "selectedRows: ",
+                selectedRows
+              );
+            },
+          }}
+        />
+      </Skeleton>
     </>
   );
 };

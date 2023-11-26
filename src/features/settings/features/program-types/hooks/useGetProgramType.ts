@@ -2,11 +2,11 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
-import { IData } from "../types";
+import { IProgram } from "../types";
 
 export const QUERY_KEY_FOR_PROGRAM_TYPE = "programType";
 
-const getData = async (props: { token: string }):Promise<IData[]> => {
+const getData = async (props: { token: string }):Promise<IProgram[]> => {
   const url = `${END_POINT.BASE_URL}/admin/programtypes`;
   const config = {
     headers: {
@@ -16,7 +16,7 @@ const getData = async (props: { token: string }):Promise<IData[]> => {
   };
 
   const res = await axios.get(url, config);
-  const data: IData[] = res.data.data
+  const data: IProgram[] = res.data.data
   return data
 };
 

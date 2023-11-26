@@ -27,7 +27,7 @@ export const appRoute = {
   documentRequirements: `/settings/documentsRequirements`,
   applicationTemplate: `/settings/applicationTemplate`,
   newApplicationTemplate: `/settings/newApplicationTemplate`,
-  countryMilestonesProgram: `/settings/ countryMilestonesProgram`,
+  countryMilestonesProgram: `/settings/countryMilestonesProgram`,
   createProgramType: `/settings/createProgramRoute`,
   defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
   addFees: `/settings/addfees`,

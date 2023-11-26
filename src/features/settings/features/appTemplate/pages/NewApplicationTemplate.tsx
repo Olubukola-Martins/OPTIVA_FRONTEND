@@ -22,7 +22,7 @@ const NewApplicationTemplate = () => {
       <PageIntro
         title="New Application Template "
         description="Create new application template on the system"
-        linkBack={appRoute.settings}
+        linkBack={appRoute.app_template}
       />
       <Form form={form} onFinish={handleSubmit} layout="vertical">
         <div className="flex gap-5 border rounded p-5">
