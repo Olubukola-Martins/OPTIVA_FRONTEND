@@ -1,7 +1,7 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Drawer, Input } from "antd";
 import { Icon } from "@iconify/react";
-import { Badge, Select, Dropdown } from "antd";
+import { Badge, Dropdown } from "antd";
 import logo from "src/assets/miniLogo.png";
 import { useState } from "react";
 import { SideBar } from "./SideBar";
@@ -10,6 +10,7 @@ import { SignOut } from "./SignOut";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { EditProfile } from "src/ExtraSettings/components/EditProfile";
 import { ChangePassword } from "src/ExtraSettings/components/ChangePassword";
+import { CurrentBranch } from "src/ExtraSettings/components/CurrentBranch";
 
 export const Navbar = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
@@ -17,6 +18,7 @@ export const Navbar = () => {
   const [openLogout, setOpenLogout] = useState(false);
   const [passwordChange, setPasswordChange] = useState(false);
   const { userInfo } = useGetUserInfo();
+  // const {data, isLoading} = useFetchBranches()
 
   return (
     <>
@@ -43,25 +45,7 @@ export const Navbar = () => {
           />
         </div>
         <div className="flex items-center gap-x-5 text-gray-600">
-          <Select
-            placeholder="Select branch"
-            options={[
-              {
-                value: 1,
-                label: "Abuja branch",
-              },
-              {
-                value: 2,
-                label: "Lagos branch",
-              },
-            ]}
-            style={{
-              borderRadius: "7px",
-              border: "1.5px solid var(--app-color-primary)",
-              width: "150px",
-            }}
-            className="lg:flex hidden"
-          />
+          <CurrentBranch />
           <Icon icon="tabler:search" className="lg:hidden flex text-xl" />
           <Badge dot>
             <Icon icon="radix-icons:bell" className="text-xl font-medium" />

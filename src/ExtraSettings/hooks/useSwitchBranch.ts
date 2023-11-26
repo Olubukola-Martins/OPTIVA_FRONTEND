@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
-import { changePasswordProps } from "../types";
 import { useGetToken } from "src/hooks/useGetToken";
 
-const UserRequest = async (props: changePasswordProps) => {
+const UserRequest = async (branch_id: number) => {
   const token = useGetToken();
-  const url = `${END_POINT.BASE_URL}/change-password`;
+
+  const url = `${END_POINT.BASE_URL}/admin/current-branch`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -15,13 +15,13 @@ const UserRequest = async (props: changePasswordProps) => {
   };
 
   const data = {
-    ...props,
+    branch_id: branch_id,
   };
 
   const response = await axios.post(url, data, config);
   return response;
 };
 
-export const useChangePassword = () => {
+export const useSwitchBranch = () => {
   return useMutation(UserRequest);
 };

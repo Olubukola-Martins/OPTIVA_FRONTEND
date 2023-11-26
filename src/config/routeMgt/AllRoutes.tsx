@@ -46,6 +46,8 @@ import ResetPassword from "src/features/authentication/pages/ResetPassword";
 import { GlobalContextProvider } from "src/stateManagement/GlobalContext";
 import Department from "src/features/settings/features/department/pages/Department";
 import Employees from "src/features/settings/features/employees/pages/Employees";
+import Branches from "src/features/settings/features/branch/pages/Branches";
+import Roles from "src/features/settings/features/rolesAndPermissions/pages/Roles";
 import EditProgramType from "src/features/settings/features/program-types/pages/EditProgramType";
 
 const routesArray = [
@@ -154,6 +156,8 @@ const routesArray = [
   { path: appRoute.app_template, element: <ApplicationTemplate /> },
   { path: appRoute.department, element: <Department /> },
   { path: appRoute.employees, element: <Employees /> },
+  { path: appRoute.branches, element: <Branches /> },
+  { path: appRoute.roles, element: <Roles  /> },
 ];
 
 export const AllRoutes = () => {

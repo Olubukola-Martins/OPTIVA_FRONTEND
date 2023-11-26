@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
-import { changePasswordProps } from "../types";
+import { editProfileProps } from "../types";
 import { useGetToken } from "src/hooks/useGetToken";
 
-const UserRequest = async (props: changePasswordProps) => {
+const UserRequest = async (props: editProfileProps) => {
   const token = useGetToken();
-  const url = `${END_POINT.BASE_URL}/change-password`;
+  const url = `${END_POINT.BASE_URL}/update-profile`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -22,6 +22,6 @@ const UserRequest = async (props: changePasswordProps) => {
   return response;
 };
 
-export const useChangePassword = () => {
+export const useEditProfile = () => {
   return useMutation(UserRequest);
 };
