@@ -12,14 +12,31 @@ import { useFetchBranches } from "../../branch/hooks/useFetchBranches";
 import { useFetchRoles } from "../../rolesAndPermissions/hooks/useFetchRoles";
 import { QUERY_KEY_FOR_EMPLOYEES } from "../hooks/useFetchEmployees";
 import { useQueryClient } from "react-query";
+import { useGetSingleEmployee } from "../hooks/useGetSingleEmployee";
+import { useEffect } from "react";
 
 export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
   const [form] = Form.useForm();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading: loadAddEmp } = useCreateAndUpdateEmployee();
   const { data: departData, isLoading: loadDepart } = useFetchDepartment();
   const { data: branchData, isLoading: loadBranch } = useFetchBranches();
   const { data: rolesData, isLoading: loadRole } = useFetchRoles();
+  const { data, isSuccess } = useGetSingleEmployee({ id: id as number });
+  const branches = data?.user?.branches.map((item) => item.id);
+  const roles = data?.user?.roles.map((item) => item.id);
+  useEffect(() => {
+    if (isSuccess && id) {
+      form.setFieldsValue({
+        ...data,
+        branches,
+        roles,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [form, id, data, isSuccess]);
 
   const handleSubmit = (data: any) => {
     mutate(
@@ -63,22 +80,6 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
         form={form}
       >
         <Form.Item
-          name="branches"
-          label="Branch"
-          rules={generalValidationRules}
-        >
-          <Select
-            placeholder="Select"
-            options={branchData?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-            loading={loadBranch}
-            allowClear
-            mode="multiple"
-          />
-        </Form.Item>
-        <Form.Item
           name="name"
           label="Employee Name"
           rules={generalValidationRules}
@@ -88,18 +89,37 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
         <Form.Item name="email" label="Email" rules={emailValidationRules}>
           <Input />
         </Form.Item>
-        <Form.Item name="roles" label="Roles" rules={generalValidationRules}>
-          <Select
-            placeholder="Select"
-            options={rolesData?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-            loading={loadRole}
-            allowClear
-            mode="multiple"
-          />
-        </Form.Item>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Form.Item
+            name="branches"
+            label="Branch"
+            rules={generalValidationRules}
+          >
+            <Select
+              placeholder="Select"
+              options={branchData?.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              loading={loadBranch}
+              allowClear
+              mode="multiple"
+            />
+          </Form.Item>
+          <Form.Item name="roles" label="Roles" rules={generalValidationRules}>
+            <Select
+              placeholder="Select"
+              options={rolesData?.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+              loading={loadRole}
+              allowClear
+              mode="multiple"
+            />
+          </Form.Item>
+        </div>
         <Form.Item
           name="department_id"
           label="Department"

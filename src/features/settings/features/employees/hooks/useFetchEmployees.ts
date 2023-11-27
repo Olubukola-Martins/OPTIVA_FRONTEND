@@ -6,9 +6,9 @@ import { useGetToken } from "src/hooks/useGetToken";
 
 export const QUERY_KEY_FOR_EMPLOYEES = "departments";
 
-const getData = async (): Promise<employeesProps[]> => {
+const getData = async (endpoint: string): Promise<employeesProps[]> => {
   const token = useGetToken();
-  const url = `${END_POINT.BASE_URL}/admin/active-employees`;
+  const url = `${END_POINT.BASE_URL}/admin/${endpoint}`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -16,21 +16,23 @@ const getData = async (): Promise<employeesProps[]> => {
     },
   };
   const res = await axios.get(url, config);
-  
-  const data: employeesProps[] = res.data.data.map(
-    (item: employeesProps) => ({
-      ...item,
-    })
-  );
+
+  const data: employeesProps[] = res.data.data.map((item: employeesProps) => ({
+    ...item,
+  }));
 
   return data;
 };
 
-export const useFetchEmployees = () => {
-  const queryData = useQuery([QUERY_KEY_FOR_EMPLOYEES], () => getData(), {
-    onError: () => {},
-    onSuccess: () => {},
-  });
+export const useFetchEmployees = (endpoint: string) => {
+  const queryData = useQuery(
+    [QUERY_KEY_FOR_EMPLOYEES, endpoint],
+    () => getData(endpoint),
+    {
+      onError: () => {},
+      onSuccess: () => {},
+    }
+  );
 
   return queryData;
 };

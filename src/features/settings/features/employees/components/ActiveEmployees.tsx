@@ -2,10 +2,14 @@ import Table, { ColumnsType } from "antd/es/table";
 import { Dropdown, Menu } from "antd";
 import { employeesProps } from "../types";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
+import { useHandleUpdate } from "../hooks/useHandleUpdate";
+import { NewEmployee } from "./NewEmployee";
 
 export const ActiveEmployees = () => {
-  const {data, isLoading} = useFetchEmployees()
-  
+  const { data, isLoading } = useFetchEmployees("active-employees");
+  const { handleEmployee, addEmployee, setAddEmployee, employeeId } =
+    useHandleUpdate();
+
   const columns: ColumnsType<employeesProps> = [
     {
       title: "Full Name",
@@ -18,7 +22,7 @@ export const ActiveEmployees = () => {
     {
       title: "Department",
       dataIndex: "department_id",
-      render: (_, val) => <span>{val?.department?.name}</span>
+      render: (_, val) => <span>{val?.department?.name}</span>,
     },
     {
       title: "Role",
@@ -32,13 +36,15 @@ export const ActiveEmployees = () => {
       title: "Action",
       dataIndex: "action",
 
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">Edit</Menu.Item>
+                <Menu.Item key="1" onClick={() => handleEmployee(val.id)}>
+                  Edit
+                </Menu.Item>
                 <Menu.Item key="2">Delete</Menu.Item>
               </Menu>
             }
@@ -52,8 +58,13 @@ export const ActiveEmployees = () => {
 
   return (
     <div>
+      <NewEmployee
+        id={employeeId}
+        open={addEmployee}
+        handleClose={() => setAddEmployee(false)}
+      />
       <Table
-        className="bg-white rounded-md shadow border"
+        className="bg-white rounded-md shadow border overflow-x-hidden"
         columns={columns}
         dataSource={data}
         loading={isLoading}

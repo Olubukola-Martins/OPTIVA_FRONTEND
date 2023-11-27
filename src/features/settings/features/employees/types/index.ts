@@ -1,3 +1,6 @@
+import { branchProps } from "../../branch/types";
+import { rolesProps } from "../../rolesAndPermissions/types";
+
 export interface employeesProps {
   id: number;
   name: string;
@@ -8,5 +11,9 @@ export interface employeesProps {
   branches: number[];
   department: {
     name: string;
+  };
+  user: {
+    branches: branchProps[];
+    roles: rolesProps[];
   };
 }
