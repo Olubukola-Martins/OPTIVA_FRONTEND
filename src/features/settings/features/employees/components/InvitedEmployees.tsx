@@ -2,6 +2,7 @@ import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { employeesProps } from "../types";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
+import dayjs from "dayjs";
 
 export const InvitedEmployees = () => {
   const { data, isLoading } = useFetchEmployees("inactive-employees");
@@ -22,14 +23,47 @@ export const InvitedEmployees = () => {
     {
       title: "Role",
       dataIndex: "role",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                {val?.user?.roles?.map((item) => (
+                  <Menu.Item key={item.id}>{item.name}</Menu.Item>
+                ))}
+              </Menu>
+            }
+          >
+            <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
+          </Dropdown>
+        </div>
+      ),
     },
     {
       title: "Branch",
       dataIndex: "branches",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                {val?.user?.branches?.map((item) => (
+                  <Menu.Item key={item.id}>{item.name}</Menu.Item>
+                ))}
+              </Menu>
+            }
+          >
+            <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
+          </Dropdown>
+        </div>
+      ),
     },
     {
       title: "Created at",
       dataIndex: "last_sent",
+      render: (_, val) => <span> {dayjs(val?.created_at).format("DD MMMM YYYY")}</span>
     },
 
     {

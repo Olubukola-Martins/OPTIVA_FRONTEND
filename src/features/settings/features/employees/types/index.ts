@@ -16,4 +16,5 @@ export interface employeesProps {
     branches: branchProps[];
     roles: rolesProps[];
   };
+  created_at: string;
 }

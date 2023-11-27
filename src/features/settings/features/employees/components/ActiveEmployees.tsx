@@ -27,10 +27,42 @@ export const ActiveEmployees = () => {
     {
       title: "Role",
       dataIndex: "role",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                {val?.user?.roles?.map((item) => (
+                  <Menu.Item key={item.id}>{item.name}</Menu.Item>
+                ))}
+              </Menu>
+            }
+          >
+            <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
+          </Dropdown>
+        </div>
+      ),
     },
     {
       title: "Branch",
       dataIndex: "branches",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                {val?.user?.branches?.map((item) => (
+                  <Menu.Item key={item.id}>{item.name}</Menu.Item>
+                ))}
+              </Menu>
+            }
+          >
+            <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
+          </Dropdown>
+        </div>
+      ),
     },
     {
       title: "Action",
