@@ -10,7 +10,8 @@ for (let i = 0; i < 3; i++) {
     last_sent: "10th December 2009",
     department_id: "CSI",
     roles: [],
-    branches: []
+    branches: [],
+    id: 0
   });
 }
 
