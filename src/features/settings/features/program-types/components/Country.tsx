@@ -39,7 +39,7 @@ export const Country = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -79,7 +79,10 @@ export const Country = () => {
   const handleCountryModalCancel = () => {
     setOpenCountryModal(false);
   };
-  const handleEditCountrySubmit = (val: any) => {};
+  const handleEditCountrySubmit = (val: any) => {
+    console.log(val);
+    
+  };
 
   // Add Success
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
