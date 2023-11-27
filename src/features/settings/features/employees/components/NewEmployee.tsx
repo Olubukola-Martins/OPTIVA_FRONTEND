@@ -10,9 +10,12 @@ import { openNotification } from "src/utils/notification";
 import { useFetchDepartment } from "../../department/hooks/useFetchDepartment";
 import { useFetchBranches } from "../../branch/hooks/useFetchBranches";
 import { useFetchRoles } from "../../rolesAndPermissions/hooks/useFetchRoles";
+import { QUERY_KEY_FOR_EMPLOYEES } from "../hooks/useFetchEmployees";
+import { useQueryClient } from "react-query";
 
 export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient()
   const { mutate, isLoading: loadAddEmp } = useCreateAndUpdateEmployee();
   const { data: departData, isLoading: loadDepart } = useFetchDepartment();
   const { data: branchData, isLoading: loadBranch } = useFetchBranches();
@@ -38,7 +41,7 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
             duration: 6.0,
           });
           form.resetFields();
-          // queryClient.invalidateQueries([QUERY_KEY_FOR_DEPARTMENT]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_EMPLOYEES]);
           handleClose();
         },
       }

@@ -1,21 +1,11 @@
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { employeesProps } from "../types";
+import { useFetchEmployees } from "../hooks/useFetchEmployees";
 
-
-const data: employeesProps[] = [];
-for (let i = 0; i < 3; i++) {
-  data.push({
-    name: "Peter Smith",
-    email: "peter@gmail.com",
-    last_sent: "10th December 2009",
-    department_id: "Dev",
-    roles: [],
-    branches: []
-  });
-}
 
 export const InvitedEmployees = () => {
+  const {data, isLoading} = useFetchEmployees()
     const columns: ColumnsType<employeesProps> = [
         {
           title: "Full Name",
@@ -28,6 +18,7 @@ export const InvitedEmployees = () => {
         {
           title: "Department",
           dataIndex: "department_id",
+          render: (_, val) => <span>{val?.department?.name}</span>
         },
         {
           title: "Role",
@@ -65,7 +56,8 @@ export const InvitedEmployees = () => {
         className="bg-white rounded-md shadow border"
         columns={columns}
         dataSource={data}
-        // scroll={{ x: 500 }}
+        loading={isLoading}
+        scroll={{ x: 800 }}
       />
     </div>
   )

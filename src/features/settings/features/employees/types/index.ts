@@ -6,4 +6,7 @@ export interface employeesProps {
   department_id: string;
   roles: number[];
   branches: number[];
+  department: {
+    name: string;
+  };
 }
