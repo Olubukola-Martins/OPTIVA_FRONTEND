@@ -84,10 +84,10 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
           label="Employee Name"
           rules={generalValidationRules}
         >
-          <Input />
+          <Input placeholder="Full name"/>
         </Form.Item>
         <Form.Item name="email" label="Email" rules={emailValidationRules}>
-          <Input />
+          <Input placeholder="Employee email"/>
         </Form.Item>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
