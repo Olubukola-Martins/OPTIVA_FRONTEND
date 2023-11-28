@@ -1,56 +1,100 @@
 import { Dropdown, Menu, Table } from "antd";
-import { DataType } from "../../department/pages/Department";
 import { ColumnsType } from "antd/es/table";
-
+import { employeesProps } from "../types";
+import { useFetchEmployees } from "../hooks/useFetchEmployees";
+import dayjs from "dayjs";
 
 export const InvitedEmployees = () => {
-    const columns: ColumnsType<DataType> = [
-        {
-          title: "Employee Id",
-          dataIndex: "id",
-        },
-        {
-          title: "Full Name",
-          dataIndex: "name",
-        },
-        {
-          title: "email",
-          dataIndex: "email",
-        },
-        {
-          title: "Last sent",
-          dataIndex: "date",
-        },
-      
-        {
-          title: "Action",
-          dataIndex: "action",
-    
-          render: (_, val) => (
-            <div>
-              <Dropdown
-                trigger={["click"]}
-                overlay={
-                  <Menu>
-                    <Menu.Item key="1">Resend Invite</Menu.Item>
-                    <Menu.Item key="2">Delete</Menu.Item>
-                  </Menu>
-                }
-              >
-                <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-              </Dropdown>
-            </div>
-          ),
-        },
-      ];
+  const { data, isLoading } = useFetchEmployees("inactive-employees");
+  const columns: ColumnsType<employeesProps> = [
+    {
+      title: "Full Name",
+      dataIndex: "name",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Department",
+      dataIndex: "department_id",
+      render: (_, val) => <span>{val?.department?.name}</span>,
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                {val?.user?.roles?.map((item) => (
+                  <Menu.Item key={item.id}>{item.name}</Menu.Item>
+                ))}
+              </Menu>
+            }
+          >
+            <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
+          </Dropdown>
+        </div>
+      ),
+    },
+    {
+      title: "Branch",
+      dataIndex: "branches",
+      render: (_, val) => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                {val?.user?.branches?.map((item) => (
+                  <Menu.Item key={item.id}>{item.name}</Menu.Item>
+                ))}
+              </Menu>
+            }
+          >
+            <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
+          </Dropdown>
+        </div>
+      ),
+    },
+    {
+      title: "Created at",
+      dataIndex: "last_sent",
+      render: (_, val) => <span> {dayjs(val?.created_at).format("DD MMMM YYYY")}</span>
+    },
+
+    {
+      title: "Action",
+      dataIndex: "action",
+
+      render: () => (
+        <div>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                <Menu.Item key="1">Send Reminder</Menu.Item>
+              </Menu>
+            }
+          >
+            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
+          </Dropdown>
+        </div>
+      ),
+    },
+  ];
   return (
-    <div>
-         <Table
-        className="bg-white rounded-md shadow border"
+    <div className="overflow-x-hidden">
+      <Table
+        className="bg-white rounded-md shadow border overflow-x-hidden"
         columns={columns}
-        dataSource={[]}
-        // scroll={{ x: 500 }}
+        dataSource={data}
+        loading={isLoading}
+        scroll={{ x: 800 }}
       />
     </div>
-  )
-}
+  );
+};

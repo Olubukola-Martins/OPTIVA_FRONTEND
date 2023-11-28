@@ -18,7 +18,6 @@ import TimelineExtensions from "src/features/applications/pages/TimelineExtensio
 import ProcessingStrategyAndSteps from "src/features/applications/pages/ProcessingStrategyAndSteps";
 import Comments from "src/features/applications/pages/Comments";
 import Meetings from "src/features/meetings/pages/Meetings";
-
 import { RequireAuth } from "react-auth-kit";
 import NewApplication from "src/features/applications/pages/NewApplication";
 import ApplicantDocument from "src/features/applications/pages/ApplicantDocument";
@@ -42,6 +41,7 @@ import Employees from "src/features/settings/features/employees/pages/Employees"
 import Branches from "src/features/settings/features/branch/pages/Branches";
 import Roles from "src/features/settings/features/rolesAndPermissions/pages/Roles";
 import ViewEditTemplate from "src/features/settings/features/contractsEmailTemplates/pages/ViewEditTemplate";
+import CompanyProfile from "src/features/settings/features/companyProfile/page/CompanyProfile";
 
 const routesArray = [
   {
@@ -126,6 +126,7 @@ const routesArray = [
   { path: appRoute.employees, element: <Employees /> },
   { path: appRoute.branches, element: <Branches /> },
   { path: appRoute.roles, element: <Roles /> },
+  { path: appRoute.companyProfile, element: <CompanyProfile /> },
 ];
 
 export const AllRoutes = () => {

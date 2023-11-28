@@ -1,6 +1,6 @@
-import { Form, Input, InputNumber, Select, FormInstance } from "antd";
+import { Form, Input, InputNumber, Select } from "antd";
 
-export const NewApplicantBrief = ({ form }: { form: FormInstance }) => {
+export const NewApplicantBrief = () => {
   const { Option } = Select;
   const selectBefore = (
     <Select defaultValue="$" style={{ width: 100 }}>

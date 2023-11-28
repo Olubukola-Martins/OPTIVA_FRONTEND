@@ -1,4 +1,3 @@
-import { AppButton } from "src/components/button/AppButton";
 export const ApplicantBrief = () => {
   return (
     <>

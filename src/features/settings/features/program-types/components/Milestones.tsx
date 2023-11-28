@@ -57,7 +57,7 @@ export const Milestones = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -89,7 +89,10 @@ export const Milestones = () => {
       lastModified: "dd/mm/yyyy",
     });
   }
-  const handleEditMilestoneSubmit = (val: any) => {};
+  const handleEditMilestoneSubmit = (val: any) => {
+    console.log(val);
+    
+  };
 
   const selectTimeAfter = (
     <Select

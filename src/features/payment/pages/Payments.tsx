@@ -22,11 +22,11 @@ const Payments = () => {
   const [modalForm] = Form.useForm();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const { RangePicker } = DatePicker;
-  const handleFilter = (formValues) => {
+  const handleFilter = () => {
     setIsModalOpen(false);
     modalForm.resetFields();
   };
-  const handleFilterValuesChange = (values:any) => {
+  const handleFilterValuesChange = () => {
     const allFieldValues = modalForm.getFieldsValue();
     const allEmpty = Object.values(allFieldValues).every((value) => {
       if (Array.isArray(value)) {

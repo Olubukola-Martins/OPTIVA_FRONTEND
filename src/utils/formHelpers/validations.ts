@@ -32,7 +32,7 @@ export const passwordValidationRules: Rule[] = [
   { message: "Field is required" },
 
   {
-    validator: async (rule, value) => {
+    validator: async (_, value) => {
       let paswd =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])[A-Za-z\d!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]{8,}$/;
 
@@ -46,15 +46,20 @@ export const passwordValidationRules: Rule[] = [
   },
 ];
 
-export const phoneNumberValidationRule: Rule = {
-  validator: async (rule, value) => {
-    let paswd = /^[0-9]*$/;
+const phoneNumberVal: Rule = {
+  validator: async (_, value) => {
+    let paswd = /^\+?[0-9()-\s]+$/;
 
     if (!value.match(paswd)) throw new Error("Only digits are allowed");
     // if (false) throw new Error("Something wrong!");
     return true;
   },
 };
+
+export const phoneNumberValidationRules: Rule[] = [
+  ...generalValidationRules,
+  phoneNumberVal,
+];
 
 export const integerValidationRules: Rule[] = [
   { required: true, message: "Please enter a number" },
@@ -67,4 +72,13 @@ export const integerValidationRules: Rule[] = [
       }
     },
   },
+];
+
+export const urlValidationRules: Rule[] = [
+  { required: false },
+  {
+    type: "url",
+    message: "Invalid URL",
+  },
+  { whitespace: true },
 ];
