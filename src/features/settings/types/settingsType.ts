@@ -1,3 +1,4 @@
+
 interface Dependantcondition {
   other_condition: string;
 }
@@ -21,18 +22,18 @@ export interface IDocRequirementBody {
   eligible_dependants: number[];
 }
 
-interface Level {
-  duration: number;
+interface EscalationLevel {
+  duration: number | undefined;
   role_id: number;
-  employee_id: number;
+  employee_id: number | undefined;
 }
 export interface IEscalationBody {
   escalation_name: string;
   role_id: number;
   task: string;
-  deadline: number;
-  reminder_frequency: number;
-  levels: Level[];
+  deadline: number | undefined;
+  reminder_frequency: number | undefined;
+  levels: EscalationLevel[];
 }
 
 // AllEligibleDependentsResponse;
@@ -96,7 +97,7 @@ export interface ISingleEligibleDependent {
   success: boolean;
   data: AllEligiDependentsDatum;
   message: string;
-  meta: any[] | [];
+  // meta: any[] | [];
 }
 
 //All Doc Requirement response
@@ -144,7 +145,7 @@ export interface ISingleDocRequirement {
   success: boolean;
   data: IAllDocRequirementDatum;
   message: string;
-  meta: any[] | [];
+  // meta: any[] | [];
 }
 
 // All Escalations
@@ -167,3 +168,24 @@ export interface ISingleDocRequirement {
 export interface IAllEscalationsData {
   data: IAllEscalationsDatum[]
 }
+
+// Contract & Email Template
+export interface IEmailTemplateBody {
+  name: string;
+  email: JSX.Element
+}
+
+export interface IAllEmailTemplate {
+  success: boolean;
+  data: IEmailTemplateDatum[];
+  message: string;
+  meta: string;
+}
+
+ interface IEmailTemplateDatum {
+   id: number;
+   name: string;
+   email: string;
+   created_at: string;
+   updated_at: string;
+ }

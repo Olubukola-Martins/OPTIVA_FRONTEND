@@ -43,7 +43,6 @@ const Escalation = () => {
   const {
     data: allEscalationData,
     isLoading: allEscalationLoading,
-    refetch,
   }: IQueryDataType<IAllEscalationsData> = useFetchAllItems({
     queryKey,
     urlEndPoint: escalationURL,
@@ -135,7 +134,7 @@ const Escalation = () => {
         const highestLevel = Math.max(...item.levels.map((item) => item.id));
         return {
           key: item.id,
-          sn: index + 1, // Incrementing index within the object directly
+          sn: index + 1, 
           role: item.role_id,
           task: item.task,
           taskDeadline: `${item.deadline} Hours`,

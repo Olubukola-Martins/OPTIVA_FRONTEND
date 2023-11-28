@@ -132,7 +132,7 @@ const Dependents = () => {
       ),
     },
   ];
-
+useEffect(()=>{},[itemId])
   return (
     <>
       <AddDependent open={addNewD} handleClose={() => setAddNewD(false)} />

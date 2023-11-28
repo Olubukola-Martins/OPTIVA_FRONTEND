@@ -5,14 +5,6 @@ import { postItemData } from "src/features/settings/utils/settingsAPIHelpers";
 import { IDependentsBody } from "src/features/settings/types/settingsType";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { openNotification } from "src/utils/notification";
-// import { MICROSERVICE_ENDPOINTS } from "config/enviroment";
-// import { useApiAuth } from "hooks/useApiAuth";
-// import { openNotification } from "utils/notifications";
-// import { appRoutes } from "config/router/paths";
-
-// interface IProps extends ICurrentCompany {
-//   newData: IDependentsBody;
-// }
 export const QUERY_KEY_ELIGIBLE_DEPENDENTS = "EligibleDependents";
 export const eligibleDependentURL = `${END_POINT.BASE_URL}/admin/eligible-dependant`;
 

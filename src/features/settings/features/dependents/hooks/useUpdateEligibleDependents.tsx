@@ -34,7 +34,7 @@ const useUpdateEligibleDependents = () => {
       }
     );
   };
-  return { editEligibleDependents, isSuccess };
+  return { editEligibleDependents, isSuccess, isLoading };
 };
 
 export default useUpdateEligibleDependents;

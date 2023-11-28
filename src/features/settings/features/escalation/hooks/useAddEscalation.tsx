@@ -14,7 +14,7 @@ export const useAddEscalation = () => {
   const queryClient = useQueryClient();
   const { token,  } = useGetUserInfo();
   const { mutate, isLoading, isSuccess } = useMutation(postItemData);
-  const addDocumentRequirement = (newData: IEscalationBody) => {
+  const addEscalation = (newData: IEscalationBody) => {
     mutate(
       {
         url: escalationURL,
@@ -43,7 +43,7 @@ export const useAddEscalation = () => {
     );
   };
   return {
-    addDocumentRequirement,
+    addEscalation,
     postEscalationoading: isLoading,
     addEscalationSuccess: isSuccess,
   };

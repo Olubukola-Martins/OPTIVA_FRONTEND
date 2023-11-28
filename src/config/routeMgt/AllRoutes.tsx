@@ -34,13 +34,6 @@ import Escalation from "src/features/settings/features/escalation/pages/Escalati
 import NewEscalation from "src/features/settings/features/escalation/pages/NewEscalation";
 import EditEscalation from "src/features/settings/features/escalation/pages/EditEscalation";
 import AllContractsEmailTemplates from "src/features/settings/features/contractsEmailTemplates/pages/AllContractsEmailTemplates";
-import ContractTemplate from "src/features/settings/features/contractsEmailTemplates/pages/ContractTemplate";
-import OnboardingWelcomeEmailTemplate from "src/features/settings/features/contractsEmailTemplates/pages/OnboardingWelcomeEmailTemplate";
-import CollationAppointConfirmationTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CollationAppointConfirmationTemplate";
-import CBIBankDDClearanceTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankDDClearanceTemplate";
-import CBIBankAppECopyPassportReceiptTemp from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppECopyPassportReceiptTemp";
-import CBIBankAppApprovalTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppApprovalTemplate";
-import CBIAppSubmissionTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIAppSubmissionTemplate";
 import ForgotPassword from "src/features/authentication/pages/ForgotPassword";
 import ResetPassword from "src/features/authentication/pages/ResetPassword";
 import { GlobalContextProvider } from "src/stateManagement/GlobalContext";
@@ -48,6 +41,7 @@ import Department from "src/features/settings/features/department/pages/Departme
 import Employees from "src/features/settings/features/employees/pages/Employees";
 import Branches from "src/features/settings/features/branch/pages/Branches";
 import Roles from "src/features/settings/features/rolesAndPermissions/pages/Roles";
+import ViewEditTemplate from "src/features/settings/features/contractsEmailTemplates/pages/ViewEditTemplate";
 
 const routesArray = [
   {
@@ -63,30 +57,9 @@ const routesArray = [
     path: appRoute.contractsEmailTemplates,
     element: <AllContractsEmailTemplates />,
   },
-  { path: appRoute.contractsTemplate, element: <ContractTemplate /> },
   {
-    path: appRoute.onboardingWelcomeTempl,
-    element: <OnboardingWelcomeEmailTemplate />,
-  },
-  {
-    path: appRoute.collationAppointmentConfirmTempl,
-    element: <CollationAppointConfirmationTemplate />,
-  },
-  {
-    path: appRoute.cbiBankDDclearance,
-    element: <CBIBankDDClearanceTemplate />,
-  },
-  {
-    path: appRoute.cbiBAsoftPassportReceipt,
-    element: <CBIBankAppECopyPassportReceiptTemp />,
-  },
-  {
-    path: appRoute.cbiBAapprovalMailTemp,
-    element: <CBIBankAppApprovalTemplate />,
-  },
-  {
-    path: appRoute.cbiApplicationSubmissionMailTemp,
-    element: <CBIAppSubmissionTemplate />,
+    path: appRoute.viewEditEmailTemplate().format,
+    element: <ViewEditTemplate />,
   },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },

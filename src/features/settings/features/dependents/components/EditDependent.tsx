@@ -26,6 +26,7 @@ interface IEditDepOrops extends IdentifierProps {
   itemId: number;
   editSuccess: (isSuccess: boolean) => void;
   refetchAllDependents: any;
+
 }
 interface IGetSingleDepQueryData {
   data: ISingleEligibleDependent | undefined;
@@ -47,19 +48,20 @@ export const EditDependent = ({
   editSuccess,
   refetchAllDependents,
 }: IEditDepOrops) => {
+  
   const {
     data: singleDependentData,
     isLoading,
-    refetch,
-    isSuccess: singleDependentSuccess,
-  }: IGetSingleDepQueryData = useFetchSingleItem({
-    itemId,
-    queryKey,
-    urlEndPoint,
-  });
-  const { editEligibleDependents, isSuccess } = useUpdateEligibleDependents();
-  const [data, setData] = useState(singleDependentData);
-  // const [modalContent, setModalContent] = useState<any>();
+  }: IGetSingleDepQueryData  // refetch,
+    // isSuccess: singleDependentSuccess,
+  =  useFetchSingleItem({
+      itemId,
+      queryKey,
+      urlEndPoint,
+    });
+  const { editEligibleDependents, isSuccess, isLoading:editLoading } =
+    useUpdateEligibleDependents();
+  const [data, setData] = useState(singleDependentData?.data);
 
   const [editForm] = useForm();
   const handleNewDependent = (values) => {
@@ -73,133 +75,52 @@ export const EditDependent = ({
         ? [{ other_condition: values.conditions }, ...extraConditions]
         : undefined,
     });
-    handleClose();
-        setData(singleDependentData);
+   isSuccess && handleClose();
+    setData(singleDependentData?.data);
     editForm.resetFields();
   };
-  // useEffect(() => {
-  //   if (data?.data && !Array.isArray(data?.data)) {
-  //     isLoading && handleClose();
-  //     !isLoading &&
-  //       singleDependentData 
-  //       // setModalContent(
-  //       //   <>
-  //       //     <Form.Item
-  //       //       name="dependent"
-  //       //       label="Dependent"
-  //       //       rules={generalValidationRules}
-  //       //       // initialValue={dependant}
-  //       //     >
-  //       //       <Input placeholder="Mother" disabled={true} />
-  //       //     </Form.Item>
-  //       //     <Form.Item
-  //       //       name="age"
-  //       //       label="Dependent Age"
-  //       //       // initialValue={age_brackets.map((item) => item.age_bracket)}
-  //       //       rules={generalValidationRules}
-  //       //     >
-  //       //       <Select
-  //       //         mode="multiple"
-  //       //         allowClear
-  //       //         placeholder="Select"
-  //       //         options={dependentsAgeList.map((item: string) => ({
-  //       //           value: item,
-  //       //           label: item,
-  //       //         }))}
-  //       //       />
-  //       //     </Form.Item>
-  //       //     <Form.Item
-  //       //       name="conditions"
-  //       //       label="Condition"
-  //       //       rules={textInputValidationRulesOpt}
-  //       //       // initialValue={other_conditions[0]?.other_condition || ""}
-  //       //     >
-  //       //       <Input placeholder="Retired" />
-  //       //     </Form.Item>
-  //       //     <Form.List
-  //       //       name="extraConditions"
-  //       //       // initialValue={other_conditions
-  //       //       //   .filter((_, index) => index !== 0)
-  //       //       //   .map((item) => ({ value: item.other_condition || "" }))}
-  //       //     >
-  //       //       {(fields, { add, remove }) => (
-  //       //         <>
-  //       //           {fields.map(({ key, name, fieldKey, ...restField }) => (
-  //       //             <div className="flex gap-2 w-full" key={key}>
-  //       //               <Form.Item
-  //       //                 {...restField}
-  //       //                 className="w-11/12"
-  //       //                 label="Condition"
-  //       //                 name={[name, "value"]}
-  //       //                 fieldKey={[fieldKey as number, "value"]}
-  //       //                 rules={[
-  //       //                   {
-  //       //                     required: true,
-  //       //                     message: "Please input value!",
-  //       //                   },
-  //       //                 ]}
-  //       //               >
-  //       //                 <Input placeholder="Unmarried" />
-  //       //               </Form.Item>
-  //       //               <DeleteOutlined
-  //       //                 className="text-red-600 text-xl"
-  //       //                 onClick={() => remove(key)}
-  //       //               />
-  //       //             </div>
-  //       //           ))}
-  //       //           <Form.Item>
-  //       //             <div className="flex gap-2">
-  //       //               <PlusCircleOutlined
-  //       //                 className="text-green-600 text-2xl"
-  //       //                 onClick={() => add()}
-  //       //               />
-  //       //               <p className="font-semibold" onClick={() => add()}>
-  //       //                 Add New Condition
-  //       //               </p>
-  //       //             </div>
-  //       //           </Form.Item>
-  //       //         </>
-  //       //       )}
-  //       //     </Form.List>
-  //       //     <AppButton type="submit" label="Save" />
-  //       //   </>
-  //       // );
-  //   }
-  // }, [data, isLoading, singleDependentData, handleClose]);
 
   useEffect(() => {
-    refetch()
-    setData(singleDependentData);
+    // refetch()
     if (
-      singleDependentData?.data &&
-      !Array.isArray(singleDependentData?.data)
-      ) {
+      singleDependentData &&
+      singleDependentData.data &&
+      !Array.isArray(singleDependentData.data)
+    ) {
+      setData(singleDependentData.data);
       const { dependant, age_brackets, other_conditions } =
         singleDependentData.data;
+      // as AllEligiDependentsDatum;
+      // singleDependentData.data;
       editForm.setFieldsValue({
         dependent: dependant,
         age: age_brackets.map((item) => item.age_bracket),
-        conditions: other_conditions.length > 0
-          ? other_conditions[0].other_condition
-          : undefined,
-        extraConditions: other_conditions.length > 1 ? other_conditions.filter((_, index) => index !== 0)
-          .map((item) => ({ value: item.other_condition })) : [],
+        conditions:
+          other_conditions.length > 0
+            ? other_conditions[0].other_condition
+            : undefined,
+        extraConditions:
+          other_conditions.length > 1
+            ? other_conditions
+                .filter((_, index) => index !== 0)
+                .map((item) => ({ value: item.other_condition }))
+            : [],
       });
     }
   }, [
     singleDependentData,
     itemId,
-    refetch,
+    // refetch,
     isLoading,
-    singleDependentSuccess,
-    data,
-    editForm,
+    // singleDependentSuccess,
+    // data,
+    // editForm,
+    
   ]);
-
   useEffect(() => {
     refetchAllDependents();
-}, [data]);
-  
+  }, [editLoading]);
+
   return (
     <Modal
       open={open}
@@ -217,83 +138,79 @@ export const EditDependent = ({
         className="mt-4"
         onFinish={handleNewDependent}
       >
-          <>
-            <Form.Item
-              name="dependent"
-              label="Dependent"
-              rules={generalValidationRules}
-            >
-              <Input placeholder="Mother" disabled={true} />
-            </Form.Item>
-            <Form.Item
-              name="age"
-              label="Dependent Age"
-              rules={generalValidationRules}
-            >
-              <Select
-                mode="multiple"
-                allowClear
-                placeholder="Select"
-                options={dependentsAgeList.map((item: string) => ({
-                  value: item,
-                  label: item,
-                }))}
-              />
-            </Form.Item>
-            <Form.Item
-              name="conditions"
-              label="Condition"
-              rules={textInputValidationRulesOpt}
-            >
-              <Input
-                placeholder="Retired"
-              />
-            </Form.Item>
-            <Form.List
-              name="extraConditions"
-            >
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <div className="flex gap-2 w-full">
-                      <Form.Item
-                        {...restField}
-                        className="w-11/12"
-                        key={key}
-                        label="Condition"
-                        name={[name, "value"]}
-                        fieldKey={[fieldKey as number, "value"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input value!",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="Unmarried" />
-                      </Form.Item>
-                      <DeleteOutlined
-                        className="text-red-600 text-xl "
-                        onClick={() => remove(key)}
-                      />
-                    </div>
-                  ))}
-                  <Form.Item>
-                    <div className="flex gap-2">
-                      <PlusCircleOutlined
-                        className="text-green-600 text-2xl"
-                        onClick={() => add()}
-                      />
-                      <p className="font-semibold" onClick={() => add()}>
-                        Add New Condition
-                      </p>
-                    </div>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
-            <AppButton type="submit" label="Save" />
-          </>
+        <>
+          <Form.Item
+            name="dependent"
+            label="Dependent"
+            rules={generalValidationRules}
+          >
+            <Input placeholder="Mother" disabled={true} />
+          </Form.Item>
+          <Form.Item
+            name="age"
+            label="Dependent Age"
+            rules={generalValidationRules}
+          >
+            <Select
+              mode="multiple"
+              allowClear
+              placeholder="Select"
+              options={dependentsAgeList.map((item: string) => ({
+                value: item,
+                label: item,
+              }))}
+            />
+          </Form.Item>
+          <Form.Item
+            name="conditions"
+            label="Condition"
+            rules={textInputValidationRulesOpt}
+          >
+            <Input placeholder="Retired" />
+          </Form.Item>
+          <Form.List name="extraConditions">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, fieldKey, ...restField }) => (
+                  <div className="flex gap-2 w-full">
+                    <Form.Item
+                      {...restField}
+                      className="w-11/12"
+                      key={key}
+                      label="Condition"
+                      name={[name, "value"]}
+                      fieldKey={[fieldKey as number, "value"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input value!",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Unmarried" />
+                    </Form.Item>
+                    <DeleteOutlined
+                      className="text-red-600 text-xl "
+                      onClick={() => remove(key)}
+                    />
+                  </div>
+                ))}
+                <Form.Item>
+                  <div className="flex gap-2">
+                    <PlusCircleOutlined
+                      className="text-green-600 text-2xl"
+                      onClick={() => add()}
+                    />
+                    <p className="font-semibold" onClick={() => add()}>
+                      Add New Condition
+                    </p>
+                  </div>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+          <AppButton type="submit" label="Save" isLoading={editLoading}/>
+        </>
       </Form>
     </Modal>
   );

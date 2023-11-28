@@ -11,7 +11,7 @@ import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 
 export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
   const { addEligibleDependents } = useCreateEligibleDependents();
-  const handleNewDependent = (values) => {
+  const handleNewDependent = (values: { extraConditions: any[]; dependent: any; age: any[]; conditions: string; }) => {
     console.log(values);
     const extraConditions = values.extraConditions ? values.extraConditions.map(
       (item) => ({other_condition:item.value})
