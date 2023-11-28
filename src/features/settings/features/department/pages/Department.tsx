@@ -21,7 +21,6 @@ const Department = () => {
     deleteEndPointUrl: "admin/departments/",
     queryKey: QUERY_KEY_FOR_DEPARTMENT,
   });
-console.log(data);
 
   const handleDepartment = (id: number) => {
     setDepartmentId(id);
