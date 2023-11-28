@@ -35,7 +35,7 @@ export interface SidebarProps {
 }
 
 export interface IdentifierProps {
-  id?: number | string;
+  id?: number;
   open: boolean;
   handleClose: Function;
 }
@@ -45,6 +45,6 @@ export interface IUserToken {
 }
 
 export interface IGeneralProps {
-  id: number | string;
+  id: number;
   deleteEndPointUrl?: string;
 }

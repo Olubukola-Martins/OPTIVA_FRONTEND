@@ -4,11 +4,12 @@ import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { ActiveEmployees } from "../components/ActiveEmployees";
 import { InvitedEmployees } from "../components/InvitedEmployees";
-import { useState } from "react";
 import { NewEmployee } from "../components/NewEmployee";
+import { useHandleUpdate } from "../hooks/useHandleUpdate";
 
 const Employees = () => {
-  const [addEmployee, setAddEmployee] = useState(false);
+  const { addEmployee, setAddEmployee, employeeId, handleAddEmployee } =
+    useHandleUpdate();
 
   const operations = (
     <div className="hidden lg:flex gap-4 w-full">
@@ -35,6 +36,7 @@ const Employees = () => {
   return (
     <>
       <NewEmployee
+        id={employeeId}
         open={addEmployee}
         handleClose={() => setAddEmployee(false)}
       />
@@ -46,7 +48,7 @@ const Employees = () => {
         />
 
         <div>
-          <AppButton label="Add New" handleClick={() => setAddEmployee(true)} />
+          <AppButton label="Add New" handleClick={() => handleAddEmployee()} />
         </div>
       </div>
 

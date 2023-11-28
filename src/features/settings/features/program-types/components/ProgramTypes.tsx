@@ -1,6 +1,6 @@
 import { Dropdown, Menu, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React from "react";
+import React, { useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
 import DeleteIcon from "../assets/img/warning.png";
 
@@ -61,7 +61,7 @@ export const ProgramTypes = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -142,7 +142,3 @@ export const ProgramTypes = () => {
     </>
   );
 };
-function useState<T>(arg0: boolean): [any, any] {
-    throw new Error("Function not implemented.");
-}
-

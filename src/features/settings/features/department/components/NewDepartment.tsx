@@ -9,13 +9,16 @@ import { useCreateAndUpdateDepart } from "../hooks/useCreateAndUpdateDepart";
 import { useFetchBranches } from "../../branch/hooks/useFetchBranches";
 import { useGetSingleDepartment } from "../hooks/useGetSingleDepartment";
 import { useEffect } from "react";
+import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
 
 export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useCreateAndUpdateDepart();
   const { data: branchData, isLoading: loadBrach } = useFetchBranches();
+  const { data: employeeData, isLoading: loadEmployee } =
+    useFetchEmployees("active-employees");
   const [form] = Form.useForm();
-  const {data, isSuccess} = useGetSingleDepartment({id: id as unknown as number})
+  const { data, isSuccess } = useGetSingleDepartment({ id: id as number });
   useEffect(() => {
     if (isSuccess && id) {
       form.setFieldsValue({
@@ -61,14 +64,23 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
       title={`${id ? "Edit" : "New"} Department`}
       style={{ top: 15 }}
     >
-      <Form layout="vertical" form={form} onFinish={handleSubmit}>
+      <Form
+        layout="vertical"
+        form={form}
+        onFinish={handleSubmit}
+        requiredMark="optional"
+      >
         <Form.Item name={"name"} label="Name" rules={generalValidationRules}>
           <Input />
         </Form.Item>
 
-        <Form.Item name="branch_id" label="Branch" rules={generalValidationRules}>
+        <Form.Item
+          name="branch_id"
+          label="Branch"
+          rules={generalValidationRules}
+        >
           <Select
-          loading={loadBrach}
+            loading={loadBrach}
             placeholder="Select Branch"
             allowClear
             options={branchData?.map((item) => ({
@@ -77,9 +89,17 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
             }))}
           />
         </Form.Item>
-        {/* <Form.Item name="head" label="Department head">
-          <Select options={[{ value: 1, label: "Basil Ikpe" }]} />
-        </Form.Item> */}
+        <Form.Item name="department_head_id" label="Department head">
+          <Select
+            placeholder="Select"
+            options={employeeData?.map((item) => ({
+              label: item.name,
+              value: item.id,
+            }))}
+            loading={loadEmployee}
+            allowClear
+          />
+        </Form.Item>
 
         <AppButton type="submit" isLoading={isLoading} />
       </Form>

@@ -40,6 +40,7 @@ const Department = () => {
     {
       title: "head",
       dataIndex: "head",
+      render: (_, val) => <span>{val?.head?.name}</span>
     },
     {
       title: "Action",

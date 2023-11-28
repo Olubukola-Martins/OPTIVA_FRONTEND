@@ -19,7 +19,7 @@ export type DataSourceItem = {
 
 export const ActiveApplications = () => {
   const params = useParams();
-  const itemId = params.id;
+  // const itemId = params.id;
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -59,7 +59,7 @@ export const ActiveApplications = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}

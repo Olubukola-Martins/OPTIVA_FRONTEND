@@ -7,16 +7,30 @@ import { useCreateAndUpdateRole } from "../hooks/useCreateAndUpdateRole";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_ROLES } from "../hooks/useFetchRoles";
 import { useQueryClient } from "react-query";
+import { useGetSingleRole } from "../hooks/useGetSingleRole";
+import { useEffect } from "react";
 
 export const NewRole = ({ handleClose, open, id }: IdentifierProps) => {
-    const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   const { data: permissionData, isLoading: loadPermissions } =
     useFetchPermissions();
-    const {mutate, isLoading} = useCreateAndUpdateRole()
-  const [form] = Form.useForm()
+  const { data, isSuccess } = useGetSingleRole({ id: id as number });
+  const { mutate, isLoading } = useCreateAndUpdateRole();
+  const [form] = Form.useForm();
+  useEffect(() => {
+    if (isSuccess && id) {
+      form.setFieldsValue({
+        ...data,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [form, id, data, isSuccess]);
 
-    const handleSubmit = (data: any) => {
-       mutate({...data},   {
+  const handleSubmit = (data: any) => {
+    mutate(
+      { ...data, id },
+      {
         onError: (err: any) => {
           openNotification({
             title: "Error",
@@ -36,8 +50,9 @@ export const NewRole = ({ handleClose, open, id }: IdentifierProps) => {
           queryClient.invalidateQueries([QUERY_KEY_FOR_ROLES]);
           handleClose();
         },
-      })
-    }
+      }
+    );
+  };
 
   return (
     <Modal
@@ -47,7 +62,12 @@ export const NewRole = ({ handleClose, open, id }: IdentifierProps) => {
       title={`${id ? "Edit" : "New"} Role`}
       style={{ top: 15 }}
     >
-      <Form layout="vertical" className="mt-5" form={form} onFinish={handleSubmit}>
+      <Form
+        layout="vertical"
+        className="mt-5"
+        form={form}
+        onFinish={handleSubmit}
+      >
         <Form.Item name="name" label="Name" rules={generalValidationRules}>
           <Input />
         </Form.Item>
