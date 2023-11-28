@@ -16,7 +16,6 @@ const getData = async (endpoint: string): Promise<employeesProps[]> => {
     },
   };
   const res = await axios.get(url, config);
-console.log(res);
 
   const data: employeesProps[] = res.data.data.map((item: employeesProps) => ({
     ...item,

@@ -101,10 +101,10 @@ export const Navbar = () => {
                     <Icon icon="mdi:partnership" className="text-xl" />
                     <span>International Partners</span>
                   </li> */}
-                  <li className="menuStyle">
+                  <Link to={appRoute.companyProfile} className="menuStyle">
                     <Icon icon="mdi:company" className="text-xl" />
                     <span>Company Profile</span>
-                  </li>
+                  </Link>
                   {/* <li className="menuStyle">
                     <Icon icon="ion:key-outline" className="text-xl" />
                     <span>Enable 2FA</span>
