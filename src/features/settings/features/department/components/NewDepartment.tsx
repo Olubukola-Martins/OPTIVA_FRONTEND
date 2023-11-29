@@ -6,15 +6,14 @@ import { QUERY_KEY_FOR_DEPARTMENT } from "../hooks/useFetchDepartment";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { useCreateAndUpdateDepart } from "../hooks/useCreateAndUpdateDepart";
-import { useFetchBranches } from "../../branch/hooks/useFetchBranches";
 import { useGetSingleDepartment } from "../hooks/useGetSingleDepartment";
 import { useEffect } from "react";
 import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
+import { FormBranchInput } from "../../branch/components/FormBranchInput";
 
 export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useCreateAndUpdateDepart();
-  const { data: branchData, isLoading: loadBrach } = useFetchBranches();
   const { data: employeeData, isLoading: loadEmployee } =
     useFetchEmployees("active-employees");
   const [form] = Form.useForm();
@@ -74,21 +73,15 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
           <Input />
         </Form.Item>
 
-        <Form.Item
-          name="branch_id"
-          label="Branch"
-          rules={generalValidationRules}
-        >
-          <Select
-            loading={loadBrach}
-            placeholder="Select Branch"
-            allowClear
-            options={branchData?.map((item) => ({
-              value: item.id,
-              label: item.name,
-            }))}
-          />
-        </Form.Item>
+        <FormBranchInput
+          Form={Form}
+          // handleSelect={(_, b) =>
+          //   console.log({
+          //     name: b?.name,
+          //     id: b?.id,
+          //   })
+          // }
+        />
         <Form.Item name="department_head_id" label="Department head">
           <Select
             placeholder="Select"
