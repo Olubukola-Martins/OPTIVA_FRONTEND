@@ -3,9 +3,14 @@ import { ColumnsType } from "antd/es/table";
 import { employeesProps } from "../types";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import dayjs from "dayjs";
+import { usePagination } from "src/hooks/usePagination";
 
 export const InvitedEmployees = () => {
-  const { data, isLoading } = useFetchEmployees("inactive-employees");
+  const { onChange, pagination } = usePagination();
+  const { data, isLoading } = useFetchEmployees({
+    currentUrl: "inactive-employees",
+    pagination,
+  });
   const columns: ColumnsType<employeesProps> = [
     {
       title: "Full Name",
@@ -63,7 +68,9 @@ export const InvitedEmployees = () => {
     {
       title: "Created at",
       dataIndex: "last_sent",
-      render: (_, val) => <span> {dayjs(val?.created_at).format("DD MMMM YYYY")}</span>
+      render: (_, val) => (
+        <span> {dayjs(val?.created_at).format("DD MMMM YYYY")}</span>
+      ),
     },
 
     {
@@ -91,7 +98,9 @@ export const InvitedEmployees = () => {
       <Table
         className="bg-white rounded-md shadow border overflow-x-hidden"
         columns={columns}
-        dataSource={data}
+        dataSource={data?.data}
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         loading={isLoading}
         scroll={{ x: 800 }}
       />

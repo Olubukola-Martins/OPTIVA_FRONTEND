@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Select } from "antd";
+import { Form, Input, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
@@ -8,14 +8,12 @@ import { openNotification } from "src/utils/notification";
 import { useCreateAndUpdateDepart } from "../hooks/useCreateAndUpdateDepart";
 import { useGetSingleDepartment } from "../hooks/useGetSingleDepartment";
 import { useEffect } from "react";
-import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
 import { FormBranchInput } from "../../branch/components/FormBranchInput";
+import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
 
 export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
   const queryClient = useQueryClient();
   const { mutate, isLoading } = useCreateAndUpdateDepart();
-  const { data: employeeData, isLoading: loadEmployee } =
-    useFetchEmployees("active-employees");
   const [form] = Form.useForm();
   const { data, isSuccess } = useGetSingleDepartment({ id: id as number });
   useEffect(() => {
@@ -82,17 +80,7 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
           //   })
           // }
         />
-        <Form.Item name="department_head_id" label="Department head">
-          <Select
-            placeholder="Select"
-            options={employeeData?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-            loading={loadEmployee}
-            allowClear
-          />
-        </Form.Item>
+        <FormEmployeeInput Form={Form} />
 
         <AppButton type="submit" isLoading={isLoading} />
       </Form>
