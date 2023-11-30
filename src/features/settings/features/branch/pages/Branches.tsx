@@ -12,15 +12,22 @@ import {
 } from "../hooks/useFetchBranches";
 import { useDelete } from "src/hooks/useDelete";
 import Popconfirm from "antd/lib/popconfirm";
+import { usePagination } from "src/hooks/usePagination";
 
 const Branches = () => {
   const [addBranch, setAddBranch] = useState(false);
   const [branchId, setBranchId] = useState<number>();
-  const { data, isLoading } = useFetchBranches();
+  const { pagination, onChange } = usePagination();
+  const { data, isLoading } = useFetchBranches({
+    pagination,
+    currentUrl: "active-branches",
+  });
   const { removeData } = useDelete({
     deleteEndPointUrl: "admin/branches/",
     queryKey: QUERY_KEY_FOR_BRANCHES,
   });
+
+  // console.log(pagination.total);
 
   const handleBranch = (id: number) => {
     setBranchId(id);
@@ -96,8 +103,10 @@ const Branches = () => {
       <Table
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
-        dataSource={data}
-        // scroll={{ x: 500 }}
+        dataSource={data?.data}
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
+        scroll={{ x: 800 }}
         loading={isLoading}
       />
     </>

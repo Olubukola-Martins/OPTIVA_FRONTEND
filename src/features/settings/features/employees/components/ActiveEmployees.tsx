@@ -4,9 +4,14 @@ import { employeesProps } from "../types";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { useHandleUpdate } from "../hooks/useHandleUpdate";
 import { NewEmployee } from "./NewEmployee";
+import { usePagination } from "src/hooks/usePagination";
 
 export const ActiveEmployees = () => {
-  const { data, isLoading } = useFetchEmployees("active-employees");
+  const { onChange, pagination } = usePagination();
+  const { data, isLoading } = useFetchEmployees({
+    currentUrl: "active-employees",
+    pagination,
+  });
   const { handleEmployee, addEmployee, setAddEmployee, employeeId } =
     useHandleUpdate();
 
@@ -98,7 +103,9 @@ export const ActiveEmployees = () => {
       <Table
         className="bg-white rounded-md shadow border overflow-x-hidden"
         columns={columns}
-        dataSource={data}
+        dataSource={data?.data}
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         loading={isLoading}
         scroll={{ x: 800 }}
       />

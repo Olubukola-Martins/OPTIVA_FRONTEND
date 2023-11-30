@@ -4,6 +4,10 @@ export const generalValidationRules: Rule[] = [
   { required: true, message: "Field is required!" },
 ];
 
+export const generalValidationRulesOpt: Rule[] = [
+  { required: false, message: "Field is required!" },
+];
+
 export const textInputValidationRules: Rule[] = [
   ...generalValidationRules,
   { whitespace: true },
