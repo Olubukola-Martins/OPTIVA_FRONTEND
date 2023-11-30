@@ -1,4 +1,4 @@
-import { Form, Input, Modal, Select } from "antd";
+import { Form, Input, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
 import {
@@ -7,22 +7,18 @@ import {
 } from "src/utils/formHelpers/validations";
 import { useCreateAndUpdateEmployee } from "../hooks/useCreateAndUpdateEmployee";
 import { openNotification } from "src/utils/notification";
-import { useFetchDepartment } from "../../department/hooks/useFetchDepartment";
-import { useFetchBranches } from "../../branch/hooks/useFetchBranches";
-import { useFetchRoles } from "../../rolesAndPermissions/hooks/useFetchRoles";
 import { QUERY_KEY_FOR_EMPLOYEES } from "../hooks/useFetchEmployees";
 import { useQueryClient } from "react-query";
 import { useGetSingleEmployee } from "../hooks/useGetSingleEmployee";
 import { useEffect } from "react";
+import { FormDepartmentInput } from "../../department/components/FormDepartmentInput";
+import { FormBranchInput } from "../../branch/components/FormBranchInput";
+import { FormRolesInput } from "../../rolesAndPermissions/components/FormRolesInput";
 
 export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
-
   const { mutate, isLoading: loadAddEmp } = useCreateAndUpdateEmployee();
-  const { data: departData, isLoading: loadDepart } = useFetchDepartment();
-  const { data: branchData, isLoading: loadBranch } = useFetchBranches();
-  const { data: rolesData, isLoading: loadRole } = useFetchRoles();
   const { data, isSuccess } = useGetSingleEmployee({ id: id as number });
   const branches = data?.user?.branches.map((item) => item.id);
   const roles = data?.user?.roles.map((item) => item.id);
@@ -84,57 +80,23 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
           label="Employee Name"
           rules={generalValidationRules}
         >
-          <Input placeholder="Full name"/>
+          <Input placeholder="Full name" />
         </Form.Item>
         <Form.Item name="email" label="Email" rules={emailValidationRules}>
-          <Input placeholder="Employee email"/>
+          <Input placeholder="Employee email" />
         </Form.Item>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <Form.Item
-            name="branches"
-            label="Branch"
-            rules={generalValidationRules}
-          >
-            <Select
-              placeholder="Select"
-              options={branchData?.map((item) => ({
-                label: item.name,
-                value: item.id,
-              }))}
-              loading={loadBranch}
-              allowClear
-              mode="multiple"
-            />
-          </Form.Item>
-          <Form.Item name="roles" label="Roles" rules={generalValidationRules}>
-            <Select
-              placeholder="Select"
-              options={rolesData?.map((item) => ({
-                label: item.name,
-                value: item.id,
-              }))}
-              loading={loadRole}
-              allowClear
-              mode="multiple"
-            />
-          </Form.Item>
-        </div>
-        <Form.Item
-          name="department_id"
-          label="Department"
-          rules={generalValidationRules}
-        >
-          <Select
-            placeholder="Select"
-            options={departData?.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))}
-            loading={loadDepart}
-            allowClear
+          <FormBranchInput
+            Form={Form}
+            mode="multiple"
+            control={{ name: "branches", label: "Branches" }}
           />
-        </Form.Item>
+
+         
+          <FormRolesInput Form={Form}/>
+        </div>
+        <FormDepartmentInput Form={Form} />
 
         <AppButton type="submit" isLoading={loadAddEmp} />
       </Form>
