@@ -5,7 +5,9 @@ import { openNotification } from "src/utils/notification";
 import { useFetchCurrentBranch } from "../hooks/useFetchCurrentBranch";
 
 export const CurrentBranch = () => {
-  const { data: branchData, isLoading: loadBrach } = useFetchBranches();
+  const { data: branchData, isLoading: loadBrach } = useFetchBranches({
+    currentUrl: "active-branches",
+  });
   const { mutate } = useSwitchBranch();
   const { data } = useFetchCurrentBranch();
 
@@ -35,7 +37,7 @@ export const CurrentBranch = () => {
     <Select
       loading={loadBrach}
       value={data?.current_branch_id}
-      options={branchData?.map((item) => ({
+      options={branchData?.data?.map((item) => ({
         value: item.id,
         label: item.name,
       }))}

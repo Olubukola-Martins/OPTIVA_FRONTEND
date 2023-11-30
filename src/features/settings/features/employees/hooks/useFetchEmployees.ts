@@ -3,16 +3,26 @@ import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { employeesProps } from "../types";
 import { useGetToken } from "src/hooks/useGetToken";
+import { paginationAndFilterProps } from "src/types";
 
-export const QUERY_KEY_FOR_EMPLOYEES = "departments";
+export const QUERY_KEY_FOR_EMPLOYEES = "employees";
 
-const getData = async (endpoint: string): Promise<employeesProps[]> => {
+const getData = async (
+  props: paginationAndFilterProps
+): Promise<{ data: employeesProps[]; total: number }> => {
+  const { pagination, search, currentUrl } = props;
   const token = useGetToken();
-  const url = `${END_POINT.BASE_URL}/admin/${endpoint}`;
+
+  const url = `${END_POINT.BASE_URL}/admin/${currentUrl}`;
   const config = {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
+    },
+    params: {
+      name: search,
+      page: pagination?.current,
+      limit: pagination?.pageSize,
     },
   };
   const res = await axios.get(url, config);
@@ -21,13 +31,22 @@ const getData = async (endpoint: string): Promise<employeesProps[]> => {
     ...item,
   }));
 
-  return data;
+  const ans = {
+    data,
+    total: res.data.meta.total,
+  };
+
+  return ans;
 };
 
-export const useFetchEmployees = (endpoint: string) => {
+export const useFetchEmployees = ({
+  pagination,
+  search,
+  currentUrl,
+}: paginationAndFilterProps = {}) => {
   const queryData = useQuery(
-    [QUERY_KEY_FOR_EMPLOYEES, endpoint],
-    () => getData(endpoint),
+    [QUERY_KEY_FOR_EMPLOYEES, pagination, search, currentUrl],
+    () => getData({ pagination, search, currentUrl }),
     {
       onError: () => {},
       onSuccess: () => {},

@@ -48,3 +48,12 @@ export interface IGeneralProps {
   id: number;
   deleteEndPointUrl?: string;
 }
+
+export interface paginationAndFilterProps {
+  pagination?: {
+    pageSize?: number;
+    current?: number;
+  };
+  search?: string;
+  currentUrl?: string;
+}

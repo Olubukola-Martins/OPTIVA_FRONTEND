@@ -25,7 +25,7 @@ const CompanyProfile = () => {
   ];
   return (
     <>
-      <div className="lg:h-[40vh] lg:-mr-[31px] lg:-ml-[31px] companyProfileContainer bg-gradient">
+      <div className="lg:h-[40vh] lg:-mr-[31px] lg:-ml-[31px] companyProfileContainer bg-gradient sticky top-12">
         <div className="mb-5 pt-8 text-accent">
           <h3 className="flex items-center gap-x-2 font-semibold text-xl">
             <Link to={appRoute.settings}>
@@ -41,7 +41,7 @@ const CompanyProfile = () => {
       </div>
 
       <div
-        className="bg-white rounded border px-2 py-5 lg:-mt-[7rem]"
+        className="bg-white rounded border px-2 py-5 lg:-mt-[7rem] sticky z-10"
         style={{
           boxShadow:
             "0px 3.555555582046509px 5.333333492279053px 0px #00000026",
