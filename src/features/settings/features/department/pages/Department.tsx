@@ -12,10 +12,15 @@ import {
 import { departmentProps } from "../types";
 import { useDelete } from "src/hooks/useDelete";
 import Popconfirm from "antd/lib/popconfirm";
+import { usePagination } from "src/hooks/usePagination";
 
 const Department = () => {
   const [addDepartment, setAddDepartment] = useState(false);
-  const { data, isLoading } = useFetchDepartment();
+  const { onChange, pagination } = usePagination();
+  const { data, isLoading } = useFetchDepartment({
+    currentUrl: "active-departments",
+    pagination,
+  });
   const [departmentId, setDepartmentId] = useState<number>();
   const { removeData } = useDelete({
     deleteEndPointUrl: "admin/departments/",
@@ -40,7 +45,7 @@ const Department = () => {
     {
       title: "head",
       dataIndex: "head",
-      render: (_, val) => <span>{val?.head?.name}</span>
+      render: (_, val) => <span>{val?.head?.name}</span>,
     },
     {
       title: "Action",
@@ -98,7 +103,9 @@ const Department = () => {
       <Table
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
-        dataSource={data}
+        dataSource={data?.data}
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         loading={isLoading}
         // scroll={{ x: 500 }}
       />
