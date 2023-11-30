@@ -27,34 +27,6 @@ interface IQueryDataType<TPageData> {
   ) => Promise<QueryObserverResult<any, any>>;
 }
 
-// const deleteEndpointUrl = emailContractTemplatesURL;
-// const contractsEmailTemplateRoutes = [
-//   { name: "Contract Template", link: appRoute.contractsTemplate },
-//   {
-//     name: "Onboarding/Welcome Email Template",
-//     link: appRoute.onboardingWelcomeTempl,
-//   },
-//   {
-//     name: "Collation Appointment Confirmation  Email Template",
-//     link: appRoute.collationAppointmentConfirmTempl,
-//   },
-//   {
-//     name: "CBI Bank DD Clearance  Email Template",
-//     link: appRoute.cbiBankDDclearance,
-//   },
-//   {
-//     name: "CBI Bank Application Soft Copy Passport Receipt  Email Template",
-//     link: appRoute.cbiBAsoftPassportReceipt,
-//   },
-//   {
-//     name: "CBI Bank Application Approval  Email Template",
-//     link: appRoute.cbiBAapprovalMailTemp,
-//   },
-//   {
-//     name: "CBI Application Submission  Email Template",
-//     link: appRoute.cbiApplicationSubmissionMailTemp,
-//   },
-// ];
 
 const queryKey = QUERY_KEY_EMAIL_TEMPLATES;
 
@@ -70,11 +42,11 @@ const AllContractsEmailTemplates = () => {
   useEffect(() => {
     if (allEmailTemplates?.data && Array.isArray(allEmailTemplates.data)) {
       const contractsEmailTemplateRoutes = allEmailTemplates.data?.map(
-        (template: { name: string; id?: number }) => {
-          const { id, name } = template;
+        (template:any) => {
+          const {  name ,type} = template;
           return {
             name: name,
-            link: appRoute.viewEditEmailTemplate(name, id).path,
+            link: appRoute.viewEditEmailTemplate(type).path,
           };
         }
       );

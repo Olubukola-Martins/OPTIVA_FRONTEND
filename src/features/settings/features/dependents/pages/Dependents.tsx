@@ -12,7 +12,11 @@ import {
   eligibleDependentURL,
 } from "../hooks/useCreateEligibleDependents";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import { IAllEligiDependentsResponse } from "src/features/settings/types/settingsType";
+import {
+  AllEligiDependentsDatum,
+  IAllEligiDependentsResponse,
+  ISingleEligibleDependent,
+} from "src/features/settings/types/settingsType";
 import { Skeleton } from "antd";
 import { EditDependent } from "../components/EditDependent";
 import {
@@ -21,8 +25,10 @@ import {
   RefetchQueryFilters,
 } from "react-query";
 import { useForm } from "antd/es/form/Form";
+import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
+import { useFetchDependent } from "../hooks/useFetchDependent";
 
-interface DataType {
+export interface DataType {
   key: React.Key;
   dependent: string;
   ageBracket: string[];
@@ -44,6 +50,9 @@ const Dependents = () => {
   const [editNewD, setEditNewD] = useState(false);
   const [itemId, setItemId] = useState<number>();
   const [data, setData] = useState<DataType[] | []>([]);
+  const [singleDependent, setSingleDependent] = useState<
+    AllEligiDependentsDatum | undefined
+  >();
   const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
 
   const {
@@ -54,6 +63,21 @@ const Dependents = () => {
     queryKey,
     urlEndPoint: eligibleDependentURL,
   });
+  const {
+    data: singleDependentData,
+    isLoading: singleDependentLoading,
+  }: { data: ISingleEligibleDependent | undefined; isLoading: boolean } =
+    useFetchDependent(itemId as number);
+  // const {
+  //   data: singleDependentData,
+  //   isLoading: singleDependentLoading,
+  // }: { data: ISingleEligibleDependent | undefined; isLoading: boolean } =
+  //   useFetchSingleItem({
+  //     itemId,
+  //     queryKey,
+  //     urlEndPoint: eligibleDependentURL,
+  //   });
+
   const editSuccess = (isSuccess: boolean) => {
     setEditSuccessful(isSuccess);
   };
@@ -76,6 +100,17 @@ const Dependents = () => {
     }
   }, [allDependentsData, allDependentsLoading, editSuccessful]);
 
+  useEffect(() => {
+    if (singleDependentData?.data && !Array.isArray(singleDependentData.data)) {
+      console.log("data from dependants for single", singleDependentData.data);
+      setSingleDependent(singleDependentData.data);
+    }
+  }, [itemId, singleDependentData, singleDependentLoading]);
+
+  useEffect(() => {
+    console.log("itemId", itemId);
+    console.log("type", typeof itemId);
+  }, [itemId]);
   const columns: ColumnsType<DataType> = [
     {
       title: "Dependents",
@@ -132,7 +167,6 @@ const Dependents = () => {
       ),
     },
   ];
-useEffect(()=>{},[itemId])
   return (
     <>
       <AddDependent open={addNewD} handleClose={() => setAddNewD(false)} />
@@ -141,6 +175,7 @@ useEffect(()=>{},[itemId])
           open={editNewD}
           handleClose={() => setEditNewD(false)}
           itemId={itemId}
+          singleDependent={singleDependent}
           editSuccess={editSuccess}
           refetchAllDependents={() => refetch()}
         />

@@ -1,19 +1,25 @@
-import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
-import { IDependentsBody } from "src/features/settings/types/settingsType";
+import {
+  IAllEligiDependentsResponse,
+  IDependentsBody,
+  ISingleEligibleDependent,
+} from "src/features/settings/types/settingsType";
 import { editItemData } from "src/features/settings/utils/settingsAPIHelpers";
-import { QUERY_KEY_ELIGIBLE_DEPENDENTS, eligibleDependentURL } from "./useCreateEligibleDependents";
+import {
+  QUERY_KEY_ELIGIBLE_DEPENDENTS,
+  eligibleDependentURL,
+} from "./useCreateEligibleDependents";
 import { openNotification } from "src/utils/notification";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { useGetToken } from "src/hooks/useGetToken";
 
 const useUpdateEligibleDependents = () => {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const { token } = useGetUserInfo();
+  const { token } = useGetToken();
   const { mutate, isLoading, isSuccess } = useMutation(editItemData);
+  const queryClient = useQueryClient();
   const editEligibleDependents = (id: number, newData: IDependentsBody) => {
     mutate(
-      { url: `${eligibleDependentURL}/${id}`,  token, newData },
+      { newData, id, token, url: eligibleDependentURL },
       {
         onError: (error: any) => {
           openNotification({
@@ -25,11 +31,15 @@ const useUpdateEligibleDependents = () => {
         },
         onSuccess: (response: any) => {
           openNotification({
-            state: "success",
             title: "Success",
             description: response.data.message,
+            state: "success",
           });
-          queryClient.invalidateQueries([QUERY_KEY_ELIGIBLE_DEPENDENTS]);
+          // queryClient.invalidateQueries([QUERY_KEY_ELIGIBLE_DEPENDENTS]);
+          queryClient.invalidateQueries({
+            queryKey: [QUERY_KEY_ELIGIBLE_DEPENDENTS],
+            // exact: true,
+          });
         },
       }
     );

@@ -10,6 +10,7 @@ interface IPostProps extends IUserToken {
 interface IEditProps extends IUserToken {
   newData: any;
   url: string;
+  id: number
 }
 
 export const postItemData = async ({ newData, url ,token}: IPostProps) => {
@@ -24,7 +25,8 @@ export const postItemData = async ({ newData, url ,token}: IPostProps) => {
   return response;
 };
 
-export const editItemData = async ({ newData, url, token }: IEditProps) => {
+export const editItemData = async ({ newData, id, url, token }: IEditProps) => {
+  const editUrl = `${url}/${id}`
   const config = {
     headers: {
       Accept: "application/json",
@@ -32,6 +34,7 @@ export const editItemData = async ({ newData, url, token }: IEditProps) => {
     },
   };
 
-  const response = await axios.put(url, newData, config);
+  const response = await axios.put(editUrl, newData, config);
+  
   return response;
 };

@@ -61,7 +61,7 @@ interface Links {
   next?: any;
 }
 
-interface AllEligiDependentsDatum {
+export interface AllEligiDependentsDatum {
   id: number;
   dependant: string;
   created_at: string;

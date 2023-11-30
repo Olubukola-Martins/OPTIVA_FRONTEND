@@ -40,8 +40,8 @@ import Department from "src/features/settings/features/department/pages/Departme
 import Employees from "src/features/settings/features/employees/pages/Employees";
 import Branches from "src/features/settings/features/branch/pages/Branches";
 import Roles from "src/features/settings/features/rolesAndPermissions/pages/Roles";
-import ViewEditTemplate from "src/features/settings/features/contractsEmailTemplates/pages/ViewEditTemplate";
 import CompanyProfile from "src/features/settings/features/companyProfile/page/CompanyProfile";
+import SettingsTemplate from "src/features/settings/features/contractsEmailTemplates/pages/SettingsTemplate";
 
 const routesArray = [
   {
@@ -59,7 +59,7 @@ const routesArray = [
   },
   {
     path: appRoute.viewEditEmailTemplate().format,
-    element: <ViewEditTemplate />,
+    element: <SettingsTemplate />,
   },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },

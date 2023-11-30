@@ -131,11 +131,12 @@ const Escalation = () => {
       const responseData = allEscalationData.data;
 
       const newData: DataType[] = responseData.map((item, index) => {
-        const highestLevel = Math.max(...item.levels.map((item) => item.id));
+        // const highestLevel = Math.max(...item.levels.map((item) => item.id));
+        const highestLevel = item.levels.length
         return {
           key: item.id,
           sn: index + 1, 
-          role: item.role_id,
+          role: item.r,
           task: item.task,
           taskDeadline: `${item.deadline} Hours`,
           reminder: `After ${item.reminder_frequency} Hours`,
@@ -225,7 +226,7 @@ const Escalation = () => {
             setShowDeleteModal(false);
           }}
           handleDelete={() => {
-            deleteData(currentId);
+            deleteData(currentId as number);
           }}
         />
         <PageIntro

@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { openNotification } from "src/utils/notification";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { useGetToken } from "src/hooks/useGetToken";
 
 const getData = async (props: {
   token: string;
@@ -19,7 +20,7 @@ const getData = async (props: {
 
   const res = await axios.get(url, config);
   const item = res.data;
-
+// return res
   return item;
 };
 
@@ -32,7 +33,7 @@ export const useFetchSingleItem = ({
   queryKey: string;
   urlEndPoint: string;
 }) => {
-  const {  token } = useGetUserInfo();
+  const {  token } = useGetToken();
   const queryData = useQuery(
     [queryKey],
     () => getData({ token, itemId, urlEndPoint }),
@@ -47,6 +48,7 @@ export const useFetchSingleItem = ({
         });
       },
       onSuccess: (res) => {
+        console.log("res",res)
         // openNotification({
         //   state: "success",
         //   title: "Success",

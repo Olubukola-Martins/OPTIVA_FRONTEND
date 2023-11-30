@@ -20,6 +20,7 @@ import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import useAddEscalation from "../hooks/useAddEscalation";
 import EscalationDateErrorModal from "../components/EscalationDateErrorModal";
 import { IEscalationBody } from "src/features/settings/types/settingsType";
+import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
 
 interface DataRow {
   key: number;
@@ -38,13 +39,13 @@ const NewEscalation = () => {
     queryKey: "roles",
     urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
   });
-  //  const { data: employeeData, isLoading: loadEmployee } =
-  //    useFetchEmployees("active-employees");
-  const { data: allEmployees, isLoading: allEmployeesLoading } =
-    useFetchAllItems({
-      queryKey: "employees",
-      urlEndPoint: `${END_POINT.BASE_URL}/admin/employees`,
-    });
+   const { data: employeeData, isLoading: loadEmployee } =
+     useFetchEmployees("active-employees");
+  // const { data: allEmployees, isLoading: allEmployeesLoading } =
+  //   useFetchAllItems({
+  //     queryKey: "employees",
+  //     urlEndPoint: `${END_POINT.BASE_URL}/admin/employees`,
+  //   });
   const TimePopover: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) => {
@@ -104,10 +105,10 @@ const NewEscalation = () => {
         <Select
           popupMatchSelectWidth={false}
           placeholder="Select Employee"
-          loading={allEmployeesLoading}
+          loading={loadEmployee}
           options={
-            allEmployees?.data
-              ? allEmployees?.data.map(
+            employeeData
+              ? employeeData.map(
                   (employee: { name: string; id: number }) => {
                     return { label: employee.name, value: employee.id };
                   }
@@ -126,7 +127,7 @@ const NewEscalation = () => {
           style={{ paddingBottom: 0, marginBottom: 0 }}
           className=" min-w-[150px]"
         >
-          <InputNumber min={0} addonAfter={"Day(s)"} />
+          <InputNumber min={0} addonAfter={"Hour(s)"} />
         </Form.Item>
       </TimePopover>
     );
@@ -147,7 +148,7 @@ const NewEscalation = () => {
   ];
   useEffect(() => {
     if (!allRolesLoading && allRoles) setData(tableInitialData);
-  }, [allRolesLoading, allRoles, allEmployees, allEmployeesLoading]);
+  }, [allRolesLoading, allRoles, employeeData, loadEmployee]);
 
   const [data, setData] = useState<DataRow[]>(tableInitialData);
   const deleteEscalationLevel = (item: DataRow) => {
@@ -320,7 +321,7 @@ const NewEscalation = () => {
                   label="Task Deadline"
                   name="deadline"
                 >
-                  <InputNumber min={0} addonAfter={"Day(s)"} />
+                  <InputNumber min={0} addonAfter={"Hour(s)"} />
                 </FormItem>
               </TimePopover>
             </div>
@@ -330,7 +331,7 @@ const NewEscalation = () => {
                 name="reminderFrequency"
                 className="sm:w-fit"
               >
-                <InputNumber min={0} addonAfter={"Day(s)"} />
+                <InputNumber min={0} addonAfter={"Hour(s)"} />
               </FormItem>
               <div>
                 <FormItem label="Escalation Levels" name="escalationLevels">
