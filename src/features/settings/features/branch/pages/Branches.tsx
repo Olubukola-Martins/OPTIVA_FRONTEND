@@ -1,86 +1,30 @@
-import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AddBranch } from "../components/AddBranch";
-import { Dropdown, Menu, Table } from "antd";
-import { ColumnsType } from "antd/es/table";
-import { branchProps } from "../types";
-import {
-  QUERY_KEY_FOR_BRANCHES,
-  useFetchBranches,
-} from "../hooks/useFetchBranches";
-import { useDelete } from "src/hooks/useDelete";
-import Popconfirm from "antd/lib/popconfirm";
-import { usePagination } from "src/hooks/usePagination";
+import { Tabs } from "antd";
+
+import { ActivateBranches } from "../hooks/ActivateBranches";
+import { InactiveBranches } from "../hooks/InactiveBranches";
+import { useBranchUpdate } from "../hooks/useBranchUpdate";
 
 const Branches = () => {
-  const [addBranch, setAddBranch] = useState(false);
-  const [branchId, setBranchId] = useState<number>();
-  const { pagination, onChange } = usePagination();
-  const { data, isLoading } = useFetchBranches({
-    pagination,
-    currentUrl: "active-branches",
-  });
-  const { removeData } = useDelete({
-    deleteEndPointUrl: "admin/branches/",
-    queryKey: QUERY_KEY_FOR_BRANCHES,
-  });
-
-  // console.log(pagination.total);
-
-  const handleBranch = (id: number) => {
-    setBranchId(id);
-    setAddBranch(true);
-  };
-
-  const handleAddBranch = () => {
-    setBranchId(undefined);
-    setAddBranch(true);
-  };
-
-  const columns: ColumnsType<branchProps> = [
+  const { addBranch, setAddBranch, branchId, handleAddBranch } =
+  useBranchUpdate();
+  const tabItems: {
+    label: string;
+    children: React.ReactNode;
+    key: string;
+  }[] = [
     {
-      title: "Name",
-      dataIndex: "name",
+      label: "Active Branches",
+      children: <ActivateBranches />,
+      key: "Active Employees",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-    },
-    {
-      title: "Address",
-      dataIndex: "address_details",
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-
-      render: (_, val) => (
-        <div>
-          <Dropdown
-            trigger={["click"]}
-            overlay={
-              <Menu>
-                <Menu.Item key="1" onClick={() => handleBranch(val.id)}>
-                  Edit
-                </Menu.Item>
-                <Menu.Item key="2">
-                  <Popconfirm
-                    title="Delete branch"
-                    description={`Are you sure to delete ${val.name}`}
-                    onConfirm={() => removeData(val.id)}
-                  >
-                    Delete
-                  </Popconfirm>
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-          </Dropdown>
-        </div>
-      ),
+      label: "Inactive Branches",
+      children: <InactiveBranches />,
+      key: "Inactive Employees",
     },
   ];
   return (
@@ -100,14 +44,11 @@ const Branches = () => {
           <AppButton label="Add New" handleClick={() => handleAddBranch()} />
         </div>
       </div>
-      <Table
-        className="bg-white rounded-md shadow border mt-8"
-        columns={columns}
-        dataSource={data?.data}
-        pagination={{ ...pagination, total: data?.total }}
-        onChange={onChange}
-        scroll={{ x: 800 }}
-        loading={isLoading}
+
+      <Tabs
+        items={tabItems}
+        className="hover:bg-caramel active:text-primary"
+        // tabBarExtraContent={operations}
       />
     </>
   );

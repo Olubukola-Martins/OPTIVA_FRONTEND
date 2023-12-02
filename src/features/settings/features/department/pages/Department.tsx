@@ -23,7 +23,7 @@ const Department = () => {
   });
   const [departmentId, setDepartmentId] = useState<number>();
   const { removeData } = useDelete({
-    deleteEndPointUrl: "admin/departments/",
+    EndPointUrl: "admin/departments/",
     queryKey: QUERY_KEY_FOR_DEPARTMENT,
   });
 

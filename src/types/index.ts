@@ -46,7 +46,8 @@ export interface IUserToken {
 
 export interface IGeneralProps {
   id: number;
-  deleteEndPointUrl?: string;
+  EndPointUrl?: string;
+  is_active?: boolean;
 }
 
 export interface paginationAndFilterProps {

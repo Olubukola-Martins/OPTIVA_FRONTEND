@@ -13,7 +13,7 @@ const Roles = () => {
   const [rolesId, setRolesId] = useState<number>();
   const { isLoading: loadRoles, data: rolesData } = useFetchRoles();
   const { removeData } = useDelete({
-    deleteEndPointUrl: "admin/roles/",
+    EndPointUrl: "admin/roles/",
     queryKey: QUERY_KEY_FOR_ROLES,
   });
 
