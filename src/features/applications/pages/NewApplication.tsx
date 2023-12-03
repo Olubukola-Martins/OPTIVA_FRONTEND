@@ -30,7 +30,7 @@ const NewApplication = () => {
     <NewApplicantBrief />,
     <NewAboutTheApplicant form={form} />,
     <NewApplicantPeculiarites />,
-    <NewOthers form={form} />,
+    <NewOthers />,
   ];
 
   return (
