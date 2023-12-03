@@ -111,7 +111,7 @@ const NewEscalation = () => {
     {
       title: "Level",
       key: "level",
-      render: (_: any, record: DataRow, index: number) => {
+      render: (_: any, _record: DataRow, index: number) => {
         return index + 1;
       },
     },

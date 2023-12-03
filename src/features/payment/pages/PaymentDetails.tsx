@@ -33,7 +33,7 @@ const PaymentDetails = () => {
   const { id } = useParams();
   const [modalForm] = Form.useForm();
   const navigate = useNavigate();
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
   const [data, setData] = useState<IPaymentItem[]>([]);
   const onFinish = (values: any) => {
     console.log("form values", values);
@@ -41,7 +41,7 @@ const PaymentDetails = () => {
 
   // MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleAddNewPayment = (values) => {
+  const handleAddNewPayment = (values: any) => {
     const newdateCreated = values.dateCreated;
     const newdatePaid = values.datePaid;
     const key = data.length + 1;
@@ -169,7 +169,7 @@ const PaymentDetails = () => {
   const editableColumns: ColumnsType<IPaymentItem> = [
     {
       title: "SN",
-      render: (_: any, record: IPaymentItem, index: number) => {
+      render: (_: any, _record: IPaymentItem, index: number) => {
         return index + 1;
       },
     },

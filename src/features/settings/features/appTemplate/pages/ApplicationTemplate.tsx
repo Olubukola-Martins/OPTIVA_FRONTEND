@@ -33,7 +33,7 @@ const ApplicationTemplate = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}

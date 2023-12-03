@@ -94,7 +94,7 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
           />
 
          
-          <FormRolesInput Form={Form}/>
+          <FormRolesInput Form={Form} mode="multiple"/>
         </div>
         <FormDepartmentInput Form={Form} />
 

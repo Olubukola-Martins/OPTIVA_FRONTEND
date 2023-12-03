@@ -6,7 +6,7 @@ export const useDetailsForm = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editDetails, setEditDetails] = useState<any | null>(null);
 
-  const addNewDetail = (detailType: string) => {
+  const addNewDetail = () => {
     const randomNumber = Math.random() * 1000;
     const newDetails: any = {
       key: randomNumber,
