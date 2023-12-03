@@ -7,7 +7,7 @@ import {
   MeetingModalActions,
   NewMeetingModal,
 } from "./MeetingModals";
-import { IMeetingData } from "./MeetingModals";
+// import { IMeetingData } from "./MeetingModals";
 
 export interface IEvent {
   id: number;
@@ -60,10 +60,11 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
     setOpenNewMeetingModal(false);
   };
 
-  const handleCreateMeeting = (meetingData: IMeetingData) => {
-    const updatedEvents = [...events, meetingData];
+  const handleCreateMeeting = () => {
     setOpenNewMeetingModal(false);
   };
+
+  
   return (
     <div className="h-[500px]">
       <BigCalendar

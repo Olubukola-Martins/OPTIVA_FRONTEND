@@ -1,5 +1,4 @@
 import { Form, Input, Select } from "antd";
-import { useParams } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -14,10 +13,11 @@ const EditProgramType = () => {
     console.log("Form values submitted:", values);
   };
 
-  const handleUpdate = () => {
-    const formValues = form.getFieldsValue();
-    console.log("Form values updated:", formValues);
-  };
+  // const handleUpdate = () => {
+  //   const formValues = form.getFieldsValue();
+  //   console.log("Form values updated:", formValues);
+  // };
+
   return (
     <>
       <PageIntro

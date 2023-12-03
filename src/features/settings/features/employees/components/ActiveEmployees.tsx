@@ -1,11 +1,12 @@
 import Table, { ColumnsType } from "antd/es/table";
-import { Dropdown, Menu } from "antd";
+import { Dropdown, Menu, Popconfirm } from "antd";
 import { employeesProps } from "../types";
-import { useFetchEmployees } from "../hooks/useFetchEmployees";
+import { QUERY_KEY_FOR_EMPLOYEES, useFetchEmployees } from "../hooks/useFetchEmployees";
 import { useHandleUpdate } from "../hooks/useHandleUpdate";
 import { NewEmployee } from "./NewEmployee";
 import { usePagination } from "src/hooks/usePagination";
 import { searchValueProps } from "src/types";
+import { useDeactivate } from "src/hooks/useDeactivate";
 
 export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
@@ -13,6 +14,11 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
     currentUrl: "active-employees",
     pagination,
     search: searchValue,
+  });
+  const { removeData } = useDeactivate({
+    EndPointUrl: "admin/deactivate-employee/",
+    queryKey: QUERY_KEY_FOR_EMPLOYEES,
+    is_active: false,
   });
   const { handleEmployee, addEmployee, setAddEmployee, employeeId } =
     useHandleUpdate();
@@ -84,7 +90,15 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
                 <Menu.Item key="1" onClick={() => handleEmployee(val.id)}>
                   Edit
                 </Menu.Item>
-                <Menu.Item key="2">Delete</Menu.Item>
+                <Menu.Item key="2">
+                  <Popconfirm
+                    title="Deactivate employee"
+                    description={`Are you sure to deactivate ${val.name}`}
+                    onConfirm={() => removeData(val.id)}
+                  >
+                    Deactivate employee
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >

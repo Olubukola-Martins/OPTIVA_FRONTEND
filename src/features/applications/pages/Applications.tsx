@@ -9,7 +9,7 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 
 const Applications = () => {
   const [form] = Form.useForm()
-  const handleSubmit = (val:any)=>{}
+  const handleSubmit = ()=>{}
   // New Applications Modal
   const [openNewApplicationsModal, setOpenNewApplicationsModal] =
     useState(false);

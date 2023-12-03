@@ -145,7 +145,7 @@ export const MeetingDetailsModal: React.FC<{
   onAttend?: () => void;
   onDecline?: () => void;
   inActionsModal?: boolean;
-}> = ({ open, meetingData, onCancel, onAttend, onDecline, inActionsModal }) => {
+}> = ({ open, meetingData, onCancel, inActionsModal }) => {
   const {
     organizer,
     attendee,
@@ -367,8 +367,8 @@ export const MeetingModalActions: React.FC<{
     detailsOfMeeting: "Lorem ipsum...",
   };
 
-  const handleAttendMeeting = (data?: any) => {};
-  const handleDeclineMeeting = (data?: any) => {};
+  const handleAttendMeeting = () => {};
+  const handleDeclineMeeting = () => {};
 
   return (
     <>

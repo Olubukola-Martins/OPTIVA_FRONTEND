@@ -1,5 +1,5 @@
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Select, Switch, Table } from "antd";
+import { Form, Select, Switch, Table } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
@@ -111,7 +111,7 @@ const EditEscalation = () => {
     {
       title: "Level",
       key: "level",
-      render: (_: any, record: DataRow, index: number) => {
+      render: (_: any, _record: DataRow, index: number) => {
         return index + 1;
       },
     },

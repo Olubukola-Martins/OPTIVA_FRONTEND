@@ -23,8 +23,8 @@ const Meetings = () => {
   ]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isCreateMeetingModalVisible, setCreateMeetingModalVisible] =
-    useState(false);
+  // const [isCreateMeetingModalVisible, setCreateMeetingModalVisible] =
+  //   useState(false);
   const [meetingActionsModal, setMeetingActionsModal] = useState(false);
 
   const showModal = () => {
@@ -35,9 +35,9 @@ const Meetings = () => {
     setIsModalVisible(false);
   };
 
-  const showModalActions = () => {
-    setMeetingActionsModal(true);
-  };
+  // const showModalActions = () => {
+  //   setMeetingActionsModal(true);
+  // };
   const handleCancelModalActions = () => {
     setMeetingActionsModal(false);
   };

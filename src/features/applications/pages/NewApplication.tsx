@@ -27,9 +27,9 @@ const NewApplication = () => {
   };
 
   const steps = [
-    <NewApplicantBrief form={form} />,
+    <NewApplicantBrief />,
     <NewAboutTheApplicant form={form} />,
-    <NewApplicantPeculiarites form={form} />,
+    <NewApplicantPeculiarites />,
     <NewOthers form={form} />,
   ];
 
