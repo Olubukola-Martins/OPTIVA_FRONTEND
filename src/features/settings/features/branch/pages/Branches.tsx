@@ -2,15 +2,19 @@ import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AddBranch } from "../components/AddBranch";
-import { Tabs } from "antd";
-
+import { Input, Tabs } from "antd";
 import { ActivateBranches } from "../hooks/ActivateBranches";
-import { InactiveBranches } from "../hooks/InactiveBranches";
 import { useBranchUpdate } from "../hooks/useBranchUpdate";
+import { InactivateBranches } from "../hooks/InactiveBranches";
+import { useState } from "react";
+import { useDebounce } from "src/hooks/useDebounce";
 
 const Branches = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { addBranch, setAddBranch, branchId, handleAddBranch } =
-  useBranchUpdate();
+    useBranchUpdate();
+
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -18,13 +22,13 @@ const Branches = () => {
   }[] = [
     {
       label: "Active Branches",
-      children: <ActivateBranches />,
-      key: "Active Employees",
+      children: <ActivateBranches searchValue={debouncedSearchTerm} />,
+      key: "Active Branches",
     },
     {
       label: "Inactive Branches",
-      children: <InactiveBranches />,
-      key: "Inactive Employees",
+      children: <InactivateBranches searchValue={debouncedSearchTerm} />,
+      key: "Inactive Branches",
     },
   ];
   return (
@@ -48,7 +52,15 @@ const Branches = () => {
       <Tabs
         items={tabItems}
         className="hover:bg-caramel active:text-primary"
-        // tabBarExtraContent={operations}
+        tabBarExtraContent={
+          <Input.Search
+            allowClear
+            placeholder="Search"
+            className="md:flex hidden"
+            onSearch={(val) => setSearchTerm(val)}
+            onChange={(e) => e.target.value === "" && setSearchTerm("")}
+          />
+        }
       />
     </>
   );

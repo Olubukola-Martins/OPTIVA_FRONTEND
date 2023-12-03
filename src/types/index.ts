@@ -58,3 +58,7 @@ export interface paginationAndFilterProps {
   search?: string;
   currentUrl?: string;
 }
+
+export interface searchValueProps {
+  searchValue: string;
+}

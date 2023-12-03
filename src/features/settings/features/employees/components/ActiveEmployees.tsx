@@ -5,12 +5,14 @@ import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import { useHandleUpdate } from "../hooks/useHandleUpdate";
 import { NewEmployee } from "./NewEmployee";
 import { usePagination } from "src/hooks/usePagination";
+import { searchValueProps } from "src/types";
 
-export const ActiveEmployees = () => {
+export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
   const { data, isLoading } = useFetchEmployees({
     currentUrl: "active-employees",
     pagination,
+    search: searchValue,
   });
   const { handleEmployee, addEmployee, setAddEmployee, employeeId } =
     useHandleUpdate();

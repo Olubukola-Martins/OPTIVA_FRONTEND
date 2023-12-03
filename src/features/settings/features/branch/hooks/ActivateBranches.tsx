@@ -7,12 +7,14 @@ import { Table } from "antd/lib";
 import { useBranchUpdate } from "./useBranchUpdate";
 import { AddBranch } from "../components/AddBranch";
 import { useDeactivate } from "src/hooks/useDeactivate";
+import { searchValueProps } from "src/types";
 
-export const ActivateBranches = () => {
+export const ActivateBranches = ({ searchValue }: searchValueProps) => {
   const { pagination, onChange } = usePagination();
   const { data, isLoading } = useFetchBranches({
     pagination,
     currentUrl: "active-branches",
+    search: searchValue,
   });
   const { removeData } = useDeactivate({
     EndPointUrl: "admin/deactivate-branch/",
