@@ -12,10 +12,7 @@ export const AddFees = () => {
       />
 
       <AddFeesTab />
-      <div className="flex items-center justify-end gap-4">
-        <AppButton label="Cancel" type="reset" variant="transparent" />
-        <AppButton label="Save" type="submit" />
-      </div>
+     
     </>
   );
 };

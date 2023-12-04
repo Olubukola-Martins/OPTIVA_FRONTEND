@@ -1,4 +1,5 @@
 import { Input, Select, Form } from "antd";
+import { AntiguaBarbacudaDonationQuestions } from "./AntiguaBarbacudaDonationQuestions";
 
 export const ProgramFeesBreakdown = () => {
   // const addOnAfter = (
@@ -15,7 +16,8 @@ export const ProgramFeesBreakdown = () => {
   );
   return (
     <div className="border rounded-lg p-5">
-      <div className="flex gap-8">
+      <AntiguaBarbacudaDonationQuestions />
+      {/* <div className="flex gap-8">
         <div className="w-1/2">
           <Form.Item
             label="Finance Fee for Applicants"
@@ -107,7 +109,7 @@ export const ProgramFeesBreakdown = () => {
             <Input size="large" addonAfter={currency} />
           </Form.Item>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

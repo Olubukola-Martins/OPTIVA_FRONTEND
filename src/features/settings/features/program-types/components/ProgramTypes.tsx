@@ -81,7 +81,7 @@ export const ProgramTypes = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}

@@ -1,4 +1,4 @@
-import { Modal, Input, Select, Form } from "antd";
+import { Modal, Input,  Form } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
 import { usePostCountry } from "../hooks/usePostCountry";
@@ -6,8 +6,8 @@ import { useQueryClient } from "react-query";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { QUERY_KEY_FOR_COUNTRY } from "../hooks/useGetCountry";
 import { openNotification } from "src/utils/notification";
-import { useGetProgramType } from "../hooks/useGetProgramType";
-import type { SelectProps } from "antd";
+// import { useGetProgramType } from "../hooks/useGetProgramType";
+// import type { SelectProps } from "antd";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
 
 export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
@@ -16,7 +16,7 @@ export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
   const { mutate, isLoading } = usePostCountry();
   const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
-  const { data } = useGetProgramType();
+  // const { data } = useGetProgramType();
 
   //   // PROGRAM TYPE SELECT
   // const options: SelectProps["options"] =

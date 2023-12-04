@@ -5,15 +5,15 @@ import {
   QUERY_KEY_FOR_MILESTONE,
   useGetMilestone,
 } from "../hooks/useGetMilestone";
-import { usePostMilestone } from "../hooks/usePostMilestone";
+import { usePostAndPutMilestone } from "../hooks/usePostAndPutMilestone";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
-
+import { textInputValidationRules } from "src/utils/formHelpers/validations";
 
 export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
   const [form] = Form.useForm();
-  const { mutate, isLoading: postLoading } = usePostMilestone();
+  const { mutate, isLoading: postLoading } = usePostAndPutMilestone();
   const { token } = useGetUserInfo();
   const queryClient = useQueryClient();
   const { data: milestoneData } = useGetMilestone();
@@ -33,23 +33,24 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
     });
   };
 
-
   const handleMilestoneSubmit = (val: any) => {
     console.log("valuues of form", val);
     const milestoneTitle = val.milestone;
     const milestoneTimeline = val.timeline;
-    const processes = val.newProcess?.map((item: any) => ({
-      title: item.newTitle,  
-      duration: item.newDuration,  
-      duration_type: "days",
-    })) || [];
-  
+    const processes =
+      val.newProcess?.map((item: any) => ({
+        title: item.newTitle,
+        duration: item.newDuration,
+        duration_type: "days",
+      })) || [];
+
     mutate(
       {
+        ...val, 
         milestone: milestoneTitle,
         processes,
         timeline: milestoneTimeline,
-        token,
+
         duration_type: "days",
       },
       {
@@ -74,7 +75,6 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
     );
   };
 
-
   return (
     <>
       <Modal open={open} onCancel={() => handleClose()} footer={null}>
@@ -85,24 +85,32 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
           form={form}
           requiredMark={false}
         >
-          <Form.Item name="milestone" label="Milestone" required>
+          <Form.Item
+            name="milestone"
+            label="Milestone"
+            rules={textInputValidationRules}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="timeline" label="Timeline (days)" required>
+          <Form.Item
+            name="timeline"
+            label="Timeline (days)"
+            rules={textInputValidationRules}
+          >
             <Input />
           </Form.Item>
 
           <h2>Processes</h2>
           <div>
             <h2 className="p-1">What is the title of the process?</h2>
-            <Form.Item name="title">
+            <Form.Item name="title" rules={textInputValidationRules}>
               <Input />
             </Form.Item>
           </div>
 
           <div>
             <h2 className="p-1">What is the duration of the process?</h2>
-            <Form.Item name="duration">
+            <Form.Item name="duration" rules={textInputValidationRules}>
               <Input />
             </Form.Item>
           </div>
@@ -118,6 +126,7 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
                         {...field}
                         name={[field.name, "newTitle"]}
                         label="What is the title of the process?"
+                        rules={textInputValidationRules}
                       >
                         <Input placeholder="Enter process title" />
                       </Form.Item>
@@ -126,6 +135,7 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
                           {...field}
                           name={[field.name, "newDuration"]}
                           label="What is the duration of the process?"
+                          rules={textInputValidationRules}
                         >
                           <Input placeholder="Enter process duration" />
                         </Form.Item>
@@ -158,8 +168,6 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
             />
             <AppButton label="Save" type="submit" isLoading={postLoading} />
           </div>
-
-        
         </Form>
       </Modal>
     </>

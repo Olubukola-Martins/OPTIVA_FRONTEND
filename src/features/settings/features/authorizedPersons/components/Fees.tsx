@@ -1,9 +1,11 @@
-import { Dropdown, Menu,  Skeleton, Table } from "antd";
+import { Dropdown, Menu, Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import { QUERY_KEY_FOR_FEES, useGetFees } from "../hooks/useGetFees";
 import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
 import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useGetCountry } from "../../program-types/hooks/useGetCountry";
+import { useGetInvestmentRoute } from "../../investment/hooks/useGetInvestmentRoute";
 
 type DataSourceItem = {
   key: React.Key;
@@ -21,7 +23,11 @@ export const Fees = () => {
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
   const [feeId, setFeeId] = useState<number>();
 
-  console.log('fees data', data)
+  console.log("fees data", data);
+  const { data: countryData } = useGetCountry();
+  const { data: investmentData } = useGetInvestmentRoute();
+  console.log("country data", countryData);
+  console.log("investment data", investmentData);
 
   const { removeData, deleteIsLoading } = useDeleteHandler({
     deleteEndPointUrl: "admin/fee",
@@ -96,7 +102,7 @@ export const Fees = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
