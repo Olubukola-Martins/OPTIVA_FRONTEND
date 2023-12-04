@@ -21,6 +21,19 @@ const config = {
   allowResizeY: false,
   uploader: {
     insertImageAsBase64URI: true,
+    // // URL where the files will be uploaded
+    // url: "/your-upload-endpoint", 
+    // format: "json", // Response format, e.g., JSON
+    // headers: {
+    //   Authorization: "Bearer your_access_token", 
+    // },
+    // //  handle the uploaded files' response
+    // isSuccess: function (response) {
+    //   return response.success; // Customize based on your server's response
+    // },
+    // getMessage: function (response) {
+    //   return response.message; // Customize based on your server's response
+    // },
   },
   toolbarAdaptive: false,
 };

@@ -25,6 +25,12 @@ const CompanyProfile = () => {
   ];
   return (
     <>
+
+
+
+
+
+    
       <div className="lg:h-[40vh] lg:-mr-[31px] lg:-ml-[31px] companyProfileContainer bg-gradient sticky top-12">
         <div className="mb-5 pt-8 text-accent">
           <h3 className="flex items-center gap-x-2 font-semibold text-xl">

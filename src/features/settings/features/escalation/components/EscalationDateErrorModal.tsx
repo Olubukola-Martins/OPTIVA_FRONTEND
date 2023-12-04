@@ -2,18 +2,12 @@ import { Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 
 interface IProps {
-  description?: string;
-  heading?: string;
   open: boolean;
   handleClose: () => void;
-  handleDelete: () => void;
 }
-const DeleteModal = ({
+const EscalationDateErrorModal = ({
   open,
   handleClose,
-  heading,
-  description,
-  handleDelete,
 }: IProps) => {
   return (
     <Modal
@@ -60,9 +54,13 @@ const DeleteModal = ({
         </div>
         <div className="mb-4">
           <h4 className="text-center text-lg mb-[10px] font-semibold">
-            {heading}
+            "Invalid Date Selection"
           </h4>
-          <p className="text-center text-base ">{description}</p>
+          <p className="text-center text-base ">
+              Please check deadline/escalation, select a future date and time.
+              <br />
+              Date and time for deadline and escalations must be after the current date and time.
+          </p>
         </div>
         <div className="flex justify-between w-fit gap-4 mb-3">
           <AppButton
@@ -70,17 +68,10 @@ const DeleteModal = ({
             variant="transparent"
             handleClick={() => handleClose()}
           />
-          <AppButton
-            label="Delete"
-            handleClick={() => {
-              handleDelete();
-              handleClose();
-            }}
-          />
         </div>
       </div>
     </Modal>
   );
 };
 
-export default DeleteModal;
+export default EscalationDateErrorModal

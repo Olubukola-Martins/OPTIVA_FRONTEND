@@ -1,25 +1,81 @@
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Form, Input, Select, Table } from "antd";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Popover,
+  Select,
+  Table,
+} from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import SuccessModal from "src/features/settings/components/SuccessModal";
-
+import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
+import useAddEscalation from "../hooks/useAddEscalation";
+import EscalationDateErrorModal from "../components/EscalationDateErrorModal";
+import { IEscalationBody } from "src/features/settings/types/settingsType";
+import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
+              
 interface DataRow {
   key: number;
   escalateTo: JSX.Element;
-  employeeName: JSX.Element;
+  employeeName: any;
   escalateAfter: JSX.Element;
 }
-
 const NewEscalation = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showDateErrorModal, setShowDateErrorModal] = useState(false);
+  const [openTimePop, setopenTimePop] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { addEscalation } = useAddEscalation();
+  const { data: allRoles, isLoading: allRolesLoading } = useFetchAllItems({
+    queryKey: "roles",
+    urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
+  });
+  //  const { data: employeeData, isLoading: loadEmployee } =
+  //    useFetchEmployees("active-employees");
+  // const { data: allEmployees, isLoading: allEmployeesLoading } =
+  //   useFetchAllItems({
+  //     queryKey: "employees",
+  //     urlEndPoint: `${END_POINT.BASE_URL}/admin/employees`,
+  //   });
+  const TimePopover: React.FC<{ children: React.ReactNode }> = ({
+    children,
+  }) => {
+    return (
+      <Popover
+        content={
+          <>
+            <span>
+              Please select a future date and time.
+              <br />
+              Date and time must be after the current date and time.
+            </span>
+            <AppButton
+              handleClick={() => {
+                setopenTimePop(false);
+              }}
+              label="Ok"
+            />
+          </>
+        }
+        title={
+          <p className="text-red-600 font-semibold">Invalid Date Selection</p>
+        }
+        open={openTimePop}
+      >
+        {children}
+      </Popover>
+    );
+  };
+
   const escalateToItem = (key: number) => {
     return (
       <Form.Item
@@ -29,53 +85,42 @@ const NewEscalation = () => {
         <Select
           popupMatchSelectWidth={false}
           placeholder="Select Role"
-          options={[
-            { value: "Service Manager 1", label: "Service Manager 1" },
-            { value: "Service Manager 2", label: "Service Manager 2" },
-            { value: "Client Manager 1", label: "Client Manager 1" },
-            { value: "Client Manager 2", label: "Client Manager 2" },
-          ]}
+          // loading={allRolesLoading}
+          options={
+            allRoles?.data.map((role: { name: string; id: number }) => {
+              return { label: role.name, value: role.id };
+            })
+            // : []
+          }
         />
       </Form.Item>
     );
   };
   const employeeNameItem = (key: number) => {
     return (
-      <Form.Item
-        name={`${key}-employeeName`}
-        style={{ paddingBottom: 0, marginBottom: 0 }}
-      >
-        <Select
-          popupMatchSelectWidth={false}
-          placeholder="Select Employee"
-          options={[
-            { value: "George Boyd", label: "George Boyd" },
-            { value: "Ade Tola", label: "Ade Tola" },
-            { value: "Toni Tones", label: "Toni Tones" },
-          ]}
+      <div className="min-w-[120px] mt-5">
+        <FormEmployeeInput
+          control={{ name: `${key}-employeeName`, label: " " }}
+          showLabel={false}
+          Form={Form}
         />
-      </Form.Item>
+      </div>
     );
   };
   const escalateAfterItem = (key: number) => {
     return (
-      <Form.Item
-        name={`${key}-escalateAfter`}
-        style={{ paddingBottom: 0, marginBottom: 0 }}
-      >
-        <Select
-          placeholder="Select Duration"
-          popupMatchSelectWidth={false}
-          options={[
-            { value: "8 Hours", label: "8 Hours" },
-            { value: "2 Hours", label: "2 Hours" },
-            { value: "5 Hours", label: "5 Hours" },
-          ]}
-        />
-      </Form.Item>
+      <TimePopover>
+        <Form.Item
+          name={`${key}-escalateAfter`}
+          style={{ paddingBottom: 0, marginBottom: 0 }}
+          className=" min-w-[150px]"
+        >
+          <InputNumber min={0} addonAfter={"Hour(s)"} />
+        </Form.Item>
+      </TimePopover>
     );
   };
-  const [data, setData] = useState<DataRow[]>([
+  const tableInitialData = [
     {
       key: 1,
       escalateTo: escalateToItem(1),
@@ -88,20 +133,14 @@ const NewEscalation = () => {
       employeeName: employeeNameItem(2),
       escalateAfter: escalateAfterItem(2),
     },
-    {
-      key: 3,
-      escalateTo: escalateToItem(3),
-      employeeName: employeeNameItem(3),
-      escalateAfter: escalateAfterItem(3),
-    },
-    {
-      key: 4,
-      escalateTo: escalateToItem(4),
-      employeeName: employeeNameItem(4),
-      escalateAfter: escalateAfterItem(4),
-    },
-  ]);
-  const handleDelete = (item: any) => {
+  ];
+
+  useEffect(() => {
+    if (!allRolesLoading && allRoles) setData(tableInitialData);
+  }, [allRolesLoading, allRoles]);
+
+  const [data, setData] = useState<DataRow[]>(tableInitialData);
+  const deleteEscalationLevel = (item: DataRow) => {
     setData((pre) => {
       return pre.filter((row) => row.key !== item.key);
     });
@@ -111,7 +150,7 @@ const NewEscalation = () => {
     {
       title: "Level",
       key: "level",
-      render: (_: any, _record: DataRow, index: number) => {
+      render: (_, __: DataRow, index: number) => {
         return index + 1;
       },
     },
@@ -136,7 +175,7 @@ const NewEscalation = () => {
       render: (record: DataRow) => (
         <DeleteOutlined
           className="text-red-500 flex  justify-center"
-          onClick={() => handleDelete(record)}
+          onClick={() => deleteEscalationLevel(record)}
         />
       ),
     },
@@ -147,15 +186,58 @@ const NewEscalation = () => {
     const newValue = {
       key: newKey,
       escalateTo: escalateToItem(newKey),
-      employeeName: employeeNameItem(newKey),
+      employeeName: employeeNameItem(newKey), 
       escalateAfter: escalateAfterItem(newKey),
     };
     setData((pre) => {
       return [...pre, newValue];
     });
   };
-  const onFinish = (values: any) => {
-    console.log(values);
+
+  // HANDLE SUBMIT
+  const handleAddEscalation = (formValues: any) => {
+    console.log(formValues);
+    const levels: {
+      duration: number | undefined;
+      role_id: number;
+      employee_id: number;
+    }[] = [];
+    Object.keys(formValues).forEach((key) => {
+      const [prefix, field] = key.split("-");
+
+      if (field === "employeeName") {
+        const setNumber = parseInt(prefix);
+        if (!isNaN(setNumber)) {
+          const duration = formValues[`${setNumber}-escalateAfter`];
+          const roleId = formValues[`${setNumber}-escalateTo`];
+          const employeeId = formValues[`${setNumber}-employeeName`];
+
+          // Add data to levels array if all required fields are present
+          if (
+            duration !== undefined &&
+            roleId !== undefined &&
+            employeeId !== undefined
+          ) {
+            levels.push({
+              duration: duration,
+              role_id: roleId,
+              employee_id: employeeId,
+            });
+          }
+        }
+      }
+    });
+
+    const escalationBody: IEscalationBody = {
+      escalation_name: formValues.escalationName,
+      role_id: parseInt(formValues.selectRole),
+      task: formValues.selectTask,
+      deadline: formValues.deadline,
+      reminder_frequency: formValues.reminderFrequency,
+      levels: levels,
+    };
+    console.log("escalationBody", escalationBody);
+    addEscalation(escalationBody);
   };
   return (
     <>
@@ -164,7 +246,13 @@ const NewEscalation = () => {
         description="Escalation Added Successfully"
         handleClose={() => {
           setShowSuccessModal(false);
-          // navigate(appRoute.escalation);
+        }}
+        buttonLabel="Back"
+      />
+      <EscalationDateErrorModal
+        open={showDateErrorModal}
+        handleClose={() => {
+          setShowDateErrorModal(false);
         }}
       />
       <PageIntro
@@ -176,12 +264,12 @@ const NewEscalation = () => {
         <Form
           name="defineEscalation"
           layout="vertical"
-          onFinish={onFinish}
+          onFinish={handleAddEscalation}
           form={form}
-          className="px-[45px] max-md:px-4 max-xl:px-8 py-10 max-md:py-3 max-xl:py-6 flex flex-col"
+          className="px-[45px] max-md:px-4 max-xl:px-6 py-10 max-md:py-3 max-xl:py-6 flex flex-col"
         >
           <div className="flex flex-col lg:flex-row gap-2 justify-between lg:gap-10">
-            <div className="w-full">
+            <div className="w-3/4">
               <FormItem
                 label="Escalation Name"
                 name="escalationName"
@@ -195,46 +283,42 @@ const NewEscalation = () => {
                 className="sm:w-1/2 lg:w-full"
               >
                 <Select
-                  defaultValue={"Service Manager 2"}
-                  options={[
-                    { value: "Service Manager 1", label: "Service Manager 1" },
-                    { value: "Service Manager 2", label: "Service Manager 2" },
-                    { value: "Client Manager 1", label: "Client Manager 1" },
-                    { value: "Client Manager 2", label: "Client Manager 2" },
-                  ]}
+                  placeholder="Select Role"
+                  loading={allRolesLoading}
+                  options={
+                    allRoles?.data
+                      ? allRoles?.data.map(
+                          (role: { name: string; id: number }) => {
+                            return { label: role.name, value: role.id };
+                          }
+                        )
+                      : []
+                  }
                 />
               </FormItem>
               <FormItem
-                label="Select Task"
+                label="Task"
                 name="selectTask"
                 className="sm:w-1/2 lg:w-full"
               >
-                <Select defaultValue={"Accept Client"} disabled={true} />
+                <Input placeholder="Input Task" />
               </FormItem>
-              <FormItem label="Task Deadline" className="sm:w-1/2 lg:w-full">
-                <Select
-                  defaultValue={"2 Hours"}
-                  options={[
-                    { value: "8 Hours", label: "8 Hours" },
-                    { value: "2 Hours", label: "2 Hours" },
-                  ]}
-                />
-              </FormItem>
+              <TimePopover>
+                <FormItem
+                  label="Task Deadline"
+                  name="deadline"
+                >
+                  <InputNumber min={0} addonAfter={"Hour(s)"} />
+                </FormItem>
+              </TimePopover>
             </div>
             <div>
               <FormItem
                 label="Select Reminder Frequecy"
                 name="reminderFrequency"
-                className="sm:w-1/2 "
+                className="sm:w-fit"
               >
-                <Select
-                  defaultValue={"8 Hours"}
-                  options={[
-                    { value: "8 Hours", label: "8 Hours" },
-                    { value: "2 Hours", label: "2 Hours" },
-                    { value: "5 Hours", label: "5 Hours" },
-                  ]}
-                />
+                <InputNumber min={0} addonAfter={"Hour(s)"} />
               </FormItem>
               <div>
                 <FormItem label="Escalation Levels" name="escalationLevels">
@@ -244,7 +328,7 @@ const NewEscalation = () => {
                     pagination={false}
                     size="small"
                     bordered
-                    scroll={{ x: 300 }}
+                    scroll={{ x: 250 }}
                   />
                 </FormItem>
                 <PlusCircleOutlined
@@ -261,16 +345,11 @@ const NewEscalation = () => {
               label="Cancel"
               handleClick={() => navigate(appRoute.escalation)}
             />
-            <AppButton
-              type="submit"
-              label="Save"
-              handleClick={() => setShowSuccessModal(true)}
-            />
+            <AppButton type="submit" label="Save" handleClick={() => {}} />
           </div>
         </Form>
       </div>
     </>
   );
 };
-
 export default NewEscalation;
