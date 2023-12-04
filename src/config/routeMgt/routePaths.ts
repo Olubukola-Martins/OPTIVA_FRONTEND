@@ -39,6 +39,7 @@ export const appRoute = {
   department: `/settings/department`,
   employees: `/settings/employees`,
   roles: `/settings/roles`,
+  companyProfile: `company-profile`,
 
   // Applications
   applications: `/applications`,

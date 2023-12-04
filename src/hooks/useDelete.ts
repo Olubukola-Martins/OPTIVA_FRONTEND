@@ -6,15 +6,15 @@ import { IGeneralProps } from "src/types";
 import { useGetToken } from "./useGetToken";
 
 interface IDProps {
-    deleteEndPointUrl: string;
+    EndPointUrl: string;
     queryKey: string;
   }
 
  const handleDelete = async ({
   id,
-  deleteEndPointUrl,
+  EndPointUrl,
 }: IGeneralProps) => {
-  const url = `${END_POINT.BASE_URL}/${deleteEndPointUrl}${id}`;
+  const url = `${END_POINT.BASE_URL}/${EndPointUrl}${id}`;
   const token = useGetToken();
   const config = {
     headers: {
@@ -27,13 +27,13 @@ interface IDProps {
   return response;
 };
 
-export const useDelete = ({ deleteEndPointUrl, queryKey }: IDProps) => {
+export const useDelete = ({ EndPointUrl, queryKey }: IDProps) => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation(handleDelete);
 
   const removeData = (id: number) => {
     mutate(
-      { id, deleteEndPointUrl },
+      { id, EndPointUrl },
       {
         onError: (err: any) => {
           openNotification({

@@ -1,5 +1,4 @@
 import { Form, Input, Select } from "antd";
-import React from "react";
 
 export const AddFees = () => {
   const addOnAfter = (

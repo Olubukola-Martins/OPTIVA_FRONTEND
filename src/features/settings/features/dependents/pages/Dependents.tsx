@@ -27,6 +27,7 @@ for (let i = 0; i < 6; i++) {
     conditions: "unmarried",
   });
 }
+
 const Dependents = () => {
   const [addNewD, setAddNewD] = useState(false);
   // Import Modal
@@ -58,43 +59,41 @@ const Dependents = () => {
   };
   const handleEditDependentSubmit = (val: any) => {};
 
-  const columns: ColumnsType<DataType> = [
-    {
-      title: "Dependents",
-      dataIndex: "dependent",
-    },
-    {
-      title: "Age Bracket",
-      dataIndex: "ageBracket",
-    },
-    {
-      title: "Conditions",
-      dataIndex: "conditions",
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (_, val) => (
-        <div>
-          <Dropdown
-            trigger={["click"]}
-            overlay={
-              <Menu>
-                <Menu.Item key="1" onClick={showEditDependentModal}>
-                  Edit
-                </Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>
-                  Delete
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-          </Dropdown>
-        </div>
-      ),
-    },
-  ];
+const columns: ColumnsType<DataType> = [
+  {
+    title: "Dependents",
+    dataIndex: "dependent",
+  },
+
+  {
+    title: "Age Bracket",
+    dataIndex: "ageBracket",
+  },
+  {
+    title: "Conditions",
+    dataIndex: "conditions",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+
+    render: (_, val) => (
+      <div>
+        <Dropdown
+          trigger={["click"]}
+          overlay={
+            <Menu>
+              <Menu.Item key="1">Edit</Menu.Item>
+              <Menu.Item key="2">Delete</Menu.Item>
+            </Menu>
+          }
+        >
+          <i className="ri-more-2-fill text-lg cursor-pointer"></i>
+        </Dropdown>
+      </div>
+    ),
+  },
+];
 
   // Delete Modal
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);

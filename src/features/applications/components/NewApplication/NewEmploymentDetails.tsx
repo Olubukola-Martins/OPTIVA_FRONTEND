@@ -1,6 +1,6 @@
 import { DatePicker, Form, Input, Switch } from "antd";
 import { useState } from "react";
-import { AppButton } from "src/components/button/AppButton";
+// import { AppButton } from "src/components/button/AppButton";
 
 export const NewEmploymentDetails = () => {
   const [form] = Form.useForm();
@@ -108,9 +108,9 @@ export const NewEmploymentDetails = () => {
     setIsLicenseVisible(checked);
   };
 
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
-  };
+  // const handleChange = (value: string[]) => {
+  //   console.log(`selected ${value}`);
+  // };
 
   return (
     <>

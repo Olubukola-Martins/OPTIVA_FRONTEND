@@ -1,10 +1,9 @@
 import { Input, Select, Form } from "antd";
-import React from "react";
 
 export const ProgramFeesBreakdown = () => {
-  const addOnAfter = (
-    <Select options={[{ value: "%", label: "%" }]} defaultValue="%" />
-  );
+  // const addOnAfter = (
+  //   <Select options={[{ value: "%", label: "%" }]} defaultValue="%" />
+  // );
   const currency = (
     <Select
       options={[

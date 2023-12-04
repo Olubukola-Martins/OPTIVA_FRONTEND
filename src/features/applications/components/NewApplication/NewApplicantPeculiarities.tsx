@@ -1,8 +1,7 @@
-import { AppButton } from "src/components/button/AppButton";
 import { NewApplicantPeculiaritiesTab } from "./NewApplicantPeculiaritiesTab";
-import { FormInstance } from "antd";
+// import { FormInstance } from "antd";
 
-export const NewApplicantPeculiarites = ({ form }: { form: FormInstance }) => {
+export const NewApplicantPeculiarites = () => {
   return (
     <>
       <NewApplicantPeculiaritiesTab />

@@ -2,7 +2,6 @@ import GenerateTemplate from "../components/GenerateTemplate";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import Table, { ColumnsType } from "antd/es/table";
-import { Descriptions } from "antd";
 
 // TABLE 1
 interface DataTypeFirstTable {
@@ -115,7 +114,7 @@ const columnsSecondTable: ColumnsType<DataTypeSecondTable> = [
         return {
           rowSpan: 5,
         };
-      } else if (index > 5) {
+      } else if (10 > 5) {
         return {
           rowSpan: 0,
         };

@@ -3,16 +3,15 @@ import { Icon } from "@iconify/react";
 import { AppButton } from "src/components/button/AppButton";
 import { useState } from "react";
 import { Modal, Select, Form, Dropdown, Menu } from "antd";
-import { Link } from "react-router-dom";
-import { appRoute } from "src/config/routeMgt/routePaths";
+
 
 const DocumentRequirements = () => {
   // New Applications Modal
   const [openSupportingDocumentModal, setSupportingDocumentModal] =
     useState(false);
-  const showSupportingDocumentModal = () => {
-    setSupportingDocumentModal(true);
-  };
+  // const showSupportingDocumentModal = () => {
+  //   setSupportingDocumentModal(true);
+  // };
   const handleSupportingDocumentCancel = () => {
     setSupportingDocumentModal(false);
   };

@@ -106,7 +106,7 @@ const Escalation = () => {
  const [hideDeleteBtn, setHideDeleteBtn] = useState<boolean>(true)
   // rowSelection object
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (_selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
       selectedRows.length === 0 || !selectedRows ? setHideDeleteBtn(true) : setHideDeleteBtn(false)
       // console.log(
       //   `selectedRowKeys: ${selectedRowKeys}`,
@@ -114,7 +114,7 @@ const Escalation = () => {
       //   selectedRows
       // );
     },
-    getCheckboxProps: (record: DataType) => ({
+    getCheckboxProps: (_record: DataType) => ({
       //   name: record.name,
     }),
   };

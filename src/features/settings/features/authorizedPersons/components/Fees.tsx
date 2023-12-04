@@ -96,7 +96,7 @@ export const Fees = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}

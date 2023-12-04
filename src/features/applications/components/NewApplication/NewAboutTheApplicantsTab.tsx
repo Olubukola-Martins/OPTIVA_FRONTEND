@@ -1,5 +1,4 @@
 import { Tabs } from "antd";
-import React from "react";
 import { NewPersonalDetails } from "./NewPersonalDetails";
 import { NewContactDetails } from "./NewContactDetails";
 import { NewMarriageDetails } from "./NewMarriageDetails";

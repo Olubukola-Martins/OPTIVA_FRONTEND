@@ -1,17 +1,16 @@
-import { Input, Select, Form, Table, Checkbox, Modal } from "antd";
+import { Input, Select, Form, Table, Modal } from "antd";
 import { DataSourceItem } from "../ApplicantDetails/ChildrenDetails";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
-import type { CheckboxChangeEvent } from "antd/es/checkbox";
 
 export const NewChildrenDetails = () => {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editApplicantData, setEditApplicantData] = useState<any | null>(null);
-  const onSelectCheckbox = (e: CheckboxChangeEvent) => {
-    console.log(`checked = ${e.target.checked}`);
-  };
+  // const onSelectCheckbox = (e: CheckboxChangeEvent) => {
+  //   console.log(`checked = ${e.target.checked}`);
+  // };
   const handleSelectChange = (value: string) => {
     console.log(`selected ${value}`);
   };

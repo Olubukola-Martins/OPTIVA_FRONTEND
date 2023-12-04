@@ -18,6 +18,7 @@ const SettingsTemplate = ({ title }: IProps) => {
     const onClose = () => {
       setOpen(false);
     };
+console.log(formValues);
 
   const handleCancel = () => {
     form.resetFields();
@@ -27,7 +28,7 @@ const SettingsTemplate = ({ title }: IProps) => {
     setFormValues(values);
     setOpen(true);
   };
-  const handleSave = (values: any) => {};
+  const handleSave = () => {};
   return (
     <>
       <PageIntro

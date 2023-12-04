@@ -5,3 +5,4 @@ export interface branchProps {
   address_details: string;
   id: number;
 }
+

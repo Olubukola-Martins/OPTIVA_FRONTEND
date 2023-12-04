@@ -10,23 +10,38 @@ import { useDelete } from "src/hooks/useDelete";
 
 const Roles = () => {
   const [addRole, setAddRole] = useState(false);
+  const [rolesId, setRolesId] = useState<number>();
   const { isLoading: loadRoles, data: rolesData } = useFetchRoles();
   const { removeData } = useDelete({
-    deleteEndPointUrl: "admin/roles/",
+    EndPointUrl: "admin/roles/",
     queryKey: QUERY_KEY_FOR_ROLES,
   });
 
+  const handleRole = (id: number) => {
+    setRolesId(id);
+    setAddRole(true);
+  };
+
+  const handleAddRole = () => {
+    setRolesId(undefined);
+    setAddRole(true);
+  };
+
   return (
     <>
-      <NewRole open={addRole} handleClose={() => setAddRole(false)} />
+      <NewRole
+        id={rolesId}
+        open={addRole}
+        handleClose={() => setAddRole(false)}
+      />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
           title="Roles & Permissions"
           description="Create, View & edit roles on the system"
-          linkBack={appRoute.roles}
+          linkBack={appRoute.settings}
         />
         <div>
-          <AppButton label="Add New" handleClick={() => setAddRole(true)} />
+          <AppButton label="Add New" handleClick={handleAddRole} />
         </div>
       </div>
 
@@ -42,7 +57,10 @@ const Roles = () => {
               <div className="lg:px-7 px-3 py-5 border-b flex items-center justify-between">
                 <h4 className="font-medium">{item.name}</h4>
                 <div className="flex items-center gap-3 text-xl">
-                  <i className="ri-pencil-line cursor-pointer hover:text-primary"></i>
+                  <i
+                    onClick={() => handleRole(item.id)}
+                    className="ri-pencil-line cursor-pointer hover:text-primary"
+                  ></i>
                   <Popconfirm
                     title="Delete department"
                     description={`Are you sure to delete ${item.name}`}
@@ -64,7 +82,7 @@ const Roles = () => {
                   </p>
                 </div>
 
-                <button className="px-4 py-[5px] text-secondary bg-[#801D231A] rounded-2xl">
+                <button onClick={() => handleRole(item.id)} className="px-4 py-[5px] text-secondary bg-[#801D231A] rounded-2xl">
                   Add Permissions
                 </button>
               </div>
