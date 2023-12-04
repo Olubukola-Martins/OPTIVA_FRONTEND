@@ -31,28 +31,50 @@ export const AddMilestoneModal = ({
   const { putData, isLoading: putLoading } = useUpdateMilestone({
     queryKey: QUERY_KEY_FOR_MILESTONE,
   });
+  // useEffect(() => {
+  //   if (singleMilestone) {
+  //     const { milestone, timeline, processes } = singleMilestone;
+  //     form.setFieldsValue({
+  //       milestone,
+  //       timeline,
+  //     });
+  //     form.setFieldsValue({
+  //       title: processes.map((item) => item.title),
+  //       duration: processes.map((item) => item.duration),
+  //     });
+  //     if (processes.length > 1) {
+  //       const newProcesses = processes.slice(1).map((item, index) => ({
+  //         newTitle: item.title,
+  //         newDuration: item.duration,
+  //         key: index,
+  //       }));
+
+  //       form.setFieldsValue({
+  //         newProcess: newProcesses,
+  //       });
+  //     }
+  //   }
+  // }, [singleMilestone]);
+
   useEffect(() => {
     if (singleMilestone) {
       const { milestone, timeline, processes } = singleMilestone;
+
       form.setFieldsValue({
         milestone,
         timeline,
       });
-      form.setFieldsValue({
-        title: processes.map((item) => item.title),
-        duration: processes.map((item) => item.duration),
-      });
-      if (processes.length > 1) {
-        const newProcesses = processes.slice(1).map((item, index) => ({
-          newTitle: item.title,
-          newDuration: item.duration,
-          key: index,
-        }));
 
-        form.setFieldsValue({
-          newProcess: newProcesses,
-        });
-      }
+      // Map processes to form fields
+      const newProcesses = processes.map((item, index) => ({
+        newTitle: item.title,
+        newDuration: item.duration,
+        key: index, 
+      }));
+
+      form.setFieldsValue({
+        newProcess: newProcesses,
+      });
     }
   }, [singleMilestone]);
 
