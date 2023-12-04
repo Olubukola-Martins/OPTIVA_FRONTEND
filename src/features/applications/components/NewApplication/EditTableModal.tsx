@@ -19,16 +19,16 @@ export const EditTableModal = ({
   data,
   columns,
 }: EditTableModalProps) => {
-  // const [formData, setFormData] = useState(data);
-
-  // const handleInputChange = (key: string, value: any) => {
-  //   setFormData((prevData:any) => ({ ...prevData, [key]: value }));
-  // };
-  const [formData, setFormData] = useState(() => ({ ...data }));
+  const [formData, setFormData] = useState(data);
 
   const handleInputChange = (key: string, value: any) => {
     setFormData((prevData:any) => ({ ...prevData, [key]: value }));
   };
+  // const [formData, setFormData] = useState(() => ({ ...data }));
+
+  // const handleInputChange = (key: string, value: any) => {
+  //   setFormData((prevData:any) => ({ ...prevData, [key]: value }));
+  // };
 
   return (
     <Modal open={open} footer={null} onCancel={onCancel}>

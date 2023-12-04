@@ -175,10 +175,12 @@ const Dependents = () => {
             <Icon
               icon="uil:file-import"
               className="text-3xl cursor-pointer hover:text-primary"
+              // onClick={showImportModal}
             />
             <Icon
               icon="mingcute:file-import-line"
               className="text-3xl cursor-pointer hover:text-primary"
+              // onClick={showExportModal}
             />
           </div>
           <AppButton label="Add New" handleClick={() => setAddNewD(true)} />

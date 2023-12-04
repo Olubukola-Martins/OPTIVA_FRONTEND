@@ -42,6 +42,7 @@ import Branches from "src/features/settings/features/branch/pages/Branches";
 import Roles from "src/features/settings/features/rolesAndPermissions/pages/Roles";
 import CompanyProfile from "src/features/settings/features/companyProfile/page/CompanyProfile";
 import SettingsTemplate from "src/features/settings/features/contractsEmailTemplates/pages/SettingsTemplate";
+import EditProgramType from "src/features/settings/features/program-types/pages/EditProgramType";
 
 const routesArray = [
   {
@@ -109,6 +110,10 @@ const routesArray = [
   {
     path: appRoute.createProgramType,
     element: <CreateProgramType />,
+  },
+  {
+    path: appRoute.editProgramType().format,
+    element: <EditProgramType />,
   },
   {
     path: appRoute.defineFeesAndAuthorizedPersons,
