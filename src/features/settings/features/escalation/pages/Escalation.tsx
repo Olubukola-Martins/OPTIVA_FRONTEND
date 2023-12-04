@@ -3,18 +3,12 @@ import React, { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-
 import type { ColumnsType } from "antd/es/table";
 import { Dropdown, Menu, Table } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteModal from "src/features/settings/components/DeleteModal";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import { QUERY_KEY_ESCALATION, escalationURL } from "../hooks/useAddEscalation";
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from "react-query";
 import { IAllEscalationsData } from "src/features/settings/types/settingsType";
 import { useDeleteItem } from "src/features/settings/hooks/useDeleteItem";
 
@@ -30,9 +24,10 @@ interface DataType {
 interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
   isLoading: boolean;
-  refetch: (
-    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
-  ) => Promise<QueryObserverResult<any, any>>;
+  isFetching: boolean;
+  // refetch: (
+  //   options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  // ) => Promise<QueryObserverResult<any, any>>;
 }
 
 const deleteEndpointUrl = escalationURL;
@@ -42,7 +37,7 @@ const Escalation = () => {
   const navigate = useNavigate();
   const {
     data: allEscalationData,
-    isLoading: allEscalationLoading,
+    isLoading: allEscalationLoading, isFetching
   }: IQueryDataType<IAllEscalationsData> = useFetchAllItems({
     queryKey,
     urlEndPoint: escalationURL,
@@ -136,7 +131,7 @@ const Escalation = () => {
         return {
           key: item.id,
           sn: index + 1, 
-          role: item.r,
+          role: item.role.name,
           task: item.task,
           taskDeadline: `${item.deadline} Hours`,
           reminder: `After ${item.reminder_frequency} Hours`,
@@ -148,67 +143,16 @@ const Escalation = () => {
       setData(newData);
     }
   }, [allEscalationData, allEscalationLoading]);
-  // useEffect(() => {
-  //   setSubmitted(false);
-  //   if (
-  //     allDocRequirementData?.data &&
-  //     Array.isArray(allDocRequirementData?.data)
-  //   ) {
-  //     const responseData = allDocRequirementData.data;
-  //     // Required Doc Data
-  //     const newDataRequi: DataType[] = responseData
-  //       .filter((item) => item.document_type === "required")
-  //       .map((item, index) => ({
-  //         key: item.id,
-  //         sn: index + 1,
-  //         documentName: item.name,
-  //         documentCategory: item.document_category.name,
-  //         documentFormat: (
-  //           <>
-  //             {item.document_format.map((item) => {
-  //               return <Tag>{item}</Tag>;
-  //             })}
-  //           </>
-  //         ),
-  //         documentSize: `${item.document_size} mb`,
-  //       }));
-  //     setDataRecuiredDoc(newDataRequi);
-  //     // Supporting Doc Data
-  //     const newDataSupport: DataType[] = responseData
-  //       .filter((item) => item.document_type === "supporting")
-  //       .map((item, index) => ({
-  //         key: item.id,
-  //         sn: index + 1,
-  //         documentName: item.name,
-  //         documentCategory: item.document_category.name,
-  //         documentFormat: (
-  //           <>
-  //             {item.document_format.map((item) => {
-  //               return <Tag>{item}</Tag>;
-  //             })}
-  //           </>
-  //         ),
-  //         documentSize: `${item.document_size} mb`,
-  //       }));
-  //     setDataSupportDoc(newDataSupport);
-  //   }
-  // }, [allDocRequirementData, allDocRequirementLoading]);
 
   // rowSelection object
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (_: React.Key[], selectedRows: DataType[]) => {
       selectedRows.length === 0 || !selectedRows
         ? setHideDeleteBtn(true)
         : setHideDeleteBtn(false);
-      // console.log(
-      //   `selectedRowKeys: ${selectedRowKeys}`,
-      //   "selectedRows: ",
-      //   selectedRows
-      // );
     },
-    getCheckboxProps: (record: DataType) => ({
-      //   name: record.name,
-    }),
+    // getCheckboxProps: (record: DataType) => ({
+    // }),
   };
 
   // Handle Add New/ Define Escalation
@@ -270,6 +214,7 @@ const Escalation = () => {
           ...rowSelection,
         }}
         className="bg-white rounded-md shadow border mt-8"
+        loading={allEscalationLoading || isFetching}
         columns={columns}
         dataSource={data}
         scroll={{ x: 768 }}

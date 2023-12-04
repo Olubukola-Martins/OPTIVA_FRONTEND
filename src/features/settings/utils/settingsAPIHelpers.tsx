@@ -1,19 +1,19 @@
 import axios from "axios";
-import { IUserToken } from "src/types";
-// import { ICurrentCompany } from "types";
+import { useGetToken } from "src/hooks/useGetToken";
 
 
-interface IPostProps extends IUserToken {
+interface IPostProps  {
   newData: any;
   url: string;
 }
-interface IEditProps extends IUserToken {
+interface IEditProps {
   newData: any;
   url: string;
   id: number
 }
 
-export const postItemData = async ({ newData, url ,token}: IPostProps) => {
+export const postItemData = async ({ newData, url }: IPostProps) => {
+  const token = useGetToken();
   const config = {
     headers: {
       Accept: "application/json",
@@ -25,7 +25,8 @@ export const postItemData = async ({ newData, url ,token}: IPostProps) => {
   return response;
 };
 
-export const editItemData = async ({ newData, id, url, token }: IEditProps) => {
+export const editItemData = async ({ newData, id, url }: IEditProps) => {
+    const token = useGetToken();
   const editUrl = `${url}/${id}`
   const config = {
     headers: {

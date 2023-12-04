@@ -9,7 +9,6 @@ import {
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
 import { QUERY_KEY_ELIGIBLE_DEPENDENTS, eligibleDependentURL } from "../../dependents/hooks/useCreateEligibleDependents";
-import { useEffect } from "react";
 
 interface IProps extends IdentifierProps {
   docType: string;
@@ -65,7 +64,7 @@ export const AddDocument = ({
             rules={generalValidationRules}
           >
             <Select
-              options={allDocCategories?.data.map((category) => ({
+              options={allDocCategories?.data.map((category: { id: any; name: any; }) => ({
                 value: category.id,
                 label: category.name,
               }))}
@@ -120,7 +119,7 @@ export const AddDocument = ({
           <Select
             mode="multiple"
             loading={allDependentsLoading}
-            options={ Array.isArray(allDependentsData?.data) &&  allDependentsData?.data.map((dependent) => ({
+            options={ Array.isArray(allDependentsData?.data) &&  allDependentsData?.data.map((dependent: { id: any; dependant: any; }) => ({
               value: dependent.id,
               label: dependent.dependant,
             }))}

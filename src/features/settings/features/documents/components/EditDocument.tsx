@@ -20,11 +20,6 @@ import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleIt
 import { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { ISingleDocRequirement } from "src/features/settings/types/settingsType";
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from "react-query";
 
 interface IProps extends IdentifierProps {
   docType: string;
@@ -39,22 +34,17 @@ export const EditDocument = ({
   handleEditNewDocument,
   id,
 }: IProps) => {
+  const [itemId, setItemId] = useState<number | undefined>()
   const {
     data: singleDocRequirementData,
-    refetch,
     isLoading,
   }: {
     data: ISingleDocRequirement | undefined;
-    refetch: (
-      options?:
-        | (RefetchOptions & RefetchQueryFilters<ISingleDocRequirement>)
-        | undefined
-    ) => Promise<QueryObserverResult<any, any>>;
     isLoading: boolean;
   } = useFetchSingleItem({
     queryKey,
     urlEndPoint: documentRequirementURL,
-    itemId: id as number,
+    itemId:itemId as number,
   });
   const { data: allDocCategories, isLoading: allDocCategoriestLoading } =
     useFetchAllItems({
@@ -66,10 +56,11 @@ export const EditDocument = ({
       queryKey: QUERY_KEY_ELIGIBLE_DEPENDENTS,
       urlEndPoint: eligibleDependentURL,
     });
-      const [editForm] = useForm();
+  const [editForm] = useForm();
   const [data, setData] = useState(singleDocRequirementData);
+
   useEffect(() => {
-    // refetch();
+    setItemId(id as number);
     if (
       singleDocRequirementData?.data &&
       !Array.isArray(singleDocRequirementData?.data)
@@ -90,13 +81,16 @@ export const EditDocument = ({
         dependents: eligible_dependants.map((item) => item.id),
       });
     }
-  }, [singleDocRequirementData, id, editForm, data, isLoading]);
+  }, [singleDocRequirementData, id, itemId, editForm, data, isLoading]);
 
 
   return (
     <Modal
       open={open}
-      onCancel={() => handleClose()}
+      onCancel={() => {
+        handleClose();
+        // editForm.resetFields();
+      }}
       closeIcon
       footer={null}
       title={`Edit ${docType} Document`}
@@ -169,7 +163,7 @@ export const EditDocument = ({
             loading={allDependentsLoading}
             options={
               Array.isArray(allDependentsData?.data) &&
-              allDependentsData?.data.map((dependent) => ({
+              allDependentsData?.data.map((dependent: { id: any; dependant: any; }) => ({
                 value: dependent.id,
                 label: dependent.dependant,
               }))

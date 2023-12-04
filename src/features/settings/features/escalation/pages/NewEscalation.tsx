@@ -20,13 +20,13 @@ import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import useAddEscalation from "../hooks/useAddEscalation";
 import EscalationDateErrorModal from "../components/EscalationDateErrorModal";
 import { IEscalationBody } from "src/features/settings/types/settingsType";
-import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
-
+import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
+              
 interface DataRow {
   key: number;
   escalateTo: JSX.Element;
-  employeeName: JSX.Element;
-  escalateAfter: JSX.Element | void;
+  employeeName: any;
+  escalateAfter: JSX.Element;
 }
 const NewEscalation = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -39,8 +39,8 @@ const NewEscalation = () => {
     queryKey: "roles",
     urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
   });
-   const { data: employeeData, isLoading: loadEmployee } =
-     useFetchEmployees("active-employees");
+  //  const { data: employeeData, isLoading: loadEmployee } =
+  //    useFetchEmployees("active-employees");
   // const { data: allEmployees, isLoading: allEmployeesLoading } =
   //   useFetchAllItems({
   //     queryKey: "employees",
@@ -98,25 +98,13 @@ const NewEscalation = () => {
   };
   const employeeNameItem = (key: number) => {
     return (
-      <Form.Item
-        name={`${key}-employeeName`}
-        style={{ paddingBottom: 0, marginBottom: 0 }}
-      >
-        <Select
-          popupMatchSelectWidth={false}
-          placeholder="Select Employee"
-          loading={loadEmployee}
-          options={
-            employeeData
-              ? employeeData.map(
-                  (employee: { name: string; id: number }) => {
-                    return { label: employee.name, value: employee.id };
-                  }
-                )
-              : []
-          }
+      <div className="min-w-[120px] mt-5">
+        <FormEmployeeInput
+          control={{ name: `${key}-employeeName`, label: " " }}
+          showLabel={false}
+          Form={Form}
         />
-      </Form.Item>
+      </div>
     );
   };
   const escalateAfterItem = (key: number) => {
@@ -146,9 +134,10 @@ const NewEscalation = () => {
       escalateAfter: escalateAfterItem(2),
     },
   ];
+
   useEffect(() => {
     if (!allRolesLoading && allRoles) setData(tableInitialData);
-  }, [allRolesLoading, allRoles, employeeData, loadEmployee]);
+  }, [allRolesLoading, allRoles]);
 
   const [data, setData] = useState<DataRow[]>(tableInitialData);
   const deleteEscalationLevel = (item: DataRow) => {
@@ -161,7 +150,7 @@ const NewEscalation = () => {
     {
       title: "Level",
       key: "level",
-      render: (_, record: DataRow, index: number) => {
+      render: (_, __: DataRow, index: number) => {
         return index + 1;
       },
     },
@@ -197,7 +186,7 @@ const NewEscalation = () => {
     const newValue = {
       key: newKey,
       escalateTo: escalateToItem(newKey),
-      employeeName: employeeNameItem(newKey),
+      employeeName: employeeNameItem(newKey), 
       escalateAfter: escalateAfterItem(newKey),
     };
     setData((pre) => {
@@ -249,8 +238,6 @@ const NewEscalation = () => {
     };
     console.log("escalationBody", escalationBody);
     addEscalation(escalationBody);
-    //onSuccess setShowSuccessModal(true);
-    // onSuccess  Form.resetfieldsvalue
   };
   return (
     <>

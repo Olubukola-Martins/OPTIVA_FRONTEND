@@ -150,6 +150,7 @@ export interface ISingleDocRequirement {
 
 // All Escalations
  interface IAllEscalationsDatum {
+  role: any;
   accepted: number;
   active: string;
   created_at: string;

@@ -1,4 +1,4 @@
-import { Form, Modal, Input, Select, Skeleton } from "antd";
+import { Form, Modal, Input, Select, Spin } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
 import { dependentsAgeList } from "../contants";
@@ -6,63 +6,37 @@ import {
   generalValidationRules,
   textInputValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
-import {
-  QUERY_KEY_ELIGIBLE_DEPENDENTS,
-  eligibleDependentURL,
-} from "../hooks/useCreateEligibleDependents";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useForm } from "antd/es/form/Form";
-import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
 import {
   AllEligiDependentsDatum,
-  ISingleEligibleDependent,
 } from "src/features/settings/types/settingsType";
 import useUpdateEligibleDependents from "../hooks/useUpdateEligibleDependents";
-import { useEffect, useState } from "react";
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  RefetchQueryFilters,
-} from "react-query";
+import { useEffect } from "react";
 
 interface IEditDepOrops extends IdentifierProps {
   itemId: number;
-  editSuccess: (isSuccess: boolean) => void;
-  refetchAllDependents: any;
   singleDependent: AllEligiDependentsDatum | undefined;
+  singleDependentLoading:boolean;
 }
-// interface IGetSingleDepQueryData {
-//   data: ISingleEligibleDependent | undefined;
-//   isSuccess: boolean;
-//   isLoading: boolean;
-//   refetch: (
-//     options?:
-//       | (RefetchOptions & RefetchQueryFilters<ISingleEligibleDependent>)
-//       | undefined
-//   ) => Promise<QueryObserverResult<any, any>>;
-// }
-const urlEndPoint = eligibleDependentURL;
-const queryKey = QUERY_KEY_ELIGIBLE_DEPENDENTS;
 
 export const EditDependent = ({
   handleClose,
   open,
   itemId,
-  singleDependent,
-  editSuccess,
-  refetchAllDependents,
+  singleDependent,singleDependentLoading
 }: IEditDepOrops) => {
   const {
     editEligibleDependents,
-    isSuccess,
+    // isSuccess,
     isLoading: editLoading,
   } = useUpdateEligibleDependents();
   // const [data, setData] = useState(singleDependentData?.data);
 
   const [editForm] = useForm();
 
-  const handleEditDependent = (values) => {
-    const extraConditions = values.extraConditions.map((item) => ({
+  const handleEditDependent = (values: { extraConditions: { value: any; }[]; dependent: any; age: any[]; conditions: any; }) => {
+    const extraConditions = values.extraConditions.map((item: { value: any; }) => ({
       other_condition: item.value,
     }));
     editEligibleDependents(itemId, {
@@ -72,9 +46,9 @@ export const EditDependent = ({
         ? [{ other_condition: values.conditions }, ...extraConditions]
         : undefined,
     });
-    isSuccess && handleClose();
+     handleClose();
     // setData(singleDependentData?.data);
-    editForm.resetFields();
+    // editForm.resetFields();
   };
 
   // useEffect(() => {
@@ -150,10 +124,10 @@ export const EditDependent = ({
 
   useEffect(() => {
     if (singleDependent && !Array.isArray(singleDependent)) {
-      console.log("singleDependent",singleDependent)
+      console.log("singleDependent", singleDependent);
       const { age_brackets, other_conditions, dependant } = singleDependent;
       editForm.setFieldsValue({
-        dependant:"xyz",
+        dependent: dependant,
         age: age_brackets?.map((item) => item.age_bracket),
         conditions:
           other_conditions?.length > 0
@@ -167,19 +141,19 @@ export const EditDependent = ({
             : [],
       });
     }
-  }, [singleDependent,editForm]);
+  }, [singleDependent, singleDependentLoading]);
 
   return (
     <Modal
       open={open}
       onCancel={() => {
-        editForm.resetFields();
         handleClose();
       }}
       closeIcon
       footer={null}
       title="Edit Dependents"
     >
+      <Spin spinning={singleDependentLoading}>
         <Form
           layout="vertical"
           form={editForm}
@@ -192,7 +166,7 @@ export const EditDependent = ({
               label="Dependent"
               rules={generalValidationRules}
             >
-              <Input placeholder="Mother" disabled={true} />
+              <Input placeholder="" disabled={true} />
             </Form.Item>
             <Form.Item
               name="age"
@@ -260,6 +234,7 @@ export const EditDependent = ({
             <AppButton type="submit" label="Save" isLoading={editLoading} />
           </>
         </Form>
+      </Spin>
     </Modal>
   );
 };

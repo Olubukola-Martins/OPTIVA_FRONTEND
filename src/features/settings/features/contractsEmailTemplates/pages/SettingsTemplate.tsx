@@ -6,53 +6,57 @@ import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { JoditEditorComponent } from "src/features/settings/components/JoditEditor";
 import { UseWindowWidth } from "src/features/settings/hooks/UseWindowWidth";
-import useUpdateTemplate, { IPropData, QUERY_KEY_EMAIL_TEMPLATES } from "../hooks/useUpdateTemplate";
+import useUpdateTemplate, {
+  IPropData,
+  QUERY_KEY_EMAIL_TEMPLATES,
+} from "../hooks/useUpdateTemplate";
 import { useGetSingleTemplate } from "../hooks/useGetSingleTemplate";
 import { useNavigate, useParams } from "react-router-dom";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
 
-interface IProps {
-  title: string;
-  id: number;
-  name: string;
-}
+// interface IProps {
+//   title: string;
+//   id: number;
+//   name: string;
+// }
 const SettingsTemplate = () => {
   const { type } = useParams();
   const navigate = useNavigate();
   const typeStr = type as string;
-    const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const { data, isLoading } = useGetSingleTemplate(typeStr);
-  const [template,setTemplate]=useState(data?.data[0])
+  const [template, setTemplate] = useState(data?.data[0]);
   const [open, setOpen] = useState(false);
-  const { mutate,isLoading:updateLoading } = useUpdateTemplate();
+  const { mutate, isLoading: updateLoading } = useUpdateTemplate();
   const { drawerSize } = UseWindowWidth();
-    const editEmailTemplate = ({ content, name, type }: IPropData) => {
-      mutate(
-        { content, name, type },
-        {
-          onError: (error: any) => {
-            openNotification({
-              state: "error",
-              title: "Error Occured",
-              description: error.response.message,
-              duration: 5,
-            });
-          },
-          onSuccess: (response: any) => {
-            openNotification({
-              state: "success",
-              title: "Success",
-              description: response.message,
-            });
-            form.resetFields();
-            navigate(appRoute.contractsEmailTemplates)
-            queryClient.invalidateQueries([QUERY_KEY_EMAIL_TEMPLATES, type]);
-          },
-        }
-      );
-    };
+  const editEmailTemplate = ({ content, name, type }: IPropData) => {
+    mutate(
+      { content, name, type },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occured",
+            description: error.response.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (response: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            duration: 5,
+            description: response.message,
+          });
+          form.resetFields();
+          navigate(appRoute.contractsEmailTemplates);
+          queryClient.invalidateQueries([QUERY_KEY_EMAIL_TEMPLATES, type]);
+        },
+      }
+    );
+  };
 
   useEffect(() => {
     setTemplate(data?.data[0]);
@@ -60,7 +64,7 @@ const SettingsTemplate = () => {
       const itemData = data.data[0];
       form.setFieldValue("templateDescription", `${itemData.content}`);
     }
-  }, [form,type, data,data?.data, isLoading]);
+  }, [form, type, data, data?.data, isLoading]);
 
   const onClose = () => {
     setOpen(false);
@@ -69,17 +73,30 @@ const SettingsTemplate = () => {
   const handleCancel = () => {
     form.resetFields();
   };
-  const handlePreview = () => {
-    const values = form.getFieldsValue();
-    setOpen(true);
-  };
+  // const handlePreview = () => {
+  //   const values = form.getFieldsValue();
+  //   console.log(values)
+  //   setOpen(true);
+  // };
   const handleSave = (values: { templateDescription: JSX.Element }) => {
-    editEmailTemplate({content:`${values.templateDescription}`,name:template?.name,type:typeStr});
+    editEmailTemplate({
+      content: `${values.templateDescription}`,
+      name: template?.name,
+      type: typeStr,
+    });
+  };
+  const trimOutTitle = () => {
+    const originalString = `${template?.name || "Template"} `;
+    const lastIndex = originalString.lastIndexOf(" Email Template");
+    const trimmedString =
+      lastIndex !== -1 ? originalString.slice(0, lastIndex) : originalString;
+
+    return trimmedString;
   };
   return (
     <>
       <PageIntro
-        title={`${template?.name || "Template"}`}
+        title={`${trimOutTitle()}`}
         linkBack={appRoute.contractsEmailTemplates}
       />
       <Skeleton active loading={isLoading} paragraph={{ rows: 6 }} title={true}>

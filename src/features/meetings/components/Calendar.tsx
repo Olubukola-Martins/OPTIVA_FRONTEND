@@ -14,12 +14,14 @@ export interface IEvent {
   meetingTitle: string;
   startTime: Date;
   endTime: Date;
+  // date: Date;
   attendee: string;
   meetingType: string;
-  meetingLink: string;
+  meetingLink?: string;
+  meetingPlatform?: string;
   detailsOfMeeting: string;
   organizer?: string;
-  meetingPlatform?: string;
+  meetingLocation?: string;
 }
 interface ICalendarProps {
   events: IEvent[];
@@ -30,7 +32,6 @@ const localizer = momentLocalizer(moment);
 export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
   const [openNewMeetingModal, setOpenNewMeetingModal] =
     useState<boolean>(false);
-  //   const [selectedEvent, setSelectedEvent] = useState<boolean>(false);
   const [actionModal, setActionModal] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
 
@@ -61,7 +62,9 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
   };
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {
-    const updatedEvents = [...events, meetingData];
+    // const updatedEvents = [...events, meetingData];
+    console.log("meetingData",meetingData)
+    
     setOpenNewMeetingModal(false);
   };
   return (
@@ -69,6 +72,16 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
       <BigCalendar
         localizer={localizer}
         events={events}
+        eventPropGetter={(event) => ({
+          style: {
+          },
+          onClick: () => {
+            // Handle click event on the calendar event
+            if (event.meetingLink) {
+              window.open(event.meetingLink, "_blank"); 
+            }
+          },
+        })}
         startAccessor="startTime"
         endAccessor="endTime"
         // onSelectEvent={handleEventClick}
@@ -82,11 +95,11 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
       />
       {selectedEvent && (
         <MeetingDetailsModal
-        open={actionModal}
-        meetingData={selectedEvent}
-        onCancel={() => {
-          setSelectedEvent(null);
-          setActionModal(false);
+          open={actionModal}
+          meetingData={selectedEvent}
+          onCancel={() => {
+            setSelectedEvent(null);
+            setActionModal(false);
           }}
           inActionsModal={true}
           // open={selectedEvent}
@@ -94,7 +107,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
           // onCancel={() => setSelectedEvent(false)}
         />
       )}
-     
+
       {/* <NewMeetingModal
         open={openNewMeetingModal}
         onCancel={handleNewMeetingCancel}

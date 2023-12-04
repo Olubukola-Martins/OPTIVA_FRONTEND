@@ -27,7 +27,7 @@ export const useGetSingleTemplate = (type: string) => {
     [QUERY_KEY_EMAIL_TEMPLATES, type],
     () => getData(type),
     {
-      enabled: !!type,
+       enabled:!!type,
       onError: () => {},
       onSuccess: () => {
       },

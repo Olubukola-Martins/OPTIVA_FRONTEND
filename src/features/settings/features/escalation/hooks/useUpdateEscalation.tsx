@@ -1,22 +1,20 @@
 import { QUERY_KEY_ESCALATION, escalationURL } from "./useAddEscalation";
 import { editItemData } from "src/features/settings/utils/settingsAPIHelpers";
-import { IEscalationBody } from "src/features/settings/types/settingsType";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 const useUpdateEscalation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { token } = useGetUserInfo();
   const { mutate, isLoading, isSuccess } = useMutation(editItemData);
   const editEscalation = (
     id: number,
-    newData: Omit<IEscalationBody, "escalation_name">
+    newData: any
   ) => {
     mutate(
-      { url: `${escalationURL}/${id}`, token, newData },
+      { url: escalationURL, newData ,id},
       {
         onError: (error: any) => {
           openNotification({
@@ -27,18 +25,18 @@ const useUpdateEscalation = () => {
           });
         },
         onSuccess: (response: { data: { message: string } }) => {
-          //   navigate(appRoutes.recruitmentDashboard);
+            navigate(appRoute.escalation);
           openNotification({
             state: "success",
             title: "Success",
             description: response.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_ESCALATION]);
+          queryClient.invalidateQueries([QUERY_KEY_ESCALATION, id]);
         },
       }
     );
   };
-  return { editEscalation };
+  return { editEscalation, isLoading, isSuccess };
 };
 
 export default useUpdateEscalation;

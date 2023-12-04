@@ -16,9 +16,6 @@ import { Skeleton } from "antd";
 import { useEffect, useState } from "react";
 
 type TemplateContent = Array<{ name: string; link: string }> | [];
-
-
-
 interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
   isLoading: boolean;
@@ -26,7 +23,6 @@ interface IQueryDataType<TPageData> {
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<any, any>>;
 }
-
 
 const queryKey = QUERY_KEY_EMAIL_TEMPLATES;
 
@@ -42,8 +38,8 @@ const AllContractsEmailTemplates = () => {
   useEffect(() => {
     if (allEmailTemplates?.data && Array.isArray(allEmailTemplates.data)) {
       const contractsEmailTemplateRoutes = allEmailTemplates.data?.map(
-        (template:any) => {
-          const {  name ,type} = template;
+        (template: any) => {
+          const { name, type } = template;
           return {
             name: name,
             link: appRoute.viewEditEmailTemplate(type).path,
@@ -62,19 +58,20 @@ const AllContractsEmailTemplates = () => {
         linkBack={appRoute.settings}
       />
 
-      <Skeleton loading={allEmailTemplatesLoading} active={true} />
-      <div className="mt-5">
-        {templatesData?.map((item) => (
-          <Link
-            key={item.name}
-            to={item.link}
-            className="flex justify-between transition-all duration-300 ease-in-out hover:border-primary hover:text-primary items-center border shadow-sm rounded-md my-5 py-2 px-3 text-sm md:text-base text-accent"
-          >
-            <span> {item.name}</span>
-            <i className="ri-arrow-drop-right-line text-2xl w-fit pl-2"></i>
-          </Link>
-        ))}
-      </div>
+      <Skeleton loading={allEmailTemplatesLoading} active={true}>
+        <div className="mt-5">
+          {templatesData?.map((item) => (
+            <Link
+              key={item.name}
+              to={item.link}
+              className="flex justify-between transition-all duration-300 ease-in-out hover:border-primary hover:text-primary items-center border shadow-sm rounded-md my-5 py-2 px-3 text-sm md:text-base text-accent"
+            >
+              <span> {item.name}</span>
+              <i className="ri-arrow-drop-right-line text-2xl w-fit pl-2"></i>
+            </Link>
+          ))}
+        </div>
+      </Skeleton>
     </div>
   );
 };

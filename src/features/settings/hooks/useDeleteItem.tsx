@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { IUserToken } from "src/types";
 import { openNotification } from "src/utils/notification";

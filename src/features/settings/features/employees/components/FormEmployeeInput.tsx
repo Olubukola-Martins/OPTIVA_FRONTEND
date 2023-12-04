@@ -39,6 +39,7 @@ export const FormEmployeeInput: React.FC<{
 
   return (
     <Form.Item
+      className="w-full"
       fieldKey={fieldKey}
       name={control?.name ?? "employee_id"}
       label={showLabel ? control?.label ?? "Employee" : null}

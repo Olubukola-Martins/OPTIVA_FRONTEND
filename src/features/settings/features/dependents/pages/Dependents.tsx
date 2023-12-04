@@ -24,8 +24,6 @@ import {
   RefetchOptions,
   RefetchQueryFilters,
 } from "react-query";
-import { useForm } from "antd/es/form/Form";
-import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
 import { useFetchDependent } from "../hooks/useFetchDependent";
 
 export interface DataType {
@@ -45,7 +43,7 @@ const deleteEndpointUrl = eligibleDependentURL;
 const queryKey = QUERY_KEY_ELIGIBLE_DEPENDENTS;
 
 const Dependents = () => {
-  const [editSuccessful, setEditSuccessful] = useState(false);
+  // const [editSuccessful, setEditSuccessful] = useState(false);
   const [addNewD, setAddNewD] = useState(false);
   const [editNewD, setEditNewD] = useState(false);
   const [itemId, setItemId] = useState<number>();
@@ -58,7 +56,7 @@ const Dependents = () => {
   const {
     data: allDependentsData,
     isLoading: allDependentsLoading,
-    refetch,
+    // refetch,
   }: IQueryDataType<IAllEligiDependentsResponse> = useFetchAllItems({
     queryKey,
     urlEndPoint: eligibleDependentURL,
@@ -67,25 +65,12 @@ const Dependents = () => {
     data: singleDependentData,
     isLoading: singleDependentLoading,
   }: { data: ISingleEligibleDependent | undefined; isLoading: boolean } =
-    useFetchDependent(itemId as number);
-  // const {
-  //   data: singleDependentData,
-  //   isLoading: singleDependentLoading,
-  // }: { data: ISingleEligibleDependent | undefined; isLoading: boolean } =
-  //   useFetchSingleItem({
-  //     itemId,
-  //     queryKey,
-  //     urlEndPoint: eligibleDependentURL,
-  //   });
+    useFetchDependent({id:itemId as number});
 
-  const editSuccess = (isSuccess: boolean) => {
-    setEditSuccessful(isSuccess);
-  };
-
-  useEffect(() => {
-    console.log("changedData", data);
-    refetch();
-  }, [data]);
+  // const editSuccess = (isSuccess: boolean) => {
+  //   setEditSuccessful(isSuccess);
+  // };
+  // useEffect(()=>{console.log(data,"data")},[data])
 
   useEffect(() => {
     if (allDependentsData?.data && Array.isArray(allDependentsData?.data)) {
@@ -98,19 +83,14 @@ const Dependents = () => {
       }));
       setData(newData);
     }
-  }, [allDependentsData, allDependentsLoading, editSuccessful]);
+  }, [allDependentsData, allDependentsLoading, data]);
 
   useEffect(() => {
     if (singleDependentData?.data && !Array.isArray(singleDependentData.data)) {
-      console.log("data from dependants for single", singleDependentData.data);
       setSingleDependent(singleDependentData.data);
     }
   }, [itemId, singleDependentData, singleDependentLoading]);
 
-  useEffect(() => {
-    console.log("itemId", itemId);
-    console.log("type", typeof itemId);
-  }, [itemId]);
   const columns: ColumnsType<DataType> = [
     {
       title: "Dependents",
@@ -176,8 +156,7 @@ const Dependents = () => {
           handleClose={() => setEditNewD(false)}
           itemId={itemId}
           singleDependent={singleDependent}
-          editSuccess={editSuccess}
-          refetchAllDependents={() => refetch()}
+          singleDependentLoading={singleDependentLoading}         
         />
       )}
       <div className="flex justify-between flex-col md:flex-row  md:items-center">

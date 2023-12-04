@@ -75,7 +75,7 @@ const DocumentRequirements = () => {
   const { addDocumentRequirement } = useCreateDocumentRequirement();
 
   // Handle add new document
-  const handleAddNewDocument = (val) => {
+  const handleAddNewDocument = (val: any) => {
     addDocumentRequirement({
       name: val.name,
       document_category_id: val.category,
@@ -88,16 +88,17 @@ const DocumentRequirements = () => {
     handleNewDocumentCancel();
   };
   // Handle edit document
-  const handleEditNewDocument = (val) => {
-  currentId &&  editDocumentRequirement(currentId, {
-      name: val.name,
-      document_category_id: val.category,
-      document_format: val.format,
-      document_size: val.size,
-      document_type: docType,
-      eligible_dependants: val.dependents,
-      other_requirement: "None",
-    });
+  const handleEditNewDocument = (val: any) => {
+    currentId &&
+      editDocumentRequirement(currentId, {
+        name: val.name,
+        document_category_id: val.category,
+        document_format: val.format,
+        document_size: val.size,
+        document_type: docType,
+        eligible_dependants: val.dependents,
+        other_requirement: "None",
+      });
     handleNewDocumentCancel();
     setSubmitted(true);
   };
@@ -181,7 +182,6 @@ const DocumentRequirements = () => {
       ),
     },
   ];
-
   useEffect(() => {
     setSubmitted(false)
     if (
@@ -231,12 +231,12 @@ useEffect(() => {
   refetch();
 }, [submitted,editLoading]);
   const rowSelectionRequiredDoc = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (_: React.Key[], selectedRows: DataType[]) => {
       selectedRows.length === 0 || !selectedRows
         ? setHideDeleteBtn(true)
         : setHideDeleteBtn(false);
     },
-    getCheckboxProps: (record: DataType) => ({}),
+    getCheckboxProps: (_: DataType) => ({}),
   };
 
   // Supporting Documents table
@@ -304,12 +304,12 @@ useEffect(() => {
     },
   ];
   const rowSelectionSupportDoc = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (_: React.Key[], selectedRows: DataType[]) => {
       selectedRows.length === 0 || !selectedRows
         ? setHideDeleteBtn(true)
         : setHideDeleteBtn(false);
     },
-    getCheckboxProps: (record: DataType) => ({}),
+    getCheckboxProps: (_: DataType) => ({}),
   };
 
   // Tab items
@@ -525,7 +525,7 @@ useEffect(() => {
           description="Create, View & edit document requirements on the system"
           linkBack={appRoute.settings}
         />
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2">
             <Icon
               icon="uil:file-import"
@@ -538,7 +538,7 @@ useEffect(() => {
             />
           </div>
           <Dropdown.Button
-            className="bg-secondary rounded-lg "
+            className="bg-secondary rounded-lg w-fit "
             arrow={true}
             icon={
               <DownOutlined className="text-white font-medium hover:text-white" />
