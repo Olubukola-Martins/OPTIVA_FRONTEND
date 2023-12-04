@@ -1,7 +1,7 @@
 import { Dropdown, Form, Input, Menu, Modal, Select, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
@@ -18,7 +18,7 @@ export type DataSourceItem = {
 };
 
 export const ActiveApplications = () => {
-  const params = useParams();
+  // const params = useParams();
   // const itemId = params.id;
   const columns: ColumnsType<DataSourceItem> = [
     {

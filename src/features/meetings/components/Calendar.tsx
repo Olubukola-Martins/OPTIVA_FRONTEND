@@ -3,11 +3,12 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import { useState } from "react";
 import {
+  IMeetingData,
   MeetingDetailsModal,
   MeetingModalActions,
   NewMeetingModal,
 } from "./MeetingModals";
-import { IMeetingData } from "./MeetingModals";
+// import { IMeetingData } from "./MeetingModals";
 
 export interface IEvent {
   id: number;
@@ -67,6 +68,8 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
     
     setOpenNewMeetingModal(false);
   };
+
+  
   return (
     <div className="h-[500px]">
       <BigCalendar

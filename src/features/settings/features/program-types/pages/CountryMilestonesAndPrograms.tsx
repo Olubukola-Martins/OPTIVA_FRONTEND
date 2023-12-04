@@ -3,7 +3,7 @@ import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { CountryMilestonesAndProgramsTab } from "../components/CountryMilestonesAndProgramsTab";
-import { Dropdown, Form, Input, Menu, Modal, Select } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 
@@ -18,13 +18,13 @@ const CountryMilestonesAndPrograms = () => {
   };
 
   // Add Country Success
-  const [openCountrySuccessModal, setOpenCountrySuccessModal] = useState(false);
-  const showCountrySuccessModal = () => {
-    setOpenCountrySuccessModal(true);
-  };
-  const handleCountrySucessCancel = () => {
-    setOpenCountrySuccessModal(false);
-  };
+  // const [openCountrySuccessModal, setOpenCountrySuccessModal] = useState(false);
+  // const showCountrySuccessModal = () => {
+  //   setOpenCountrySuccessModal(true);
+  // };
+  // const handleCountrySucessCancel = () => {
+  //   setOpenCountrySuccessModal(false);
+  // };
 
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
@@ -56,13 +56,13 @@ const CountryMilestonesAndPrograms = () => {
 
   // Milestone Modal
   const [openMilestoneModal, setOpenMilestoneModal] = useState<boolean>(false);
-  const showMilestoneModal = () => {
-    setOpenMilestoneModal(true);
-  };
+  // const showMilestoneModal = () => {
+  //   setOpenMilestoneModal(true);
+  // };
   const handleMilestoneModalCancel = () => {
     setOpenMilestoneModal(false);
   };
-  const handleEditMilestoneSubmit = (val: any) => {};
+  const handleEditMilestoneSubmit = () => {};
 
      //Add Milestone Modal
   const [openAddMilestoneModal, setOpenAddMilestoneModal] = useState<boolean>(false);
@@ -72,7 +72,7 @@ const CountryMilestonesAndPrograms = () => {
   const handleAddMilestoneModalCancel = () => {
     setOpenAddMilestoneModal(false);
   };
-  const handleAddMilestoneSubmit = (val: any) => {};
+  const handleAddMilestoneSubmit = () => {};
 
   const selectTimeAfter = (
     <Select

@@ -1,78 +1,41 @@
-import { useState } from "react";
 import { NewDepartment } from "../components/NewDepartment";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
-import { Dropdown, Menu, Table } from "antd";
-import { ColumnsType } from "antd/es/table";
-import {
-  QUERY_KEY_FOR_DEPARTMENT,
-  useFetchDepartment,
-} from "../hooks/useFetchDepartment";
-import { departmentProps } from "../types";
-import { useDelete } from "src/hooks/useDelete";
-import Popconfirm from "antd/lib/popconfirm";
+import { ActiveDepartment } from "../components/ActiveDepartment";
+import { InactivateDepartment } from "../components/InactivateDepartment";
+import { Input, Tabs } from "antd";
+import { useHandleDepartment } from "../hooks/useHandleDepartment";
+import { useState } from "react";
+import { useDebounce } from "src/hooks/useDebounce";
 
 const Department = () => {
-  const [addDepartment, setAddDepartment] = useState(false);
-  const { data, isLoading } = useFetchDepartment();
-  const [departmentId, setDepartmentId] = useState<number>();
-  const { removeData } = useDelete({
-    deleteEndPointUrl: "admin/departments/",
-    queryKey: QUERY_KEY_FOR_DEPARTMENT,
-  });
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const {addDepartment, departmentId, setAddDepartment, handleAddDepartment} = useHandleDepartment()
 
-  const handleDepartment = (id: number) => {
-    setDepartmentId(id);
-    setAddDepartment(true);
-  };
+  // const { removeData } = useDelete({
+  //   EndPointUrl: "admin/departments/",
+  //   queryKey: QUERY_KEY_FOR_DEPARTMENT,
+  // });
 
-  const handleAddDepartment = () => {
-    setDepartmentId(undefined);
-    setAddDepartment(true);
-  };
-
-  const columns: ColumnsType<departmentProps> = [
+  const tabItems: {
+    label: string;
+    children: React.ReactNode;
+    key: string;
+  }[] = [
     {
-      title: "Name",
-      dataIndex: "name",
+      label: "Active Departments",
+      children: <ActiveDepartment searchValue={debouncedSearchTerm} />,
+      key: "Active Employees",
     },
     {
-      title: "head",
-      dataIndex: "head",
-      render: (_, val) => <span>{val?.head?.name}</span>
-    },
-    {
-      title: "Action",
-      dataIndex: "action",
-
-      render: (_, val) => (
-        <div>
-          <Dropdown
-            trigger={["click"]}
-            overlay={
-              <Menu>
-                <Menu.Item key="1" onClick={() => handleDepartment(val.id)}>
-                  Edit
-                </Menu.Item>
-                <Menu.Item key="2">
-                  <Popconfirm
-                    title="Delete department"
-                    description={`Are you sure to delete ${val.name}`}
-                    onConfirm={() => removeData(val.id)}
-                  >
-                    Delete
-                  </Popconfirm>
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-          </Dropdown>
-        </div>
-      ),
+      label: "Inactive Departments",
+      children: <InactivateDepartment searchValue={debouncedSearchTerm} />,
+      key: "Inactive Employees",
     },
   ];
+
   return (
     <>
       <NewDepartment
@@ -95,13 +58,21 @@ const Department = () => {
         </div>
       </div>
 
-      <Table
-        className="bg-white rounded-md shadow border mt-8"
-        columns={columns}
-        dataSource={data}
-        loading={isLoading}
-        // scroll={{ x: 500 }}
-      />
+      <div>
+        <Tabs
+          items={tabItems}
+          className="hover:bg-caramel active:text-primary"
+          tabBarExtraContent={
+            <Input.Search
+              allowClear
+              placeholder="Search"
+              className="md:flex hidden"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
+            />
+          }
+        />
+      </div>
     </>
   );
 };

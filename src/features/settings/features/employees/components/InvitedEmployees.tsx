@@ -4,12 +4,14 @@ import { employeesProps } from "../types";
 import { useFetchEmployees } from "../hooks/useFetchEmployees";
 import dayjs from "dayjs";
 import { usePagination } from "src/hooks/usePagination";
+import { searchValueProps } from "src/types";
 
-export const InvitedEmployees = () => {
+export const InvitedEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
   const { data, isLoading } = useFetchEmployees({
     currentUrl: "inactive-employees",
     pagination,
+    search: searchValue,
   });
   const columns: ColumnsType<employeesProps> = [
     {

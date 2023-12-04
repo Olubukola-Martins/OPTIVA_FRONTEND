@@ -33,7 +33,7 @@ const PaymentDetails = () => {
   const { id } = useParams();
   const [modalForm] = Form.useForm();
   const navigate = useNavigate();
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
   const [data, setData] = useState<IPaymentItem[]>([]);
   const [isEditingNewDetails, setIsEditingNewDetails] = useState(false);
   const [indexEdited, setIndexEdited] = useState<undefined | number>(undefined);
@@ -43,7 +43,7 @@ const PaymentDetails = () => {
 
   // MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleAddNewPayment = (values) => {
+  const handleAddNewPayment = (values: any) => {
     const newdateCreated = values.dateCreated;
     const newdatePaid = values.datePaid;
     const key = isEditingNewDetails ? values.key : data.length + 1;
@@ -189,7 +189,7 @@ const PaymentDetails = () => {
   const editableColumns: ColumnsType<IPaymentItem> = [
     {
       title: "SN",
-      render: (_: any, record: IPaymentItem, index: number) => {
+      render: (_: any, _record: IPaymentItem, index: number) => {
         return index + 1;
       },
     },
@@ -222,7 +222,7 @@ const PaymentDetails = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, record: IPaymentItem, index) => (
+      render: (_, record: IPaymentItem) => (
         <div>
           <Dropdown
             trigger={["click"]}

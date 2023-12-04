@@ -6,13 +6,15 @@ import { IGeneralProps } from "src/types";
 import { useGetToken } from "./useGetToken";
 
 interface IDProps {
-    EndPointUrl: string;
-    queryKey: string;
-  }
+  EndPointUrl: string;
+  queryKey: string;
+  is_active: boolean;
+}
 
- const handleDelete = async ({
+const handleDeactivation = async ({
   id,
   EndPointUrl,
+  is_active,
 }: IGeneralProps) => {
   const url = `${END_POINT.BASE_URL}/${EndPointUrl}${id}`;
   const token = useGetToken();
@@ -23,17 +25,20 @@ interface IDProps {
     },
   };
 
-  const response = await axios.delete(url, config);
+  const data: any = {
+    is_active,
+  };
+
+  const response = await axios.put(url, data, config);
   return response;
 };
 
-export const useDelete = ({ EndPointUrl, queryKey }: IDProps) => {
+export const useDeactivate = ({ EndPointUrl, queryKey, is_active }: IDProps) => {
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(handleDelete);
-
+  const { mutate } = useMutation(handleDeactivation);
   const removeData = (id: number) => {
     mutate(
-      { id, EndPointUrl },
+      { id, EndPointUrl, is_active },
       {
         onError: (err: any) => {
           openNotification({

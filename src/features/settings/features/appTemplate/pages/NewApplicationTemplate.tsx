@@ -7,7 +7,7 @@ import Success from "../assets/img/success.png";
 
 const NewApplicationTemplate = () => {
   const [form] = Form.useForm();
-  const handleSubmit = (val: any) => { };
+  const handleSubmit = () => { };
   // Add Success
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
