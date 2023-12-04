@@ -1,12 +1,11 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Dropdown, Form, Input, Menu, Modal, Skeleton, Table } from "antd";
+import { Dropdown,  Menu,  Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import DeleteIcon from "../assets/img/delete-icon.png";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { DeleteModal } from "src/components/modals/DeleteModal";
@@ -66,7 +65,7 @@ const ApplicationTemplate = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}

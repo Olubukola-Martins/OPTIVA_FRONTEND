@@ -14,8 +14,8 @@ export const AntiguaBarbacudaDonationQuestions = () => {
     <div className="flex gap-8">
       <div className="w-1/2">
         <Form.Item
-          label="Finance Fee for Applicants"
-          name="FinanceFeeApplicants"
+          label="Contribution Fee for Applicants"
+          name="contributionFeeApplicants"
           required
         >
           <Input  addonAfter={currency} />
@@ -95,9 +95,7 @@ export const AntiguaBarbacudaDonationQuestions = () => {
         >
           <Input addonAfter={currency} />
         </Form.Item>
-        <Form.Item label="Local Agent Fee + VAT " name="localAgentFee" required>
-          <Input addonAfter={currency} />
-        </Form.Item>
+        
       </div>
     </div>
   );

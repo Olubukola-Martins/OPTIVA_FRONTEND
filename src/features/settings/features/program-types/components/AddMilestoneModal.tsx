@@ -1,25 +1,61 @@
 import { Form, Input, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
-import {
-  QUERY_KEY_FOR_MILESTONE,
-  useGetMilestone,
-} from "../hooks/useGetMilestone";
-import { usePostAndPutMilestone } from "../hooks/usePostAndPutMilestone";
+import { QUERY_KEY_FOR_MILESTONE } from "../hooks/useGetMilestone";
+import { usePostMilestone } from "../hooks/usePostMilestone";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
+import { useGetSingleMilestone } from "../hooks/useGetSingleMilestone";
+import { useEffect } from "react";
+import { useUpdateMilestone } from "../hooks/useUpdateMilestone";
 
-export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
+interface IEditMilestone extends IdentifierProps {
+  milestoneId?: React.Key;
+}
+
+export const AddMilestoneModal = ({
+  handleClose,
+  open,
+  milestoneId,
+}: IEditMilestone) => {
   const [form] = Form.useForm();
-  const { mutate, isLoading: postLoading } = usePostAndPutMilestone();
+  const { mutate, isLoading: postLoading } = usePostMilestone();
   const { token } = useGetUserInfo();
   const queryClient = useQueryClient();
-  const { data: milestoneData } = useGetMilestone();
-  console.log("milestone data", milestoneData);
+  const { data: singleMilestone } = useGetSingleMilestone({
+    id: milestoneId as unknown as number,
+    queryKey: QUERY_KEY_FOR_MILESTONE,
+  });
+  const { putData, isLoading: putLoading } = useUpdateMilestone({
+    queryKey: QUERY_KEY_FOR_MILESTONE,
+  });
+  useEffect(() => {
+    if (singleMilestone) {
+      const { milestone, timeline, processes } = singleMilestone;
+      form.setFieldsValue({
+        milestone,
+        timeline,
+      });
+      form.setFieldsValue({
+        title: processes.map((item) => item.title),
+        duration: processes.map((item) => item.duration),
+      });
+      if (processes.length > 1) {
+        const newProcesses = processes.slice(1).map((item, index) => ({
+          newTitle: item.title,
+          newDuration: item.duration,
+          key: index,
+        }));
 
-  // ADD MORE PROCESS
+        form.setFieldsValue({
+          newProcess: newProcesses,
+        });
+      }
+    }
+  }, [singleMilestone]);
+
   const handleAddProcess = () => {
     const newProcess = form.getFieldValue("newProcess") || [];
     const initialProcess = { processTitle: "", processDuration: "" };
@@ -34,7 +70,6 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
   };
 
   const handleMilestoneSubmit = (val: any) => {
-    console.log("valuues of form", val);
     const milestoneTitle = val.milestone;
     const milestoneTimeline = val.timeline;
     const processes =
@@ -44,41 +79,52 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
         duration_type: "days",
       })) || [];
 
-    mutate(
-      {
-        ...val, 
-        milestone: milestoneTitle,
-        processes,
-        timeline: milestoneTimeline,
-
-        duration_type: "days",
-      },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occured",
-            description: error.response?.data?.message || "Unknown error",
-            duration: 5,
-          });
+    if (milestoneId) {
+      putData(
+        milestoneId as number,
+        milestoneTitle,
+        milestoneTimeline,
+        "days", // You might want to make this dynamic based on your use case
+        processes
+      );
+    } else {
+      mutate(
+        {
+          milestone: milestoneTitle,
+          processes,
+          timeline: milestoneTimeline,
+          token,
+          duration_type: "days",
         },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_MILESTONE]);
-          // form.resetFields();
-        },
-      }
-    );
+        {
+          onError: (error: any) => {
+            openNotification({
+              state: "error",
+              title: "Error Occured",
+              description: error.response?.data?.message || "Unknown error",
+              duration: 5,
+            });
+          },
+          onSuccess: (res: any) => {
+            openNotification({
+              state: "success",
+              title: "Success",
+              description: res.data.message,
+            });
+            queryClient.invalidateQueries([QUERY_KEY_FOR_MILESTONE]);
+            form.resetFields();
+          },
+        }
+      );
+    }
   };
 
   return (
     <>
       <Modal open={open} onCancel={() => handleClose()} footer={null}>
-        <h2 className="text-center text-lg font-bold">Add Milestone</h2>
+        <h2 className="text-center text-lg font-bold">
+          {milestoneId ? "Edit Milestone" : "Add Milestone"}
+        </h2>
         <Form
           layout="vertical"
           onFinish={handleMilestoneSubmit}
@@ -166,7 +212,11 @@ export const AddMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
               handleClick={() => handleClose}
               variant="transparent"
             />
-            <AppButton label="Save" type="submit" isLoading={postLoading} />
+            <AppButton
+              label="Save"
+              type="submit"
+              isLoading={milestoneId ? putLoading : postLoading}
+            />
           </div>
         </Form>
       </Modal>

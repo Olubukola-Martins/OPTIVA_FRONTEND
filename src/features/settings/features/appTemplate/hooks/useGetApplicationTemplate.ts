@@ -25,8 +25,8 @@ export const useGetApplicationTemplate = () => {
       [QUERY_KEY_FOR_APPLICATION_TEMPLATE],
       () => getData({ token }),
       {
-        onError: (err: any) => {},
-        onSuccess: (data) => {},
+        onError: () => {},
+        onSuccess: () => {},
       }
     );
     return queryData;

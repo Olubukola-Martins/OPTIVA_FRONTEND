@@ -14,7 +14,6 @@ import { useGetWorkflow } from "../hooks/useGetWorkflow";
 import type { SelectProps } from "antd";
 import { useUpdateProgramType } from "../hooks/useUpdateProgramType";
 import { useGetCountry } from "../hooks/useGetCountry";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 
 const EditProgramType = () => {
   const [form] = Form.useForm();
@@ -24,7 +23,6 @@ const EditProgramType = () => {
     id: id as unknown as number,
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
   });
-  const { token } = useGetUserInfo();
   const { data: dependentData } = useGetEligibleDependent();
   const { data: documentData } = useGetDocumentRequirement();
   const { data: applicationData } = useGetApplicationTemplate();
@@ -84,8 +82,7 @@ const EditProgramType = () => {
       key: item.id,
     })) || [];
   
-  console.log('country options', countryOptions)
-  console.log('country data', countryData)
+ 
 
   useEffect(() => {
     if (programData) {
@@ -102,7 +99,6 @@ const EditProgramType = () => {
   }, [programData]);
 
   const handleSubmit = (values: any) => {
-    console.log("Form values submitted:", values);
     putData(
       id as unknown as number,
       values.programName,

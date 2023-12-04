@@ -26,8 +26,8 @@ export const useGetProgramType = () => {
     [QUERY_KEY_FOR_PROGRAM_TYPE],
     () => getData({ token }),
     {
-      onError: (err: any) => {},
-      onSuccess: (data) => {},
+      onError: () => {},
+      onSuccess: () => {},
     }
   );
   return queryData;

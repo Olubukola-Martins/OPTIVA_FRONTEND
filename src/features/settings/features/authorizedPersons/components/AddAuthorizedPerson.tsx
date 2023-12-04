@@ -25,10 +25,10 @@ const props: UploadProps = {
       message.error(`${info.file.name} file upload failed.`);
     }
   },
-  beforeUpload(file) {
+  beforeUpload() {
     return false;
   },
-  customRequest(options) {},
+  customRequest() {},
 };
 
 export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {

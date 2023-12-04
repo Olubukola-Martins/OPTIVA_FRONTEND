@@ -28,8 +28,8 @@ export const useGetSingleAuthorizedPerson = (authorizedId: number) => {
         authorizedId,
       }),
     {
-      onError: (err: any) => {},
-      onSuccess: (res: any) => {},
+      onError: () => {},
+      onSuccess: () => {},
     }
   );
   return queryData;

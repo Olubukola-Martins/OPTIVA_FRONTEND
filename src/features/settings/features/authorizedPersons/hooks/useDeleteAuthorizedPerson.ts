@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
@@ -36,7 +35,7 @@ export const useDeleteAuthorizedPerson = (queryKey: string) => {
         queryKey,
       },
       {
-        onError: (error: any) => {
+        onError: () => {
           openNotification({
             state: "error",
             title: "Error Occured",
@@ -44,7 +43,7 @@ export const useDeleteAuthorizedPerson = (queryKey: string) => {
             duration: 5,
           });
         },
-        onSuccess: (res: any) => {
+        onSuccess: () => {
           openNotification({
             state: "success",
             title: "Success",

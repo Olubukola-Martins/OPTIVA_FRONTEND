@@ -1,7 +1,6 @@
 import axios from "axios";
 import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
-import { QUERY_KEY_FOR_MILESTONE } from "./useGetMilestone";
 import { useQuery } from "react-query";
 
 export const QUERY_KEY_ELIGIBLE_DEPENDENTS = "EligibleDependents";
@@ -26,8 +25,8 @@ export const useGetEligibleDependent = () => {
       [QUERY_KEY_ELIGIBLE_DEPENDENTS],
       () => getData({ token }),
       {
-        onError: (err: any) => {},
-        onSuccess: (data) => {},
+        onError: () => {},
+        onSuccess: () => {},
       }
     );
     return queryData;

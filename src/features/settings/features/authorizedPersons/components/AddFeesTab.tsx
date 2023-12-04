@@ -1,5 +1,4 @@
 import { Form, Tabs, TabsProps } from "antd";
-import React from "react";
 import { AddFees } from "./AddFees";
 import { ProgramFeesBreakdown } from "./ProgramFeesBreakdown";
 import { AppButton } from "src/components/button/AppButton";

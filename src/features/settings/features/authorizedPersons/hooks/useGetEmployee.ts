@@ -27,8 +27,8 @@ export const useGetEmployee = () => {
       [QUERY_KEY_FOR_EMPLOYEE],
       () => getData({ token }),
       {
-        onError: (err: any) => {},
-        onSuccess: (data) => {},
+        onError: () => {},
+        onSuccess: () => {},
       }
     );
     return queryData;

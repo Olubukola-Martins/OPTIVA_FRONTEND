@@ -26,8 +26,8 @@ export const useGetInvestmentRoute = () => {
     [QUERY_KEY_FOR_INVESTMENT_ROUTE],
     () => getData({ token }),
     {
-      onError: (err: any) => {},
-      onSuccess: (data) => {},
+      onError: () => {},
+      onSuccess: () => {},
     }
   );
   return queryData;

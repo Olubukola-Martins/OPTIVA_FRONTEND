@@ -10,8 +10,9 @@ interface IDProps {
   queryKey: string;
 }
 
-interface IDelete extends IGeneralProps{
-  token:string
+interface IDelete extends IGeneralProps {
+  token: string;
+  deleteEndPointUrl: string;
 }
 
 export const handleDelete = async ({

@@ -33,10 +33,7 @@ const InvestmentRoute = () => {
   const [id, setId] = useState<number>();
   const [addInvRoute, setAddInvRoute] = useState<boolean>(false);
   const [editInvRoute, setEditInvRoute] = useState<boolean>(false);
-  // const { removeData, deleteIsLoading } = useDeleteHandler({
-  //   deleteEndPointUrl: "admin/investment-route",
-  //   queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
-  // });
+
   const { removeData, deleteIsLoading } = useDeleteHandler({
     queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
     deleteEndPointUrl: "admin/investment-route",

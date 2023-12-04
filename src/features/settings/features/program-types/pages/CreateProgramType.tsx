@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, Select } from "antd";
+import { Form, Input, Select } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -130,9 +130,7 @@ const CreateProgramType = () => {
               <Form.Item label="Program Name" required name="programName">
                 <Input />
               </Form.Item>
-              <Form.Item name="date">
-                <DatePicker.RangePicker />
-              </Form.Item>
+             
 
               <Form.Item name="programLink" label="Program Link">
                 <Input />

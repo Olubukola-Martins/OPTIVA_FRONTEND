@@ -21,11 +21,6 @@ export const ProgramTypes = () => {
   const { data, isLoading } = useGetProgramType();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
 
-  const [openProgramModal, setOpenProgramModal] = useState<boolean>(false);
-  const showProgramModal = () => {
-    setOpenProgramModal(true);
-  };
-
   useEffect(() => {
     if (data) {
       const programType: DataSourceItem[] = data.map((item, index) => {

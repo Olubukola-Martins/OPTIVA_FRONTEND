@@ -51,13 +51,10 @@ const Dependents = () => {
   //Edit Dependent Modal
   const [openEditDependentModal, setOpenEditDependentModal] =
     useState<boolean>(false);
-  const showEditDependentModal = () => {
-    setOpenEditDependentModal(true);
-  };
   const handleEditDependentModalCancel = () => {
     setOpenEditDependentModal(false);
   };
-  const handleEditDependentSubmit = (val: any) => {};
+  const handleEditDependentSubmit = (val: any) => {console.log('values', val)};
 
 const columns: ColumnsType<DataType> = [
   {
@@ -77,7 +74,7 @@ const columns: ColumnsType<DataType> = [
     title: "Action",
     dataIndex: "action",
 
-    render: (_, val) => (
+    render: () => (
       <div>
         <Dropdown
           trigger={["click"]}
@@ -97,9 +94,6 @@ const columns: ColumnsType<DataType> = [
 
   // Delete Modal
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
-  const showDeleteModal = () => {
-    setOpenDeleteModal(true);
-  };
   const handleDeleteCancel = () => {
     setOpenDeleteModal(false);
   };

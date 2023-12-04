@@ -9,12 +9,12 @@ export interface ITemplate {
 }
 
 
-interface ISection {
-  section_title: string;
-  section_description: string;
-  subsections?: Subsection[];
-  form_questions?: Formquestion2[];
-}
+// interface ISection {
+//   section_title: string;
+//   section_description: string;
+//   subsections?: Subsection[];
+//   form_questions?: Formquestion2[];
+// }
 
 interface Formquestion2 {
   question: string;

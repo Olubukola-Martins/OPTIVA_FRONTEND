@@ -23,8 +23,8 @@ const getData = async (props: IDataProps) => {
 export const useGetSingleCountry = ({ id, queryKey }: ISingleInvestment) => {
   const { token } = useGetUserInfo();
   const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
-    onError: (err: any) => {},
-    onSuccess: (data) => {},
+    onError: () => {},
+    onSuccess: () => {},
   });
 
   return queryData;

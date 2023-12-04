@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { IUserToken } from "src/types";

@@ -25,8 +25,8 @@ export const useGetDocumentRequirement = () => {
       [QUERY_KEY_DOC_REQUIREMENT],
       () => getData({ token }),
       {
-        onError: (err: any) => {},
-        onSuccess: (data) => {},
+        onError: () => {},
+        onSuccess: () => {},
       }
     );
     return queryData;

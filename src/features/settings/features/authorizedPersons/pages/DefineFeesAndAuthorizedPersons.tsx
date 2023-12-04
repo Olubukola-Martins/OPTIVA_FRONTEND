@@ -63,9 +63,6 @@ const DefineFeesAndAuthorizedPersons = () => {
   // Add Success
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
-  const renderSuccessModal = () => {
-    setShowSuccessModal(true);
-  };
   const cancelSuccessModal = () => {
     setShowSuccessModal(false);
   };

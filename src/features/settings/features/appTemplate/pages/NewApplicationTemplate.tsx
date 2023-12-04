@@ -1,12 +1,9 @@
-import { DatePicker, Form, Input, Select, Switch } from "antd";
+import { Form, Input, Select} from "antd";
 import { useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
 import Section from "../assets/img/add-section.png";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { PageIntro } from "src/components/PageIntro";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
-import { usePostApplicationTemplate } from "../hooks/usePostApplicationTemplate";
-import { IPostApplication } from "../types";
 
 interface ISection {
   section_title: string;
@@ -389,7 +386,7 @@ const NewApplicationTemplate = () => {
 
                 {/* ADD SUBSECTIONS */}
 
-                {section.subsections?.map((subsection, subsectionIndex) => (
+                {section.subsections?.map((_, subsectionIndex) => (
                   <div key={subsectionIndex}>
                     <h2 className="text-center p-4 font-bold text-lg">
                       Sub-section {subsectionIndex + 1}

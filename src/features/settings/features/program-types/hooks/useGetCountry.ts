@@ -26,8 +26,8 @@ export const useGetCountry = () => {
     [QUERY_KEY_FOR_COUNTRY],
     () => getData({ token }),
     {
-      onError: (err: any) => {},
-      onSuccess: (data) => {},
+      onError: () => {},
+      onSuccess: () => {},
     }
   );
   return queryData;

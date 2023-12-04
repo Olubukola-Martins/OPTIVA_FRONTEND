@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
-import { useGetToken } from "src/hooks/useGetToken";
 import { IUserToken } from "src/types";
 
 interface IProcesses {
@@ -10,33 +9,34 @@ interface IProcesses {
   duration_type: string;
 }
 interface IPostMilestone extends IUserToken {
-  id: number;
   milestone: string;
   timeline: number;
   duration_type?: string;
   processes: IProcesses[];
 }
 const postRequest = async (props: IPostMilestone) => {
-  const { token } = useGetToken();
-  const updateUrl = `/admin/milestone/${props.id}`;
-  const addUrl = "/admin/milestone";
-  const acceptedUrl = props.id ? updateUrl : addUrl;
-  const url = `${END_POINT.BASE_URL}${acceptedUrl}`;
+  const url = `${END_POINT.BASE_URL}/admin/milestone`;
   const config = {
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${props.token}`,
     },
   };
   const body = {
-    ...props,
-  };;
+    milestone: props.milestone,
+    timeline: props.timeline,
+    duration_type: props.duration_type,
+    processes: props.processes.map((process) => ({
+        title: process.title,
+        duration: process.duration,
+        duration_type: process.duration_type,
+      })),
+  };
 
-  const requestType = props.id ? axios.put : axios.post;
-  const response = await requestType(url, body, config);
-  return response;
+  const res = await axios.post(url, body, config);
+  return res;
 };
 
-export const usePostAndPutMilestone = () => {
+export const usePostMilestone = () => {
   return useMutation(postRequest);
 };

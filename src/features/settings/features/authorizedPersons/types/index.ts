@@ -7,29 +7,29 @@ export interface IAuthorizedPerson{
 }
 
 // EMPLOYEE TYPES TO BE DELETED
-interface Meta {
-  current_page: number;
-  from: number;
-  last_page: number;
-  links: Link[];
-  path: string;
-  per_page: number;
-  to: number;
-  total: number;
-}
+// interface Meta {
+//   current_page: number;
+//   from: number;
+//   last_page: number;
+//   links: Link[];
+//   path: string;
+//   per_page: number;
+//   to: number;
+//   total: number;
+// }
 
-interface Link {
-  url?: string;
-  label: string;
-  active: boolean;
-}
+// interface Link {
+//   url?: string;
+//   label: string;
+//   active: boolean;
+// }
 
-interface Links {
-  first: string;
-  last: string;
-  prev?: any;
-  next?: any;
-}
+// interface Links {
+//   first: string;
+//   last: string;
+//   prev?: any;
+//   next?: any;
+// }
 
 export interface IEmployee {
   id: number;

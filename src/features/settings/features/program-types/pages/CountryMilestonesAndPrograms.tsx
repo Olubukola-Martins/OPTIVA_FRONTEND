@@ -3,28 +3,18 @@ import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { CountryMilestonesAndProgramsTab } from "../components/CountryMilestonesAndProgramsTab";
-import { Dropdown,  } from "antd";
+import { Dropdown } from "antd";
 import { Link } from "react-router-dom";
-import '../assets/style.css'
+import "../assets/style.css";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
-import { usePostCountry } from "../hooks/usePostCountry";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
-import { openNotification } from "src/utils/notification";
-import { useQueryClient } from "react-query";
-import { QUERY_KEY_FOR_COUNTRY } from "../hooks/useGetCountry";
+
 import { AddCountryModal } from "../components/AddCountryModal";
-import { EditMilestoneModal } from "../components/EditMilestoneModal";
 import { DownOutlined } from "@ant-design/icons";
 import { AddMilestoneModal } from "../components/AddMilestoneModal";
 import type { MenuProps } from "antd";
 
 const CountryMilestonesAndPrograms = () => {
-  const { token } = useGetUserInfo();
-  const queryClient = useQueryClient();
-
-  // Add New Country
-  const { mutate, isLoading: postLoading } = usePostCountry();
   // Country Modal
   const [openCountryModal, setOpenCountryModal] = useState(false);
   const showCountryModal = () => {
@@ -34,32 +24,13 @@ const CountryMilestonesAndPrograms = () => {
     setOpenCountryModal(false);
   };
 
-  // SUBMIT COUNTRY
-  const handleCountrySubmit = (val: any) => {
-    mutate(
-      {
-        country_name: val.country,
-        token,
-      },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occured",
-            description: error,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_COUNTRY]);
-        },
-      }
-    );
+  // Milestone Modal
+  const [openMilestoneModal, setOpenMilestoneModal] = useState(false);
+  const showMilestoneModal = () => {
+    setOpenMilestoneModal(true);
+  };
+  const handleMilestoneModalCancel = () => {
+    setOpenMilestoneModal(false);
   };
 
   // Import Modal
@@ -71,30 +42,7 @@ const CountryMilestonesAndPrograms = () => {
     setOpenImportModal(false);
   };
 
-  // Upload Document
-  const [exportModal, setExportModal] = useState(false);
-  const showExportModal = () => {
-    setExportModal(true);
-  };
-  const handleExportCancel = () => {
-    setExportModal(false);
-  };
 
-  // Milestone Modal
-  const [openMilestoneModal, setOpenMilestoneModal] = useState<boolean>(false);
-  const handleMilestoneModalCancel = () => {
-    setOpenMilestoneModal(false);
-  };
-
-  //Add Milestone Modal
-  const [openAddMilestoneModal, setOpenAddMilestoneModal] =
-    useState<boolean>(false);
-  const showAddMilestoneModal = () => {
-    setOpenAddMilestoneModal(true);
-  };
-  const handleAddMilestoneModalCancel = () => {
-    setOpenAddMilestoneModal(false);
-  };
 
   const items: MenuProps["items"] = [
     {
@@ -105,7 +53,7 @@ const CountryMilestonesAndPrograms = () => {
     {
       label: "Milestone",
       key: "2",
-      onClick: () => showAddMilestoneModal(),
+      onClick: () => showMilestoneModal(),
     },
     {
       label: <Link to={appRoute.createProgramType}>Program Type</Link>,
@@ -136,17 +84,13 @@ const CountryMilestonesAndPrograms = () => {
             <Icon
               icon="mingcute:file-import-line"
               className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showExportModal}
+              // onClick={showExportModal}
             />
           </div>
-          
-            <Dropdown.Button
-              menu={menuProps}
-              icon={<DownOutlined />}
-            >
-              Add New
-            </Dropdown.Button>
-         
+
+          <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
+            Add New
+          </Dropdown.Button>
         </div>
       </div>
       <CountryMilestonesAndProgramsTab />
@@ -163,20 +107,17 @@ const CountryMilestonesAndPrograms = () => {
         header="Country"
       />
 
-      {/*ADD MILESTONE MODAL */}
-      <AddMilestoneModal
-        handleClose={handleAddMilestoneModalCancel}
-        open={openAddMilestoneModal}
-      />
       {/* ADD COUNTRY MODAL */}
       <AddCountryModal
         handleClose={handleCountryModalCancel}
         open={openCountryModal}
       />
-      {/*EDIT MILESTONE MODAL */}
-      <EditMilestoneModal
+
+      {/* MILESTONE MODAL */}
+      <AddMilestoneModal
         handleClose={handleMilestoneModalCancel}
-        open={openMilestoneModal} milestoneId={""}      />
+        open={openMilestoneModal}
+      />
     </>
   );
 };

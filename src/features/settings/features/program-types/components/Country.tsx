@@ -1,13 +1,9 @@
-import { Dropdown, Form, Menu, Modal, Skeleton, Table } from "antd";
+import { Dropdown, Menu, Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
-import { AppButton } from "src/components/button/AppButton";
-import Success from "../assets/img/success.png";
 import { QUERY_KEY_FOR_COUNTRY, useGetCountry } from "../hooks/useGetCountry";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
 import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
-import { useQueryClient } from "react-query";
 import { EditCountryModal } from "./EditCountryModal";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 
@@ -20,8 +16,6 @@ type DataSourceItem = {
 };
 
 export const Country = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
   // GET REQUEST
   const { data, isLoading } = useGetCountry();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
@@ -41,7 +35,7 @@ export const Country = () => {
   }, [data]);
 
   const [countryId, setCountryId] = useState<number>();
-  
+
   const { removeData, deleteIsLoading } = useDeleteHandler({
     deleteEndPointUrl: "admin/countries",
     queryKey: QUERY_KEY_FOR_COUNTRY,
@@ -71,7 +65,7 @@ export const Country = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_,val) => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -105,38 +99,12 @@ export const Country = () => {
     },
   ];
 
-  const handleDeleteCheckbox = () => {
-    showDeleteModal();
-    // handleDelete({
-    //   id: id as unknown as number,
-    //   deleteEndPointUrl: "/admin/countries",
-    //   token,
-    // });
-
-    setSelectedRowKeys([]);
-  };
-
-  // Country Modal
   const [openCountryModal, setOpenCountryModal] = useState<boolean>(false);
   const showCountryModal = () => {
     setOpenCountryModal(true);
   };
   const handleCountryModalCancel = () => {
     setOpenCountryModal(false);
-  };
-  const handleEditCountrySubmit = (val: any) => {
-    console.log(val);
-    
-  };
-
-  // Add Success
-  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
-
-  const renderSuccessModal = () => {
-    setShowSuccessModal(true);
-  };
-  const cancelSuccessModal = () => {
-    setShowSuccessModal(false);
   };
 
   // Delete Modal
@@ -149,17 +117,6 @@ export const Country = () => {
   };
   return (
     <>
-      {/* DELETE CHECKBOX BUTTON */}
-      {selectedRowKeys.length > 0 && (
-        <div>
-          <AppButton
-            variant="transparent"
-            label="Delete"
-            handleClick={handleDeleteCheckbox}
-          />
-        </div>
-      )}
-
       {/* TABLE */}
       <Skeleton loading={isLoading} active>
         <Table
@@ -189,22 +146,6 @@ export const Country = () => {
         open={openCountryModal}
         countryId={countryId as unknown as number}
       />
-      {/* ADD SUCCESS MODAL */}
-      <Modal
-        open={showSuccessModal}
-        footer={null}
-        onCancel={cancelSuccessModal}
-      >
-        <div className="flex flex-col items-center gap-4 font-bold">
-          <img src={Success} className="mx-auto" />
-          <div className="text-center text-lg">
-            <h2>Country</h2>
-            <h2>Added Successfully</h2>
-          </div>
-
-          <AppButton label="Back" handleClick={cancelSuccessModal} />
-        </div>
-      </Modal>
 
       {/* DELETE MODAL */}
       <DeleteModal

@@ -6,8 +6,6 @@ import { useQueryClient } from "react-query";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { QUERY_KEY_FOR_COUNTRY } from "../hooks/useGetCountry";
 import { openNotification } from "src/utils/notification";
-// import { useGetProgramType } from "../hooks/useGetProgramType";
-// import type { SelectProps } from "antd";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
 
 export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
@@ -16,21 +14,10 @@ export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
   const { mutate, isLoading } = usePostCountry();
   const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
-  // const { data } = useGetProgramType();
-
-  //   // PROGRAM TYPE SELECT
-  // const options: SelectProps["options"] =
-  //   data?.map((item) => ({
-  //     value: item.id,
-  //     label: item.program_name,
-  //     key: item.id,
-  //   })) || [];
-
-  const handleCountrySubmit = (val: any) => {
+   const handleCountrySubmit = (val: any) => {
     mutate(
       {
         country_name: val.country,
-        // program_types: val.programType,
         token,
       },
       {
@@ -70,9 +57,7 @@ export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
         >
           <Input  />
         </Form.Item>
-        {/* <Form.Item name="programType" label="Select Program Type">
-          <Select mode="multiple" allowClear  options={options} />
-        </Form.Item> */}
+       
         <div className="flex items-center justify-center gap-4 p-4">
           <AppButton
             variant="transparent"

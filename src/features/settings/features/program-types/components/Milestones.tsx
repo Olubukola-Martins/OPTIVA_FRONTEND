@@ -1,10 +1,4 @@
-import {
-  Dropdown,
- 
-  Menu,
-  Skeleton,
-  Table,
-} from "antd";
+import { Dropdown, Menu, Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import {
@@ -14,6 +8,7 @@ import {
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
 import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
 import { DeleteModal } from "src/components/modals/DeleteModal";
+import { AddMilestoneModal } from "./AddMilestoneModal";
 
 type DataSourceItem = {
   key: React.Key;
@@ -28,6 +23,7 @@ export const Milestones = () => {
   // GET REQUEST
   const { data, isLoading } = useGetMilestone();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+
   useEffect(() => {
     if (data) {
       const milestone: DataSourceItem[] = data.map((item, index) => {
@@ -57,6 +53,10 @@ export const Milestones = () => {
     setOpenMilestoneModal(true);
   };
 
+  const handleAddMilestoneModalCancel = () => {
+    setOpenMilestoneModal(false);
+  };
+
   // Delete Modal
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const showDeleteModal = () => {
@@ -65,6 +65,16 @@ export const Milestones = () => {
   const handleDeleteCancel = () => {
     setOpenDeleteModal(false);
   };
+
+  //    //Add Milestone Modal
+  //    const [openAddMilestoneModal, setOpenAddMilestoneModal] =
+  //    useState<boolean>(false);
+  //  const showAddMilestoneModal = () => {
+  //    setOpenAddMilestoneModal(true);
+  //  };
+  //  const handleAddMilestoneModalCancel = () => {
+  //    setOpenAddMilestoneModal(false);
+  //   };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -101,7 +111,13 @@ export const Milestones = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={showMilestoneModal}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setMilestoneId(val.key as unknown as number);
+                    showMilestoneModal();
+                  }}
+                >
                   Edit
                 </Menu.Item>
                 <Menu.Item
@@ -147,6 +163,13 @@ export const Milestones = () => {
           }}
         />
       </Skeleton>
+
+      {/*ADD MILESTONE MODAL */}
+      <AddMilestoneModal
+        handleClose={handleAddMilestoneModalCancel}
+        open={openMilestoneModal}
+        milestoneId={milestoneId as unknown as number}
+      />
 
       {/* DELETE MODAL */}
       <DeleteModal

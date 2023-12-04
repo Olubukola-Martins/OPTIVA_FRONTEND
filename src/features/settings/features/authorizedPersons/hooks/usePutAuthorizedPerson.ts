@@ -44,7 +44,7 @@ export const usePutAuthorizedPerson = ({ queryKey, employee }: IPutAuthorizedPer
         queryKey,
       },
       {
-        onError: (error: any) => {
+        onError: () => {
           openNotification({
             state: "error",
             title: "Error Occured",
@@ -52,7 +52,7 @@ export const usePutAuthorizedPerson = ({ queryKey, employee }: IPutAuthorizedPer
             duration: 5,
           });
         },
-        onSuccess: (res: any) => {
+        onSuccess: () => {
           openNotification({
             state: "success",
             title: "Success",

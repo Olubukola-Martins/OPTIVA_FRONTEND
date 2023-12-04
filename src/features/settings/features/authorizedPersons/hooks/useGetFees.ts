@@ -23,8 +23,8 @@ const getData = async (props: { token: string }): Promise<IFees[]> => {
 export const useGetFees = () => {
   const { token } = useGetUserInfo();
   const queryData = useQuery([QUERY_KEY_FOR_FEES], () => getData({ token }), {
-    onError: (err: any) => {},
-    onSuccess: (data) => {},
+    onError: () => {},
+    onSuccess: () => {},
   });
   return queryData;
 };

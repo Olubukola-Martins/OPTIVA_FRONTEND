@@ -1,5 +1,4 @@
 import { Form, Input, Modal } from "antd";
-import React from "react";
 import { AppButton } from "../button/AppButton";
 import { IModalProps } from "./DeleteModal";
 

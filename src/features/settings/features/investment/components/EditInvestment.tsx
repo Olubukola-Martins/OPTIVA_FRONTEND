@@ -1,7 +1,7 @@
-import { Modal, Input, Form, Select, DatePicker } from "antd";
+import { Modal, Input, Form, Select } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
-import { textInputValidationRules } from "src/utils/formHelpers/validations";
+import { generalValidationRules, textInputValidationRules } from "src/utils/formHelpers/validations";
 import { useGetSingleInvestmentRoute } from "../hooks/useGetSingleInvestmentRoute";
 import { QUERY_KEY_FOR_INVESTMENT_ROUTE } from "../hooks/useGetInvestmentRoute";
 import { useEffect } from "react";
@@ -68,7 +68,7 @@ export const EditInvestment = ({
         <Form.Item
           name="country"
           label="Select Country"
-          //   rules={textInputValidationRules}
+          rules={generalValidationRules}
         >
           <Select>
             {countryData?.map((item) => (

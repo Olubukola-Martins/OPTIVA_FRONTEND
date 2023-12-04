@@ -11,7 +11,7 @@ import { ExportModal } from "src/components/modals/ExportModal";
 
 const Applications = () => {
   const [form] = Form.useForm();
-  const handleSubmit = (val: any) => {};
+  const handleSubmit = (val: any) => { console.log('values', val)};
   // New Applications Modal
   const [openNewApplicationsModal, setOpenNewApplicationsModal] =
     useState(false);

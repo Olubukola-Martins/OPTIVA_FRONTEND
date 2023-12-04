@@ -22,7 +22,6 @@ export const EditCountryModal = ({
       queryKey: QUERY_KEY_FOR_COUNTRY,
     });
 
-  console.log("single country data program", countryData);
 
   useEffect(() => {
     if (countryData) {
@@ -58,9 +57,6 @@ export const EditCountryModal = ({
           >
             <Input />
           </Form.Item>
-          {/* <Form.Item name="programType" label="Select Program Type" required>
-            <Select mode="multiple" allowClear options={options} />
-          </Form.Item> */}
 
           <div className="flex items-center justify-center gap-5">
             <AppButton

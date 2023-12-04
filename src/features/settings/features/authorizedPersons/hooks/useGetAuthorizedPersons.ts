@@ -26,8 +26,8 @@ export const useGetAuthorizedPersons = () => {
     [QUERY_KEY_FOR_AUTHORIZED_PERSON],
     () => getData({ token }),
     {
-      onError: (err: any) => {},
-      onSuccess: (data) => {},
+      onError: () => {},
+      onSuccess: () => {},
     }
   );
   return queryData;
