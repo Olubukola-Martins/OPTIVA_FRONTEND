@@ -2,6 +2,7 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { IAuthorizedPerson } from "../types";
 
 export const QUERY_KEY_FOR_AUTHORIZED_PERSON = "authorisedPerson";
 

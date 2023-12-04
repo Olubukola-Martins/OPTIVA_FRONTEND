@@ -15,7 +15,7 @@ export interface IAddInvestmentProps extends IdentifierProps {
   investmentId?: React.Key; // Add investmentId prop for editing
 }
 
-export const AddInvestment = ({ handleClose, open }: IdentifierProps) => {
+export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
   // POST REQUEST
   const { mutate, isLoading } = usePostInvestmentRoute();
   const [form] = Form.useForm();
@@ -32,9 +32,10 @@ export const AddInvestment = ({ handleClose, open }: IdentifierProps) => {
     })) || [];
 
   const handleSubmit = (val: any) => {
+    console.log("form values", val);
     mutate(
       {
-        countries: val.country,
+        country_id: val.country,
         investment_name: val.name,
         token,
       },
@@ -78,14 +79,20 @@ export const AddInvestment = ({ handleClose, open }: IdentifierProps) => {
           label="Investment Name"
           rules={textInputValidationRules}
         >
-          <Input placeholder="Enter..."  />
+          <Input placeholder="Enter..." />
         </Form.Item>
         <Form.Item
           name="country"
           label="Select Country"
           // rules={textInputValidationRules}
         >
-          <Select mode="multiple" allowClear  options={options} />
+          <Select>
+            {data?.map((item) => (
+              <Select.Option value={item.id} key={item.id}>
+                {item.country_name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <AppButton type="submit" isLoading={isLoading} />

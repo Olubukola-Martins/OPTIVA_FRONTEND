@@ -2,7 +2,11 @@ import { Form, Input, Modal, Select } from 'antd'
 import { AppButton } from 'src/components/button/AppButton'
 import { IdentifierProps } from 'src/types'
 
-export const EditMilestoneModal = ({ handleClose, open }: IdentifierProps) => {
+interface IEditMilestone extends IdentifierProps {
+  milestoneId: React.Key;
+}
+
+export const EditMilestoneModal = ({ handleClose, open, milestoneId }: IEditMilestone) => {
     const [form] = Form.useForm()
     const handleMilestoneSubmit = () => { }
     const selectTimeAfter = (

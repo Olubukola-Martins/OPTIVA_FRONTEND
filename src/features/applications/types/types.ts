@@ -1,1 +1,1 @@
-export interface IDataType{}
+// GET APPLICATION

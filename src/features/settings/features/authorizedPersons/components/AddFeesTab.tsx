@@ -1,4 +1,4 @@
-import { Tabs, TabsProps } from "antd";
+import { Form, Tabs, TabsProps } from "antd";
 import React from "react";
 import { AddFees } from "./AddFees";
 import { ProgramFeesBreakdown } from "./ProgramFeesBreakdown";
@@ -16,7 +16,11 @@ const AddFeesTab = () => {
       children: <ProgramFeesBreakdown />,
     },
   ];
-  return <Tabs items={tabItems} />;
+  return (
+    <Form layout="vertical">
+      <Tabs items={tabItems} />
+    </Form>
+  );
 };
 
 export default AddFeesTab;

@@ -1,4 +1,4 @@
-import { Form, Input, Select } from "antd";
+import { DatePicker, Form, Input, Select } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -13,6 +13,7 @@ import { useGetDocumentRequirement } from "../hooks/useGetDocumentRequirement";
 import { useGetApplicationTemplate } from "../../appTemplate/hooks/useGetApplicationTemplate";
 import { useGetMilestone } from "../hooks/useGetMilestone";
 import { useGetWorkflow } from "../hooks/useGetWorkflow";
+import { useGetCountry } from "../hooks/useGetCountry";
 
 const CreateProgramType = () => {
   const [form] = Form.useForm();
@@ -24,6 +25,7 @@ const CreateProgramType = () => {
   const { data: applicationData } = useGetApplicationTemplate();
   const { data: milestoneData } = useGetMilestone();
   const { data: workflowData } = useGetWorkflow();
+  const { data: countryData } = useGetCountry();
 
   // DEPENDENT OPTION
   const dependentOptions: SelectProps["options"] =
@@ -65,7 +67,16 @@ const CreateProgramType = () => {
       key: item.id,
     })) || [];
 
+  // COUNTRY OPTION
+  const countryOptions: SelectProps["options"] =
+    countryData?.map((item) => ({
+      value: item.id,
+      label: item.country_name,
+      key: item.id,
+    })) || [];
+
   const handleSubmit = (values: any) => {
+    console.log("values of form", values);
     mutate(
       {
         token,
@@ -76,6 +87,7 @@ const CreateProgramType = () => {
         milestones: values.milestones,
         template_id: values.applicationTemplate,
         workflow_id: values.selectWorkflow,
+        countries: values.selectCountry,
       },
       {
         onError: (error: any) => {
@@ -118,6 +130,9 @@ const CreateProgramType = () => {
               <Form.Item label="Program Name" required name="programName">
                 <Input />
               </Form.Item>
+              <Form.Item name="date">
+                <DatePicker.RangePicker />
+              </Form.Item>
 
               <Form.Item name="programLink" label="Program Link">
                 <Input />
@@ -151,6 +166,10 @@ const CreateProgramType = () => {
               </Form.Item>
               <Form.Item name="selectWorkflow" label="Select Workflow" required>
                 <Select allowClear options={workflowOptions} />
+              </Form.Item>
+
+              <Form.Item name="selectCountry" label="Select Country" required>
+                <Select allowClear options={countryOptions} mode="multiple" />
               </Form.Item>
             </div>
           </div>

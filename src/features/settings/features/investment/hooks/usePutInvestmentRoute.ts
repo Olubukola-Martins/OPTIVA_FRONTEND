@@ -8,7 +8,7 @@ import { openNotification } from "src/utils/notification";
 export interface IPutInvestment extends IUserToken {
   id: number;
   investment_name: string;
-  countries: number[];
+  country_id: number;
 }
 
 interface IPProps {
@@ -26,7 +26,7 @@ const handlePutData = async (props: IPutInvestment) => {
 
   const data: any = {
     investment_name: props.investment_name,
-    countries: props.countries,
+    country_id: props.country_id,
   };
 
   const response = await axios.put(url, data, config);
@@ -43,13 +43,13 @@ export const usePutInvestmentRoute = ({
   const putData = (
     id: number,
     investment_name: string,
-    countries: number[]
+    country_id: number
   ) => {
     mutate(
       {
         token,
         id,
-        countries,
+        country_id,
         investment_name,
       },
       {

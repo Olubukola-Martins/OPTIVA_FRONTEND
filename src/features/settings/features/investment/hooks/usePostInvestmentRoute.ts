@@ -5,7 +5,7 @@ import { IUserToken } from "src/types";
 
 export interface IInvestment extends IUserToken {
     investment_name: string;
-   countries: number[];
+    country_id: number;
   }
   const postRequest = async (props: IInvestment) => {
     const url = `${END_POINT.BASE_URL}/admin/investment-route`;
@@ -17,7 +17,7 @@ export interface IInvestment extends IUserToken {
     };
     const body = {
         investment_name: props. investment_name,
-        countries: props.countries,
+        country_id: props.country_id,
     };
   
     const res = await axios.post(url, body, config);

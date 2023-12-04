@@ -1,338 +1,214 @@
-import { Input, Select, Form, Table, Modal, DatePicker, Button } from "antd";
-// import { DataSourceItem } from "../ApplicantDetails/ChildrenDetails";
+import { Input, Select, Form, Table, Checkbox, Modal } from "antd";
+import { DataSourceItem } from "../ApplicantDetails/ChildrenDetails";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
-import { EditTableModal } from "./EditTableModal";
-import { Dayjs } from "dayjs";
-import { EditableTable } from "./EditableTable";
-import { ModalDetails } from "./ModalDetailsForm";
-
-interface DataSourceItem {
-  key: React.Key;
-  childName: string;
-  gender: string;
-}
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
 
 export const NewChildrenDetails = () => {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
-  const [form] = Form.useForm();
-  const [isEditing, setIsEditing] = useState(false);
-  const [modalIsVisible, setModalIsVisible] = useState(false);
-  const [editApplicantData, setEditApplicantData] = useState(null);
-  const [editingRecord, setEditingRecord] = useState<any | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [editApplicantData, setEditApplicantData] = useState<any | null>(null);
+  const onSelectCheckbox = (e: CheckboxChangeEvent) => {
+    console.log(`checked = ${e.target.checked}`);
+  };
+  const handleSelectChange = (value: string) => {
+    console.log(`selected ${value}`);
+  };
 
-  const columns = [
+  const columns: ColumnsType<DataSourceItem> = [
     {
+      title: "Child's Name (First, Middle & Last Name) ",
       dataIndex: "childName",
-      title: "Child's Name",
+      key: "1",
     },
     {
+      title: " Gender",
       dataIndex: "gender",
-      title: "Gender",
+      key: "2",
     },
-    // ... other columns
+    {
+      title: "Date of Birth",
+      dataIndex: "dateOfBirth",
+      key: "3",
+    },
+    {
+      title: "City of Birth",
+      dataIndex: "cityOfBirth",
+      key: "4",
+    },
+    {
+      title: "Country of Birth",
+      dataIndex: "countryOfBirth",
+      key: "5",
+    },
+    {
+      title: "Height (cm)",
+      dataIndex: "height",
+      key: "6",
+    },
+    {
+      title: "Eye Color",
+      dataIndex: "eyeColor",
+      key: "7",
+    },
+    {
+      title: "Hair Color",
+      dataIndex: "hairColor",
+      key: "8",
+    },
+    {
+      title: "Dual Citizen?",
+      dataIndex: "dualCitizen",
+      key: "9",
+    },
+    {
+      title:
+        "Countries of  Citizenship (Leave blank if the  child is not a citizen  of another country)",
+      dataIndex: "countriesOfCitizenship",
+      key: "10",
+    },
+    {
+      title: "Passport No.",
+      dataIndex: "passportNo",
+      key: "11",
+    },
+    {
+      title: "Occupation",
+      dataIndex: "occupation",
+      key: "12",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "13",
+    },
+    {
+      title: "Email Address",
+      dataIndex: "emailAddress",
+      key: "14",
+    },
+    {
+      title:
+        "Residential Address - Apt/Floor/Suite (if different from your residential address)",
+      dataIndex: "residentialAddressApt",
+      key: "15",
+    },
+    {
+      title: "Residential Address - Street",
+      dataIndex: "residentialAddressStreet",
+      key: "16",
+    },
+    {
+      title: "Residential Address - City",
+      dataIndex: "residentialAddressCity",
+      key: "17",
+    },
+    {
+      title: "Residential Address - State",
+      dataIndex: "residentialAddressState",
+      key: "18",
+    },
+    {
+      title: "Residential Address - Country",
+      dataIndex: "residentialAddressCountry",
+      key: "19",
+    },
+    {
+      title: "Residential Address - Zip/Postcode",
+      dataIndex: "residentialAddressCode",
+      key: "20",
+    },
+    {
+      title: "Residential Address - Date they moved in",
+      dataIndex: "residentialAddressDate",
+      key: "21",
+    },
+    {
+      title: "On Application?",
+      dataIndex: "onApplication",
+      key: "22",
+    },
+    {
+      title: "Action",
+      render: (record: any) => {
+        return (
+          <div className="flex gap-5">
+            <AppButton
+              label="Edit"
+              handleClick={() => editApplicant(record)}
+              variant="transparent"
+            />
+            <AppButton
+              label="Delete"
+              handleClick={() => onDeleteDetail(record)}
+              variant="transparent"
+            />
+          </div>
+        );
+      },
+    },
   ];
 
-  const handleAdd = () => {
+  const onAddNewDetail = () => {
+    setIsEditing(true)
+    const randomNumber = Math.random() * 1000;
+    const newDetails = {
+      key: randomNumber,
+      childName: "",
+      gender: "",
+      dateOfBirth: "",
+      cityOfBirth: "",
+      countryOfBirth: "",
+      height: "",
+      eyeColor: "",
+      hairColor: "",
+      dualCitizen: "",
+      countriesOfCitizenship: "",
+      passportNo: 0,
+      occupation: "",
+      phoneNumber: 0,
+      emailAddress: "",
+      residentialAddressApt: "",
+      residentialAddressCity: "",
+      residentialAddressStreet: "",
+      residentialAddressState: "",
+      residentialAddressCountry: "",
+      residentialAddressCode: "",
+      residentialAddressDate: "",
+      onApplication: "",
+    };
+    setDataSource((pre) => {
+      return [...pre, newDetails];
+    });
+  };
+
+  const onDeleteDetail = (record: any) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete?",
+      okText: "Yes",
+      okType: "danger",
+      onOk: () => {
+        setDataSource((prev) => {
+          return prev.filter((details) => details.key !== record.key);
+        });
+      },
+    });
+  };
+
+  const editApplicant = (record: any) => {
     setIsEditing(true);
-    setEditingRecord(null);
-    setModalIsVisible(true);
+    setEditApplicantData({ ...record });
   };
 
-  const handleEdit = (record: any) => {
-    setIsEditing(true);
-    setEditingRecord(record);
-  };
-
-  const handleDelete = (record: any) => {
-    // Delete logic here
-    const updatedDataSource = dataSource.filter(
-      (item) => item.key !== record.key
-    );
-    setDataSource(updatedDataSource);
-  };
-
-  const handleModalCancel = () => {
+  const resetEditing = () => {
     setIsEditing(false);
-    setEditingRecord(null);
+    setEditApplicantData(null);
   };
 
-  const handleModalOk = (values: any) => {
-    console.log(values);
-
-    if (isEditing && editingRecord !== null) {
-      // Update existing record
-      const updatedDataSource = dataSource.map((item) =>
-        item.key === editingRecord.key ? { ...item, ...values } : item
-      );
-      setDataSource(updatedDataSource);
-    } else {
-      // Add new record
-      const newRecord = {
-        key: dataSource.length + 1,
-        ...values,
-      };
-      setDataSource([...dataSource, newRecord]);
-    }
-
-    setIsEditing(false);
-    setEditingRecord(null);
-    setModalIsVisible(false); // Close the modal after handling the OK button
+  const handleCountryChange = (value: string[]) => {
+    console.log(`selected ${value}`);
   };
-
-  // const handleModalOk = (values: any) => {
-  //   console.log(values);
-
-  //   if (isEditing && editingRecord !== null) {
-  //     // Update existing record
-  //     const updatedDataSource = dataSource.map((item) =>
-  //       item.key === editingRecord.key ? { ...item, ...values } : item
-  //     );
-  //     setDataSource(updatedDataSource);
-  //   } else {
-  //     // Add new record
-  //     const newRecord = {
-  //       key: dataSource.length + 1, // You may need to adjust how you generate keys
-  //       ...values,
-  //     };
-  //     setDataSource([...dataSource, newRecord]);
-  //   }
-
-  //   setIsEditing(false);
-  //   setEditingRecord(null);
-  // };
-
-  // const handleModalOk = (values:any) => {
-  //   // Save or update logic here
-  //   console.log(values);
-
-  //   if (isEditing) {
-  //     // Update existing record
-  //     const updatedDataSource = dataSource.map((item) => (item.key === editingRecord.key ? { ...item, ...values } : item));
-  //     setDataSource(updatedDataSource);
-  //   } else {
-  //     // Add new record
-  //     const newRecord = {
-  //       key: dataSource.length + 1, // You may need to adjust how you generate keys
-  //       ...values,
-  //     };
-  //     setDataSource([...dataSource, newRecord]);
-  //   }
-
-  //   setIsEditing(false);
-  //   setEditingRecord(null);
-  // };
-  // const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
-  // const [isEditing, setIsEditing] = useState<boolean>(false);
-  // const [editApplicantData, setEditApplicantData] = useState<any | null>(null);
-  // const handleDateChange = (
-  //   field: keyof DataSourceItem,
-  //   date: Dayjs | null
-  // ) => {
-  //   setEditApplicantData((prev: any) => ({
-  //     ...prev,
-  //     [field]: date,
-  //   }));
-  // };
-
-  // const handleSelectChange = (value: string) => {
-  //   console.log(`selected ${value}`);
-  // };
-
-  // const columns: ColumnsType<DataSourceItem> = [
-  //   {
-  //     title: "Child's Name (First, Middle & Last Name) ",
-  //     dataIndex: "childName",
-  //     key: "1",
-  //   },
-  //   {
-  //     title: " Gender",
-  //     dataIndex: "gender",
-  //     key: "2",
-  //   },
-  //   {
-  //     title: "Date of Birth",
-  //     dataIndex: "dateOfBirth",
-  //     key: "3",
-  //   },
-  //   {
-  //     title: "City of Birth",
-  //     dataIndex: "cityOfBirth",
-  //     key: "4",
-  //   },
-  //   {
-  //     title: "Country of Birth",
-  //     dataIndex: "countryOfBirth",
-  //     key: "5",
-  //   },
-  //   {
-  //     title: "Height (cm)",
-  //     dataIndex: "height",
-  //     key: "6",
-  //   },
-  //   {
-  //     title: "Eye Color",
-  //     dataIndex: "eyeColor",
-  //     key: "7",
-  //   },
-  //   {
-  //     title: "Hair Color",
-  //     dataIndex: "hairColor",
-  //     key: "8",
-  //   },
-  //   {
-  //     title: "Dual Citizen?",
-  //     dataIndex: "dualCitizen",
-  //     key: "9",
-  //   },
-  //   {
-  //     title:
-  //       "Countries of  Citizenship (Leave blank if the  child is not a citizen  of another country)",
-  //     dataIndex: "countriesOfCitizenship",
-  //     key: "10",
-  //   },
-  //   {
-  //     title: "Passport No.",
-  //     dataIndex: "passportNo",
-  //     key: "11",
-  //   },
-  //   {
-  //     title: "Occupation",
-  //     dataIndex: "occupation",
-  //     key: "12",
-  //   },
-  //   {
-  //     title: "Phone Number",
-  //     dataIndex: "phoneNumber",
-  //     key: "13",
-  //   },
-  //   {
-  //     title: "Email Address",
-  //     dataIndex: "emailAddress",
-  //     key: "14",
-  //   },
-  //   {
-  //     title:
-  //       "Residential Address - Apt/Floor/Suite (if different from your residential address)",
-  //     dataIndex: "residentialAddressApt",
-  //     key: "15",
-  //   },
-  //   {
-  //     title: "Residential Address - Street",
-  //     dataIndex: "residentialAddressStreet",
-  //     key: "16",
-  //   },
-  //   {
-  //     title: "Residential Address - City",
-  //     dataIndex: "residentialAddressCity",
-  //     key: "17",
-  //   },
-  //   {
-  //     title: "Residential Address - State",
-  //     dataIndex: "residentialAddressState",
-  //     key: "18",
-  //   },
-  //   {
-  //     title: "Residential Address - Country",
-  //     dataIndex: "residentialAddressCountry",
-  //     key: "19",
-  //   },
-  //   {
-  //     title: "Residential Address - Zip/Postcode",
-  //     dataIndex: "residentialAddressCode",
-  //     key: "20",
-  //   },
-  //   {
-  //     title: "Residential Address - Date they moved in",
-  //     dataIndex: "residentialAddressDate",
-  //     key: "21",
-  //   },
-  //   {
-  //     title: "On Application?",
-  //     dataIndex: "onApplication",
-  //     key: "22",
-  //   },
-  //   {
-  //     title: "Action",
-  //     render: (record: any) => {
-  //       return (
-  //         <div className="flex gap-5">
-  //           <AppButton
-  //             label="Edit"
-  //             handleClick={() => editApplicant(record)}
-  //             variant="transparent"
-  //           />
-  //           <AppButton
-  //             label="Delete"
-  //             handleClick={() => onDeleteDetail(record)}
-  //             variant="transparent"
-  //           />
-  //         </div>
-  //       );
-  //     },
-  //   },
-  // ];
-
-  // const onAddNewDetail = () => {
-  //   setIsEditing(true);
-  //   const randomNumber = Math.random() * 1000;
-  //   const newDetails = {
-  //     key: randomNumber,
-  //     childName: "",
-  //     gender: "",
-  //     dateOfBirth: "",
-  //     cityOfBirth: "",
-  //     countryOfBirth: "",
-  //     height: "",
-  //     eyeColor: "",
-  //     hairColor: "",
-  //     dualCitizen: "",
-  //     countriesOfCitizenship: "",
-  //     passportNo: 0,
-  //     occupation: "",
-  //     phoneNumber: 0,
-  //     emailAddress: "",
-  //     residentialAddressApt: "",
-  //     residentialAddressCity: "",
-  //     residentialAddressStreet: "",
-  //     residentialAddressState: "",
-  //     residentialAddressCountry: "",
-  //     residentialAddressCode: "",
-  //     residentialAddressDate: "",
-  //     onApplication: "",
-  //   };
-  //   setDataSource((pre) => {
-  //     return [...pre, newDetails];
-  //   });
-  // };
-
-  // const onDeleteDetail = (record: any) => {
-  //   Modal.confirm({
-  //     title: "Are you sure you want to delete?",
-  //     okText: "Yes",
-  //     okType: "danger",
-  //     onOk: () => {
-  //       setDataSource((prev) => {
-  //         return prev.filter((details) => details.key !== record.key);
-  //       });
-  //     },
-  //   });
-  // };
-
-  // const editApplicant = (record: any) => {
-  //   setIsEditing(true);
-  //   setEditApplicantData({ ...record });
-  // };
-
-  // const resetEditing = () => {
-  //   setIsEditing(false);
-  //   setEditApplicantData(null);
-  // };
-
-  // const handleCountryChange = (value: string[]) => {
-  //   console.log(`selected ${value}`);
-  // };
 
   return (
     <div className=" justify-center p-4 lg:gap-10 w-full">
@@ -348,7 +224,7 @@ export const NewChildrenDetails = () => {
             <h2 className="p-2">Any Adopted Children?</h2>
             <Form.Item name="adoptedChildren" className="w-full" required>
               <Select
-                // onChange={handleSelectChange}
+                onChange={handleSelectChange}
                 size="large"
                 options={[
                   {
@@ -365,7 +241,7 @@ export const NewChildrenDetails = () => {
             <h2 className="p-2">Will you be adopting?</h2>
             <Form.Item name="adopting" className="w-full" required>
               <Select
-                // onChange={handleSelectChange}
+                onChange={handleSelectChange}
                 size="large"
                 options={[
                   {
@@ -382,7 +258,7 @@ export const NewChildrenDetails = () => {
             </h2>
             <Form.Item name="childrenDependent" className="w-full" required>
               <Select
-                // onChange={handleSelectChange}
+                onChange={handleSelectChange}
                 size="large"
                 options={[
                   {
@@ -395,91 +271,18 @@ export const NewChildrenDetails = () => {
           </div>
         </div>
       </div>
-      <Button type="primary" onClick={handleAdd}>
-        Add Record
-      </Button>
-      <div>
-        {/* <EditableTable
-          columns={columns}
-          dataSource={dataSource}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-         */}
-
-        <EditableTable
-          columns={columns}
-          dataSource={dataSource}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-        {isEditing && (
-          // <ModalDetails
-          //   visible={modalIsVisible}
-          //   onCancel={() => {
-          //     setModalIsVisible(false);
-          //     setEditingRecord(null);
-          //   }}
-          //   onOk={handleModalOk}
-          //   data={editingRecord || {}} // Pass an empty object if there's no record to edit
-          //   columns={columns}
-          // />
-          <ModalDetails
-            visible={modalIsVisible}
-            onCancel={() => {
-              setModalIsVisible(false);
-              setEditingRecord(null);
-            }}
-            onOk={handleModalOk}
-            data={editingRecord || {}}
-            columns={columns}
-          />
-        )}
-
-        {/* <ModalDetails
-          visible={modalIsVisible}
-          onCancel={() => {
-            setModalIsVisible(false);
-            setEditingRecord(null);
-          }}
-          onOk={handleModalOk}
-          data={editingRecord || {}} // Pass an empty object if there's no record to edit
-          columns={columns}
-        /> */}
-      </div>
-      {/* <div className="p-4">
+      <div className="p-4">
         <AppButton
           label="Add children details"
           handleClick={onAddNewDetail}
           type="button"
         />
-      </div> */}
+      </div>
 
-      {/* <div className="p-2 lg:w-[1200px] mx-auto">
+      <div className="p-2 lg:w-[1200px] mx-auto">
         <Table columns={columns} dataSource={dataSource} scroll={{ x: 200 }} />
-      </div> */}
-      {/* <EditTableModal
-        columns={columns}
-        data={dataSource}
-        onCancel={resetEditing}
-        onSave={() => {
-          setDataSource((pre) => {
-            return pre.map((applicant) => {
-              if (applicant.key === editApplicantData.key) {
-                return editApplicantData;
-              } else {
-                return applicant;
-              }
-            });
-          });
-          resetEditing();
-        }}
-        open={isEditing}
-        title="Edit Children Details"
-        key={editApplicantData?.key} 
-      /> */}
-
-      {/* <Modal
+      </div>
+      <Modal
         title="Edit Children Details"
         open={isEditing}
         okText="Save"
@@ -530,21 +333,18 @@ export const NewChildrenDetails = () => {
         </div>
 
         <div>
-          <h2 className="p-1">Date of Birth</h2>
+          <h2 className="p-1">Date of Birth</h2>{" "}
           <Form.Item name="dateOfBirth">
-            <DatePicker
+            <Input
               size="large"
               placeholder="dd/mm/yyyy"
               value={editApplicantData?.dateOfBirth}
-              // onChange={(e) => {
-              //   setEditApplicantData((prev: any) => ({
-              //     ...prev,
-              //     dateOfBirth: e.target.value,
-              //   }));
-              // }}
-              onChange={(date) =>
-                handleDateChange("dateOfBirth", date)
-              }
+              onChange={(e) => {
+                setEditApplicantData((prev: any) => ({
+                  ...prev,
+                  dateOfBirth: e.target.value,
+                }));
+              }}
             />
           </Form.Item>
         </div>
@@ -824,18 +624,15 @@ export const NewChildrenDetails = () => {
         <div>
           <h2 className="p-1">Residential Address - Date they moved in</h2>
           <Form.Item name="residentialAddressDate">
-            <DatePicker
+            <Input
               size="large"
               value={editApplicantData?.residentialAddressDate}
-              // onChange={(e) => {
-              //   setEditApplicantData((prev: any) => ({
-              //     ...prev,
-              //     residentialAddressCode: e.target.value,
-              //   }));
-              // }}
-              onChange={(date) =>
-                handleDateChange("residentialAddressDate", date)
-              }
+              onChange={(e) => {
+                setEditApplicantData((prev: any) => ({
+                  ...prev,
+                  residentialAddressCode: e.target.value,
+                }));
+              }}
             />
           </Form.Item>
         </div>
@@ -851,7 +648,7 @@ export const NewChildrenDetails = () => {
             />
           </Form.Item>
         </div>
-      </Modal> */}
+      </Modal>
     </div>
   );
 };

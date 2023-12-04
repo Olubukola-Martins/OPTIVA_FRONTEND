@@ -1,13 +1,4 @@
-import {
-  Modal,
-  Input,
-  Form,
-  Select,
-  Menu,
-  Dropdown,
-  message,
-  Upload,
-} from "antd";
+import { Modal, Input, Form, Dropdown } from "antd";
 import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -21,8 +12,8 @@ import Success from "../assets/img/success.png";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { DownOutlined } from "@ant-design/icons";
-
-
+import type { MenuProps } from "antd";
+import { AddAuthorizedPerson } from "../components/AddAuthorizedPerson";
 
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
@@ -79,16 +70,23 @@ const DefineFeesAndAuthorizedPersons = () => {
     setShowSuccessModal(false);
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1">
-        <Link to={appRoute.addFees}>Fees</Link>
-      </Menu.Item>
-      <Menu.Item key="2" onClick={renderAddAuthorizedModal}>
-        Authorized Person
-      </Menu.Item>
-    </Menu>
-  );
+  const items: MenuProps["items"] = [
+    {
+      label: <Link to={appRoute.addFees}>Fees</Link>,
+      key: "1",
+    },
+    {
+      label: " Authorized Person",
+      key: "2",
+      onClick: () => renderAddAuthorizedModal(),
+    },
+  ];
+
+  const menuProps = {
+    items,
+    onClick: () => {},
+  };
+
   return (
     <>
       <div className=" flex flex-col md:flex-row justify-between p-3">
@@ -115,15 +113,9 @@ const DefineFeesAndAuthorizedPersons = () => {
             variant="transparent"
             handleClick={showSetFxModal}
           />
-          <div>
-            <Dropdown.Button
-              className="bg-secondary text-white w-full "
-              overlay={menu}
-              icon={<DownOutlined />}
-            >
-              Add New
-            </Dropdown.Button>
-          </div>
+          <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
+            Add New
+          </Dropdown.Button>
         </div>
       </div>
       {/* Import Modal */}
@@ -178,8 +170,10 @@ const DefineFeesAndAuthorizedPersons = () => {
       </Modal>
 
       {/* AUTHORIZED PERSON */}
-      
-
+      <AddAuthorizedPerson
+        open={showAuthorizedModal}
+        handleClose={cancelAddAuthorizedModal}
+      />
       {/* ADD SUCCESS MODAL */}
       <Modal
         open={showSuccessModal}

@@ -59,6 +59,7 @@ export interface IMilestone {
   id: number;
   milestone: string;
   timeline: string;
+  duration_type: string;
   created_at: string;
   updated_at: string;
   processes: IProcess[];
@@ -68,6 +69,7 @@ interface IProcess {
   id: number;
   title: string;
   duration: number;
+  duration_type: string;
   milestone_id: number;
   created_at: string;
   updated_at: string;
@@ -184,4 +186,26 @@ interface Eligibledependent {
 interface Pivot {
   programtype_id: number;
   eligibledependant_id: number;
+}
+
+
+// SINGLE MILESTONE
+export interface ISingleMilestone {
+  id: number;
+  milestone: string;
+  timeline: string;
+  duration_type: string;
+  created_at: string;
+  updated_at: string;
+  processes: Process[];
+}
+
+interface Process {
+  id: number;
+  title: string;
+  duration: number;
+  duration_type: string;
+  milestone_id: number;
+  created_at: string;
+  updated_at: string;
 }

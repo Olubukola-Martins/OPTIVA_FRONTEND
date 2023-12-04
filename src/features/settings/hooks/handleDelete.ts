@@ -10,11 +10,15 @@ interface IDProps {
   queryKey: string;
 }
 
+interface IDelete extends IGeneralProps{
+  token:string
+}
+
 export const handleDelete = async ({
   id,
   token,
   deleteEndPointUrl,
-}: IGeneralProps) => {
+}: IDelete) => {
   const url = `${END_POINT.BASE_URL}/${deleteEndPointUrl}/${id}`;
   const config = {
     headers: {
@@ -23,7 +27,7 @@ export const handleDelete = async ({
     },
   };
 
-  const response = await axios.get(url, config);
+  const response = await axios.delete(url, config);
   return response;
 };
 

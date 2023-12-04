@@ -1,17 +1,12 @@
 import {
   Dropdown,
-  Form,
-  Input,
+ 
   Menu,
-  Modal,
-  Select,
   Skeleton,
   Table,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
-import { AppButton } from "src/components/button/AppButton";
-import DeleteIcon from "../assets/img/warning.png";
 import {
   QUERY_KEY_FOR_MILESTONE,
   useGetMilestone,
@@ -52,7 +47,7 @@ export const Milestones = () => {
   const [milestoneId, setMilestoneId] = useState<number>();
 
   const { removeData, deleteIsLoading } = useDeleteHandler({
-    deleteEndPointUrl: "admin/milestones",
+    deleteEndPointUrl: "admin/milestone",
     queryKey: QUERY_KEY_FOR_MILESTONE,
   });
 
@@ -156,8 +151,8 @@ export const Milestones = () => {
       {/* DELETE MODAL */}
       <DeleteModal
         open={openDeleteModal}
-        header="Investment Route"
-        text="investment route"
+        header="Milestone"
+        text="milestone"
         onCancel={handleDeleteCancel}
         onDelete={() => removeData(milestoneId as unknown as number)}
         isLoading={deleteIsLoading}

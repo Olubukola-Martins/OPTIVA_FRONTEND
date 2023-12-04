@@ -7,8 +7,8 @@ import { openNotification } from "src/utils/notification";
 
 export interface IPutCountry extends IUserToken {
   id: number;
-  country_name?: string;
-  programtypes?: any[];
+  country_name: string;
+  // programtypes: any[];
 }
 
 interface IPProps {
@@ -26,7 +26,7 @@ const handlePutData = async (props: IPutCountry) => {
 
   const data: any = {
     country_name: props.country_name,
-    programtypes: props.programtypes,
+    // programtypes: props.programtypes,
   };
 
   const response = await axios.put(url, data, config);
@@ -38,33 +38,30 @@ export const useUpdateCountry = ({ queryKey }: IPProps) => {
   const { token } = useGetUserInfo();
   const { mutate, isLoading } = useMutation(handlePutData);
 
-  const putData = (
-    id: number,
-    country_name: string,
-    programtypes: any[]
-  ) => {
+  const putData = (id: number, country_name: string, ) => {
     mutate(
       {
         country_name,
         token,
-        programtypes,
+        // programtypes,
         id,
-        
       },
       {
         onError: (error: any) => {
+          console.log("error", error);
           openNotification({
             state: "error",
             title: "Error Occured",
-            description: error,
+            description: error.message,
             duration: 5,
           });
         },
         onSuccess: (res: any) => {
+          console.log("success", res.data.message);
           openNotification({
             state: "success",
             title: "Success",
-            description: res,
+            description: res.data.message,
           });
           queryClient.invalidateQueries([queryKey]);
         },

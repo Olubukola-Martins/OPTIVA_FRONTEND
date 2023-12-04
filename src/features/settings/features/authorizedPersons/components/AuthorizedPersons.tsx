@@ -1,14 +1,11 @@
-import { Dropdown, Menu, Modal, Skeleton, Table } from "antd";
+import { Dropdown, Menu,  Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
-import DeleteIcon from "../assets/img/warning.png";
 import { AppButton } from "src/components/button/AppButton";
 import { useGetAuthorizedPersons } from "../hooks/useGetAuthorizedPersons";
 import {
-  handleDelete,
   useDeleteHandler,
 } from "src/features/settings/hooks/handleDelete";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import { QUERY_KEY_FOR_MILESTONE } from "../../program-types/hooks/useGetMilestone";
 
@@ -35,7 +32,6 @@ export const AuthorizedPersons = () => {
   // GET REQUEST
   const { data, isLoading } = useGetAuthorizedPersons();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
-  const { token } = useGetUserInfo();
   const [authorizedId, setAuthorizedId] = useState<number>();
 
   const { removeData, deleteIsLoading } = useDeleteHandler({
@@ -139,19 +135,6 @@ export const AuthorizedPersons = () => {
           dataSource={dataArray}
           className="bg-white rounded-md shadow border mt-2"
           scroll={{ x: 600 }}
-          // rowSelection={{
-          //   type: "checkbox",
-          //   onChange: (
-          //     selectedRowKeys: React.Key[],
-          //     selectedRows: DataSourceItem[]
-          //   ) => {
-          //     console.log(
-          //       `selectedRowKeys: ${selectedRowKeys}`,
-          //       "selectedRows: ",
-          //       selectedRows
-          //     );
-          //   },
-          // }}
           rowSelection={{
             type: "checkbox",
             selectedRowKeys,

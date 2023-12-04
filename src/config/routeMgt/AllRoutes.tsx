@@ -157,7 +157,7 @@ const routesArray = [
   { path: appRoute.department, element: <Department /> },
   { path: appRoute.employees, element: <Employees /> },
   { path: appRoute.branches, element: <Branches /> },
-  { path: appRoute.roles, element: <Roles  /> },
+  { path: appRoute.roles, element: <Roles /> },
 ];
 
 export const AllRoutes = () => {

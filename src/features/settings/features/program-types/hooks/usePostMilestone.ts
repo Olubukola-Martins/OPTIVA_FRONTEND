@@ -20,20 +20,18 @@ const postRequest = async (props: IPostMilestone) => {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${props.token}`,
+      
     },
   };
   const body = {
     milestone: props.milestone,
     timeline: props.timeline,
     duration_type: props.duration_type,
-    processes: props.processes.map((process) => ({
-        title: process.title,
-        duration: process.duration,
-        duration_type: process.duration_type,
-      })),
+    processes: props.processes,
   };
 
   const res = await axios.post(url, body, config);
+  console.log('post request response', res)
   return res;
 };
 

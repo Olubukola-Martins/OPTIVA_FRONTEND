@@ -12,10 +12,9 @@ const postRequest = async (props: IPostApplication) => {
     },
   };
   const body = {
-    section_title: props.section_title,
-    form_questions: props.form_questions,
-    section_description: props.section_description,
-    subsections: props.subsections,
+    sections: props.sections,
+    template_description: props.template_description,
+    template_name: props.template_name,
   };
 
   const res = await axios.post(url, body, config);
@@ -23,5 +22,5 @@ const postRequest = async (props: IPostApplication) => {
 };
 
 export const usePostApplicationTemplate = () => {
-    return useMutation(postRequest);
+  return useMutation(postRequest);
 };

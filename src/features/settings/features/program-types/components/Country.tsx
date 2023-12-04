@@ -41,7 +41,7 @@ export const Country = () => {
   }, [data]);
 
   const [countryId, setCountryId] = useState<number>();
-
+  
   const { removeData, deleteIsLoading } = useDeleteHandler({
     deleteEndPointUrl: "admin/countries",
     queryKey: QUERY_KEY_FOR_COUNTRY,

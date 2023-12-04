@@ -7,7 +7,7 @@ import { openNotification } from "src/utils/notification";
 
 interface IPutProgramType extends IUserToken {
   program_name: string;
-  //   country_id: number;
+  countries: number;
   program_link: string;
   document_requirements: number[];
   template_id: number;
@@ -33,7 +33,7 @@ const handlePutData = async (props: IPutProgramType) => {
   const data: any = {
     program_name: props.program_name,
     program_link: props.program_link,
-    // country_id: props.country_id,
+    countries: props.countries,
     eligible_dependants: props.eligible_dependants,
     template_id: props.template_id,
     milestones: props.milestones,
@@ -53,7 +53,7 @@ export const useUpdateProgramType = ({ queryKey }: IPProps) => {
   const putData = (
     id: number,
     program_name: string,
-    // country_id: number,
+    countries: number,
     program_link: string,
     document_requirements: number[],
     template_id: number,
@@ -63,23 +63,24 @@ export const useUpdateProgramType = ({ queryKey }: IPProps) => {
   ) => {
     mutate(
       {
+        token,
         id,
-        // country_id,
+        countries,
         document_requirements,
         eligible_dependants,
         milestones,
         program_link,
         program_name,
         template_id,
-        token,
         workflow_id,
       },
+     
       {
         onError: (error: any) => {
           openNotification({
             state: "error",
             title: "Error Occured",
-            description: error,
+            description: error.response.data.message,
             duration: 5,
           });
         },
@@ -87,7 +88,7 @@ export const useUpdateProgramType = ({ queryKey }: IPProps) => {
           openNotification({
             state: "success",
             title: "Success",
-            description: res,
+            description: res.data.message,
           });
           queryClient.invalidateQueries([queryKey]);
         },

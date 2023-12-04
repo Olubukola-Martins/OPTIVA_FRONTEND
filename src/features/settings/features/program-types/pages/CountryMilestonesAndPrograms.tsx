@@ -3,9 +3,9 @@ import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { CountryMilestonesAndProgramsTab } from "../components/CountryMilestonesAndProgramsTab";
-import { Dropdown, Form, Input, Menu, Modal, Select } from "antd";
+import { Dropdown,  } from "antd";
 import { Link } from "react-router-dom";
-import { AppButton } from "src/components/button/AppButton";
+import '../assets/style.css'
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { usePostCountry } from "../hooks/usePostCountry";
@@ -17,6 +17,7 @@ import { AddCountryModal } from "../components/AddCountryModal";
 import { EditMilestoneModal } from "../components/EditMilestoneModal";
 import { DownOutlined } from "@ant-design/icons";
 import { AddMilestoneModal } from "../components/AddMilestoneModal";
+import type { MenuProps } from "antd";
 
 const CountryMilestonesAndPrograms = () => {
   const { token } = useGetUserInfo();
@@ -38,7 +39,6 @@ const CountryMilestonesAndPrograms = () => {
     mutate(
       {
         country_name: val.country,
-        program_types: val.programType,
         token,
       },
       {
@@ -96,15 +96,27 @@ const CountryMilestonesAndPrograms = () => {
     setOpenAddMilestoneModal(false);
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1" onClick={showCountryModal}>Country</Menu.Item>
-      <Menu.Item key="2" onClick={showAddMilestoneModal}>Milestone</Menu.Item>
-      <Menu.Item key="3">
-        <Link to={appRoute.createProgramType}>Program Type</Link>
-      </Menu.Item>
-    </Menu>
-  );
+  const items: MenuProps["items"] = [
+    {
+      label: "Country",
+      key: "1",
+      onClick: () => showCountryModal(),
+    },
+    {
+      label: "Milestone",
+      key: "2",
+      onClick: () => showAddMilestoneModal(),
+    },
+    {
+      label: <Link to={appRoute.createProgramType}>Program Type</Link>,
+      key: "3",
+    },
+  ];
+
+  const menuProps = {
+    items,
+    onClick: () => {},
+  };
 
   return (
     <>
@@ -127,16 +139,15 @@ const CountryMilestonesAndPrograms = () => {
               onClick={showExportModal}
             />
           </div>
-          <div>
+          
             <Dropdown.Button
-              className="bg-secondary text-white w-full "
-              overlay={menu}
+              menu={menuProps}
               icon={<DownOutlined />}
             >
               Add New
             </Dropdown.Button>
-          </div>
-           </div>
+         
+        </div>
       </div>
       <CountryMilestonesAndProgramsTab />
       {/* Import Modal */}
@@ -156,7 +167,6 @@ const CountryMilestonesAndPrograms = () => {
       <AddMilestoneModal
         handleClose={handleAddMilestoneModalCancel}
         open={openAddMilestoneModal}
-        
       />
       {/* ADD COUNTRY MODAL */}
       <AddCountryModal
@@ -166,8 +176,7 @@ const CountryMilestonesAndPrograms = () => {
       {/*EDIT MILESTONE MODAL */}
       <EditMilestoneModal
         handleClose={handleMilestoneModalCancel}
-        open={openMilestoneModal}
-      />
+        open={openMilestoneModal} milestoneId={""}      />
     </>
   );
 };

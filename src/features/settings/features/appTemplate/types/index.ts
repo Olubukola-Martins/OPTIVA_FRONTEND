@@ -38,8 +38,13 @@ interface Formquestion {
 
 
 // POST TYPE
+export interface IPostApplication extends IUserToken {
+  template_name: string;
+  template_description: string;
+  sections: Section[]; 
+}
 
-export interface IPostApplication extends IUserToken{
+interface Section {
   section_title: string;
   section_description: string;
   subsections?: Subsection[];
@@ -65,3 +70,5 @@ interface Formquestion {
   is_required: boolean;
   options?: string[];
 }
+
+

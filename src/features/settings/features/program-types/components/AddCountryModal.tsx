@@ -19,18 +19,18 @@ export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
   const { data } = useGetProgramType();
 
   //   // PROGRAM TYPE SELECT
-  const options: SelectProps["options"] =
-    data?.map((item) => ({
-      value: item.id,
-      label: item.program_name,
-      key: item.id,
-    })) || [];
+  // const options: SelectProps["options"] =
+  //   data?.map((item) => ({
+  //     value: item.id,
+  //     label: item.program_name,
+  //     key: item.id,
+  //   })) || [];
 
   const handleCountrySubmit = (val: any) => {
     mutate(
       {
         country_name: val.country,
-        program_types: val.programType,
+        // program_types: val.programType,
         token,
       },
       {
@@ -70,9 +70,9 @@ export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
         >
           <Input  />
         </Form.Item>
-        <Form.Item name="programType" label="Select Program Type">
+        {/* <Form.Item name="programType" label="Select Program Type">
           <Select mode="multiple" allowClear  options={options} />
-        </Form.Item>
+        </Form.Item> */}
         <div className="flex items-center justify-center gap-4 p-4">
           <AppButton
             variant="transparent"

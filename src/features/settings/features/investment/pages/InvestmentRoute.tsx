@@ -33,9 +33,13 @@ const InvestmentRoute = () => {
   const [id, setId] = useState<number>();
   const [addInvRoute, setAddInvRoute] = useState<boolean>(false);
   const [editInvRoute, setEditInvRoute] = useState<boolean>(false);
+  // const { removeData, deleteIsLoading } = useDeleteHandler({
+  //   deleteEndPointUrl: "admin/investment-route",
+  //   queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
+  // });
   const { removeData, deleteIsLoading } = useDeleteHandler({
-    deleteEndPointUrl: "admin/investment-route",
     queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
+    deleteEndPointUrl: "admin/investment-route",
   });
   const [editId, setEditId] = useState<number>();
 
@@ -45,10 +49,10 @@ const InvestmentRoute = () => {
         return {
           key: item.id,
           sn: index + 1,
+          country: item.country.country_name,
           dateCreated: formatDate(item.created_at),
           investmentName: item.investment_name,
           lastModified: formatDate(item.updated_at),
-          country: item.country.country_name,
         };
       });
       setDataArray(investmentRoute);

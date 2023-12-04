@@ -12,6 +12,7 @@ interface IProgram extends IUserToken {
   milestones: number[];
   eligible_dependants: number[];
   document_requirements: number[];
+  countries:number[]
 }
 const postRequest = async (props: IProgram) => {
   const url = `${END_POINT.BASE_URL}/admin/programtypes`;
@@ -29,6 +30,7 @@ const postRequest = async (props: IProgram) => {
     milestones: props.milestones,
     eligible_dependants: props.eligible_dependants,
     document_requirements: props.eligible_dependants,
+    countries:props.countries
   };
 
   const res = await axios.post(url, body, config);
