@@ -1,4 +1,4 @@
-import { Modal, Form, Input, DatePicker, Select, Card } from "antd";
+import { Modal, Form, Input, DatePicker, Select, Card, TimePicker } from "antd";
 import dayjs from "dayjs";
 import { AppButton } from "src/components/button/AppButton";
 import { IEvent } from "./Calendar";
@@ -6,13 +6,20 @@ import { useState } from "react";
 import { Icon } from "@iconify/react";
 import DeleteIcon from "../assets/img/warning.png";
 import SuccessIcon from "../assets/img/success.png";
+// import useAddMeeting from "../hooks/useAddMeeting";
+// import { openNotification } from "src/utils/notification";
+// import { QUERY_KEY_MEETINGS, meetingsURL } from "../pages/Meetings";
+// import { INewMeeting } from "../types/types";
+// import { useQueryClient } from "react-query";
+// import moment from "moment";
 
 export interface IMeetingData {
   id: number;
   meetingTitle: string;
   startTime: Date;
   endTime: Date;
-  attendee: string;
+  date:Date;
+  attendees: number[];
   meetingType: string;
   meetingLink: string;
   detailsOfMeeting: string;
@@ -24,15 +31,54 @@ export const NewMeetingModal: React.FC<{
   onCreate: (meetingData: IMeetingData) => void;
 }> = ({ open, onCancel, onCreate }) => {
   const [form] = Form.useForm();
+  // const queryClient = useQueryClient();
+  // const { mutate, isLoading: meetingLoading } = useAddMeeting();
+  // const addNewMeeting = (newData: INewMeeting) => {
+  //   mutate(
+  //     { newData,url:meetingsURL },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occured",
+  //           description: error.response.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (response: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           duration: 5,
+  //           description: response.message,
+  //         });
+  //         form.resetFields();
+  //         queryClient.invalidateQueries([QUERY_KEY_MEETINGS]);
+  //       },
+  //     }
+  //   );
+  // };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = (values: IMeetingData) => {
+    console.log(values)
+//     const {attendees,detailsOfMeeting,endTime,meetingLink,meetingTitle,meetingType,startTime,date } = values;
+// addNewMeeting({
+//   attendees,
+//   date: moment(date).format("YYYY-MM-DD"),
+//   title: meetingTitle,
+//   description: detailsOfMeeting,
+//   end_time: moment(endTime).format("HH:mm:ss"),
+//   start_time: moment(startTime).format("HH:mm:ss"),
+//   location,
+// });
     form.validateFields().then((values) => {
       const formData: IMeetingData = {
         id: Math.random(),
         meetingTitle: values.meetingTitle,
+        date: values.date,
         startTime: values.startTime,
         endTime: values.endTime,
-        attendee: values.attendee,
+        attendees: values.attendee,
         meetingType: values.meetingType,
         meetingLink: values.meetingLink,
         detailsOfMeeting: values.detailsOfMeeting,
@@ -55,7 +101,7 @@ export const NewMeetingModal: React.FC<{
             <Input size="large" />
           </Form.Item>
           <Form.Item
-            name="attendee"
+            name="attendees"
             label="Attendee(s)"
             rules={[
               { required: true, message: "Please enter meeting attendee(s)" },
@@ -66,11 +112,11 @@ export const NewMeetingModal: React.FC<{
               mode="multiple"
               options={[
                 {
-                  value: "Ruth Godwin",
+                  value: 1,
                   label: "Ruth Godwin",
                 },
                 {
-                  value: "Godswill Omenuko",
+                  value: 2,
                   label: "Godswill Omenuko",
                 },
               ]}
@@ -102,22 +148,19 @@ export const NewMeetingModal: React.FC<{
           >
             <Input size="large" />
           </Form.Item>
+          <Form.Item label="Date" name="date">
+            <DatePicker className="w-full" />
+          </Form.Item>
           <Form.Item label="Start Time" name="startTime">
-            <DatePicker
-              showTime
-              size="large"
+            <TimePicker
+              defaultValue={dayjs("00:00:00", "HH:mm:ss")}
               className="w-full"
-              format="YYYY-MM-DD HH:mm"
-              defaultValue={dayjs().add(1, "hour")}
             />
           </Form.Item>
           <Form.Item label="End Time" name="endTime">
-            <DatePicker
-              showTime
-              size="large"
+            <TimePicker
+              defaultValue={dayjs("00:00:00", "HH:mm:ss")}
               className="w-full"
-              format="YYYY-MM-DD HH:mm"
-              defaultValue={dayjs().add(1, "hour")}
             />
           </Form.Item>
           <Form.Item label="Details of Meeting" name="detailsOfMeeting">
@@ -174,8 +217,8 @@ export const MeetingDetailsModal: React.FC<{
           />
         </p>
         <p>
-          {dayjs(startTime).format("dddd, MMMM D, YYYY")} |{" "}
-          {dayjs(startTime).format("h:mma")}-{dayjs(endTime).format("h:mma")}
+          {dayjs(startTime).format("dd, MMM, YYYY")} |{" "}
+          {dayjs(startTime).format("hh:mm")}-{dayjs(endTime).format("hh:mm")}
         </p>
       </div>
       <div className="flex gap-2 items-center my-2">
@@ -244,11 +287,11 @@ export const EditMeetingModal: React.FC<{
             mode="multiple"
             options={[
               {
-                value: "Ruth Godwin",
+                value: "1",
                 label: "Ruth Godwin",
               },
               {
-                value: "Godswill Omenuko",
+                value: "2",
                 label: "Godswill Omenuko",
               },
             ]}
@@ -367,8 +410,8 @@ export const MeetingModalActions: React.FC<{
     detailsOfMeeting: "Lorem ipsum...",
   };
 
-  const handleAttendMeeting = () => {};
-  const handleDeclineMeeting = () => {};
+  const handleAttendMeeting = (data?: any) => {console.log(data)};
+  const handleDeclineMeeting = (data?: any) => {console.log(data);};
 
   return (
     <>
