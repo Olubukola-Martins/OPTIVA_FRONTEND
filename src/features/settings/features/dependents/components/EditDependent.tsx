@@ -8,22 +8,23 @@ import {
 } from "src/utils/formHelpers/validations";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useForm } from "antd/es/form/Form";
-import { AllEligiDependentsDatum } from "src/features/settings/types/settingsType";
+import {
+  AllEligiDependentsDatum,
+} from "src/features/settings/types/settingsType";
 import useUpdateEligibleDependents from "../hooks/useUpdateEligibleDependents";
 import { useEffect } from "react";
 
 interface IEditDepOrops extends IdentifierProps {
   itemId: number;
   singleDependent: AllEligiDependentsDatum | undefined;
-  singleDependentLoading: boolean;
+  singleDependentLoading:boolean;
 }
 
 export const EditDependent = ({
   handleClose,
   open,
   itemId,
-  singleDependent,
-  singleDependentLoading,
+  singleDependent,singleDependentLoading
 }: IEditDepOrops) => {
   const {
     editEligibleDependents,
@@ -34,25 +35,18 @@ export const EditDependent = ({
 
   const [editForm] = useForm();
 
-  const handleEditDependent = (values: {
-    extraConditions: { value: any }[];
-    dependent: any;
-    age: any[];
-    conditions: any;
-  }) => {
-    const extraConditions = values.extraConditions.map(
-      (item: { value: any }) => ({
-        other_condition: item.value,
-      })
-    );
-    editDependents(itemId, {
+  const handleEditDependent = (values: { extraConditions: { value: any; }[]; dependent: any; age: any[]; conditions: any; }) => {
+    const extraConditions = values.extraConditions.map((item: { value: any; }) => ({
+      other_condition: item.value,
+    }));
+    editEligibleDependents(itemId, {
       dependant: values.dependent,
       age_dependants: values.age.map((item: any) => ({ age_bracket: item })),
       dependant_conditions: values.conditions
         ? [{ other_condition: values.conditions }, ...extraConditions]
         : undefined,
     });
-    handleClose();
+     handleClose();
     // setData(singleDependentData?.data);
     // editForm.resetFields();
   };

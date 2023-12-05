@@ -1,4 +1,4 @@
-import { Form, Tabs } from "antd";
+import { Tabs } from "antd";
 import type { TabsProps } from "antd";
 import ApplicantBriefTemplate from "./ApplicantBriefTemplate";
 import { AboutTheApplicantTemplate } from "./AboutTheApplicantTemplate";

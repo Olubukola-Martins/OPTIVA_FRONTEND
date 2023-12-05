@@ -142,7 +142,7 @@ export const StKittsNevisQuestions = () => {
           <Input addonAfter={currency} />
         </Form.Item>
         <Form.Item
-          label="Bank Due Diligence & Processing Fees for Spouse"
+          label="Bank Due Diligence & Processing Fees for  Spouse"
           name="bankSpouseDueDiligenceProcessing"
           required
         >
