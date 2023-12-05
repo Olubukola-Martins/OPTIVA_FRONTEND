@@ -18,25 +18,25 @@ export const AddFees = () => {
       <div className="flex gap-8">
         <div className="w-1/2">
           <Form.Item label="Fee Name" name="feeName" required>
-            <Input size="large" />
+            <Input />
           </Form.Item>
           <Form.Item
             label="Local Processing Fee"
             name="localProcessingFee"
             required
           >
-            <Input addonAfter={currency} size="large" />
+            <Input addonAfter={currency} />
           </Form.Item>
           <Form.Item
             label="Local Processing Fee Threshold Payment"
             name="thresholdPayment"
             required
           >
-            <Input size="large" addonAfter={addOnAfter} />
+            <Input addonAfter={addOnAfter} />
           </Form.Item>
           <Form.Item label="Country" name="country" required>
             <Select
-              size="large"
+             
               options={[
                 {
                   value: "China",
@@ -56,21 +56,21 @@ export const AddFees = () => {
             name="balancePayment"
             required
           >
-            <Input size="large" addonAfter={addOnAfter} />
+            <Input addonAfter={addOnAfter} />
           </Form.Item>
           <Form.Item
             label="Program Threshold Payment"
             name="programThresholdPayment"
             required
           >
-            <Input size="large" addonAfter={addOnAfter} />
+            <Input addonAfter={addOnAfter} />
           </Form.Item>
           <Form.Item
             label="Program Balance Payment"
             name="programBalancePayment"
             required
           >
-            <Input size="large" addonAfter={addOnAfter} />
+            <Input addonAfter={addOnAfter} />
           </Form.Item>
         </div>
       </div>
