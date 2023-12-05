@@ -14,23 +14,12 @@ const CompanyProfile = () => {
     },
     {
       key: "2",
-      label: "Branch Details",
-      children: <p>Branch details here</p>,
-    },
-    {
-      key: "3",
       label: "Bank Details",
       children: <p>Bank details here</p>,
     },
   ];
   return (
     <>
-
-
-
-
-
-    
       <div className="lg:h-[40vh] lg:-mr-[31px] lg:-ml-[31px] companyProfileContainer bg-gradient sticky top-12">
         <div className="mb-5 pt-8 text-accent">
           <h3 className="flex items-center gap-x-2 font-semibold text-xl">
