@@ -37,6 +37,8 @@ export const appRoute = {
   employees: `/settings/employees`,
   roles: `/settings/roles`,
   companyProfile: `company-profile`,
+  workflow: `/settings/workflow`,
+  addWorkflow: `/settings/add-workflow`,
 
   // Applications
   applications: `/applications`,
