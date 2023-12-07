@@ -47,7 +47,7 @@ main.Container {
 }
 
 .profileCollapse .ant-collapse-header-text {
-   @apply font-medium text-base !important;
+  @apply font-medium text-base !important;
 }
 
 /* Media query */
@@ -66,5 +66,3 @@ main.Container {
     padding-right: 2rem;
   }
 }
-
-

@@ -4,10 +4,15 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
 import { FormBranchInput } from "../../branch/components/FormBranchInput";
 import { AppButton } from "src/components/button/AppButton";
+import { useEffect, useState } from "react";
+import { FormRolesInput } from "../../rolesAndPermissions/components/FormRolesInput";
+import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
+import { FormDepartmentInput } from "../../department/components/FormDepartmentInput";
 
 const AddWorkflow = () => {
   const [form] = Form.useForm();
-  
+  const [selectedId, setSelectedId] = useState<string>();
+
   const handleAddField = () => {
     const newStage = form.getFieldValue("stages") || [];
     const initialValues = { name: "", approver_type: "" };
@@ -23,6 +28,21 @@ const AddWorkflow = () => {
     });
   };
 
+  useEffect(() => {
+    const initialValues = { name: "", approver_type: "" };
+    form.setFieldsValue({ stages: [initialValues] });
+  }, []);
+
+  let componentToRender: any;
+
+  if (selectedId === "Role") {
+    componentToRender = <FormRolesInput Form={Form}/>;
+  } else if (selectedId === "Employee") {
+    componentToRender = <FormEmployeeInput Form={Form} />;
+  } else if (selectedId === "Department") {
+    componentToRender = <FormDepartmentInput Form={Form} />;
+  }
+
   return (
     <>
       <div className="flex justify-between flex-col md:flex-row md:items-center">
@@ -35,7 +55,12 @@ const AddWorkflow = () => {
       </div>
 
       <div className="bg-white rounded-md p-5 shadow border">
-        <Form layout="vertical" requiredMark={false} form={form}>
+        <Form
+          layout="vertical"
+          requiredMark={false}
+          form={form}
+          onFinish={(val) => console.log(val)}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             <Form.Item
               name="name"
@@ -73,6 +98,7 @@ const AddWorkflow = () => {
                             <Select
                               allowClear
                               className="w-full"
+                              onSelect={(val) => setSelectedId(val)}
                               placeholder="Select"
                               options={[
                                 { value: "Role", label: "Role" },
@@ -90,7 +116,7 @@ const AddWorkflow = () => {
                           </div>
                         </div>
 
-
+                        {componentToRender}
                       </div>
                     </div>
                   ))}
