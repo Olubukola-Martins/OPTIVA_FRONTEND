@@ -128,7 +128,7 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
         loading={isLoading}
-        scroll={{ x: 800 }}
+        // scroll={{ x: 800 }}
       />
     </div>
   );

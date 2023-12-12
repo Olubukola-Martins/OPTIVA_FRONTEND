@@ -8,7 +8,7 @@ import { searchValueProps } from "src/types";
 export const DisabledEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
   const { data, isLoading } = useFetchEmployees({
-    currentUrl: "inactive-employees",
+    currentUrl: "deactivated-employees",
     pagination,
     search: searchValue,
   });

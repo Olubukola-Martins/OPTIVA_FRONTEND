@@ -1,17 +1,31 @@
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Spin } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
 import { FormBranchInput } from "../../branch/components/FormBranchInput";
 import { AppButton } from "src/components/button/AppButton";
 import { useEffect, useState } from "react";
-import { FormRolesInput } from "../../rolesAndPermissions/components/FormRolesInput";
-import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
-import { FormDepartmentInput } from "../../department/components/FormDepartmentInput";
+import { useHandleData } from "../hooks/useHandleData";
+import { useCreateWorkflow } from "../hooks/useCreateWorkflow";
+import { openNotification } from "src/utils/notification";
 
 const AddWorkflow = () => {
   const [form] = Form.useForm();
+  const { mutate, isLoading } = useCreateWorkflow();
   const [selectedId, setSelectedId] = useState<string>();
+  const {
+    handleSearch,
+    setSearchTerm,
+    employeeData,
+    isLoadingEmployees,
+    employeesSuccess,
+    departData,
+    departSuccess,
+    isLoadingDepart,
+    rolesData,
+    isLoadingRoles,
+    rolesSuccess,
+  } = useHandleData();
 
   const handleAddField = () => {
     const newStage = form.getFieldValue("stages") || [];
@@ -33,15 +47,31 @@ const AddWorkflow = () => {
     form.setFieldsValue({ stages: [initialValues] });
   }, []);
 
-  let componentToRender: any;
-
-  if (selectedId === "Role") {
-    componentToRender = <FormRolesInput Form={Form}/>;
-  } else if (selectedId === "Employee") {
-    componentToRender = <FormEmployeeInput Form={Form} />;
-  } else if (selectedId === "Department") {
-    componentToRender = <FormDepartmentInput Form={Form} />;
-  }
+  const handleSubmit = (data: any) => {
+    mutate(
+      { ...data },
+      {
+        onError: (err: any) => {
+          openNotification({
+            title: "Error",
+            state: "error",
+            description: err.response.data.message,
+            duration: 8.0,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            title: "Success",
+            state: "success",
+            description: res.data.message,
+            duration: 6.0,
+          });
+          form.resetFields();
+          // queryClient.invalidateQueries([QUERY_KEY_FOR_ROLES]);
+        },
+      }
+    );
+  };
 
   return (
     <>
@@ -59,7 +89,7 @@ const AddWorkflow = () => {
           layout="vertical"
           requiredMark={false}
           form={form}
-          onFinish={(val) => console.log(val)}
+          onFinish={handleSubmit}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             <Form.Item
@@ -115,8 +145,108 @@ const AddWorkflow = () => {
                             ></i>
                           </div>
                         </div>
-
-                        {componentToRender}
+                        {selectedId === "Employee" && (
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "employees"]}
+                            label="Employees"
+                            className="w-full"
+                          >
+                            <Select
+                              mode="multiple"
+                              placeholder="Select"
+                              showSearch
+                              allowClear
+                              onClear={() => setSearchTerm("")}
+                              onSearch={handleSearch}
+                              className="rounded border-slate-400 w-full"
+                              defaultActiveFirstOption={false}
+                              showArrow={false}
+                              loading={isLoadingEmployees}
+                              filterOption={false}
+                            >
+                              {employeesSuccess ? (
+                                employeeData?.data.map((item) => (
+                                  <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                  </Select.Option>
+                                ))
+                              ) : (
+                                <div className="flex justify-center items-center w-full">
+                                  <Spin size="small" />
+                                </div>
+                              )}
+                            </Select>
+                          </Form.Item>
+                        )}
+                        {selectedId === "Department" && (
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "departments"]}
+                            label="Departments"
+                            className="w-full"
+                          >
+                            <Select
+                              mode="multiple"
+                              placeholder="Select"
+                              showSearch
+                              allowClear
+                              onClear={() => setSearchTerm("")}
+                              onSearch={handleSearch}
+                              className="rounded border-slate-400 w-full"
+                              defaultActiveFirstOption={false}
+                              showArrow={false}
+                              loading={isLoadingDepart}
+                              filterOption={false}
+                            >
+                              {departSuccess ? (
+                                departData?.data.map((item) => (
+                                  <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                  </Select.Option>
+                                ))
+                              ) : (
+                                <div className="flex justify-center items-center w-full">
+                                  <Spin size="small" />
+                                </div>
+                              )}
+                            </Select>
+                          </Form.Item>
+                        )}
+                        {selectedId === "Role" && (
+                          <Form.Item
+                            {...field}
+                            name={[field.name, "roles"]}
+                            label="Roles"
+                            className="w-full"
+                          >
+                            <Select
+                              mode="multiple"
+                              placeholder="Select"
+                              showSearch
+                              allowClear
+                              onClear={() => setSearchTerm("")}
+                              onSearch={handleSearch}
+                              className="rounded border-slate-400 w-full"
+                              defaultActiveFirstOption={false}
+                              showArrow={false}
+                              loading={isLoadingRoles}
+                              filterOption={false}
+                            >
+                              {rolesSuccess ? (
+                                rolesData?.map((item) => (
+                                  <Select.Option key={item.id} value={item.id}>
+                                    {item.name}
+                                  </Select.Option>
+                                ))
+                              ) : (
+                                <div className="flex justify-center items-center w-full">
+                                  <Spin size="small" />
+                                </div>
+                              )}
+                            </Select>
+                          </Form.Item>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -133,7 +263,11 @@ const AddWorkflow = () => {
 
           <div className="flex justify-end gap-x-5">
             <AppButton type="reset" label="Cancel" variant="transparent" />
-            <AppButton type="submit" label="Set Workflow" />
+            <AppButton
+              type="submit"
+              label="Set Workflow"
+              isLoading={isLoading}
+            />
           </div>
         </Form>
       </div>
