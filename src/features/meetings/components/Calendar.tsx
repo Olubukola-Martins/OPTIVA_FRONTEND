@@ -3,6 +3,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import { useState } from "react";
 import {
+  EditMeetingModal,
   IMeetingData,
   MeetingDetailsModal,
   MeetingModalActions,
@@ -12,18 +13,41 @@ import {
 
 export interface IEvent {
   id: number;
-  meetingTitle: string;
-  startTime: Date;
-  endTime: Date;
-  // date: Date;
-  attendee: string;
-  meetingType: string;
-  meetingLink?: string;
-  meetingPlatform?: string;
-  detailsOfMeeting: string;
-  organizer?: string;
-  meetingLocation?: string;
+  title: string;
+  start: Date;
+  end: Date;
+  organizer_name: string;
+  organizer_id: number;
+  allDay?: boolean;
+  description?: string;
+  location?: string;
+  link?: string;
+  attendees: Attendee[];
+  color?: string;
+  editable?: boolean;
 }
+
+interface Attendee {
+  id: number;
+  name: string;
+  email: string;
+}
+
+// export interface  {
+//   id: number;
+//   meetingTitle: string;
+//   startTime: Date;
+//   endTime: Date;
+//   // date: Date;
+//   attendee: string;
+//   meetingType: string;
+//   meetingLink?: string;
+//   meetingPlatform?: string;
+//   detailsOfMeeting: string;
+//   organizer?: string;
+//   meetingLocation?: string;
+// }
+
 interface ICalendarProps {
   events: IEvent[];
 }
@@ -33,6 +57,7 @@ const localizer = momentLocalizer(moment);
 export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
   const [openNewMeetingModal, setOpenNewMeetingModal] =
     useState<boolean>(false);
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [actionModal, setActionModal] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
 
@@ -64,38 +89,31 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {
     // const updatedEvents = [...events, meetingData];
-    console.log("meetingData",meetingData)
-    
+
     setOpenNewMeetingModal(false);
   };
+  console.log("event", selectedEvent);
 
-  
   return (
     <div className="h-[500px]">
       <BigCalendar
         localizer={localizer}
         events={events}
         eventPropGetter={(event) => ({
-          style: {
-          },
+          style: {},
           onClick: () => {
-            // Handle click event on the calendar event
-            if (event.meetingLink) {
-              window.open(event.meetingLink, "_blank"); 
+            if (event.link) {
+              window.open(event.link, "_blank");
             }
           },
         })}
-        startAccessor="startTime"
-        endAccessor="endTime"
+        startAccessor="start"
+        endAccessor="end"
         // onSelectEvent={handleEventClick}
         onSelectEvent={(event) => handleEventClick(event.id)}
         //   onSelectEvent={}
       />
-      <NewMeetingModal
-        open={openNewMeetingModal}
-        onCancel={handleNewMeetingCancel}
-        onCreate={handleCreateMeeting}
-      />
+
       {selectedEvent && (
         <MeetingDetailsModal
           open={actionModal}
@@ -105,9 +123,6 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
             setActionModal(false);
           }}
           inActionsModal={true}
-          // open={selectedEvent}
-          // meetingData={events}
-          // onCancel={() => setSelectedEvent(false)}
         />
       )}
 
@@ -115,21 +130,23 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
         open={openNewMeetingModal}
         onCancel={handleNewMeetingCancel}
         onCreate={handleCreateMeeting}
-      />
+      />*/}
       {selectedEvent && (
-        <MeetingDetailsModal
-          open={actionModal}
-          meetingData={selectedEvent}
+        <EditMeetingModal
+          open={editModalVisible}
           onCancel={() => {
-            setSelectedEvent(null);
-            setActionModal(false);
+            setEditModalVisible(false);
           }}
+          onCreate={handleCreateMeeting}
+          editMeetingsLoading={false}
         />
-      )} */}
+      )}
       {actionModal && (
         <MeetingModalActions
           open={actionModal}
           onCancel={() => setActionModal(false)}
+          currentEvent={selectedEvent as IEvent}
+          // handleEditMeeting=
         />
       )}
     </div>

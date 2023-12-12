@@ -24,13 +24,14 @@ import { ISingleDocRequirement } from "src/features/settings/types/settingsType"
 interface IProps extends IdentifierProps {
   docType: string;
   handleEditNewDocument: (val: any) => any;
+  editLoading:boolean;
 }
 const queryKey = QUERY_KEY_DOC_REQUIREMENT;
 
 export const EditDocument = ({
   handleClose,
   open,
-  docType,
+  docType,editLoading,
   handleEditNewDocument,
   id,
 }: IProps) => {
@@ -163,17 +164,19 @@ export const EditDocument = ({
             loading={allDependentsLoading}
             options={
               Array.isArray(allDependentsData?.data) &&
-              allDependentsData?.data.map((dependent: { id: any; dependant: any; }) => ({
-                value: dependent.id,
-                label: dependent.dependant,
-              }))
+              allDependentsData?.data.map(
+                (dependent: { id: any; dependant: any }) => ({
+                  value: dependent.id,
+                  label: dependent.dependant,
+                })
+              )
             }
             allowClear
             placeholder="Select"
           />
         </Form.Item>
 
-        <AppButton type="submit" />
+        <AppButton type="submit" isLoading={editLoading} />
       </Form>
     </Modal>
   );

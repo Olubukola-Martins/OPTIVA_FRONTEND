@@ -43,11 +43,11 @@ export const useFetchAllItems = ({
         });
       },
       onSuccess: (res) => {
-        openNotification({
-          state: "success",
-          title: "Success",
-          description: res.data.message,
-        });
+        // openNotification({
+        //   state: "success",
+        //   title: "Success",
+        //   description: res.data.message,
+        // });
       },
     }
   );
