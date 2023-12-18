@@ -9,6 +9,7 @@ import {
   MeetingModalActions,
   NewMeetingModal,
 } from "./MeetingModals";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 // import { IMeetingData } from "./MeetingModals";
 
 export interface IEvent {
@@ -55,9 +56,10 @@ interface ICalendarProps {
 const localizer = momentLocalizer(moment);
 
 export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
+    const { userInfo } = useGetUserInfo();
   const [openNewMeetingModal, setOpenNewMeetingModal] =
     useState<boolean>(false);
-  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  // const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [actionModal, setActionModal] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
 
@@ -73,7 +75,17 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
       setActionModal(true);
     }
   };
-
+const eventStyleGetter = (event: any) => {
+  if (event.status === 1) {
+    return {
+      style: {
+        backgroundColor: "lightgray", 
+        color: "red", 
+      },
+    };
+  }
+  return {}; // Return empty object for default event style
+};
   //   const handleNewMeetingCancel = () => {
   //     setOpenNewMeetingModal(false);
   //   };
@@ -92,21 +104,21 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
 
     setOpenNewMeetingModal(false);
   };
-  console.log("event", selectedEvent);
 
   return (
     <div className="h-[500px]">
       <BigCalendar
         localizer={localizer}
         events={events}
-        eventPropGetter={(event) => ({
-          style: {},
-          onClick: () => {
-            if (event.link) {
-              window.open(event.link, "_blank");
-            }
-          },
-        })}
+        eventPropGetter={eventStyleGetter}
+        // eventPropGetter={(event) => ({
+        //   style: {},
+        //   onClick: () => {
+        //     if (event.link) {
+        //       window.open(event.link, "_blank");
+        //     }
+        //   },
+        // })}
         startAccessor="start"
         endAccessor="end"
         // onSelectEvent={handleEventClick}
@@ -131,21 +143,13 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
         onCancel={handleNewMeetingCancel}
         onCreate={handleCreateMeeting}
       />*/}
-      {selectedEvent && (
-        <EditMeetingModal
-          open={editModalVisible}
-          onCancel={() => {
-            setEditModalVisible(false);
-          }}
-          onCreate={handleCreateMeeting}
-          editMeetingsLoading={false}
-        />
-      )}
+      {/* {selectedEvent && <EditMeetingModal currentEvent={selectedEvent} />} */}
       {actionModal && (
         <MeetingModalActions
           open={actionModal}
           onCancel={() => setActionModal(false)}
           currentEvent={selectedEvent as IEvent}
+          userInfo={userInfo}
           // handleEditMeeting=
         />
       )}

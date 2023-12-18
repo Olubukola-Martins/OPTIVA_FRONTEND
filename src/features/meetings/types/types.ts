@@ -24,6 +24,7 @@ export interface INewMeeting {
   location?: string;
   link?: string;
   attendees: number[];
+  _method?: string;
 }
 
 export interface IUserMeetingsData {

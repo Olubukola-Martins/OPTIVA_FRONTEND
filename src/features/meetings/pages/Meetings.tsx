@@ -3,6 +3,7 @@ import { Calendar, IEvent } from "../components/Calendar";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import {
+  EditMeetingModal,
   MeetingModalActions,
   NewMeetingModal,
 } from "../components/MeetingModals";
@@ -10,16 +11,17 @@ import { IMeetingData } from "../components/MeetingModals";
 import { END_POINT } from "src/config/environment";
 import { useQueryClient } from "react-query";
 import useAddMeeting from "../hooks/useAddMeeting";
-import {  INewMeeting, ISingleMeeting } from "../types/types";
+import { INewMeeting, ISingleMeeting } from "../types/types";
 import { openNotification } from "src/utils/notification";
 import dayjs from "dayjs";
 import { useForm } from "antd/es/form/Form";
 import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { Spin } from "antd";
+import useEditMeeting from "../hooks/useEditMeeting";
 
 export const QUERY_KEY_MEETINGS = "Meetings";
 export const meetingsURL = `${END_POINT.BASE_URL}/admin/meetings`;
-
 
 const Meetings = () => {
   // const {
@@ -32,14 +34,19 @@ const Meetings = () => {
 
   const queryClient = useQueryClient();
   const [newForm] = useForm();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { userInfo } = useGetUserInfo();
-  console.log("userInfo", userInfo);
-  const { data: userEvents } = useFetchSingleItem({
+  const {
+    data: userEvents,
+    isLoading: userEventsLoading,
+    isFetching: userEventsFetching, refetch
+  } = useFetchSingleItem({
     itemId: userInfo?.id,
     queryKey: QUERY_KEY_MEETINGS,
     urlEndPoint: `${meetingsURL}/user`,
   });
   const { mutate, isLoading: newMeetingLoading } = useAddMeeting();
+
   const addNewMeeting = (newData: INewMeeting) => {
     mutate(
       { newData, url: meetingsURL },
@@ -59,27 +66,18 @@ const Meetings = () => {
             duration: 5,
             description: response.message,
           });
-              setIsModalVisible(false);
+          setIsModalVisible(false);
           newForm.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_MEETINGS]);
         },
       }
     );
   };
-
+  // const [editing, setEditing] = useState<boolean>(false);
+  //   const handleSetEditing = (state: boolean) => {
+  //     setEditing(state);
+  // };
   const [events, setEvents] = useState<any>([]);
-  //   useState([
-  //   {
-  //     id: 1,
-  //     meetingTitle: "Event 1",
-  //     startTime: new Date(2023, 10, 8, 10, 0),
-  //     endTime: new Date(2023, 10, 8, 12, 0),
-  // //     attendee: "",
-  // //    meetingType: "",
-  //  //   meetingLink: "",
-  //     detailsOfMeeting: "",
-  //   },
-  // ]);
 
   useEffect(() => {
     if (userEvents && userEvents.data) {
@@ -133,17 +131,20 @@ const Meetings = () => {
             start: new Date(year, month - 1, day, starthour, startminute),
             end: new Date(year, month - 1, day, endhour, endminute),
             link,
-            organizer_name:userInfo.name,
+            organizer_name: userInfo.name,
             attendees: allAttendees,
-            organizer_id
+            organizer_id,
           };
         }
       );
       setEvents(userEventsList);
     }
-  }, [userEvents, userInfo, userInfo?.id]);
+  }, [userEvents, userEvents?.data, userInfo, userInfo?.id]);
+  // useEffect(() => {
+    
+  //   console.log("editing", editing);
+  // }, [editing, handleSetEditing]);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
   // const [isCreateMeetingModalVisible, setCreateMeetingModalVisible] =
   //   useState(false);
   const [meetingActionsModal, setMeetingActionsModal] = useState(false);
@@ -176,7 +177,7 @@ const Meetings = () => {
       location,
     } = meetingData;
     addNewMeeting({
-      attendees:[...attendees,userInfo.id],
+      attendees: [...attendees, userInfo.id],
       date: dayjs(date).format("YYYY-MM-DD"),
       description,
       end_time: dayjs(end_time).format("HH:mm:ss"),
@@ -190,22 +191,29 @@ const Meetings = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center py-4">
-        <PageIntro
-          arrowBack={false}
-          title="Meetings"
-          description="View  & Create New Bookings"
+      <Spin spinning={userEventsLoading || userEventsFetching} size="large">
+        <div className="flex justify-between items-center py-4">
+          <PageIntro
+            arrowBack={false}
+            title="Meetings"
+            description="View  & Create New Bookings"
+          />
+          <AppButton label="New Meeting" handleClick={showModal} />
+        </div>
+        <Calendar events={events} />
+        <NewMeetingModal
+          open={isModalVisible}
+          onCancel={handleCancel}
+          onCreate={handleCreateMeeting}
+          newForm={newForm}
+          newMeetingsLoading={newMeetingLoading}
         />
-        <AppButton label="New Meeting" handleClick={showModal} />
-      </div>
-      <Calendar events={events} />
-      <NewMeetingModal
-        open={isModalVisible}
-        onCancel={handleCancel}
-        onCreate={handleCreateMeeting}
-        newForm={newForm}
-        newMeetingsLoading={newMeetingLoading}
-      />
+        <EditMeetingModal
+          open={isModalVisible}
+          onCancel={handleCancel}
+          refetchUserMeetins={refetch}
+        />
+      </Spin>
     </>
   );
 };
