@@ -45,6 +45,7 @@ import SettingsTemplate from "src/features/settings/features/contractsEmailTempl
 import EditProgramType from "src/features/settings/features/program-types/pages/EditProgramType";
 import Workflow from "src/features/settings/features/workFlow/pages/Workflow";
 import AddWorkflow from "src/features/settings/features/workFlow/pages/AddWorkflow";
+import WorkflowDetails from "src/features/settings/features/workFlow/pages/WorkflowDetails";
 
 const routesArray = [
   {
@@ -136,6 +137,7 @@ const routesArray = [
   { path: appRoute.companyProfile, element: <CompanyProfile /> },
   { path: appRoute.workflow, element: <Workflow /> },
   { path: appRoute.addWorkflow, element: <AddWorkflow /> },
+  { path: appRoute.workflow_details().format, element: <WorkflowDetails /> },
 ];
 
 export const AllRoutes = () => {

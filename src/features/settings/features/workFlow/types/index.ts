@@ -1,3 +1,7 @@
+import { departmentProps } from "../../department/types";
+import { employeesProps } from "../../employees/types";
+import { rolesProps } from "../../rolesAndPermissions/types";
+
 export interface workflowProps {
   id?: number;
   name: string;
@@ -8,7 +12,7 @@ export interface workflowProps {
 interface Stage {
   name: string;
   approver_type: string;
-  employees: number[];
-  departments: number[];
-  roles: number[];
+  employees: employeesProps[];
+  departments: departmentProps[];
+  roles: rolesProps[];
 }

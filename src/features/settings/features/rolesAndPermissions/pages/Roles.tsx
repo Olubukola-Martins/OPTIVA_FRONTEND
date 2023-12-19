@@ -62,7 +62,7 @@ const Roles = () => {
                     className="ri-pencil-line cursor-pointer hover:text-primary"
                   ></i>
                   <Popconfirm
-                    title="Delete department"
+                    title="Delete role"
                     description={`Are you sure to delete ${item.name}`}
                     onConfirm={() => removeData(item.id)}
                   >
@@ -82,7 +82,7 @@ const Roles = () => {
                   </p>
                 </div>
 
-                <button onClick={() => handleRole(item.id)} className="px-4 py-[5px] text-secondary bg-[#801D231A] rounded-2xl">
+                <button onClick={() => handleRole(item.id)} className="px-4 py-[5px] text-secondary border hover:border-secondary bg-[#801D231A] rounded-2xl">
                   Add Permissions
                 </button>
               </div>

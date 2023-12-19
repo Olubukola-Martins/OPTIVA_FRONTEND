@@ -39,6 +39,10 @@ export const appRoute = {
   companyProfile: `company-profile`,
   workflow: `/settings/workflow`,
   addWorkflow: `/settings/add-workflow`,
+  workflow_details: (id?: number) => ({
+    format: `/settings/workflow/:id`,
+    path: `/settings/workflow/${id}`,
+  }),
 
   // Applications
   applications: `/applications`,

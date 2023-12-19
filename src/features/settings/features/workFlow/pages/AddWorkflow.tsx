@@ -8,11 +8,14 @@ import { useEffect, useState } from "react";
 import { useHandleData } from "../hooks/useHandleData";
 import { useCreateWorkflow } from "../hooks/useCreateWorkflow";
 import { openNotification } from "src/utils/notification";
+import { QUERY_KEY_FOR_WORKFLOW } from "../hooks/useGetWorkflow";
+import { useQueryClient } from "react-query";
 
 const AddWorkflow = () => {
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
   const { mutate, isLoading } = useCreateWorkflow();
-  const [selectedId, setSelectedId] = useState<string>();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const {
     handleSearch,
     setSearchTerm,
@@ -33,6 +36,7 @@ const AddWorkflow = () => {
     form.setFieldsValue({
       stages: [...newStage, initialValues],
     });
+    setSelectedIds([...selectedIds, ""]); // Add an empty string for the new form list
   };
 
   const handleRemoveField = (index: number) => {
@@ -40,12 +44,21 @@ const AddWorkflow = () => {
     form.setFieldsValue({
       stages: newStage.filter((_: any, i: number) => i !== index),
     });
+    const newSelectedIds = [...selectedIds];
+    newSelectedIds.splice(index, 1); // Remove the selectedId for the removed form list
+    setSelectedIds(newSelectedIds);
   };
 
   useEffect(() => {
     const initialValues = { name: "", approver_type: "" };
     form.setFieldsValue({ stages: [initialValues] });
   }, []);
+
+  const handleApproverTypeChange = (index: number, value: string) => {
+    const newSelectedIds = [...selectedIds];
+    newSelectedIds[index] = value; // Update the selectedId for the specific form list
+    setSelectedIds(newSelectedIds);
+  };
 
   const handleSubmit = (data: any) => {
     mutate(
@@ -67,7 +80,7 @@ const AddWorkflow = () => {
             duration: 6.0,
           });
           form.resetFields();
-          // queryClient.invalidateQueries([QUERY_KEY_FOR_ROLES]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_WORKFLOW]);
         },
       }
     );
@@ -128,7 +141,10 @@ const AddWorkflow = () => {
                             <Select
                               allowClear
                               className="w-full"
-                              onSelect={(val) => setSelectedId(val)}
+                              // onSelect={(val) => setSelectedId(val)}
+                              onSelect={(val) =>
+                                handleApproverTypeChange(index, val)
+                              }
                               placeholder="Select"
                               options={[
                                 { value: "Role", label: "Role" },
@@ -145,7 +161,7 @@ const AddWorkflow = () => {
                             ></i>
                           </div>
                         </div>
-                        {selectedId === "Employee" && (
+                        {selectedIds[index] === "Employee" && (
                           <Form.Item
                             {...field}
                             name={[field.name, "employees"]}
@@ -179,7 +195,7 @@ const AddWorkflow = () => {
                             </Select>
                           </Form.Item>
                         )}
-                        {selectedId === "Department" && (
+                        {selectedIds[index] === "Department" && (
                           <Form.Item
                             {...field}
                             name={[field.name, "departments"]}
@@ -213,7 +229,7 @@ const AddWorkflow = () => {
                             </Select>
                           </Form.Item>
                         )}
-                        {selectedId === "Role" && (
+                        {selectedIds[index] === "Role" && (
                           <Form.Item
                             {...field}
                             name={[field.name, "roles"]}
@@ -253,7 +269,7 @@ const AddWorkflow = () => {
 
                   <AppButton
                     variant="transparent"
-                    label="+ Add question"
+                    label="+ Add stage"
                     handleClick={() => handleAddField()}
                   />
                 </>
