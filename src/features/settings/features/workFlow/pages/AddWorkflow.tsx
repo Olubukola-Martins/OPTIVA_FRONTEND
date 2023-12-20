@@ -141,7 +141,6 @@ const AddWorkflow = () => {
                             <Select
                               allowClear
                               className="w-full"
-                              // onSelect={(val) => setSelectedId(val)}
                               onSelect={(val) =>
                                 handleApproverTypeChange(index, val)
                               }
