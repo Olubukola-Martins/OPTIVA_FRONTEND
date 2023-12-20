@@ -20,7 +20,6 @@ const UserRequest = async (props: workflowProps) => {
 
   const data = {
     ...props,
-    select_approval: ["review", "accept", "notification", "reject"]
   };
   const requestType = props.id ? axios.put : axios.post;
   const response = await requestType(url, data, config);

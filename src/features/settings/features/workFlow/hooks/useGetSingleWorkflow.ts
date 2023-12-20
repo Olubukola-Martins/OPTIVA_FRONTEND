@@ -7,9 +7,7 @@ import { workflowProps } from "../types";
 
 export const QUERY_KEY_FOR_SINGLE_WORKFLOW = "single-workflow";
 
-const getSingleData = async (
-  props: IGeneralProps
-): Promise<workflowProps> => {
+const getSingleData = async (props: IGeneralProps): Promise<workflowProps> => {
   const token = useGetToken();
   const id = props.id;
   const url = `${END_POINT.BASE_URL}/admin/workflow/${id}`;
@@ -21,7 +19,6 @@ const getSingleData = async (
   };
 
   const res = await axios.get(url, config);
-  console.log(res);
 
   const item = res.data.data;
 

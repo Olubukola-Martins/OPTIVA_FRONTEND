@@ -92,7 +92,7 @@ const AddWorkflow = () => {
         <PageIntro
           title="Create Workflow"
           description="Create new workflow on the system"
-          linkBack={appRoute.settings}
+          linkBack={appRoute.workflow}
         />
         <div></div>
       </div>
