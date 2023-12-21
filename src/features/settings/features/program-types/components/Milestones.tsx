@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Skeleton, Table } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import {
@@ -6,9 +6,9 @@ import {
   useGetMilestone,
 } from "../hooks/useGetMilestone";
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
-import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import { AddMilestoneModal } from "./AddMilestoneModal";
+import { useDelete } from "src/hooks/useDelete";
 
 type DataSourceItem = {
   key: React.Key;
@@ -42,11 +42,11 @@ export const Milestones = () => {
 
   const [milestoneId, setMilestoneId] = useState<number>();
 
-  const { removeData, deleteIsLoading } = useDeleteHandler({
-    deleteEndPointUrl: "admin/milestone",
-    queryKey: QUERY_KEY_FOR_MILESTONE,
-  });
 
+ const {removeData}= useDelete({
+    queryKey: QUERY_KEY_FOR_MILESTONE,
+    EndPointUrl: "admin/milestone/",
+  });
   // Milestone Modal
   const [openMilestoneModal, setOpenMilestoneModal] = useState<boolean>(false);
   const showMilestoneModal = () => {
@@ -65,16 +65,6 @@ export const Milestones = () => {
   const handleDeleteCancel = () => {
     setOpenDeleteModal(false);
   };
-
-  //    //Add Milestone Modal
-  //    const [openAddMilestoneModal, setOpenAddMilestoneModal] =
-  //    useState<boolean>(false);
-  //  const showAddMilestoneModal = () => {
-  //    setOpenAddMilestoneModal(true);
-  //  };
-  //  const handleAddMilestoneModalCancel = () => {
-  //    setOpenAddMilestoneModal(false);
-  //   };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -142,34 +132,34 @@ export const Milestones = () => {
   return (
     <>
       {/* TABLE */}
-      <Skeleton active loading={isLoading}>
-        <Table
-          columns={columns}
-          dataSource={dataArray}
-          className="bg-white rounded-md shadow border mt-2"
-          scroll={{ x: 600 }}
-          rowSelection={{
-            type: "checkbox",
-            onChange: (
-              selectedRowKeys: React.Key[],
-              selectedRows: DataSourceItem[]
-            ) => {
-              console.log(
-                `selectedRowKeys: ${selectedRowKeys}`,
-                "selectedRows: ",
-                selectedRows
-              );
-            },
-          }}
-        />
-      </Skeleton>
+      <Table
+        loading={isLoading}
+        columns={columns}
+        dataSource={dataArray}
+        className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        rowSelection={{
+          type: "checkbox",
+          onChange: (
+            selectedRowKeys: React.Key[],
+            selectedRows: DataSourceItem[]
+          ) => {
+            console.log(
+              `selectedRowKeys: ${selectedRowKeys}`,
+              "selectedRows: ",
+              selectedRows
+            );
+          },
+        }}
+      />
 
       {/*ADD MILESTONE MODAL */}
-      <AddMilestoneModal
+      {milestoneId &&   <AddMilestoneModal
         handleClose={handleAddMilestoneModalCancel}
         open={openMilestoneModal}
-        milestoneId={milestoneId as unknown as number}
-      />
+        milestoneId={milestoneId}
+      />}
+    
 
       {/* DELETE MODAL */}
       <DeleteModal
@@ -178,7 +168,7 @@ export const Milestones = () => {
         text="milestone"
         onCancel={handleDeleteCancel}
         onDelete={() => removeData(milestoneId as unknown as number)}
-        isLoading={deleteIsLoading}
+        // isLoading={deleteIsLoading}
       />
     </>
   );

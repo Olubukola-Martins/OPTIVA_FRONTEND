@@ -1,11 +1,11 @@
-import { Dropdown, Menu, Skeleton, Table } from "antd";
+import { Dropdown, Menu,  Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import { QUERY_KEY_FOR_COUNTRY, useGetCountry } from "../hooks/useGetCountry";
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
-import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
 import { EditCountryModal } from "./EditCountryModal";
 import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useDelete } from "src/hooks/useDelete";
 
 type DataSourceItem = {
   key: React.Key;
@@ -36,10 +36,9 @@ export const Country = () => {
 
   const [countryId, setCountryId] = useState<number>();
 
-  const { removeData, deleteIsLoading } = useDeleteHandler({
-    deleteEndPointUrl: "admin/countries",
-    queryKey: QUERY_KEY_FOR_COUNTRY,
-  });
+
+
+const {removeData}=  useDelete({queryKey: QUERY_KEY_FOR_COUNTRY, EndPointUrl:"admin/countries/",})
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -118,8 +117,8 @@ export const Country = () => {
   return (
     <>
       {/* TABLE */}
-      <Skeleton loading={isLoading} active>
         <Table
+          loading={isLoading}
           columns={columns}
           dataSource={dataArray}
           className="bg-white rounded-md shadow border mt-2"
@@ -138,24 +137,25 @@ export const Country = () => {
             },
           }}
         />
-      </Skeleton>
 
       {/* Country MODAL */}
-      <EditCountryModal
+      {countryId &&  <EditCountryModal
         handleClose={handleCountryModalCancel}
         open={openCountryModal}
-        countryId={countryId as unknown as number}
-      />
+        countryId={countryId}
+      />}
+     
 
       {/* DELETE MODAL */}
-      <DeleteModal
+      {countryId && <DeleteModal
         open={openDeleteModal}
         header="Country"
         text="country"
         onCancel={handleDeleteCancel}
-        onDelete={() => removeData(countryId as unknown as number)}
-        isLoading={deleteIsLoading}
-      />
+        onDelete={() => removeData(countryId)}
+        // isLoading={deleteIsLoading}
+      />}
+      
     </>
   );
 };

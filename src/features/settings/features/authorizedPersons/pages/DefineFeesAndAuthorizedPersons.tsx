@@ -1,4 +1,4 @@
-import { Modal, Input, Form, Dropdown } from "antd";
+import { Modal, Input, Form, Dropdown, InputNumber } from "antd";
 import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -14,6 +14,10 @@ import { ExportModal } from "src/components/modals/ExportModal";
 import { DownOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { AddAuthorizedPerson } from "../components/AddAuthorizedPerson";
+import { usePostCurrency } from "../hooks/usePostCurrency";
+import { openNotification } from "src/utils/notification";
+import { QUERY_KEY_FOR_CURRENCY } from "../hooks/useGetCurrency";
+import { useQueryClient } from "react-query";
 
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
@@ -44,9 +48,37 @@ const DefineFeesAndAuthorizedPersons = () => {
     setOpenSetFxModal(false);
   };
 
+  const { mutate, isLoading } = usePostCurrency();
+  const queryClient = useQueryClient();
+
   // Submit Function
-  const handleFormSubmit = (val: any) => {
+  const handleRateSubmit = (val: any) => {
     console.log("Values of form", val);
+    mutate(
+      {
+        ...val,
+      },
+      {
+        onError: (err: any) => {
+          openNotification({
+            title: "Error",
+            state: "error",
+            description: err.response.data.message,
+            duration: 8.0,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            title: "Success",
+            state: "success",
+            description: res.data.message,
+            duration: 6.0,
+          });
+          form.resetFields();
+          queryClient.invalidateQueries([QUERY_KEY_FOR_CURRENCY]);
+        },
+      }
+    );
   };
 
   // Authorized Person Modal
@@ -105,14 +137,28 @@ const DefineFeesAndAuthorizedPersons = () => {
               onClick={showExportModal}
             />
           </div>
-          <AppButton
+          <div className="flex  gap-1 items-center">
+            <div className="w-1/2">
+              <button
+                onClick={showSetFxModal}
+                className="border border-secondary rounded text-primary px-3 py-1"
+              >
+                Set rates
+              </button>
+            </div>
+
+            <div className="w-1/2">
+              <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
+                Add New
+              </Dropdown.Button>
+            </div>
+          </div>
+
+          {/* <AppButton
             label="Set Rates"
             variant="transparent"
             handleClick={showSetFxModal}
-          />
-          <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
-            Add New
-          </Dropdown.Button>
+          /> */}
         </div>
       </div>
       {/* Import Modal */}
@@ -134,26 +180,52 @@ const DefineFeesAndAuthorizedPersons = () => {
         <p className="text-center">
           Enter the corresponding amount below to set rate.
         </p>
-        <Form layout="vertical" form={form} onFinish={handleFormSubmit}>
+        <Form layout="vertical" form={form} onFinish={handleRateSubmit}>
           <div className="flex gap-2 justify-center items-center">
-            <Form.Item name="ngn" className="mt-3" label="NGN">
-              <Input size="large" />
-            </Form.Item>
-            <img className="mx-auto" src={Switch} />
-            <Form.Item name="usdToUsd" className="mt-3" label="USD">
-              <Input size="large" />
-            </Form.Item>
+          <div className="w-1/2">
+              <Form.Item
+                name="source_currency"
+                className="mt-5 p-2"
+                // label="USD"
+              >
+                <Input className="w-full" placeholder="Source Currency"/>
+              </Form.Item>
+            </div>
+            <img src={Switch} />
+            <div className="w-1/2">
+              <Form.Item
+                name="target_currency"
+                className="mt-5 p-2"
+                // label="USD"
+              >
+                <Input className="w-full"  placeholder="Target Currency"/>
+              </Form.Item>
+            </div>
           </div>
 
           <div className="flex gap-2 justify-center items-center">
-            <Form.Item name="euro" className="mt-3" label="EURO">
-              <Input size="large" />
-            </Form.Item>
+            <div className="w-1/2">
+              <Form.Item
+                name="source_currency_amount"
+                className="mt-5 p-2"
+                // label="EURO"
+              >
+                <InputNumber className="w-full" placeholder="Source Currency Amount"/>
+              </Form.Item>
+            </div>
+
             <img className="mx-auto" src={Switch} />
-            <Form.Item name="usdToEuro" className="mt-3" label="USD">
-              <Input size="large" />
-            </Form.Item>
+            <div className="w-1/2">
+              <Form.Item
+                name="target_currency_amount"
+                className="mt-5 p-2"
+                // label="USD"
+              >
+                <InputNumber className="w-full" placeholder="Target Currency Amount"/>
+              </Form.Item>
+            </div>
           </div>
+
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
             <AppButton
               label="Cancel"
@@ -161,7 +233,7 @@ const DefineFeesAndAuthorizedPersons = () => {
               type="reset"
               handleClick={handleFxCancel}
             />
-            <AppButton label="Save" type="submit" />
+            <AppButton label="Save" type="submit" isLoading={isLoading} />
           </div>
         </Form>
       </Modal>

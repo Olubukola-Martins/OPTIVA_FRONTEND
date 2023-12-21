@@ -1,10 +1,14 @@
-import { Dropdown, Menu, Skeleton, Table } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
-import { useGetProgramType } from "../hooks/useGetProgramType";
+import {
+  QUERY_KEY_FOR_PROGRAM_TYPE,
+  useGetProgramType,
+} from "../hooks/useGetProgramType";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import { useDelete } from "src/hooks/useDelete";
 
 type DataSourceItem = {
   key: React.Key;
@@ -20,7 +24,11 @@ export const ProgramTypes = () => {
   // GET REQUEST
   const { data, isLoading } = useGetProgramType();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
-
+  const [programId, setProgramId] = useState<number>();
+  const { removeData } = useDelete({
+    queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
+    EndPointUrl: "admin/programtypes/",
+  });
   useEffect(() => {
     if (data) {
       const programType: DataSourceItem[] = data.map((item, index) => {
@@ -93,7 +101,13 @@ export const ProgramTypes = () => {
                     Edit
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    setProgramId(val.key as unknown as number);
+                    showDeleteModal();
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu>
@@ -117,36 +131,37 @@ export const ProgramTypes = () => {
   return (
     <>
       {/* TABLE */}
-      <Skeleton active loading={isLoading}>
-        <Table
-          columns={columns}
-          dataSource={dataArray}
-          className="bg-white rounded-md shadow border mt-2"
-          scroll={{ x: 600 }}
-          rowSelection={{
-            type: "checkbox",
-            onChange: (
-              selectedRowKeys: React.Key[],
-              selectedRows: DataSourceItem[]
-            ) => {
-              console.log(
-                `selectedRowKeys: ${selectedRowKeys}`,
-                "selectedRows: ",
-                selectedRows
-              );
-            },
-          }}
-        />
-      </Skeleton>
-
+      <Table
+        loading={isLoading}
+        columns={columns}
+        dataSource={dataArray}
+        className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        rowSelection={{
+          type: "checkbox",
+          onChange: (
+            selectedRowKeys: React.Key[],
+            selectedRows: DataSourceItem[]
+          ) => {
+            console.log(
+              `selectedRowKeys: ${selectedRowKeys}`,
+              "selectedRows: ",
+              selectedRows
+            );
+          },
+        }}
+      />
 
       {/* DELETE MODAL */}
-      <DeleteModal
-        header="Program Type"
-        text="program type?"
-        open={openDeleteModal}
-        onCancel={handleDeleteCancel}
-      />
+      {programId && (
+        <DeleteModal
+          header="Program Type"
+          text="program type?"
+          open={openDeleteModal}
+          onCancel={handleDeleteCancel}
+          onDelete={() => removeData(programId)}
+        />
+      )}
     </>
   );
 };

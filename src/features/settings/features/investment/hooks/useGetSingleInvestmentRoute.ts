@@ -11,7 +11,7 @@ export interface IDataProps extends IUserToken {
 
 export interface ISingleInvestment {
   id: number;
-  queryKey: string;
+  queryKey?: string;
 }
 
 const getData = async (props: IDataProps) => {

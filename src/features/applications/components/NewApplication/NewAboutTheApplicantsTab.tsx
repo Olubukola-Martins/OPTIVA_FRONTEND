@@ -65,22 +65,23 @@ export const NewAboutTheApplicantsTab = () => {
     },
   ];
   return (
-    <div className="w-full">
-      <Tabs
-        items={tabItems}
-        defaultActiveKey="1"
-        size="small"
-        moreIcon
-        tabBarStyle={{
-          display: "flex",
-          flexWrap: "wrap",
-          maxWidth: "1250px",
-          // flex: "auto",
-          // alignSelf: "stretch",
-          // overflow: "hidden",
-          // whiteSpace: "nowrap",
-        }}
-      />
-    </div>
+    <Tabs items={tabItems}/>
+    // <div className="w-full">
+      // <Tabs
+      //   items={tabItems}
+      //   // defaultActiveKey="1"
+      //   size="small"
+      //   moreIcon
+      //   // tabBarStyle={{
+      //   //   display: "flex",
+      //   //   flexWrap: "wrap",
+      //   //   maxWidth: "1250px",
+      //   //   // flex: "auto",
+      //   //   // alignSelf: "stretch",
+      //   //   // overflow: "hidden",
+      //   //   // whiteSpace: "nowrap",
+      //   // }}
+      // />
+    // </div>
   );
 };

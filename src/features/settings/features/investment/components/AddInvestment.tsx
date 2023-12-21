@@ -1,7 +1,10 @@
 import { Modal, Input, Form, Select } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
-import { generalValidationRules, textInputValidationRules } from "src/utils/formHelpers/validations";
+import {
+  generalValidationRules,
+  textInputValidationRules,
+} from "src/utils/formHelpers/validations";
 import { usePostInvestmentRoute } from "../hooks/usePostInvestmentRoute";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
@@ -9,10 +12,9 @@ import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { QUERY_KEY_FOR_INVESTMENT_ROUTE } from "../hooks/useGetInvestmentRoute";
 import { useGetCountry } from "../../program-types/hooks/useGetCountry";
 
-
 export interface IAddInvestmentProps extends IdentifierProps {
-  isEditing?: boolean; 
-  investmentId?: React.Key; 
+  isEditing?: boolean;
+  investmentId?: React.Key;
 }
 
 export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
@@ -22,7 +24,6 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
   const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
   const { data } = useGetCountry();
-
 
   const handleSubmit = (val: any) => {
     console.log("form values", val);
@@ -48,7 +49,8 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_INVESTMENT_ROUTE]);
-          form.resetFields();
+          form.resetFields()
+          handleClose();
         },
       }
     );

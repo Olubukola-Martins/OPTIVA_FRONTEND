@@ -84,8 +84,7 @@ export const AddMilestoneModal = ({
         milestoneId as number,
         milestoneTitle,
         milestoneTimeline,
-        "days", // You might want to make this dynamic based on your use case
-        processes
+        "days",  processes
       );
     } else {
       mutate(
@@ -113,6 +112,7 @@ export const AddMilestoneModal = ({
             });
             queryClient.invalidateQueries([QUERY_KEY_FOR_MILESTONE]);
             form.resetFields();
+            handleClose()
           },
         }
       );

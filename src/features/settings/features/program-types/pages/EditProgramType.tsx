@@ -14,6 +14,7 @@ import { useGetWorkflow } from "../hooks/useGetWorkflow";
 import type { SelectProps } from "antd";
 import { useUpdateProgramType } from "../hooks/useUpdateProgramType";
 import { useGetCountry } from "../hooks/useGetCountry";
+import { generalValidationRules, textInputValidationRules, textInputValidationRulesOpt } from "src/utils/formHelpers/validations";
 
 const EditProgramType = () => {
   const [form] = Form.useForm();
@@ -130,18 +131,18 @@ const EditProgramType = () => {
           >
             <div className="flex lg:gap-7 lg:flex-row flex-col">
               <div className="lg:w-1/2">
-                <Form.Item label="Program Name" required name="programName">
+                <Form.Item label="Program Name" rules={textInputValidationRules} name="programName">
                   <Input />
                 </Form.Item>
 
-                <Form.Item name="programLink" label="Program Link">
+                <Form.Item name="programLink" label="Program Link" rules={textInputValidationRulesOpt}>
                   <Input />
                 </Form.Item>
 
                 <Form.Item
                   label="Eligible Dependents"
                   name="eligibleDependents"
-                  required
+                  rules={generalValidationRules}
                 >
                   <Select
                     mode="multiple"
@@ -152,7 +153,7 @@ const EditProgramType = () => {
                 <Form.Item
                   label="Application Template"
                   name="applicationTemplate"
-                  required
+                  rules={generalValidationRules}
                 >
                   <Select allowClear options={applicantOptions} />
                 </Form.Item>
@@ -161,7 +162,7 @@ const EditProgramType = () => {
                 <Form.Item
                   label="Document Requirement"
                   name="documentRequirement"
-                  required
+                  rules={generalValidationRules}
                 >
                   <Select
                     mode="multiple"
@@ -169,7 +170,7 @@ const EditProgramType = () => {
                     options={documentOptions}
                   />
                 </Form.Item>
-                <Form.Item name="milestones" label="Milestones" required>
+                <Form.Item name="milestones" label="Milestones"  rules={generalValidationRules}>
                   <Select
                     mode="multiple"
                     allowClear
@@ -179,11 +180,11 @@ const EditProgramType = () => {
                 <Form.Item
                   name="selectWorkflow"
                   label="Select Workflow"
-                  required
+                  rules={generalValidationRules}
                 >
                   <Select allowClear options={workflowOptions} />
                 </Form.Item>
-                <Form.Item name="selectCountry" label="Select Country" required>
+                <Form.Item name="selectCountry" label="Select Country"  rules={generalValidationRules}>
                   <Select allowClear options={countryOptions} mode="multiple" />
                 </Form.Item>
               </div>

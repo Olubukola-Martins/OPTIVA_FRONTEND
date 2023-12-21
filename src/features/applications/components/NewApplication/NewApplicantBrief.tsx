@@ -1,23 +1,67 @@
-import { Form, Input, InputNumber, Select } from "antd";
+import {
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Skeleton,
+} from "antd";
+import { AppButton } from "src/components/button/AppButton";
+import { QUERY_KEY_FOR_APPLICATION_TEMPLATE } from "src/features/settings/features/appTemplate/hooks/useGetApplicationTemplate";
+import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetSingleQuestion";
+
+export const renderInput = (inputType: string) => {
+  if (inputType === "textarea") {
+    return <Input.TextArea className="w-full" />;
+  } else if (inputType === "text_input") {
+    return <Input className="w-full" />;
+  } else if (inputType === "select") {
+    return <Select className="w-1/2" />;
+  } else if (inputType === "check_box") {
+    return <Checkbox className="w-full" />;
+  } else if (inputType === "number_input") {
+    return <InputNumber className="w-1/2" />;
+  } else if (inputType === "date_input") {
+    return <DatePicker className="1/2" />;
+  }
+};
 
 export const NewApplicantBrief = () => {
-  const { Option } = Select;
-  const selectBefore = (
-    <Select defaultValue="$" style={{ width: 100 }}>
-      <Option value="$">$</Option>
-      <Option value="€">€</Option>
-    </Select>
-  );
-  const selectAfter = (
-    <Select defaultValue="USD" style={{ width: 100 }}>
-      <Option value="USD">USD</Option>
-      <Option value="EUR">EUR</Option>
-    </Select>
-  );
+  const { data, isLoading } = useGetSingleQuestion({
+    id: 1,
+    endpointUrl: "section-one",
+    queryKey: QUERY_KEY_FOR_APPLICATION_TEMPLATE,
+  });
+  const [form] = Form.useForm();
+  const handleSubmit = (val: any) => {
+    console.log("Values of form:", val);
+  };
+  console.log("application questions data", data);
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full">
+      <Skeleton active loading={isLoading}>
+        <Form onFinish={handleSubmit} form={form} layout="vertical">
+          {data?.map((item) => (
+            <div className="w-full">
+              <Form.Item
+                name={item.form_question}
+                label={item.form_question}
+                key={item.id}
+                className="w-full"
+              >
+                {renderInput(item.input_type)}
+              </Form.Item>
+            </div>
+          ))}
+          <div className="flex justify-end items-center gap-5">
+            <AppButton label="Save" type="submit" />
+          </div>
+        </Form>
+      </Skeleton>
+
+      {/* <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full">
         <div className="lg:w-1/2">
           <div>
             <h2>Why is the applicant applying for the program?</h2>
@@ -87,7 +131,7 @@ export const NewApplicantBrief = () => {
             </Form.Item>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

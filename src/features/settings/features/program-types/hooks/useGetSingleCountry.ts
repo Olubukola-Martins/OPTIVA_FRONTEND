@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 import { IDataProps, ISingleInvestment } from "../../investment/hooks/useGetSingleInvestmentRoute";
 
 const getData = async (props: IDataProps) => {
-  const url = `${END_POINT.BASE_URL}/admin/investment-route/${props.id}`;
+  const url = `${END_POINT.BASE_URL}/admin/countries/${props.id}`;
   const config = {
     headers: {
       Accept: "application/json",
