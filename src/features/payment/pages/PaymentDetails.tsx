@@ -25,6 +25,7 @@ interface IPaymentItem {
   datePaid: JSX.Element;
   paymentsUSD: JSX.Element;
   paymentsNGN: JSX.Element;
+  updatedBy:JSX.Element;
   balanceDue: JSX.Element;
 }
 const PaymentDetails = () => {
@@ -40,6 +41,9 @@ const PaymentDetails = () => {
   const onFinish = (values: any) => {
     console.log("form values", values);
   };
+
+
+
 
   // MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,18 +84,26 @@ const PaymentDetails = () => {
       ),
       paymentsUSD: (
         <Form.Item name={`${key}paymentsUSD`} initialValue={values.paymentsUSD}>
-          <Text>{values.paymentUSD} USD</Text>
+          <Text>{values.paymentsUSD} USD</Text>
         </Form.Item>
       ),
       paymentsNGN: (
         <Form.Item name={`${key}paymentsNGN`} initialValue={values.paymentsNGN}>
-          <Text>{values.paymentNGN} NGN</Text>
+          <Text>{values.paymentsNGN} NGN</Text>
         </Form.Item>
       ),
       balanceDue: (
         <Form.Item name={`${key}balanceDue`} initialValue={values.balanceDue}>
           <Text className="text-red-600">
             {values.balanceDue} <span className="text-gray-800">USD</span>
+          </Text>
+        </Form.Item>
+      ),
+      updatedBy: (
+        <Form.Item name={`${key}updatedBy`} initialValue="James Brown">
+          <Text>
+            {values.updatedBy} 
+
           </Text>
         </Form.Item>
       ),
@@ -220,6 +232,11 @@ const PaymentDetails = () => {
       dataIndex: "balanceDue",
     },
     {
+      title: "Updated By",
+      dataIndex: "updatedBy",
+    },
+
+    {
       title: "Action",
       dataIndex: "action",
       render: (_, record: IPaymentItem) => (
@@ -242,6 +259,8 @@ const PaymentDetails = () => {
                       datePaid: record.datePaid.props.initialValue,
                       paymentsUSD: record.paymentsUSD.props.initialValue,
                       paymentsNGN: record.paymentsNGN.props.initialValue,
+                      // updatedBy: record.updatedBy.props.initialValue,
+                      updatedBy: record.updatedBy.props.initialValue,
                       balanceDue: record.balanceDue.props.initialValue,
                     };
                     const currentItem = data.find(

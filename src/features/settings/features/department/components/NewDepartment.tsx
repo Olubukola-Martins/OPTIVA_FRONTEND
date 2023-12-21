@@ -80,7 +80,7 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
           //   })
           // }
         />
-        <FormEmployeeInput Form={Form} />
+        <FormEmployeeInput Form={Form} optional={true}/>
 
         <AppButton type="submit" isLoading={isLoading} />
       </Form>

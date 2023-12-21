@@ -6,7 +6,7 @@ interface IPostProps  {
   newData: any;
   url: string;
 }
-interface IEditProps {
+export interface IEditProps {
   newData: any;
   url: string;
   id: number

@@ -57,7 +57,7 @@ const SettingsTemplate = () => {
       }
     );
   };
-
+console.log(editEmailTemplate)
   useEffect(() => {
     setTemplate(data?.data[0]);
     if (data?.data) {
@@ -79,11 +79,12 @@ const SettingsTemplate = () => {
   //   setOpen(true);
   // };
   const handleSave = (values: { templateDescription: JSX.Element }) => {
-    editEmailTemplate({
-      content: `${values.templateDescription}`,
-      name: template?.name,
-      type: typeStr,
-    });
+    console.log(values)
+    // editEmailTemplate({
+    //   content: `${values.templateDescription}`,
+    //   name: template?.name,
+    //   type: typeStr,
+    // });
   };
   const trimOutTitle = () => {
     const originalString = `${template?.name || "Template"} `;

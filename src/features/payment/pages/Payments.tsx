@@ -1,24 +1,64 @@
-import {
-  DatePicker,
-  Dropdown,
-  Form,
-  InputNumber,
-  Menu,
-  Modal,
-  Select,
-  Table,
-} from "antd";
+import { DatePicker, Form, InputNumber, Modal, Select } from "antd";
 import Search from "antd/es/input/Search";
-import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
-import { appRoute } from "src/config/routeMgt/routePaths";
+import PaymentsListTable from "../components/PaymentsListTable";
+import QuotesGenTable from "../components/QuotesGenTable";
+import InvoiceGenTable from "../components/InvoiceGenTable";
+import OutstandingPaymentsTable from "../components/OutstandingPaymentsTable";
+import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
+import {
+  IAllGeneratedQuotes,
+  IAllOutstandingPayments,
+  IAllPayments,
+} from "src/features/meetings/types/types";
+import { END_POINT } from "src/config/environment";
+
+interface IQueryDataType<TPageData> {
+  data: TPageData | undefined;
+  isLoading: boolean;
+  // refetch: (
+  //   options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  // ) => Promise<QueryObserverResult<any, any>>;
+}
 
 const Payments = () => {
+  const paymentsUrl = `${END_POINT.BASE_URL}/admin/payments`;
+  const QUERY_KEY_PAYMENTS = "AllPayments";
+  const quotesUrl = `${END_POINT.BASE_URL}/admin/quotes`;
+  const QUERY_KEY_QUOTES = "AllQuotes";
+  const OutstandingPaymentUrl = `${END_POINT.BASE_URL}/admin/outstanding-payments`;
+  const QUERY_KEY_OUTSTANDING_PAYMENTS = "AllOutstandingPayment";
+
+  // Payments list data
+  const {
+    data: allPaymentsData,
+    isLoading: allPaymentsLoading,
+  }: IQueryDataType<IAllPayments> = useFetchAllItems({
+    queryKey: QUERY_KEY_PAYMENTS,
+    urlEndPoint: paymentsUrl,
+  });
+  // Quotes data
+  const {
+    data: allGenQuotesData,
+    isLoading: allGenQuotesLoading,
+  }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
+    queryKey: QUERY_KEY_QUOTES,
+    urlEndPoint: quotesUrl,
+  });
+  // Outstanding payment
+  const {
+    data: allOutPaymentData,
+    isLoading: allOutPaymentLoading,
+  }: IQueryDataType<IAllOutstandingPayments> = useFetchAllItems({
+    queryKey: QUERY_KEY_OUTSTANDING_PAYMENTS,
+    urlEndPoint: OutstandingPaymentUrl,
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTable, setCurrentTable] = useState("Payments List");
   const [modalForm] = Form.useForm();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const { RangePicker } = DatePicker;
@@ -49,175 +89,36 @@ const Payments = () => {
     "Total Invoices Generated",
     "Outstanding Payment",
   ];
-
-  type DataSourceItem = {
-    key: React.Key;
-    SN: number;
-    applicantID: string;
-    applicantName: string;
-    country: string;
-    investmentRoute: string;
-    dependents: number;
-    amountPaid: string;
-    outstandingPayment: string;
-    lastUpdated: string;
-    updatedBy: string;
-  };
-
-  const rowSelection = {
-    onChange: (
-      selectedRowKeys: React.Key[],
-      selectedRows: DataSourceItem[]
-    ) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
-    },
-  };
-
-  // COLUMS OF TABLE
-  const columns: ColumnsType<DataSourceItem> = [
-    {
-      key: "1",
-      title: "SN",
-      dataIndex: "SN",
-    },
-    {
-      key: "2",
-      title: "Applicant ID",
-      dataIndex: "applicantID",
-    },
-    {
-      title: "Applicant Name",
-      dataIndex: "applicantName",
-      key: "3",
-    },
-    {
-      title: "Country",
-      dataIndex: "country",
-      key: "4",
-    },
-    {
-      title: "Investment Route",
-      dataIndex: "investmentRoute",
-      key: "5",
-    },
-    {
-      title: "Number of Dependents",
-      dataIndex: "dependents",
-      key: "6",
-    },
-    {
-      title: "Amount Paid",
-      dataIndex: "amountPaid",
-      key: "7",
-    },
-    {
-      title: "Outstanding Payment",
-      dataIndex: "outstandingPayment",
-      key: "8",
-    },
-    {
-      title: "Last Updated",
-      dataIndex: "lastUpdated",
-      key: "9",
-    },
-    {
-      title: "Updated By",
-      dataIndex: "updatedBy",
-      key: "10",
-    },
-
-    {
-      title: "Action",
-      dataIndex: "action",
-      render: (_, record) => (
-        <Dropdown
-          trigger={["click"]}
-          overlay={
-            <Menu>
-              <Menu.Item key="1">
-                <Link
-                  to={
-                    appRoute.generateInvoice(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Invoice
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <Link
-                  to={
-                    appRoute.paymentDetails(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Payment Details
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <Link
-                  to={
-                    appRoute.generateReciept(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Receipt
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <Link
-                  to={
-                    appRoute.generateContract(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Contract
-                </Link>
-              </Menu.Item>
-
-              <Menu.Item key="5">Move to Master List</Menu.Item>
-            </Menu>
-          }
-        >
-          <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-        </Dropdown>
-      ),
-    },
+  const cardCounts: number[] = [
+    allPaymentsData?.data.length as number,
+    allGenQuotesData?.data.length as number,
+    0,
+    allOutPaymentData?.data.length as number,
   ];
 
-  // DATASOURCE FOR TABLE
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 20; i++) {
-    dataSource.push({
-      key: i,
-      SN: i + 1,
-      applicantID: "230000-01",
-      applicantName: "John Brown",
-      country: "Grenada",
-      investmentRoute: "Donation",
-      dependents: 3,
-      amountPaid: "$ 200,000",
-      outstandingPayment: "$ 200,000",
-      lastUpdated: "dd/mm/yy",
-      updatedBy: "John Brown",
-    });
-  }
+  useEffect(() => {
+    console.log("length", allPaymentsData?.data.length);
+    console.log("data", allPaymentsData);
+  }, [
+    allPaymentsData,
+    allPaymentsLoading,
+    allGenQuotesData,
+    allGenQuotesLoading,
+    allOutPaymentLoading,
+    allOutPaymentData,
+  ]);
 
   return (
     <>
       <Modal
-        title="New Payment Details"
+        title="Filter"
         footer={null}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
       >
         {/* make everything compulsory */}
         <Form
-          name="modalPaymentDetails"
+          name="modalFilter"
           form={modalForm}
           layout="vertical"
           className="pt-8 px-4"
@@ -317,16 +218,39 @@ const Payments = () => {
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-full">
         {Array.from({ length: 4 }).map((_, i) => (
-          <SimpleCard
-            icon="iconoir:page"
-            cardColor={cardColors[i]}
-            title={cardTitles[i]}
-            count={0}
-          />
+          <div
+            className="cursor-pointer"
+            key={i}
+            onClick={() => {
+              switch (i) {
+                case 0:
+                  setCurrentTable("Payments List");
+                  break;
+                case 1:
+                  setCurrentTable("Quotes Generated");
+                  break;
+                case 2:
+                  setCurrentTable("Invoices Generated");
+                  break;
+                case 3:
+                  setCurrentTable("Outstanding Payments");
+                  break;
+                default:
+                  setCurrentTable("Payments List");
+              }
+            }}
+          >
+            <SimpleCard
+              icon="iconoir:page"
+              cardColor={cardColors[i]}
+              title={cardTitles[i]}
+              count={cardCounts[i]}
+            />
+          </div>
         ))}
       </div>
       <div className="border-gray-100 border-t-2 border-r-2 border-l-2 border-b-0 rounded-t-md w-full mt-[52px] px-4 flex sm:flex-row flex-col items-center justify-around">
-        <h3 className="font-bold pt-2 sm:pt-0">Payment List</h3>
+        <h3 className="font-bold pt-2 sm:pt-0">{currentTable}</h3>
 
         <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
           <div className="flex flex-row items-center gap-x-2">
@@ -339,20 +263,30 @@ const Payments = () => {
           </div>
           <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
             <RangePicker style={{ width: 300 }} />
-            <AppButton label="View All" />
+            {/* <AppButton label="View All" /> */}
           </div>
         </div>
       </div>
-      <Table
-        rowSelection={{
-          type: "checkbox",
-          ...rowSelection,
-        }}
-        columns={columns}
-        dataSource={dataSource}
-        scroll={{ x: 900 }}
-        className="border-gray-100 border-t-0 border-2 rounded-b-md"
-      />
+      {/*All tables */}
+      {currentTable === "Payments List" && (
+        <PaymentsListTable
+          allData={allPaymentsData}
+          dataLoading={allPaymentsLoading}
+        />
+      )}
+      {currentTable === "Quotes Generated" && (
+        <QuotesGenTable
+          allData={allGenQuotesData}
+          dataLoading={allGenQuotesLoading}
+        />
+      )}
+      {currentTable === "Invoices Generated" && <InvoiceGenTable />}
+      {currentTable === "Outstanding Payments" && (
+        <OutstandingPaymentsTable
+          allData={allOutPaymentData}
+          dataLoading={allOutPaymentLoading}
+        />
+      )}
     </>
   );
 };

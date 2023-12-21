@@ -35,8 +35,7 @@ export const useFetchDependent = ({id}:{id: number}) => {
         // Handle errors
         console.log("err",err)
       },
-      onSuccess: (data) => {
-        console.log("response", data);
+      onSuccess: () => {
       },
     }
   );

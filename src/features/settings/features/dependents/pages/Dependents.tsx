@@ -6,7 +6,6 @@ import { AppButton } from "src/components/button/AppButton";
 import { Icon } from "@iconify/react";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AddDependent } from "../components/AddDependent";
-import { useDeleteItem } from "src/features/settings/hooks/useDeleteItem";
 import {
   QUERY_KEY_ELIGIBLE_DEPENDENTS,
   eligibleDependentURL,
@@ -17,7 +16,6 @@ import {
   IAllEligiDependentsResponse,
   ISingleEligibleDependent,
 } from "src/features/settings/types/settingsType";
-import { Skeleton } from "antd";
 import { EditDependent } from "../components/EditDependent";
 import {
   QueryObserverResult,
@@ -25,6 +23,8 @@ import {
   RefetchQueryFilters,
 } from "react-query";
 import { useFetchDependent } from "../hooks/useFetchDependent";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useDelete } from "src/hooks/useDelete";
 
 export interface DataType {
   key: React.Key;
@@ -39,7 +39,7 @@ interface IQueryDataType<TPageData> {
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<any, any>>;
 }
-const deleteEndpointUrl = eligibleDependentURL;
+const deleteEndpointUrl = "admin/eligible-dependant/";
 const queryKey = QUERY_KEY_ELIGIBLE_DEPENDENTS;
 
 const Dependents = () => {
@@ -51,13 +51,18 @@ const Dependents = () => {
   const [singleDependent, setSingleDependent] = useState<
     AllEligiDependentsDatum | undefined
   >();
-  const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
+  // const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { removeData } = useDelete({
+    EndPointUrl: deleteEndpointUrl,
+    queryKey,
+  });
 
   const {
     data: allDependentsData,
     isLoading: allDependentsLoading,
-    // refetch,
-  }: IQueryDataType<IAllEligiDependentsResponse> = useFetchAllItems({
+  }: 
+  IQueryDataType<IAllEligiDependentsResponse> = useFetchAllItems({
     queryKey,
     urlEndPoint: eligibleDependentURL,
   });
@@ -65,12 +70,8 @@ const Dependents = () => {
     data: singleDependentData,
     isLoading: singleDependentLoading,
   }: { data: ISingleEligibleDependent | undefined; isLoading: boolean } =
-    useFetchDependent({id:itemId as number});
+    useFetchDependent({ id: itemId as number });
 
-  // const editSuccess = (isSuccess: boolean) => {
-  //   setEditSuccessful(isSuccess);
-  // };
-  // useEffect(()=>{console.log(data,"data")},[data])
 
   useEffect(() => {
     if (allDependentsData?.data && Array.isArray(allDependentsData?.data)) {
@@ -133,7 +134,8 @@ const Dependents = () => {
                 <Menu.Item
                   key="2"
                   onClick={() => {
-                    deleteData(val.key as number);
+                    setShowDeleteModal(true);
+                    setItemId(val.key as number);
                   }}
                 >
                   Delete
@@ -150,13 +152,25 @@ const Dependents = () => {
   return (
     <>
       <AddDependent open={addNewD} handleClose={() => setAddNewD(false)} />
+      <DeleteModal
+        open={showDeleteModal}
+        header="Dependent"
+        text="dependent"
+        onCancel={() => {
+          setShowDeleteModal(false);
+        }}
+        onDelete={() => {
+          removeData(itemId as number);
+          setShowDeleteModal(false)
+        }}
+      />
       {itemId && (
         <EditDependent
           open={editNewD}
           handleClose={() => setEditNewD(false)}
           itemId={itemId}
           singleDependent={singleDependent}
-          singleDependentLoading={singleDependentLoading}         
+          singleDependentLoading={singleDependentLoading}
         />
       )}
       <div className="flex justify-between flex-col md:flex-row  md:items-center">
@@ -186,14 +200,13 @@ const Dependents = () => {
           <AppButton label="Add New" handleClick={() => setAddNewD(true)} />
         </div>
       </div>
-      <Skeleton active={true} loading={allDependentsLoading}>
-        <Table
-          className="bg-white rounded-md shadow border mt-8"
-          columns={columns}
-          dataSource={data}
-          scroll={{ x: 768 }}
-        />
-      </Skeleton>
+      <Table
+        className="bg-white rounded-md shadow border mt-8"
+        columns={columns}
+        dataSource={data}
+        scroll={{ x: 768 }}
+        loading={allDependentsLoading}
+      />
     </>
   );
 };

@@ -42,12 +42,12 @@ export const useFetchAllItems = ({
           duration: 5,
         });
       },
-      onSuccess: (res) => {
-        openNotification({
-          state: "success",
-          title: "Success",
-          description: res.data.message,
-        });
+      onSuccess: () => {
+        // openNotification({
+        //   state: "success",
+        //   title: "Success",
+        //   description: res.data.message,
+        // });
       },
     }
   );

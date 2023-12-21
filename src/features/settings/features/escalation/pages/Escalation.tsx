@@ -6,11 +6,11 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import type { ColumnsType } from "antd/es/table";
 import { Dropdown, Menu, Table } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import DeleteModal from "src/features/settings/components/DeleteModal";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import { QUERY_KEY_ESCALATION, escalationURL } from "../hooks/useAddEscalation";
 import { IAllEscalationsData } from "src/features/settings/types/settingsType";
-import { useDeleteItem } from "src/features/settings/hooks/useDeleteItem";
+import { useDelete } from "src/hooks/useDelete";
+import { DeleteModal } from "src/components/modals/DeleteModal";
 
 interface DataType {
   key: React.Key;
@@ -30,14 +30,15 @@ interface IQueryDataType<TPageData> {
   // ) => Promise<QueryObserverResult<any, any>>;
 }
 
-const deleteEndpointUrl = escalationURL;
+const deleteEndpointUrl = "admin/escalation/";
 const queryKey = QUERY_KEY_ESCALATION;
 
 const Escalation = () => {
   const navigate = useNavigate();
   const {
     data: allEscalationData,
-    isLoading: allEscalationLoading, isFetching
+    isLoading: allEscalationLoading,
+    isFetching,
   }: IQueryDataType<IAllEscalationsData> = useFetchAllItems({
     queryKey,
     urlEndPoint: escalationURL,
@@ -45,7 +46,11 @@ const Escalation = () => {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [data, setData] = useState<DataType[]>([]);
-  const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
+  // const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
+  const { removeData } = useDelete({
+    EndPointUrl: deleteEndpointUrl,
+    queryKey,
+  });
   const [currentId, setCurrentId] = useState<number>();
   const columns: ColumnsType<DataType> = [
     {
@@ -105,8 +110,19 @@ const Escalation = () => {
                 <Menu.Item
                   key="2"
                   onClick={() => {
-                    setShowDeleteModal(true);
                     setCurrentId(record.key as number);
+                    setShowDeleteModal(true);
+                    // DeleteModal({
+                    //   open: showDeleteModal,
+                    //   header: "Escalation",
+                    //   text: "escalation",
+                    //   onCancel() {
+                    //     setShowDeleteModal(false);
+                    //   },
+                    //   onDelete() {
+                    //     removeData(currentId as number);
+                    //   }
+                    // });
                   }}
                 >
                   Delete
@@ -127,10 +143,10 @@ const Escalation = () => {
 
       const newData: DataType[] = responseData.map((item, index) => {
         // const highestLevel = Math.max(...item.levels.map((item) => item.id));
-        const highestLevel = item.levels.length
+        const highestLevel = item.levels.length;
         return {
           key: item.id,
-          sn: index + 1, 
+          sn: index + 1,
           role: item.role.name,
           task: item.task,
           taskDeadline: `${item.deadline} Hours`,
@@ -164,6 +180,20 @@ const Escalation = () => {
       <div className="flex justify-between items-center">
         <DeleteModal
           open={showDeleteModal}
+          header="Escalation"
+          text="escalation"
+          onCancel={() => {
+            setShowDeleteModal(false);
+          }}
+          onDelete={() => {
+            removeData(currentId as number);
+                      setShowDeleteModal(false);
+
+          }}
+        />
+
+        {/* <DeleteModal
+          open={showDeleteModal}
           heading="Delete Escalation"
           description="Are you sure you would like to delete escalation?"
           handleClose={() => {
@@ -172,7 +202,7 @@ const Escalation = () => {
           handleDelete={() => {
             deleteData(currentId as number);
           }}
-        />
+        /> */}
         <PageIntro
           title="Escalation "
           description="Define, Edit and delete escalation rules on the system"
