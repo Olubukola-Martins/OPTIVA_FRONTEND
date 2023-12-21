@@ -1,17 +1,28 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { employeesProps } from "../types";
-import { useFetchEmployees } from "../hooks/useFetchEmployees";
+import {
+  QUERY_KEY_FOR_EMPLOYEES,
+  useFetchEmployees,
+} from "../hooks/useFetchEmployees";
 import { usePagination } from "src/hooks/usePagination";
 import { searchValueProps } from "src/types";
+import { useDeactivate } from "src/hooks/useDeactivate";
 
 export const DisabledEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
   const { data, isLoading } = useFetchEmployees({
-    currentUrl: "inactive-employees",
+    currentUrl: "deactivated-employees",
     pagination,
     search: searchValue,
   });
+
+  const { removeData } = useDeactivate({
+    EndPointUrl: "admin/deactivate-employee/",
+    queryKey: QUERY_KEY_FOR_EMPLOYEES,
+    is_active: true,
+  });
+
   const columns: ColumnsType<employeesProps> = [
     {
       title: "Full Name",
@@ -66,19 +77,26 @@ export const DisabledEmployees = ({ searchValue }: searchValueProps) => {
         </div>
       ),
     },
-   
 
     {
       title: "Action",
       dataIndex: "action",
 
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">Enable</Menu.Item>
+                <Menu.Item key="1">
+                  <Popconfirm
+                    title="Deactivate employee"
+                    description={`Are you sure to deactivate ${val.name}`}
+                    onConfirm={() => removeData(val.id)}
+                  >
+                    Enable employee
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -93,7 +111,7 @@ export const DisabledEmployees = ({ searchValue }: searchValueProps) => {
       <Table
         className="bg-white rounded-md shadow border overflow-x-hidden"
         columns={columns}
-        dataSource={[]}
+        dataSource={data?.data}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
         loading={isLoading}
