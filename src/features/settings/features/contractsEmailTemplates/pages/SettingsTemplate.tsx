@@ -57,7 +57,7 @@ const SettingsTemplate = () => {
       }
     );
   };
-
+console.log(editEmailTemplate)
   useEffect(() => {
     setTemplate(data?.data[0]);
     if (data?.data) {

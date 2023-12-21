@@ -125,21 +125,6 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
     return `${day}/${month}/${year}`;
   };
 
-  // DATASOURCE FOR TABLE
-  //   const dataSource: DataSourceItem[] = [];
-  //   for (let i = 0; i < 20; i++) {
-  //     dataSource.push({
-  //       key: i,
-  //       SN: i + 1,
-  //       applicantID: "230000-01",
-  //       applicantName: "John Brown",
-  //       country: "Grenada",
-  //       investmentRoute: "Donation",
-  //       dependents: 3,
-  //       dateCreated: "dd/mm/yy",
-  //       createdBy: "John Brown",
-  //     });
-  //   }
 
   useEffect(() => {
     if (allData) {
@@ -152,7 +137,7 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
           country,
           investment_route,
           number_of_dependents,
-          created_at,
+          created_at,generated_by
         } = quote;
         return {
           key: id,
@@ -163,7 +148,7 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
           investmentRoute: investment_route,
           dependents: +number_of_dependents,
           dateCreated: formattedDate(created_at),
-          createdBy: "John Brown", // Emmanuel to updated created By
+          createdBy: generated_by, 
         };
       });
       setDataSource(data);

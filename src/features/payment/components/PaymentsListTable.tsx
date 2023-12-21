@@ -17,7 +17,7 @@ type DataSourceItem = {
   amountPaid: string;
   outstandingPayment: string;
   lastUpdated: string;
-  updatedBy: string;
+  // updatedBy: string;
 };
 
 interface IProps {
@@ -88,11 +88,11 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
       dataIndex: "lastUpdated",
       key: "9",
     },
-    {
-      title: "Updated By",
-      dataIndex: "updatedBy",
-      key: "10",
-    },
+    // {
+    //   title: "Updated By",
+    //   dataIndex: "updatedBy",
+    //   key: "10",
+    // },
 
     {
       title: "Action",
@@ -167,7 +167,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
       const mainData = allData.data;
       const data = mainData.map((payment: IPaymentDatum, i) => {
         return {
-          key: i,
+          key: payment.id,
           SN: i + 1,
           applicantID: payment.application.applicant.applicant_unique_id,
           applicantName: payment.application.applicant.full_name,
@@ -177,7 +177,6 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           amountPaid: `$ ${payment.amount_paid}`,
           outstandingPayment: `$ ${payment.outstanding_payment}`,
           lastUpdated: formattedDate(payment.updated_at),
-          updatedBy: "John Brown", // david to update this
         };
       });
       setDataSource(data);

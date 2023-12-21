@@ -1,7 +1,5 @@
 import { Dropdown, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
-import { Link } from "react-router-dom";
-import { appRoute } from "src/config/routeMgt/routePaths";
 
 const InvoiceGenTable = () => {
   type DataSourceItem = {
@@ -75,7 +73,7 @@ const InvoiceGenTable = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_: any, record: { key: unknown }) => (
+      render: (_: any) => (
         <Dropdown
           trigger={["click"]}
           overlay={

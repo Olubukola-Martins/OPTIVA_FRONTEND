@@ -21,7 +21,6 @@ import {
   documentRequirementURL,
   useCreateDocumentRequirement,
 } from "../hooks/useCreateDocumentRequirement";
-import { useDeleteItem } from "src/features/settings/hooks/useDeleteItem";
 import { AddDocument } from "../components/AddDocument";
 import { EditDocument } from "../components/EditDocument";
 import useUpdateDocumentRequirement from "../hooks/useUpdateDocumentRequirement";

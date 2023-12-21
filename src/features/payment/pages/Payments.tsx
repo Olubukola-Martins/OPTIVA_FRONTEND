@@ -1,10 +1,4 @@
-import {
-  DatePicker,
-  Form,
-  InputNumber,
-  Modal,
-  Select,
-} from "antd";
+import { DatePicker, Form, InputNumber, Modal, Select } from "antd";
 import Search from "antd/es/input/Search";
 import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
@@ -15,7 +9,11 @@ import QuotesGenTable from "../components/QuotesGenTable";
 import InvoiceGenTable from "../components/InvoiceGenTable";
 import OutstandingPaymentsTable from "../components/OutstandingPaymentsTable";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import { IAllGeneratedQuotes, IAllPayments } from "src/features/meetings/types/types";
+import {
+  IAllGeneratedQuotes,
+  IAllOutstandingPayments,
+  IAllPayments,
+} from "src/features/meetings/types/types";
 import { END_POINT } from "src/config/environment";
 
 interface IQueryDataType<TPageData> {
@@ -26,12 +24,13 @@ interface IQueryDataType<TPageData> {
   // ) => Promise<QueryObserverResult<any, any>>;
 }
 
-
 const Payments = () => {
   const paymentsUrl = `${END_POINT.BASE_URL}/admin/payments`;
-const QUERY_KEY_PAYMENTS = "AllPayments";
+  const QUERY_KEY_PAYMENTS = "AllPayments";
   const quotesUrl = `${END_POINT.BASE_URL}/admin/quotes`;
-  const QUERY_KEY_QUOTES = "AllQuotes"; 
+  const QUERY_KEY_QUOTES = "AllQuotes";
+  const OutstandingPaymentUrl = `${END_POINT.BASE_URL}/admin/outstanding-payments`;
+  const QUERY_KEY_OUTSTANDING_PAYMENTS = "AllOutstandingPayment";
 
   // Payments list data
   const {
@@ -41,14 +40,22 @@ const QUERY_KEY_PAYMENTS = "AllPayments";
     queryKey: QUERY_KEY_PAYMENTS,
     urlEndPoint: paymentsUrl,
   });
-// Quotes data
-    const {
-      data: allGenQuotesData,
-      isLoading: allGenQuotesLoading,
-    }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
-      queryKey: QUERY_KEY_QUOTES,
-      urlEndPoint: quotesUrl,
-    });
+  // Quotes data
+  const {
+    data: allGenQuotesData,
+    isLoading: allGenQuotesLoading,
+  }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
+    queryKey: QUERY_KEY_QUOTES,
+    urlEndPoint: quotesUrl,
+  });
+  // Outstanding payment
+  const {
+    data: allOutPaymentData,
+    isLoading: allOutPaymentLoading,
+  }: IQueryDataType<IAllOutstandingPayments> = useFetchAllItems({
+    queryKey: QUERY_KEY_OUTSTANDING_PAYMENTS,
+    urlEndPoint: OutstandingPaymentUrl,
+  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTable, setCurrentTable] = useState("Payments List");
@@ -86,14 +93,20 @@ const QUERY_KEY_PAYMENTS = "AllPayments";
     allPaymentsData?.data.length as number,
     allGenQuotesData?.data.length as number,
     0,
-    0,
+    allOutPaymentData?.data.length as number,
   ];
 
-  
   useEffect(() => {
     console.log("length", allPaymentsData?.data.length);
-  console.log("data", allPaymentsData);}, [allPaymentsData, allPaymentsLoading]);
-
+    console.log("data", allPaymentsData);
+  }, [
+    allPaymentsData,
+    allPaymentsLoading,
+    allGenQuotesData,
+    allGenQuotesLoading,
+    allOutPaymentLoading,
+    allOutPaymentData,
+  ]);
 
   return (
     <>
@@ -250,7 +263,7 @@ const QUERY_KEY_PAYMENTS = "AllPayments";
           </div>
           <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
             <RangePicker style={{ width: 300 }} />
-            <AppButton label="View All" />
+            {/* <AppButton label="View All" /> */}
           </div>
         </div>
       </div>
@@ -262,10 +275,18 @@ const QUERY_KEY_PAYMENTS = "AllPayments";
         />
       )}
       {currentTable === "Quotes Generated" && (
-        <QuotesGenTable allData={allGenQuotesData} dataLoading={allGenQuotesLoading} />
+        <QuotesGenTable
+          allData={allGenQuotesData}
+          dataLoading={allGenQuotesLoading}
+        />
       )}
       {currentTable === "Invoices Generated" && <InvoiceGenTable />}
-      {currentTable === "Outstanding Payments" && <OutstandingPaymentsTable />}
+      {currentTable === "Outstanding Payments" && (
+        <OutstandingPaymentsTable
+          allData={allOutPaymentData}
+          dataLoading={allOutPaymentLoading}
+        />
+      )}
     </>
   );
 };

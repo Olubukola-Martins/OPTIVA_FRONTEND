@@ -4,7 +4,6 @@ import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import {
   EditMeetingModal,
-  MeetingModalActions,
   NewMeetingModal,
 } from "../components/MeetingModals";
 import { IMeetingData } from "../components/MeetingModals";
@@ -18,7 +17,6 @@ import { useForm } from "antd/es/form/Form";
 import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { Spin } from "antd";
-import useEditMeeting from "../hooks/useEditMeeting";
 
 export const QUERY_KEY_MEETINGS = "Meetings";
 export const meetingsURL = `${END_POINT.BASE_URL}/admin/meetings`;
@@ -35,6 +33,7 @@ const Meetings = () => {
   const queryClient = useQueryClient();
   const [newForm] = useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [iEditsModalVisible, setIsEditModalVisible] = useState(false);
   const { userInfo } = useGetUserInfo();
   const {
     data: userEvents,
@@ -95,8 +94,9 @@ const Meetings = () => {
             link,
             start_time,
             title,
-            organizer_id,
+            organizer_id,status
           } = event;
+          
           // Splitting the date string to extract year, month, and day
           const [year, month, day] = date.split("-").map(Number);
           // Splitting the time string to extract hour and minute
@@ -134,6 +134,7 @@ const Meetings = () => {
             organizer_name: userInfo.name,
             attendees: allAttendees,
             organizer_id,
+            status,
           };
         }
       );
@@ -147,8 +148,8 @@ const Meetings = () => {
 
   // const [isCreateMeetingModalVisible, setCreateMeetingModalVisible] =
   //   useState(false);
-  const [meetingActionsModal, setMeetingActionsModal] = useState(false);
-
+  // const [meetingActionsModal, setMeetingActionsModal] = useState(false);
+// console.log(meetingActionsModal)
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -156,13 +157,17 @@ const Meetings = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+    const handleCancelEdit = () => {
+      setIsEditModalVisible(false);
+    };
+
 
   // const showModalActions = () => {
   //   setMeetingActionsModal(true);
   // };
-  const handleCancelModalActions = () => {
-    setMeetingActionsModal(false);
-  };
+  // const handleCancelModalActions = () => {
+  //   setMeetingActionsModal(false);
+  // };
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {
     console.log("data", meetingData);
@@ -209,8 +214,8 @@ const Meetings = () => {
           newMeetingsLoading={newMeetingLoading}
         />
         <EditMeetingModal
-          open={isModalVisible}
-          onCancel={handleCancel}
+          open={iEditsModalVisible}
+          onCancel={handleCancelEdit}
           refetchUserMeetins={refetch}
         />
       </Spin>

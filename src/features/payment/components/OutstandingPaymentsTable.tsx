@@ -1,10 +1,10 @@
 
 import { Dropdown, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
-
-const OutstandingPaymentsTable = () => {
+import { IAllOutstandingPayments, OutstandingPaymentDatum } from "src/features/meetings/types/types";
   type DataSourceItem = {
     key: React.Key;
     SN: number;
@@ -14,8 +14,16 @@ const OutstandingPaymentsTable = () => {
     investmentRoute: string;
     outstandingPayment: string;
     lastUpdated: string;
-    updatedBy: string;
   };
+
+  interface IProps {
+    allData: IAllOutstandingPayments | undefined;
+    dataLoading: boolean;
+  }
+
+
+const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
+    const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
 
   const rowSelection = {
     onChange: (
@@ -67,11 +75,11 @@ const OutstandingPaymentsTable = () => {
       dataIndex: "lastUpdated",
       key: "7",
     },
-    {
-      title: "Updated By",
-      dataIndex: "updatedBy",
-      key: "8",
-    },
+    // {
+    //   title: "Updated By",
+    //   dataIndex: "updatedBy",
+    //   key: "8",
+    // },
 
     {
       title: "Action",
@@ -81,9 +89,7 @@ const OutstandingPaymentsTable = () => {
           trigger={["click"]}
           overlay={
             <Menu>
-              <Menu.Item key="1">
-                  View Proof of Payment
-              </Menu.Item>
+              <Menu.Item key="1">View Proof of Payment</Menu.Item>
               <Menu.Item key="2">
                 <Link
                   to={
@@ -103,21 +109,40 @@ const OutstandingPaymentsTable = () => {
     },
   ];
 
+
+
   // DATASOURCE FOR TABLE
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 20; i++) {
-    dataSource.push({
-      key: i,
-      SN: i + 1,
-      applicantID: "230000-01",
-      applicantName: "John Brown",
-      country: "Grenada",
-      investmentRoute: "Donation",
-      outstandingPayment: "$ 200,000",
-      lastUpdated: "dd/mm/yy",
-      updatedBy: "John Brown",
-    });
-  }
+    const formattedDate = (inputTimestamp: string) => {
+      const date = new Date(inputTimestamp);
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear().toString().slice(-2);
+      return `${day}/${month}/${year}`;
+    };
+
+
+    useEffect(() => {
+      if (allData) {
+        const mainData = allData.data;
+        const data = mainData.map((outstandingPayment: OutstandingPaymentDatum, i) => {
+          const { application, id,outstanding_payment,updated_at } = outstandingPayment;
+          const {country,investmentroute,applicant} = application
+          return {
+            key: id,
+            SN: i + 1,
+            applicantID: applicant.applicant_unique_id,
+            applicantName: applicant.full_name,
+            country: country.country_name,
+            investmentRoute: investmentroute.investment_name,
+            outstandingPayment: `$ ${outstanding_payment}`,
+            lastUpdated: formattedDate(updated_at),
+            //     updatedBy: "John Brown",
+          };
+        });
+        setDataSource(data);
+      }
+    }, [allData, dataLoading]);
+
 
   return (
     <Table

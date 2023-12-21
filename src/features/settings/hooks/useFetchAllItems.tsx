@@ -42,7 +42,7 @@ export const useFetchAllItems = ({
           duration: 5,
         });
       },
-      onSuccess: (res) => {
+      onSuccess: () => {
         // openNotification({
         //   state: "success",
         //   title: "Success",

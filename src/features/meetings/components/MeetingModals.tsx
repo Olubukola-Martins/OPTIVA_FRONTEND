@@ -27,9 +27,7 @@ import { QUERY_KEY_MEETINGS, meetingsURL } from "../pages/Meetings";
 import useEditMeeting from "../hooks/useEditMeeting";
 import { INewMeeting } from "../types/types";
 import { openNotification } from "src/utils/notification";
-import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, UseMutateFunction, useQueryClient } from "react-query";
-import { AxiosResponse } from "axios";
-import { IEditProps } from "src/features/settings/utils/settingsAPIHelpers";
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters,  useQueryClient } from "react-query";
 import useRespondToMeeting from "../hooks/useRespondToMeeting";
 import useChangeMeetingStatus from "../hooks/useChangeMeetingStatus";
 
@@ -54,9 +52,9 @@ export const NewMeetingModal: React.FC<{
   newMeetingsLoading: boolean;
 }> = ({ open, onCancel, onCreate, newForm, newMeetingsLoading }) => {
   const [typeMeeting, setTypeMeeting] = useState<string>("physical");
-  const handleFormSubmit = (values: IMeetingData) => {
-    console.log(values);
-  };
+  // const handleFormSubmit = (values: IMeetingData) => {
+  //   console.log(values);
+  // };
 
   return (
     <>
@@ -203,7 +201,7 @@ export const MeetingDetailsModal: React.FC<{
     organizer_name,
     start,
     title,
-    description,
+    // description,
     link,
     location,
   } = meetingData;
@@ -281,7 +279,7 @@ export const EditMeetingModal: React.FC<{
   onCancel?: () => void;
   refetchUserMeetins: <TPageData>(
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
-  ) => Promise<QueryObserverResult<any, unknown>>;
+  ) => Promise<QueryObserverResult<any, unknown>> | any;
 }> = ({ currentEvent, open, onCancel, refetchUserMeetins }) => {
   const [typeMeeting, setTypeMeeting] = useState<string>("physical");
   const [meetingId, setMeetingId] = useState<number>(0);
@@ -309,6 +307,7 @@ export const EditMeetingModal: React.FC<{
             duration: 5,
             description: response.message,
           });
+          refetchUserMeetins()
           setEditModalVisible(false);
           editForm.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_MEETINGS, id]);
@@ -324,7 +323,7 @@ export const EditMeetingModal: React.FC<{
         end,
         id,
         organizer_id,
-        organizer_name,
+        // organizer_name,
         start,
         title,
         description,
@@ -389,7 +388,7 @@ export const EditMeetingModal: React.FC<{
     <>
       <Modal
         open={open && editModalVisible}
-        title="New Meeting"
+        title="Edit Meeting"
         footer={null}
         onCancel={onCancel}
       >
@@ -505,9 +504,10 @@ export const MeetingModalActions: React.FC<{
   console.log("useerInfo", userInfo);
   console.log("currentEvent", currentEvent);
   const queryClient = useQueryClient();
-  const { mutate, responseLoading } = useRespondToMeeting();
-  const { changeMeetingStatus, statusChangeLoading } = useChangeMeetingStatus();
+  const { mutate } = useRespondToMeeting();
+  const { changeMeetingStatus } = useChangeMeetingStatus();
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  // const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [cancelModalVisible, setCancelModalVisible] = useState<boolean>(false);
   const [meetingDeclineVisible, setDeclineModalVisible] =
     useState<boolean>(false);
@@ -556,6 +556,13 @@ export const MeetingModalActions: React.FC<{
     }
   };
 
+//   useEffect((
+//   ) => {
+//     if (!editModalVisible) {
+//     setModalVisible(false);
+//   } 
+// },[editModalVisible])
+
   const handleCancelModals = (action: string) => {
     if (action === "viewDetails") {
       setMeetingDetailModalVisible(false);
@@ -582,48 +589,55 @@ export const MeetingModalActions: React.FC<{
               View Meeting Details
             </button>
           </div>
-          {currentEvent.organizer_id === userInfo.id && (
+          {currentEvent.organizer_id === userInfo.id &&
+            currentEvent.status === 0 && (
+              <div className="p-1">
+                <button onClick={() => handleMenuClick("editDetails")}>
+                  Edit Meeting Details
+                </button>
+              </div>
+            )}
+          {currentEvent.organizer_id === userInfo.id &&
+            currentEvent.status === 0 && (
+              <Popconfirm
+                title="Cancel Meeting"
+                description="Are you sure you would like to cancel this meeting?"
+                onConfirm={() => {
+                  changeMeetingStatus(currentEvent.id, { response: 1 });
+                }}
+                okText="Yes"
+                cancelText="No"
+              >
+                <div className="p-1">
+                  <button onClick={() => handleMenuClick("cancel")}>
+                    Cancel Meeting
+                  </button>
+                </div>
+              </Popconfirm>
+            )}
+
+          {currentEvent.status === 0 && (
             <div className="p-1">
-              <button onClick={() => handleMenuClick("editDetails")}>
-                Edit Meeting Details
+              <button
+                onClick={() => {
+                  respondMeeting(currentEvent.id, { response: "accepted" });
+                }}
+              >
+                Accept Meeting
               </button>
             </div>
           )}
-          {currentEvent.organizer_id === userInfo.id && (
-            <Popconfirm
-              title="Cancel Meeting"
-              description="Are you sure you would like to cancel this meeting?"
-              onConfirm={() => {
-                changeMeetingStatus(currentEvent.id, { response: 1 });
-              }}
-              okText="Yes"
-              cancelText="No"
-            >
-              <div className="p-1">
-                <button onClick={() => handleMenuClick("cancel")}>
-                  Cancel Meeting
-                </button>
-              </div>
-            </Popconfirm>
+          {currentEvent.status === 0 && (
+            <div className="p-1">
+              <button
+                onClick={() => {
+                  handleMenuClick("declineMeeting");
+                }}
+              >
+                Decline Meeting
+              </button>
+            </div>
           )}
-          <div className="p-1">
-            <button
-              onClick={() => {
-                respondMeeting(currentEvent.id, { response: "accepted" });
-              }}
-            >
-              Accept Meeting
-            </button>
-          </div>
-          <div className="p-1">
-            <button
-              onClick={() => {
-                handleMenuClick("declineMeeting");
-              }}
-            >
-              Decline Meeting
-            </button>
-          </div>
         </Card>
       </Modal>
 
@@ -673,9 +687,9 @@ export const MeetingModalActions: React.FC<{
           onCancel={() => {
             setEditModalVisible(false);
           }}
-          // refetchUserMeetins={function (): void {
-          //   throw new Error("Function not implemented.");
-          // }}
+          refetchUserMeetins={() => {
+            return;
+          }}
         />
       )}
       {meetingDeclineVisible && (

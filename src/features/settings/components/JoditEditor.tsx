@@ -1,13 +1,13 @@
 import JoditEditor, { Jodit } from "jodit-react";
 import Form from "antd/es/form";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import {   useRef } from "react";
 
 export const JoditEditorComponent: React.FC<{
   showLabel?: boolean;
   control?: { label: string; name: string };
 }> = ({ showLabel = false, control }) => {
   const editor = useRef<Jodit>(null);
-  const [selectedFiles, setSelectedFiles] = useState(null);
+  // const [selectedFiles, setSelectedFiles] = useState(null);
 
 
 const config = {
@@ -71,8 +71,8 @@ const config = {
 };
 
 
-  useEffect(() => {
-    console.log("files",selectedFiles)
+  // useEffect(() => {
+    // console.log("files",selectedFiles)
     // const updateSelectedFiles = () => {
     //   if (editor.current) {
     //     const files = editor.current.editorDocument;
@@ -83,8 +83,8 @@ const config = {
     // return () => {
     //   editor.current?.events?.off("change", updateSelectedFiles);
     // };
-  }, [selectedFiles]);
-  console.log("seleced file", selectedFiles);
+  // }, [selectedFiles]);
+  // console.log("seleced file", selectedFiles);
   return (
     <Form.Item
       name={control?.name ?? "templateDescription"}

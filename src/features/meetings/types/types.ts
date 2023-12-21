@@ -214,9 +214,45 @@ export interface IGeneratedQuoteDatum {
   number_of_dependents: string;
   quotation_total: number;
   quotation_status: number;
+  generated_by: string;
   created_at: string;
   updated_at: string;
   applicant: Applicant;
+}
+
+interface Applicant {
+  id: number;
+  application_id: number;
+  branch_id: number;
+  full_name: string;
+  applicant_unique_id: string;
+  email_address: string;
+  amount_paid: string;
+  user_id?: any;
+  created_at: string;
+  updated_at: string;
+}
+
+
+// Outstanding payments
+export interface IAllOutstandingPayments {
+  data: OutstandingPaymentDatum[];
+  links: Links;
+  meta: Meta;
+}
+
+
+export interface OutstandingPaymentDatum {
+  id: number;
+  application_id: number;
+  quote_id: number;
+  amount_paid: string;
+  outstanding_payment: string;
+  is_confirmed: boolean;
+  created_at: string;
+  updated_at: string;
+  application: Application;
+  fee?: any;
 }
 
 interface Applicant {
