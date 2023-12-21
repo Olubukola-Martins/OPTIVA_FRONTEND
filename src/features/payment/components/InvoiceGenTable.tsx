@@ -1,4 +1,3 @@
-
 import { Dropdown, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
@@ -13,10 +12,8 @@ const InvoiceGenTable = () => {
     country: string;
     investmentRoute: string;
     dependents: number;
-    amountPaid: string;
-    outstandingPayment: string;
-    lastUpdated: string;
-    updatedBy: string;
+    dateCreated: string;
+    createdBy: string;
   };
 
   const rowSelection = {
@@ -65,24 +62,14 @@ const InvoiceGenTable = () => {
       key: "6",
     },
     {
-      title: "Amount Paid",
-      dataIndex: "amountPaid",
+      title: "Date Created",
+      dataIndex: "dateCreated",
       key: "7",
     },
     {
-      title: "Outstanding Payment",
-      dataIndex: "outstandingPayment",
+      title: "Created By",
+      dataIndex: "createdBy",
       key: "8",
-    },
-    {
-      title: "Last Updated",
-      dataIndex: "lastUpdated",
-      key: "9",
-    },
-    {
-      title: "Updated By",
-      dataIndex: "updatedBy",
-      key: "10",
     },
 
     {
@@ -93,48 +80,9 @@ const InvoiceGenTable = () => {
           trigger={["click"]}
           overlay={
             <Menu>
-              <Menu.Item key="1">
-                <Link
-                  to={
-                    appRoute.generateInvoice(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Invoice
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <Link
-                  to={
-                    appRoute.paymentDetails(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Payment Details
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <Link
-                  to={
-                    appRoute.generateReciept(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Receipt
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <Link
-                  to={
-                    appRoute.generateContract(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Contract
-                </Link>
-              </Menu.Item>
+              <Menu.Item key="1">View</Menu.Item>
 
-              <Menu.Item key="5">Move to Master List</Menu.Item>
+              <Menu.Item key="2">Download</Menu.Item>
             </Menu>
           }
         >
@@ -155,10 +103,8 @@ const InvoiceGenTable = () => {
       country: "Grenada",
       investmentRoute: "Donation",
       dependents: 3,
-      amountPaid: "$ 200,000",
-      outstandingPayment: "$ 200,000",
-      lastUpdated: "dd/mm/yy",
-      updatedBy: "John Brown",
+      dateCreated: "dd/mm/yy",
+      createdBy: "John Brown",
     });
   }
 

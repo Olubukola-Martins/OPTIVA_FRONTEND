@@ -12,8 +12,6 @@ const OutstandingPaymentsTable = () => {
     applicantName: string;
     country: string;
     investmentRoute: string;
-    dependents: number;
-    amountPaid: string;
     outstandingPayment: string;
     lastUpdated: string;
     updatedBy: string;
@@ -60,29 +58,19 @@ const OutstandingPaymentsTable = () => {
       key: "5",
     },
     {
-      title: "Number of Dependents",
-      dataIndex: "dependents",
-      key: "6",
-    },
-    {
-      title: "Amount Paid",
-      dataIndex: "amountPaid",
-      key: "7",
-    },
-    {
       title: "Outstanding Payment",
       dataIndex: "outstandingPayment",
-      key: "8",
+      key: "6",
     },
     {
       title: "Last Updated",
       dataIndex: "lastUpdated",
-      key: "9",
+      key: "7",
     },
     {
       title: "Updated By",
       dataIndex: "updatedBy",
-      key: "10",
+      key: "8",
     },
 
     {
@@ -94,14 +82,7 @@ const OutstandingPaymentsTable = () => {
           overlay={
             <Menu>
               <Menu.Item key="1">
-                <Link
-                  to={
-                    appRoute.generateInvoice(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Invoice
-                </Link>
+                  View Proof of Payment
               </Menu.Item>
               <Menu.Item key="2">
                 <Link
@@ -113,28 +94,6 @@ const OutstandingPaymentsTable = () => {
                   Payment Details
                 </Link>
               </Menu.Item>
-              <Menu.Item key="3">
-                <Link
-                  to={
-                    appRoute.generateReciept(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Receipt
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <Link
-                  to={
-                    appRoute.generateContract(record.key as unknown as number)
-                      .path
-                  }
-                >
-                  Generate Contract
-                </Link>
-              </Menu.Item>
-
-              <Menu.Item key="5">Move to Master List</Menu.Item>
             </Menu>
           }
         >
@@ -154,8 +113,6 @@ const OutstandingPaymentsTable = () => {
       applicantName: "John Brown",
       country: "Grenada",
       investmentRoute: "Donation",
-      dependents: 3,
-      amountPaid: "$ 200,000",
       outstandingPayment: "$ 200,000",
       lastUpdated: "dd/mm/yy",
       updatedBy: "John Brown",

@@ -6,7 +6,7 @@ import {
   Select,
 } from "antd";
 import Search from "antd/es/input/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
@@ -14,8 +14,42 @@ import PaymentsListTable from "../components/PaymentsListTable";
 import QuotesGenTable from "../components/QuotesGenTable";
 import InvoiceGenTable from "../components/InvoiceGenTable";
 import OutstandingPaymentsTable from "../components/OutstandingPaymentsTable";
+import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
+import { IAllGeneratedQuotes, IAllPayments } from "src/features/meetings/types/types";
+import { END_POINT } from "src/config/environment";
+
+interface IQueryDataType<TPageData> {
+  data: TPageData | undefined;
+  isLoading: boolean;
+  // refetch: (
+  //   options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  // ) => Promise<QueryObserverResult<any, any>>;
+}
+
 
 const Payments = () => {
+  const paymentsUrl = `${END_POINT.BASE_URL}/admin/payments`;
+const QUERY_KEY_PAYMENTS = "AllPayments";
+  const quotesUrl = `${END_POINT.BASE_URL}/admin/quotes`;
+  const QUERY_KEY_QUOTES = "AllQuotes"; 
+
+  // Payments list data
+  const {
+    data: allPaymentsData,
+    isLoading: allPaymentsLoading,
+  }: IQueryDataType<IAllPayments> = useFetchAllItems({
+    queryKey: QUERY_KEY_PAYMENTS,
+    urlEndPoint: paymentsUrl,
+  });
+// Quotes data
+    const {
+      data: allGenQuotesData,
+      isLoading: allGenQuotesLoading,
+    }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
+      queryKey: QUERY_KEY_QUOTES,
+      urlEndPoint: quotesUrl,
+    });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTable, setCurrentTable] = useState("Payments List");
   const [modalForm] = Form.useForm();
@@ -48,6 +82,17 @@ const Payments = () => {
     "Total Invoices Generated",
     "Outstanding Payment",
   ];
+  const cardCounts: number[] = [
+    allPaymentsData?.data.length as number,
+    allGenQuotesData?.data.length as number,
+    0,
+    0,
+  ];
+
+  
+  useEffect(() => {
+    console.log("length", allPaymentsData?.data.length);
+  console.log("data", allPaymentsData);}, [allPaymentsData, allPaymentsLoading]);
 
 
   return (
@@ -166,7 +211,7 @@ const Payments = () => {
             onClick={() => {
               switch (i) {
                 case 0:
-                  setCurrentTable("Payment List");
+                  setCurrentTable("Payments List");
                   break;
                 case 1:
                   setCurrentTable("Quotes Generated");
@@ -178,7 +223,7 @@ const Payments = () => {
                   setCurrentTable("Outstanding Payments");
                   break;
                 default:
-                  setCurrentTable("Payment List");
+                  setCurrentTable("Payments List");
               }
             }}
           >
@@ -186,7 +231,7 @@ const Payments = () => {
               icon="iconoir:page"
               cardColor={cardColors[i]}
               title={cardTitles[i]}
-              count={0}
+              count={cardCounts[i]}
             />
           </div>
         ))}
@@ -210,10 +255,17 @@ const Payments = () => {
         </div>
       </div>
       {/*All tables */}
-      {currentTable === "Payment List" && <PaymentsListTable />}
-      {currentTable === "Quotes Generated" && <QuotesGenTable />}
+      {currentTable === "Payments List" && (
+        <PaymentsListTable
+          allData={allPaymentsData}
+          dataLoading={allPaymentsLoading}
+        />
+      )}
+      {currentTable === "Quotes Generated" && (
+        <QuotesGenTable allData={allGenQuotesData} dataLoading={allGenQuotesLoading} />
+      )}
       {currentTable === "Invoices Generated" && <InvoiceGenTable />}
-      {currentTable === "Outstanding Payments" && <OutstandingPaymentsTable/> }
+      {currentTable === "Outstanding Payments" && <OutstandingPaymentsTable />}
     </>
   );
 };
