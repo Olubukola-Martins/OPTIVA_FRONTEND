@@ -8,6 +8,7 @@ import { NewEmployee } from "../components/NewEmployee";
 import { useHandleUpdate } from "../hooks/useHandleUpdate";
 import { useState } from "react";
 import { useDebounce } from "src/hooks/useDebounce";
+import { DisabledEmployees } from "../components/DisabledEmployees";
 
 const Employees = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -26,9 +27,14 @@ const Employees = () => {
       key: "Active Employees",
     },
     {
-      label: "Inactive Employees",
+      label: "Invited Employees",
       children: <InvitedEmployees searchValue={debouncedSearchTerm} />,
-      key: "Inactive Employees",
+      key: "InvitedEmployees",
+    },
+    {
+      label: "Disabled Employees",
+      children: <DisabledEmployees searchValue={debouncedSearchTerm} />,
+      key: "Disabled Employees",
     },
   ];
   return (

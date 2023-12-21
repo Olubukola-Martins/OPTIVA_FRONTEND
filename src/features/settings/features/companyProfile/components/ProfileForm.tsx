@@ -125,7 +125,9 @@ export const ProfileForm = () => {
               <Input.TextArea className="w-full" />
             </Form.Item>
 
-            <AppButton type="submit" isLoading={loadUpdate} />
+          <div className="flex justify-end">
+          <AppButton type="submit" label="Save Changes" isLoading={loadUpdate} />
+          </div>
           </div>
         </div>
       </Form>

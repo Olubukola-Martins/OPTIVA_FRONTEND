@@ -22,6 +22,7 @@ const getData = async (
     },
   };
   const res = await axios.get(url, config);
+  
   const data: rolesProps[] = res.data.data.map((item: rolesProps) => ({
     ...item,
   }));

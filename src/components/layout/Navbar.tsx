@@ -90,13 +90,13 @@ export const Navbar = () => {
                     <span>Roles and Permission</span>
                   </Link>
 
-                  <li className="menuStyle">
+                  <Link to={appRoute.workflow} className="menuStyle">
                     <Icon
                       icon="carbon:workflow-automation"
                       className="text-xl"
                     />
                     <span>Workflow</span>
-                  </li>
+                  </Link>
                   {/* <li className="menuStyle">
                     <Icon icon="mdi:partnership" className="text-xl" />
                     <span>International Partners</span>
