@@ -1,32 +1,27 @@
-import Table, { ColumnsType } from "antd/es/table";
-import { Dropdown, Menu, Popconfirm } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
+import { ColumnsType } from "antd/es/table";
 import { employeesProps } from "../types";
 import {
   QUERY_KEY_FOR_EMPLOYEES,
   useFetchEmployees,
 } from "../hooks/useFetchEmployees";
-import { useHandleUpdate } from "../hooks/useHandleUpdate";
-import { NewEmployee } from "./NewEmployee";
 import { usePagination } from "src/hooks/usePagination";
 import { searchValueProps } from "src/types";
 import { useDeactivate } from "src/hooks/useDeactivate";
-// import { useDisableEmployee } from "../hooks/useDisableEmployee";
 
-export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
+export const DisabledEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
-  // const { disableUser } = useDisableEmployee();
   const { data, isLoading } = useFetchEmployees({
-    currentUrl: "active-employees",
+    currentUrl: "deactivated-employees",
     pagination,
     search: searchValue,
   });
+
   const { removeData } = useDeactivate({
     EndPointUrl: "admin/deactivate-employee/",
     queryKey: QUERY_KEY_FOR_EMPLOYEES,
-    is_active: false,
+    is_active: true,
   });
-  const { handleEmployee, addEmployee, setAddEmployee, employeeId } =
-    useHandleUpdate();
 
   const columns: ColumnsType<employeesProps> = [
     {
@@ -82,6 +77,7 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
         </div>
       ),
     },
+
     {
       title: "Action",
       dataIndex: "action",
@@ -92,16 +88,13 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={() => handleEmployee(val.id)}>
-                  Edit
-                </Menu.Item>
-                <Menu.Item key="2">
+                <Menu.Item key="1">
                   <Popconfirm
                     title="Deactivate employee"
                     description={`Are you sure to deactivate ${val.name}`}
                     onConfirm={() => removeData(val.id)}
                   >
-                    Disable employee
+                    Enable employee
                   </Popconfirm>
                 </Menu.Item>
               </Menu>
@@ -113,14 +106,8 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
       ),
     },
   ];
-
   return (
-    <div>
-      <NewEmployee
-        id={employeeId}
-        open={addEmployee}
-        handleClose={() => setAddEmployee(false)}
-      />
+    <div className="overflow-x-hidden">
       <Table
         className="bg-white rounded-md shadow border overflow-x-hidden"
         columns={columns}
@@ -128,7 +115,7 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
         loading={isLoading}
-        // scroll={{ x: 800 }}
+        scroll={{ x: 800 }}
       />
     </div>
   );

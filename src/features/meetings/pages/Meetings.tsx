@@ -1,23 +1,25 @@
-import {  useState } from "react";
-import { Calendar } from "../components/Calendar";
+import { useEffect, useState } from "react";
+import { Calendar, IEvent } from "../components/Calendar";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import {
-  MeetingModalActions,
+  EditMeetingModal,
   NewMeetingModal,
 } from "../components/MeetingModals";
 import { IMeetingData } from "../components/MeetingModals";
 import { END_POINT } from "src/config/environment";
-// import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-// import { IFetchAllMeetings } from "../types/types";
+import { useQueryClient } from "react-query";
+import useAddMeeting from "../hooks/useAddMeeting";
+import { INewMeeting, ISingleMeeting } from "../types/types";
+import { openNotification } from "src/utils/notification";
+import dayjs from "dayjs";
+import { useForm } from "antd/es/form/Form";
+import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
+import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { Spin } from "antd";
 
 export const QUERY_KEY_MEETINGS = "Meetings";
 export const meetingsURL = `${END_POINT.BASE_URL}/admin/meetings`;
-
-// interface IQueryDataType<TPageData> {
-//   data: TPageData | undefined;
-//   isLoading: boolean;
-// }
 
 const Meetings = () => {
   // const {
@@ -28,63 +30,126 @@ const Meetings = () => {
   //   urlEndPoint: meetingsURL,
   // });
 
-  const [events, setEvents] = useState<any>([]);
-  //   useState([
-  //   {
-  //     id: 1,
-  //     meetingTitle: "Event 1",
-  //     startTime: new Date(2023, 10, 8, 10, 0),
-  //     endTime: new Date(2023, 10, 8, 12, 0),
-  // //     attendee: "",
-  // //    meetingType: "",
-  //  //   meetingLink: "",
-  //     detailsOfMeeting: "",
-  //   },
-  // ]);
-
-  // useEffect(() => {
-  //   if (allMeetingsData?.data) {
-  //     const allMeetings = allMeetingsData.data;
-  //     const allEvents:IEvent[] = allMeetings.map((meeting) => {
-  //       const { id, title, start_time, end_time, description, location,date } =
-  //         meeting;
-  //       let [year, month, day] = date.split("-");
-  //       let [hours, minutes, seconds] = start_time.split(":");
-  //       let [hoursEnd, minutesEnd, secondsEnd] = end_time.split(":");
-  //       let startTime = new Date(
-  //         +year,
-  //         +month - 1,
-  //         +day,
-  //         +hours,
-  //         +minutes,
-  //         +seconds
-  //       );
-  //       let endTime = new Date(
-  //         +year,
-  //         +month - 1,
-  //         +day,
-  //         +hoursEnd,
-  //         +minutesEnd,
-  //         +secondsEnd
-  //       );
-
-  //       return {
-  //         id,
-  //         startTime,
-  //         endTime,
-  //         meetingTitle: title,
-  //         detailsOfMeeting: description,
-  //         date
-  //       };
-  //     });
-  //   }
-  // }, [allMeetingsData, allMeetingsLoading]);
-
+  const queryClient = useQueryClient();
+  const [newForm] = useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [iEditsModalVisible, setIsEditModalVisible] = useState(false);
+  const { userInfo } = useGetUserInfo();
+  const {
+    data: userEvents,
+    isLoading: userEventsLoading,
+    isFetching: userEventsFetching, refetch
+  } = useFetchSingleItem({
+    itemId: userInfo?.id,
+    queryKey: QUERY_KEY_MEETINGS,
+    urlEndPoint: `${meetingsURL}/user`,
+  });
+  const { mutate, isLoading: newMeetingLoading } = useAddMeeting();
+
+  const addNewMeeting = (newData: INewMeeting) => {
+    mutate(
+      { newData, url: meetingsURL },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occured",
+            description: error.response.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (response: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            duration: 5,
+            description: response.message,
+          });
+          setIsModalVisible(false);
+          newForm.resetFields();
+          queryClient.invalidateQueries([QUERY_KEY_MEETINGS]);
+        },
+      }
+    );
+  };
+  // const [editing, setEditing] = useState<boolean>(false);
+  //   const handleSetEditing = (state: boolean) => {
+  //     setEditing(state);
+  // };
+  const [events, setEvents] = useState<any>([]);
+
+  useEffect(() => {
+    if (userEvents && userEvents.data) {
+      const userEventsData = userEvents.data;
+      console.log("allMeetings", userEventsData);
+      const userEventsList: IEvent[] = userEventsData.map(
+        (event: ISingleMeeting) => {
+          const {
+            attendees,
+            date,
+            description,
+            end_time,
+            id,
+            location,
+            link,
+            start_time,
+            title,
+            organizer_id,status
+          } = event;
+          
+          // Splitting the date string to extract year, month, and day
+          const [year, month, day] = date.split("-").map(Number);
+          // Splitting the time string to extract hour and minute
+          const [starthour, startminute] = start_time.split(":").map(Number);
+          const [endhour, endminute] = end_time.split(":").map(Number);
+          const filteredAttendees = attendees
+            .map((attendee) => ({
+              id: attendee.id,
+              name: attendee.name,
+              email: attendee.email,
+            }))
+            .filter((attendee) => attendee.id !== organizer_id);
+
+          const organizerExists = filteredAttendees.some(
+            (attendee) => attendee.id === organizer_id
+          );
+
+          const allAttendees = [...filteredAttendees];
+
+          if (!organizerExists) {
+            allAttendees.push({
+              id: organizer_id,
+              name: userInfo.name,
+              email: userInfo.email,
+            });
+          }
+          return {
+            id,
+            title,
+            description,
+            location,
+            start: new Date(year, month - 1, day, starthour, startminute),
+            end: new Date(year, month - 1, day, endhour, endminute),
+            link,
+            organizer_name: userInfo.name,
+            attendees: allAttendees,
+            organizer_id,
+            status,
+          };
+        }
+      );
+      setEvents(userEventsList);
+    }
+  }, [userEvents, userEvents?.data, userInfo, userInfo?.id]);
+  // useEffect(() => {
+    
+  //   console.log("editing", editing);
+  // }, [editing, handleSetEditing]);
+
   // const [isCreateMeetingModalVisible, setCreateMeetingModalVisible] =
   //   useState(false);
-  const [meetingActionsModal, setMeetingActionsModal] = useState(false);
-
+  // const [meetingActionsModal, setMeetingActionsModal] = useState(false);
+// console.log(meetingActionsModal)
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -92,52 +157,68 @@ const Meetings = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+    const handleCancelEdit = () => {
+      setIsEditModalVisible(false);
+    };
+
 
   // const showModalActions = () => {
   //   setMeetingActionsModal(true);
   // };
-  const handleCancelModalActions = () => {
-    setMeetingActionsModal(false);
-  };
+  // const handleCancelModalActions = () => {
+  //   setMeetingActionsModal(false);
+  // };
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {
-    const newEvent = {
-      id: events.length + 1,
-      meetingTitle: meetingData.meetingTitle,
-      startTime: meetingData.startTime,
-      endTime: meetingData.endTime,
-      attendee: meetingData.attendees,
-      meetingType: meetingData.meetingType,
-      meetingLink: meetingData.meetingLink,
-      detailsOfMeeting: meetingData.detailsOfMeeting,
-    };
-
-    const updatedEvents = [...events, newEvent];
-    setEvents(updatedEvents);
-
-    setIsModalVisible(false);
+    console.log("data", meetingData);
+    const {
+      attendees,
+      date,
+      description,
+      end_time,
+      start_time,
+      title,
+      link,
+      location,
+    } = meetingData;
+    addNewMeeting({
+      attendees: [...attendees, userInfo.id],
+      date: dayjs(date).format("YYYY-MM-DD"),
+      description,
+      end_time: dayjs(end_time).format("HH:mm:ss"),
+      start_time: dayjs(start_time).format("HH:mm:ss"),
+      title,
+      link,
+      location,
+    });
+    // setIsModalVisible(false);
   };
 
   return (
     <>
-      <div className="flex justify-between items-center py-4">
-        <PageIntro
-          arrowBack={false}
-          title="Meetings"
-          description="View  & Create New Bookings"
+      <Spin spinning={userEventsLoading || userEventsFetching} size="large">
+        <div className="flex justify-between items-center py-4">
+          <PageIntro
+            arrowBack={false}
+            title="Meetings"
+            description="View  & Create New Bookings"
+          />
+          <AppButton label="New Meeting" handleClick={showModal} />
+        </div>
+        <Calendar events={events} />
+        <NewMeetingModal
+          open={isModalVisible}
+          onCancel={handleCancel}
+          onCreate={handleCreateMeeting}
+          newForm={newForm}
+          newMeetingsLoading={newMeetingLoading}
         />
-        <AppButton label="New Meeting" handleClick={showModal} />
-      </div>
-      <Calendar events={events} />
-      <NewMeetingModal
-        open={isModalVisible}
-        onCancel={handleCancel}
-        onCreate={handleCreateMeeting}
-      />
-      <MeetingModalActions
-        onCancel={handleCancelModalActions}
-        open={meetingActionsModal}
-      />
+        <EditMeetingModal
+          open={iEditsModalVisible}
+          onCancel={handleCancelEdit}
+          refetchUserMeetins={refetch}
+        />
+      </Spin>
     </>
   );
 };

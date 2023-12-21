@@ -13,6 +13,7 @@ import { QUERY_KEY_ELIGIBLE_DEPENDENTS, eligibleDependentURL } from "../../depen
 interface IProps extends IdentifierProps {
   docType: string;
   handleAddNewDocument: (val: any) => any;
+  postDocLoading:boolean;
 }
 
 export const AddDocument = ({
@@ -20,6 +21,7 @@ export const AddDocument = ({
   open,
   docType,
   handleAddNewDocument,
+  postDocLoading,
 }: IProps) => {
   const { data: allDocCategories, isLoading: allDocCategoriestLoading } =
     useFetchAllItems({
@@ -64,10 +66,12 @@ export const AddDocument = ({
             rules={generalValidationRules}
           >
             <Select
-              options={allDocCategories?.data.map((category: { id: any; name: any; }) => ({
-                value: category.id,
-                label: category.name,
-              }))}
+              options={allDocCategories?.data.map(
+                (category: { id: any; name: any }) => ({
+                  value: category.id,
+                  label: category.name,
+                })
+              )}
               loading={allDocCategoriestLoading}
               className="w-full"
               placeholder="Select"
@@ -100,7 +104,12 @@ export const AddDocument = ({
             label="Format"
             rules={generalValidationRules}
           >
-            <Select mode="multiple" options={DOCUMENT_TYPES} allowClear placeholder="Select" />
+            <Select
+              mode="multiple"
+              options={DOCUMENT_TYPES}
+              allowClear
+              placeholder="Select"
+            />
           </Form.Item>
           <Form.Item
             name="size"
@@ -119,16 +128,21 @@ export const AddDocument = ({
           <Select
             mode="multiple"
             loading={allDependentsLoading}
-            options={ Array.isArray(allDependentsData?.data) &&  allDependentsData?.data.map((dependent: { id: any; dependant: any; }) => ({
-              value: dependent.id,
-              label: dependent.dependant,
-            }))}
+            options={
+              Array.isArray(allDependentsData?.data) &&
+              allDependentsData?.data.map(
+                (dependent: { id: any; dependant: any }) => ({
+                  value: dependent.id,
+                  label: dependent.dependant,
+                })
+              )
+            }
             allowClear
             placeholder="Select"
           />
         </Form.Item>
 
-        <AppButton type="submit" />
+        <AppButton type="submit" isLoading={postDocLoading} />
       </Form>
     </Modal>
   );

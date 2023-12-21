@@ -21,11 +21,11 @@ import {
   documentRequirementURL,
   useCreateDocumentRequirement,
 } from "../hooks/useCreateDocumentRequirement";
-import DeleteModal from "src/features/settings/components/DeleteModal";
-import { useDeleteItem } from "src/features/settings/hooks/useDeleteItem";
 import { AddDocument } from "../components/AddDocument";
 import { EditDocument } from "../components/EditDocument";
 import useUpdateDocumentRequirement from "../hooks/useUpdateDocumentRequirement";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useDelete } from "src/hooks/useDelete";
 
 interface DataType {
   key: React.Key;
@@ -43,7 +43,7 @@ interface IQueryDataType<TPageData> {
     options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
   ) => Promise<QueryObserverResult<any, any>>;
 }
-const deleteEndpointUrl = documentRequirementURL;
+const deleteEndpointUrl = "admin/document-requirement/";
 const queryKey = QUERY_KEY_DOC_REQUIREMENT;
 
 const DocumentRequirements = () => {
@@ -55,8 +55,12 @@ const DocumentRequirements = () => {
     queryKey,
     urlEndPoint: documentRequirementURL,
   });
-  
-  const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
+  const { removeData } = useDelete({
+    EndPointUrl: deleteEndpointUrl,
+    queryKey,
+  });
+
+  // const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
   const [docType, setDocType] = useState("required");
   const [currentId, setCurrentId] = useState<number>();
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -71,8 +75,10 @@ const DocumentRequirements = () => {
   const handleImportCancel = () => {
     setOpenImportModal(false);
   };
-  const { editDocumentRequirement,isLoading:editLoading } = useUpdateDocumentRequirement();
-  const { addDocumentRequirement } = useCreateDocumentRequirement();
+  const { editDocumentRequirement, isLoading: editLoading } =
+    useUpdateDocumentRequirement();
+  const { addDocumentRequirement, postDocLoading } =
+    useCreateDocumentRequirement();
 
   // Handle add new document
   const handleAddNewDocument = (val: any) => {
@@ -167,8 +173,8 @@ const DocumentRequirements = () => {
                 <Menu.Item
                   key="2"
                   onClick={() => {
-                    setCurrentId(record.key as number);
                     setShowDeleteModal(true);
+                    setCurrentId(record.key as number);
                   }}
                 >
                   Delete
@@ -183,7 +189,7 @@ const DocumentRequirements = () => {
     },
   ];
   useEffect(() => {
-    setSubmitted(false)
+    setSubmitted(false);
     if (
       allDocRequirementData?.data &&
       Array.isArray(allDocRequirementData?.data)
@@ -227,9 +233,9 @@ const DocumentRequirements = () => {
       setDataSupportDoc(newDataSupport);
     }
   }, [allDocRequirementData, allDocRequirementLoading]);
-useEffect(() => {
-  refetch();
-}, [submitted,editLoading]);
+  useEffect(() => {
+    refetch();
+  }, [submitted, editLoading]);
   const rowSelectionRequiredDoc = {
     onChange: (_: React.Key[], selectedRows: DataType[]) => {
       selectedRows.length === 0 || !selectedRows
@@ -330,6 +336,7 @@ useEffect(() => {
             />
           </div>
           <Table
+            loading={allDocRequirementLoading}
             rowSelection={{
               type: "checkbox",
               ...rowSelectionRequiredDoc,
@@ -358,6 +365,7 @@ useEffect(() => {
             />
           </div>
           <Table
+            loading={allDocRequirementLoading}
             rowSelection={{
               type: "checkbox",
               ...rowSelectionSupportDoc,
@@ -412,17 +420,19 @@ useEffect(() => {
 
   return (
     <>
-      {currentId && (
-        <DeleteModal
-          heading="Delete Document"
-          description="Are you sure you would like to delete this document"
-          open={showDeleteModal}
-          handleClose={() => setShowDeleteModal(false)}
-          handleDelete={() => {
-            deleteData(currentId);
-          }}
-        />
-      )}
+      <DeleteModal
+        open={showDeleteModal}
+        header="Document"
+        text="document"
+        onCancel={() => {
+          setShowDeleteModal(false);
+        }}
+        onDelete={() => {
+          removeData(currentId as number);
+          setShowDeleteModal(false)
+        }}
+      />
+
       <ImportModal
         heading="Document(s)"
         open={openImportModal}
@@ -434,91 +444,18 @@ useEffect(() => {
         handleClose={handleNewDocumentCancel}
         docType={docType}
         handleAddNewDocument={handleAddNewDocument}
+        postDocLoading={postDocLoading}
       />
       {currentId && (
         <EditDocument
           open={openEditDocumentModal}
+          editLoading={editLoading}
           handleClose={handleEditDocumentCancel}
           docType={docType}
           handleEditNewDocument={handleEditNewDocument}
           id={currentId}
         />
       )}
-      {/* <Modal
-        open={openSupportingDocumentModal}
-        onCancel={handleSupportingDocumentCancel}
-        footer={null}
-      >
-        <div className="flex flex-col items-center">
-          <h1 className="p-4 font-bold text-center text-lg">
-            Select Country/Program Type
-          </h1>
-          <Form.Item
-            required
-            label="Which country passport/residency is applicant applying for?"
-            name="passportCountry"
-            className="md:w-96"
-          >
-            <Select
-              className="w-full"
-              defaultValue={1}
-              options={[
-                {
-                  value: 1,
-                  label: "Grenada",
-                },
-              ]}
-              size="large"
-            />
-          </Form.Item>
-          <Form.Item
-            required
-            label="Which program is the applicant interested in?"
-            name="interestedProgram"
-            className="md:w-96"
-          >
-            <Select
-              size="large"
-              defaultValue={1}
-              options={[
-                {
-                  value: 1,
-                  label: "Grenada",
-                },
-              ]}
-              className="w-full"
-            />
-          </Form.Item>
-          <Form.Item
-            required
-            label="Which investment route is the applicant interested in?"
-            name="investmentRoute"
-            className="md:w-96"
-          >
-            <Select
-              size="large"
-              defaultValue={1}
-              options={[
-                {
-                  value: 1,
-                  label: "Grenada",
-                },
-              ]}
-              className="w-full"
-            />
-          </Form.Item>
-          <div className="flex items-center justify-center gap-4 p-4">
-            <Form.Item>
-              <AppButton
-                type="reset"
-                label="Cancel"
-                variant="transparent"
-                containerStyle="border border-secondary text-secondary"
-              />
-            </Form.Item>
-          </div>
-        </div>
-      </Modal> */}
       <div className=" flex flex-col md:flex-row justify-between p-3">
         <PageIntro
           title="Document Requirements"

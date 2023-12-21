@@ -1,18 +1,25 @@
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { employeesProps } from "../types";
-import { useFetchEmployees } from "../hooks/useFetchEmployees";
+import { QUERY_KEY_FOR_EMPLOYEES, useFetchEmployees } from "../hooks/useFetchEmployees";
 import dayjs from "dayjs";
 import { usePagination } from "src/hooks/usePagination";
 import { searchValueProps } from "src/types";
+import { useSendReminder } from "../hooks/useSendReminder";
+import { useDelete } from "src/hooks/useDelete";
 
 export const InvitedEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
+  const {remindUser} = useSendReminder()
   const { data, isLoading } = useFetchEmployees({
     currentUrl: "inactive-employees",
     pagination,
     search: searchValue,
   });
+  const {removeData} = useDelete({
+    EndPointUrl: "admin/employees/",
+    queryKey: QUERY_KEY_FOR_EMPLOYEES,
+  })
   const columns: ColumnsType<employeesProps> = [
     {
       title: "Full Name",
@@ -79,13 +86,15 @@ export const InvitedEmployees = ({ searchValue }: searchValueProps) => {
       title: "Action",
       dataIndex: "action",
 
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">Send Reminder</Menu.Item>
+                 
+                <Menu.Item key="2" onClick={() => remindUser(val.id)}>Send reminder</Menu.Item>
+                <Menu.Item key="1" onClick={() => removeData(val.id)}>Remove employee</Menu.Item>
               </Menu>
             }
           >
