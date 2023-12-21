@@ -29,7 +29,7 @@ const Workflow = () => {
     setOpenEdit(true);
     setWorkflowId(id);
   };
-
+  // console.log(typeof(data));
   return (
     <>
       <EditWorkflow
