@@ -22,6 +22,13 @@ export const CountryMilestonesAndProgramsTab = () => {
       children: <ProgramTypes />,
     },
   ];
-  const operations = <Select placeholder="Filter" />;
-  return <Tabs items={tabItems} tabBarExtraContent={operations} />;
+  // const operations = <Select placeholder="Filter" />;
+  return (
+    <Tabs
+      items={tabItems}
+      tabBarExtraContent={
+        <Select allowClear placeholder="Filter" className="md:flex hidden w-[200px]" />
+      }
+    />
+  );
 };

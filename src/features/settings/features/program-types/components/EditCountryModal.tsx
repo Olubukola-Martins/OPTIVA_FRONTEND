@@ -1,4 +1,4 @@
-import { Form, Input, Modal,  Skeleton } from "antd";
+import { Form, Input, Modal, Skeleton } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
@@ -22,11 +22,10 @@ export const EditCountryModal = ({
       queryKey: QUERY_KEY_FOR_COUNTRY,
     });
 
-
   useEffect(() => {
     if (countryData) {
       form.setFieldsValue({
-        country: countryData.country.country_name,
+        country: countryData.country_name,
       });
     }
   }, [countryData]);
@@ -38,6 +37,8 @@ export const EditCountryModal = ({
   const [form] = Form.useForm();
   const handleEditCountrySubmit = (val: any) => {
     putData(countryId as unknown as number, val.country);
+    form.resetFields()
+    handleClose();
   };
   return (
     <Skeleton active loading={singleCountryLoading}>
@@ -52,7 +53,7 @@ export const EditCountryModal = ({
           <Form.Item
             name="country"
             label="Country"
-            required
+           
             rules={textInputValidationRules}
           >
             <Input />

@@ -18,23 +18,35 @@ export const DeleteModal = ({
   open,
   onCancel,
   onDelete,
-  isLoading
+  isLoading,
 }: IModalProps) => {
   return (
     <>
       <Modal open={open} onCancel={onCancel} footer={null}>
-        <div className="p-3 flex flex-col items-center gap-5">
+        <div className="p-4 flex flex-col items-center gap-4">
           <img src={DeleteIcon} alt="" />
+
           <h2 className="font-bold text-lg">Delete {header}</h2>
           <p>Are you sure you would like to delete this {text}?</p>
           <div className="flex gap-5">
-            <AppButton
-              variant="transparent"
-              label="Cancel"
-              handleClick={onCancel}
+            <button
+              onClick={onCancel}
+              className="text-secondary  hover:text-primary transition-colors duration-300 font-medium border-2  border-secondary  rounded px-4"
+            >
+              Cancel
+            </button>
 
+            <AppButton
+              type="button"
+              label="Delete"
+              handleClick={() => {
+                if (onDelete) {
+                  onDelete();
+                }
+                onCancel();
+              }}
+              isLoading={isLoading}
             />
-            <AppButton type="button" label="Delete" handleClick={onDelete} isLoading={ isLoading} />
           </div>
         </div>
       </Modal>

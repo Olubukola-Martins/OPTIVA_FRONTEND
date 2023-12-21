@@ -1,5 +1,4 @@
 import { NewApplicantPeculiaritiesTab } from "./NewApplicantPeculiaritiesTab";
-// import { FormInstance } from "antd";
 
 export const NewApplicantPeculiarites = () => {
   return (

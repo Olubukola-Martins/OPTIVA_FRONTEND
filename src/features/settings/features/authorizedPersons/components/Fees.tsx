@@ -1,11 +1,11 @@
-import { Dropdown, Menu, Skeleton, Table } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import { QUERY_KEY_FOR_FEES, useGetFees } from "../hooks/useGetFees";
-import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
 import { DeleteModal } from "src/components/modals/DeleteModal";
-import { useGetCountry } from "../../program-types/hooks/useGetCountry";
-import { useGetInvestmentRoute } from "../../investment/hooks/useGetInvestmentRoute";
+import { useDelete } from "src/hooks/useDelete";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 type DataSourceItem = {
   key: React.Key;
@@ -18,22 +18,18 @@ type DataSourceItem = {
   balancePayment: string;
 };
 
+
 export const Fees = () => {
   const { data, isLoading } = useGetFees();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
   const [feeId, setFeeId] = useState<number>();
 
-  console.log("fees data", data);
-  const { data: countryData } = useGetCountry();
-  const { data: investmentData } = useGetInvestmentRoute();
-  console.log("country data", countryData);
-  console.log("investment data", investmentData);
-
-  const { removeData, deleteIsLoading } = useDeleteHandler({
-    deleteEndPointUrl: "admin/fee",
+  const { removeData } = useDelete({
     queryKey: QUERY_KEY_FOR_FEES,
+    EndPointUrl: "admin/fee/",
   });
 
+ 
   useEffect(() => {
     if (data) {
       const feesArray: DataSourceItem[] = data.map((item, index) => {
@@ -108,7 +104,18 @@ export const Fees = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">Edit</Menu.Item>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setFeeId(val.key as unknown as number);
+                  }}
+                >
+                  <Link
+                    to={appRoute.editFees(val.key as number).path}
+                  >
+                    Edit
+                  </Link>
+                </Menu.Item>
                 <Menu.Item
                   key="2"
                   onClick={() => {
@@ -128,40 +135,43 @@ export const Fees = () => {
     },
   ];
 
+
+
   return (
     <>
       {/* TABLE */}
-      <Skeleton active loading={isLoading}>
-        <Table
-          columns={columns}
-          dataSource={dataArray}
-          className="bg-white rounded-md shadow border mt-2"
-          scroll={{ x: 600 }}
-          rowSelection={{
-            type: "checkbox",
-            onChange: (
-              selectedRowKeys: React.Key[],
-              selectedRows: DataSourceItem[]
-            ) => {
-              console.log(
-                `selectedRowKeys: ${selectedRowKeys}`,
-                "selectedRows: ",
-                selectedRows
-              );
-            },
-          }}
-        />
-      </Skeleton>
+      <Table
+        loading={isLoading}
+        columns={columns}
+        dataSource={dataArray}
+        className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        rowSelection={{
+          type: "checkbox",
+          onChange: (
+            selectedRowKeys: React.Key[],
+            selectedRows: DataSourceItem[]
+          ) => {
+            console.log(
+              `selectedRowKeys: ${selectedRowKeys}`,
+              "selectedRows: ",
+              selectedRows
+            );
+          },
+        }}
+      />
 
       {/* DELETE MODAL */}
-      <DeleteModal
-        header="Delete Fee"
-        onCancel={handleDeleteModalCancel}
-        open={isDeleteModalOpen}
-        onDelete={() => removeData(feeId as unknown as number)}
-        isLoading={deleteIsLoading}
-        text="fee"
-      />
+      {feeId && (
+        <DeleteModal
+          header="Delete Fee"
+          onCancel={handleDeleteModalCancel}
+          open={isDeleteModalOpen}
+          onDelete={() => removeData(feeId)}
+          // isLoading={deleteIsLoading}
+          text="fee"
+        />
+      )}
     </>
   );
 };

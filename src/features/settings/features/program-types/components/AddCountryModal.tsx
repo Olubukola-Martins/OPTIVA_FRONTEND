@@ -36,7 +36,8 @@ export const AddCountryModal = ({ handleClose, open }: IdentifierProps) => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_COUNTRY]);
-          form.resetFields();
+          form.resetFields()
+          handleClose()
         },
       }
     );

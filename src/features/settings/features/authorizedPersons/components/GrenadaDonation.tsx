@@ -1,146 +1,149 @@
-import { Form, Input, Select } from "antd";
+import { Form, InputNumber } from "antd";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
+
+// govt ntf > 55 ??
 
 export const GrenadaDonation = () => {
-  const currency = (
-    <Select
-      options={[
-        { value: "USD", label: "USD" },
-        { label: "Naira", value: "Naira" },
-      ]}
-      defaultValue="USD"
-    />
-  );
   return (
     <div className="flex gap-8">
       <div className="w-1/2">
         <Form.Item
-          label="Gov't NTF Contribution for Family < 4"
-          name="govtNTFFamilyFour"
-          required
+          label={`Gov't NTF Contribution for Family \u22644`}
+          name="govt_ntf_bution_for_family_ls_than_eq_four"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't NTF Contribution for Additional Dependents"
-          name="govtNTFAdditionalDependent"
-          required
+          name="govt_ntf_bution_for_add_depn"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't NTF Contribution for Parents < 55"
-          name="govtNTFParents"
-          required
+          name="govt_ntf_bution_for_parents_ls_than_fifty_five"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't NTF Application Fee"
-          name="govtNTFApplicationFee"
-          required
+          name="govt_ntf_application_fee"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't Due Diligence Fee for Spouse"
-          name="govtDueDiligenceSpouse"
-          required
+          name="govt_due_dil_fee_for_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
-          label=" Gov't Due Diligence Fee for Dependents 17yrs-25yrs"
-          name="govtDependentDueDiligenceDependents"
-          required
+          label=" Gov't Due Diligence Fee for Dependents 17yrs - 25yrs"
+          name="govt_due_dil_fee_for_depn_seventeen_to_twenty_five"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't  Processing for Spouse"
-          name="govtProcessingSpouse"
-          required
+          name="govt_prc_fee_for_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
-        <Form.Item
-          label="Gov't  Processing for Additional Dependents >16yrs"
-          name="govtProcessingDependentSixteen"
-          required
-        >
-          <Input addonAfter={currency} />
-        </Form.Item>
+
         <Form.Item
           label="Gov't Passport & Oath of Allegiance Fee"
-          name="govtPassportOath"
-          required
+          name="govt_passport_and_oath_of_allegiance_fee"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
-        <Form.Item label="Local Agent Fee + VAT" name="localAgentFee" required>
-          <Input addonAfter={currency} />
+        <Form.Item
+          label="Local Agent Fee + VAT"
+          name="local_agent_fee_and_vat"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item
+          label="Legal & Advisory Fee"
+          name="legal_advisory_fee"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
       </div>
       <div className="w-1/2">
-        <Form.Item label="Gov't Spouseless Fee" name="govtSpouseless" required>
-          <Input addonAfter={currency} />
+        <Form.Item
+          label="Gov't Spouseless Fee"
+          name="govt_spouseless_fee"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
 
         <Form.Item
           label="Gov't  NTF Contribution for Parents < 55"
-          name="govtNTFParent"
-          required
+          name="govt_ntf_bution_for_parents_gt_than_fifty_five"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't NTF Contribution for Unmarried Siblings"
-          name="govtNTFUnmarriedSiblings"
-          required
+          name="govt_ntf_bution_for_unmarried_siblings"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't Due Diligence for Main Applicant"
-          name="govtDueDiligenceApplicant"
-          required
+          name="govt_due_dil_fee_for_main_applicant"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
-          label="Gov't Due Diligence Fee for <16yrs"
-          name="govttDueDiligenceSixteen"
-          required
+          label={`Gov't  Processing for Additional Dependents \u226416yrs`}
+          name="govt_prc_fee_for_add_depn_ls_than_eq_sixteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item
+          label={`Gov't  Processing for Additional Dependents \u226517yrs`}
+          name="govt_prc_fee_for_add_depn_gt_than_seventeen"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't Processing for Main Applicant"
-          name="gov'tProcessingApplicant"
-          required
+          name="govt_prc_fee_for_main_applicant"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
-          label="Gov't Processing forAdditional Dependent <16yrs"
-          name="govtProcessingAdditionalDependentSixteen"
-          required
+          label={`Gov't  Due Diligence for Additional Dependents \u226416yrs`}
+          name="govt_due_dil_fee_for_depn_ls_than_or_eq_to_sixteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
-      
+
         <Form.Item
           label="Grenada Bank Fees"
-          name="grenadaBankFee"
-          required
+          name="grenada_bank_fees"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
-        </Form.Item>
-        <Form.Item
-          label="Legal & Advisory Fee"
-          name="localAdvisoryFee"
-          required
-        >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
       </div>
     </div>

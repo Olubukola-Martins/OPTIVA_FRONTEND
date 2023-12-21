@@ -1,9 +1,44 @@
-import { Input, Select, Form, DatePicker } from "antd";
+import { Form, Skeleton } from "antd";
+import { AppButton } from "src/components/button/AppButton";
+import { QUERY_KEY_FOR_APPLICATION_TEMPLATE } from "src/features/settings/features/appTemplate/hooks/useGetApplicationTemplate";
+import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetSingleQuestion";
+import { renderInput } from "./NewApplicantBrief";
 
 export const NewPersonalDetails = () => {
+  const { data, isLoading } = useGetSingleQuestion({
+    id: 3,
+    endpointUrl: "section-two",
+    queryKey: QUERY_KEY_FOR_APPLICATION_TEMPLATE,
+  });
+  const [form] = Form.useForm();
+  const handleSubmit = (val: any) => {
+    console.log("Values of form:", val);
+  };
   return (
-    <div>
-      <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full">
+    <>
+      <Skeleton active loading={isLoading}>
+      <Form onFinish={handleSubmit} form={form} layout="vertical">
+        {data?.map(
+          (item) =>
+            item.subsection_name === "personalDetails" && (
+              <div className="w-full">
+                <Form.Item
+                  name={item.form_question}
+                  label={item.form_question}
+                  key={item.id}
+                  className="w-full"
+                >
+                  {renderInput(item.input_type)}
+                </Form.Item>
+              </div>
+            )
+        )}
+
+        <AppButton label="Save" type="submit" />
+      </Form>
+      </Skeleton>
+     
+      {/* <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10 w-full">
         <div className="lg:w-1/2">
           <div>
             <h2 className="p-2">Title</h2>
@@ -158,7 +193,7 @@ export const NewPersonalDetails = () => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div> */}
+    </>
   );
 };

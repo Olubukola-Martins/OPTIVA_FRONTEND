@@ -15,6 +15,16 @@ export const DefineFeesAndAuthorizedPersonsTab = () => {
       children: <AuthorizedPersons />,
     },
   ];
-  const operations = <Select placeholder="Filter" className="" />;
-  return <Tabs items={tabItems} tabBarExtraContent={operations} />;
+  return (
+    <Tabs
+      items={tabItems}
+      tabBarExtraContent={
+        <Select
+          allowClear
+          placeholder="Filter"
+          className="md:flex hidden w-[200px]"
+        />
+      }
+    />
+  );
 };

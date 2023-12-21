@@ -2,7 +2,7 @@ import axios from "axios";
 import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { rolesProps } from "../types";
-import { useGetToken } from "src/hooks/useGetToken";
+import { useGetToken } from "src/hooks/useGetToken"; 
 
 const UserRequest = async (props: rolesProps) => {
   const token = useGetToken();

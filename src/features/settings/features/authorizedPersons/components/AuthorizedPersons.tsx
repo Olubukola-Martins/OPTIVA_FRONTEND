@@ -1,13 +1,13 @@
-import { Dropdown, Menu,  Skeleton, Table } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
-import { useGetAuthorizedPersons } from "../hooks/useGetAuthorizedPersons";
 import {
-  useDeleteHandler,
-} from "src/features/settings/hooks/handleDelete";
+  QUERY_KEY_FOR_AUTHORIZED_PERSON,
+  useGetAuthorizedPersons,
+} from "../hooks/useGetAuthorizedPersons";
 import { DeleteModal } from "src/components/modals/DeleteModal";
-import { QUERY_KEY_FOR_MILESTONE } from "../../program-types/hooks/useGetMilestone";
+import { useDelete } from "src/hooks/useDelete";
 
 type DataSourceItem = {
   key: React.Key;
@@ -34,16 +34,15 @@ export const AuthorizedPersons = () => {
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
   const [authorizedId, setAuthorizedId] = useState<number>();
 
-  const { removeData, deleteIsLoading } = useDeleteHandler({
-    deleteEndPointUrl: "admin/milestone",
-    queryKey: QUERY_KEY_FOR_MILESTONE,
+const {removeData}=  useDelete({
+    queryKey: QUERY_KEY_FOR_AUTHORIZED_PERSON,
+    EndPointUrl: "/admin/authorized-person",
   });
+
+  console.log("authorized person", data);
 
   const handleDeleteCheckbox = () => {
     console.log("Deleting rows:", selectedRowKeys);
-    // showDeleteModal()
-    // handleDelete({ id: id as unknown as number, deleteEndPointUrl: "/admin/authorized-person", token });
-
     setSelectedRowKeys([]);
   };
 
@@ -53,7 +52,7 @@ export const AuthorizedPersons = () => {
         return {
           key: item.id,
           sn: index + 1,
-          name: item.employee,
+          name: item.employee.name,
           dateCreated: formatDate(item.created_at),
         };
       });
@@ -90,7 +89,7 @@ export const AuthorizedPersons = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_,val) => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -129,31 +128,31 @@ export const AuthorizedPersons = () => {
         </div>
       )}
 
-      <Skeleton loading={isLoading} active>
-        <Table
-          columns={columns}
-          dataSource={dataArray}
-          className="bg-white rounded-md shadow border mt-2"
-          scroll={{ x: 600 }}
-          rowSelection={{
-            type: "checkbox",
-            selectedRowKeys,
-            onChange: (keys: React.Key[], rows: DataSourceItem[]) => {
-              setSelectedRowKeys(keys);
-              console.log("selectedRowKeys:", keys, "selectedRows:", rows);
-            },
-          }}
-        />
-      </Skeleton>
+      <Table
+        loading={isLoading}
+        columns={columns}
+        dataSource={dataArray}
+        className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        rowSelection={{
+          type: "checkbox",
+          selectedRowKeys,
+          onChange: (keys: React.Key[], rows: DataSourceItem[]) => {
+            setSelectedRowKeys(keys);
+            console.log("selectedRowKeys:", keys, "selectedRows:", rows);
+          },
+        }}
+      />
 
       {/* DELETE MODAL */}
+      
       <DeleteModal
         open={isDeleteModalOpen}
         header="Authorized Person"
         text="authorized person"
         onCancel={handleDeleteModalCancel}
         onDelete={() => removeData(authorizedId as unknown as number)}
-        isLoading={deleteIsLoading}
+        // isLoading={deleteIsLoading}
       />
     </>
   );
