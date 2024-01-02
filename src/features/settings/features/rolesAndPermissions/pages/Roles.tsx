@@ -66,7 +66,7 @@ const Roles = () => {
                     description={`Are you sure to delete ${item.name}`}
                     onConfirm={() => removeData(item.id)}
                   >
-                    <i className="ri-delete-bin-line cursor-pointer hover:text-primary"></i>
+                    <i className={` ${item.is_deletable ? 'flex' : 'hidden'} ri-delete-bin-line cursor-pointer hover:text-primary`}></i>
                   </Popconfirm>
                 </div>
               </div>

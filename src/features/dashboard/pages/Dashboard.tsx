@@ -7,9 +7,12 @@ import { LatestActivities } from "../components/LatestActivities";
 import { AppStatus } from "../components/AppStatus";
 import { PopularCountries } from "../components/PopularCountries";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+import { useFetchRoles } from "src/features/settings/features/rolesAndPermissions/hooks/useFetchRoles";
 
 const Dashboard = () => {
   const { data: userInfo } = useFetchUserProfile();
+  const {data: rolesData} = useFetchRoles();
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -31,6 +34,7 @@ const Dashboard = () => {
           <img src={welcomeVector} alt="dashboard" />
         </div>
       </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-7">
         <SimpleCard
           icon="ph:user-list-duotone"
