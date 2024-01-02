@@ -47,7 +47,10 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
       dataIndex: "role",
       render: (_, val) => (
         <div>
-          <Dropdown
+          {val?.user?.roles?.map((item) => (
+            <span className="capitalize" key={item.id}>{item.name}</span>
+          ))}
+          {/* <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
@@ -58,7 +61,7 @@ export const ActiveEmployees = ({ searchValue }: searchValueProps) => {
             }
           >
             <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
-          </Dropdown>
+          </Dropdown> */}
         </div>
       ),
     },

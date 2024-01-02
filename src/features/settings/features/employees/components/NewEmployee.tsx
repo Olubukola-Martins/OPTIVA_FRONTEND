@@ -92,9 +92,7 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
             mode="multiple"
             control={{ name: "branches", label: "Branches" }}
           />
-
-         
-          <FormRolesInput Form={Form} mode="multiple"/>
+          <FormRolesInput Form={Form}/>
         </div>
         <FormDepartmentInput Form={Form} />
 
