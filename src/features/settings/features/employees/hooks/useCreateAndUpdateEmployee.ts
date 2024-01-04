@@ -19,11 +19,7 @@ const UserRequest = async (props: employeesProps) => {
   };
 
   const data = {
-    name: props.name,
-    email: props.email,
-    department_id: props.department_id,
-    roles: [props.roles],
-    branches: props.branches,
+    ...props,
   };
   const requestType = props.id ? axios.put : axios.post;
   const response = await requestType(url, data, config);
