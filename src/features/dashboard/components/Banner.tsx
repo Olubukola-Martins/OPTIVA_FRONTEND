@@ -2,10 +2,12 @@ import welcomeVector from ".././assets/welcomeVector.svg";
 import introBg from ".././assets/introBg.png";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
-export const Banner = () => {
-const { data: userInfo } = useFetchUserProfile();
+interface IProps {
+  title: string;
+}
 
-// console.log(data);
+export const Banner = (props: IProps) => {
+  const { data: userInfo } = useFetchUserProfile();
 
   return (
     <div
@@ -16,7 +18,11 @@ const { data: userInfo } = useFetchUserProfile();
         <h2 className="font-semibold text-lg md:text-2xl pb-1">
           Hello {userInfo?.name}!
         </h2>
-        <p className="text-sm md:text-base">Welcome to your dashboard</p>
+        <p className="text-sm md:text-base">
+          {props.title}{" "}
+          <span className={`${props.title ? "pr-2" : "hidden"}`}>-</span>
+          Welcome to your dashboard
+        </p>
       </div>
       <div className="pt-5 md:flex hidden">
         <img src={welcomeVector} alt="dashboard" />
@@ -24,4 +30,3 @@ const { data: userInfo } = useFetchUserProfile();
     </div>
   );
 };
-

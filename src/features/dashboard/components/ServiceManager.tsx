@@ -1,13 +1,12 @@
-import { SimpleCard } from "src/components/cards/SimpleCard"
-import { Banner } from "./Banner"
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+import { SimpleCard } from "src/components/cards/SimpleCard";
+import { Banner } from "./Banner";
 
-export const Audit = () => {
+export const ServiceManager = () => {
   const { data: rolesData } = useFetchUserProfile();
-
   return (
     <div>
-         <Banner title={rolesData?.roles?.name || ""}/>
+      <Banner title={rolesData?.roles?.name || ""} />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-7">
         <SimpleCard
           icon="ph:user-list-duotone"
@@ -37,5 +36,5 @@ export const Audit = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};

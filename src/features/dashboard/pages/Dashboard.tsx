@@ -1,17 +1,17 @@
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
-import { SimpleCard } from "src/components/cards/SimpleCard";
-
-import { LatestActivities } from "../components/LatestActivities";
-import { AppStatus } from "../components/AppStatus";
-import { PopularCountries } from "../components/PopularCountries";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
-import { useFetchRoles } from "src/features/settings/features/rolesAndPermissions/hooks/useFetchRoles";
+import { Admin } from "../components/Admin";
+import { ServiceManager } from "../components/ServiceManager";
+import { DSM } from "../components/DSM";
+import { DPO } from "../components/DPO";
+import { Audit } from "../components/Audit";
+import { DR } from "../components/DR";
+import { CustomerExperience } from "../components/CustomerExperience";
+import { CE } from "../components/CE";
 
 const Dashboard = () => {
-  // const { data } = useFetchRoles();
   const { data } = useFetchUserProfile();
-  console.log(data);
 
   return (
     <>
@@ -19,12 +19,14 @@ const Dashboard = () => {
         <PageIntro title="Dashboard" arrowBack={false} />
         <AppButton label="Add Applicants" />
       </div>
-
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        <PopularCountries />
-        <AppStatus />
-        <LatestActivities />
-      </div> */}
+      {data?.roles.id === 1 && <Admin />}
+      {data?.roles.id === 2 && <ServiceManager />}
+      {data?.roles.id === 3 && <DSM />}
+      {data?.roles.id === 4 && <DPO />}
+      {data?.roles.id === 5 && <Audit />}
+      {data?.roles.id === 6 && <DR />}
+      {data?.roles.id === 8 && <CustomerExperience />}
+      {data?.roles.id === 9 && <CE />}
     </>
   );
 };

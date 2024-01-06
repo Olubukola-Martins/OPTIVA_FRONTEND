@@ -23,4 +23,8 @@ export interface userProfileProps {
   intl_id?: any;
   applicant_id?: any;
   image: string;
+  roles: {
+    id: number;
+    name: string;
+  }
 }
