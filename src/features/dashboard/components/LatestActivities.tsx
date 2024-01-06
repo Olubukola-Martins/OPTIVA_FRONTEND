@@ -1,6 +1,5 @@
-
 import { Tabs } from "antd";
-import { AppButton } from "src/components/button/AppButton";
+// import { AppButton } from "src/components/button/AppButton";
 
 export const LatestActivities = () => {
   return (
@@ -11,7 +10,7 @@ export const LatestActivities = () => {
           <span className="text-sm">Latest Activities</span>
         </div>
 
-        <AppButton variant="transparent" label="View more" />
+        {/* <AppButton variant="transparent" label="View more" /> */}
       </div>
 
       <Tabs

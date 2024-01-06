@@ -4,12 +4,12 @@ import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
 import { adminDashboardCounts } from "../types";
 
-export const QUERY_KEY_FOR_USER_PROFILE = "userProfile";
+export const QUERY_KEY_FOR_ADMIN_DASHBOARD = "adminDashboardCounts";
 
 const getData = async (): Promise<adminDashboardCounts> => {
   const token = useGetToken();
 
-  const url = `${END_POINT.BASE_URL}/get-profile`;
+  const url = `${END_POINT.BASE_URL}/admin/dashboard/admin`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -25,7 +25,7 @@ const getData = async (): Promise<adminDashboardCounts> => {
   return data;
 };
 export const useGetDashboardInfo = () => {
-  const queryData = useQuery([QUERY_KEY_FOR_USER_PROFILE], () => getData(), {
+  const queryData = useQuery([QUERY_KEY_FOR_ADMIN_DASHBOARD], () => getData(), {
     onError: () => {},
     onSuccess: () => {},
   });
