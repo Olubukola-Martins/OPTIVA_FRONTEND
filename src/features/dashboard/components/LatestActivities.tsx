@@ -1,4 +1,4 @@
-import { Tabs } from "antd";
+// import { Tabs } from "antd";
 // import { AppButton } from "src/components/button/AppButton";
 
 export const LatestActivities = () => {
@@ -13,7 +13,7 @@ export const LatestActivities = () => {
         {/* <AppButton variant="transparent" label="View more" /> */}
       </div>
 
-      <Tabs
+      {/* <Tabs
         defaultActiveKey="1"
         className="mt-2"
         size="small"
@@ -39,7 +39,7 @@ export const LatestActivities = () => {
             children: "Content of Tab Pane 4",
           },
         ]}
-      />
+      /> */}
     </div>
   );
 };

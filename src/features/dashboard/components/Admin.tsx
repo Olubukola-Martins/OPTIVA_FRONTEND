@@ -11,7 +11,7 @@ export const Admin = () => {
   return (
     <>
       <Banner title="" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-7">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-8">
         <SimpleCard
           icon="ph:user-list-duotone"
           cardColor="blue"
@@ -40,14 +40,14 @@ export const Admin = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-7 mt-10">
         <PercentageWrap title="Application status" buttonLabel="This month">
           <div className="flex justify-center">
             <div className="flex gap-y-6 flex-col">
               <Progress
-                strokeColor={'var(--card-yellow)'}
+                strokeColor={"var(--card-yellow)"}
                 type="circle"
-                percent={85}
+                percent={count?.application_status.rejected}
                 format={(percent) => (
                   <div className="text-accent">
                     <span>{percent}%</span>
@@ -56,9 +56,9 @@ export const Admin = () => {
                 )}
               />
               <Progress
-                strokeColor={'var(--card-green)'}
+                strokeColor={"var(--card-green)"}
                 type="circle"
-                percent={92}
+                percent={count?.application_status.submitted}
                 format={(percent) => (
                   <div className="text-accent">
                     <span>{percent}%</span>
@@ -71,9 +71,9 @@ export const Admin = () => {
 
             <div className="mt-7">
               <Progress
-                strokeColor={'var(--card-blue)'}
+                strokeColor={"var(--card-blue)"}
                 type="circle"
-                percent={92}
+                percent={count?.application_status.under_review}
                 format={(percent) => (
                   <div className="text-accent">
                     <span>{percent}%</span>
