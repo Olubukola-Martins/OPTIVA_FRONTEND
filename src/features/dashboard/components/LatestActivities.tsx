@@ -7,7 +7,7 @@ export const LatestActivities = () => {
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
           <i className="ri-play-fill text-lg"></i>
-          <span className="text-sm">Latest Activities</span>
+          <span className="text-base">Latest Activities</span>
         </div>
 
         {/* <AppButton variant="transparent" label="View more" /> */}

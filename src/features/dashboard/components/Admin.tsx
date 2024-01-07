@@ -1,10 +1,13 @@
 import { SimpleCard } from "src/components/cards/SimpleCard";
 import { Banner } from "./Banner";
-// import { PopularCountries } from "./PopularCountries";
-import { AppStatus } from "./AppStatus";
 import { LatestActivities } from "./LatestActivities";
+import { useGetAdminDashboardCounts } from "../hooks/useGetAdminDashboardCounts";
+import { PercentageWrap } from "./PercentageWrap";
+import { Progress } from "antd";
 
 export const Admin = () => {
+  const { data } = useGetAdminDashboardCounts();
+  const count = data?.administrator;
   return (
     <>
       <Banner title="" />
@@ -13,33 +16,75 @@ export const Admin = () => {
           icon="ph:user-list-duotone"
           cardColor="blue"
           title="Master List"
-          count={0}
+          count={count?.master_list || 0}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
           cardColor="oxblood"
           title="Authorized  
             Applicants"
-          count={0}
+          count={count?.authorized_applications || 0}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
           cardColor="green"
           title="Paid
           Applicants"
-          count={0}
+          count={count?.paid_applications || 0}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
           cardColor="yellow"
           title="Prospects"
-          count={0}
+          count={count?.prospects || 0}
         />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 mt-8">
-        {/* <PopularCountries /> */}
-        <AppStatus />
+        <PercentageWrap title="Application status" buttonLabel="This month">
+          <div className="flex justify-center">
+            <div className="flex gap-y-6 flex-col">
+              <Progress
+                strokeColor={'var(--card-yellow)'}
+                type="circle"
+                percent={85}
+                format={(percent) => (
+                  <div className="text-accent">
+                    <span>{percent}%</span>
+                    <span className="block text-sm pt-1">Pending</span>
+                  </div>
+                )}
+              />
+              <Progress
+                strokeColor={'var(--card-green)'}
+                type="circle"
+                percent={92}
+                format={(percent) => (
+                  <div className="text-accent">
+                    <span>{percent}%</span>
+                    <span className="block text-sm pt-1">Submitted</span>
+                  </div>
+                )}
+                size={160}
+              />
+            </div>
+
+            <div className="mt-7">
+              <Progress
+                strokeColor={'var(--card-blue)'}
+                type="circle"
+                percent={92}
+                format={(percent) => (
+                  <div className="text-accent">
+                    <span>{percent}%</span>
+                    <span className="block text-sm pt-1">Under Review</span>
+                  </div>
+                )}
+                size={180}
+              />
+            </div>
+          </div>
+        </PercentageWrap>
         <LatestActivities />
       </div>
     </>

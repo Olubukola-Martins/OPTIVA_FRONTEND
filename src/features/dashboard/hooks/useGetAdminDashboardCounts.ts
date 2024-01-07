@@ -24,7 +24,7 @@ const getData = async (): Promise<adminDashboardCounts> => {
 
   return data;
 };
-export const useGetDashboardInfo = () => {
+export const useGetAdminDashboardCounts = () => {
   const queryData = useQuery([QUERY_KEY_FOR_ADMIN_DASHBOARD], () => getData(), {
     onError: () => {},
     onSuccess: () => {},
