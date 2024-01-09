@@ -47,7 +47,7 @@ export const Admin = () => {
               <Progress
                 strokeColor={"var(--card-yellow)"}
                 type="circle"
-                percent={count?.application_status.rejected}
+                percent={5}
                 format={(percent) => (
                   <div className="text-accent">
                     <span>{percent}%</span>

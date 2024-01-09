@@ -11,7 +11,11 @@ export const PercentageWrap = ({ buttonLabel, children, title }: IProps) => {
     <div className="rounded shadow-sm border px-[13px] py-3">
       <div className="flex items-center justify-between">
         <h4 className="text-base font-medium">{title}</h4>
-        <AppButton variant="transparent" label={buttonLabel} />
+        <AppButton
+          variant="transparent"
+          label={buttonLabel}
+          containerStyle="cursor-text"
+        />
       </div>
 
       <div className="pb-8 pt-12 px-3">{children}</div>
