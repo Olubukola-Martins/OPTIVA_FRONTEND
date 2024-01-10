@@ -10,7 +10,6 @@ import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
 import Payments from "src/features/payment/pages/Payments";
 import PaymentDetails from "src/features/payment/pages/PaymentDetails";
 import GenerateReceipt from "src/features/payment/pages/GenerateReceipt";
-import GenerateInvoice from "src/features/payment/pages/GenerateInvoice";
 import GenerateFinancialStatement from "src/features/payment/pages/GenerateFinancialStatement";
 import GenerateContract from "src/features/payment/pages/GenerateContract";
 import Reports from "src/features/report/pages/Reports";
@@ -46,6 +45,7 @@ import EditProgramType from "src/features/settings/features/program-types/pages/
 import Workflow from "src/features/settings/features/workFlow/pages/Workflow";
 import AddWorkflow from "src/features/settings/features/workFlow/pages/AddWorkflow";
 import WorkflowDetails from "src/features/settings/features/workFlow/pages/WorkflowDetails";
+import ViewInvoice from "src/features/payment/pages/ViewInvoice";
 
 const routesArray = [
   {
@@ -71,7 +71,7 @@ const routesArray = [
   { path: appRoute.payments, element: <Payments /> },
   { path: appRoute.paymentDetails().format, element: <PaymentDetails /> },
   { path: appRoute.generateReciept().format, element: <GenerateReceipt /> },
-  { path: appRoute.generateInvoice().format, element: <GenerateInvoice /> },
+  { path: appRoute.viewInvoice().format, element: <ViewInvoice /> },
   {
     path: appRoute.financialStatement().format,
     element: <GenerateFinancialStatement />,

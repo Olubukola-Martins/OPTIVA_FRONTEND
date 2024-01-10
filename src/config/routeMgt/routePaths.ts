@@ -73,7 +73,7 @@ export const appRoute = {
 
   // Payments
   payments: `/payments`,
-  generateInvoice: (id?: number) => ({
+  viewInvoice: (id?: number) => ({
     format: `/payments/:id/generateInvoice`,
     path: `/payments/${id}/generateInvoice`,
   }),
