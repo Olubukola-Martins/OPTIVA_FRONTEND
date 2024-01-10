@@ -1,29 +1,14 @@
-// export interface adminDashboardCounts {
-//   administrator: {
-//     total_applications: number;
-//     master_list: number;
-//     paid_applications: number;
-//     prospects: number;
-//     application_status: {
-//       under_review: number;
-//       rejected: number;
-//       submitted: number;
-//     };
-//   };
-//   customer_experience: {
-//     total_applications: number;
-//     active_application: number;
-//     inactive_application: number;
-//     submitted: number;
-//     application_status: {
-//       under_review: number;
-//       rejected: number;
-//       submitted: number;
-//     };
-//   };
-// }
-
-
+export interface IActivityLogs {
+  id: number;
+  action_type: string;
+  item: string;
+  created_at: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  }
+}
 
 export interface adminDashboardCounts {
   administrator: Administrator;

@@ -1,7 +1,10 @@
-// import { Tabs } from "antd";
-// import { AppButton } from "src/components/button/AppButton";
+import { Empty, Skeleton } from "antd";
+import { useGetActivityLog } from "../hooks/useGetActivityLog";
+import dayjs from "dayjs";
 
 export const LatestActivities = () => {
+  const { data, isLoading } = useGetActivityLog();
+
   return (
     <div className="rounded shadow-sm border p-3">
       <div className="flex justify-between">
@@ -9,37 +12,38 @@ export const LatestActivities = () => {
           <i className="ri-play-fill text-lg"></i>
           <span className="text-base">Latest Activities</span>
         </div>
-
-        {/* <AppButton variant="transparent" label="View more" /> */}
       </div>
 
-      {/* <Tabs
-        defaultActiveKey="1"
-        className="mt-2"
-        size="small"
-        items={[
-          {
-            key: "1",
-            label: "All",
-            children: "Content of Tab Pane 1",
-          },
-          {
-            key: "2",
-            label: "1 hour ago",
-            children: "Content of Tab Pane 2",
-          },
-          {
-            key: "3",
-            label: "10 hours ago",
-            children: "Content of Tab Pane 3",
-          },
-          {
-            key: "4",
-            label: "24 hours ago",
-            children: "Content of Tab Pane 4",
-          },
-        ]}
-      /> */}
+      <table className="w-full text-left mt-2">
+        <thead>
+          <tr className="bg-gray-200 text-sm rounded">
+            <th className="py-1 font-normal pl-2">Date</th>
+            <th className="py-1 font-normal">User</th>
+            <th className="py-1 font-normal pr-2">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <Skeleton active loading={isLoading} className="mt-3">
+            {data?.length === 0 ? (
+              <div className="flex justify-center mt-10">
+                <Empty />
+              </div>
+            ) : (
+              data?.map((item) => (
+                <tr key={item.id} className="text-xs text-accent">
+                  <td className="p-[5px]">
+                    {dayjs(item.created_at).format("YYYY/MM/DD HH:mm")}
+                  </td>
+                  <td className="p-[5px]">{item.user.email}</td>
+                  <td className="p-[5px]">
+                    {item.user.name} {item.action_type} {item.item}
+                  </td>
+                </tr>
+              ))
+            )}
+          </Skeleton>
+        </tbody>
+      </table>
     </div>
   );
 };
