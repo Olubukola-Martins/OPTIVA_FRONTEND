@@ -4,11 +4,12 @@ import {
   generalValidationRules,
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
-import { usePostSectionOneQuestion } from "../../hooks/usePostSectionOneQuestion";
+import { usePostSectionOneQuestion } from "../../hooks/usePostTemplateQuestion";
 import { ITemplateCreatedProps } from "./ApplicationTemplateTab";
 import { QUERY_KEY_FOR_APPLICATION_TEMPLATE } from "../../hooks/useGetApplicationTemplate";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
+import { optionInputValidationRules } from "./ApplicantBriefTemplate";
 
 export const ApplicantPeculiaritesTemplate = ({
   templateCreated,
@@ -17,42 +18,39 @@ export const ApplicantPeculiaritesTemplate = ({
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
-  // const handleAddField = () => {
-  //   const newTemplateQuestion = form.getFieldValue("newTemplateQuestion") || [];
-  //   const initialQuestion = { newQuestion: "", newInputType: "" };
-  //   form.setFieldsValue({
-  //     newTemplateQuestion: [...newTemplateQuestion, initialQuestion],
-  //   });
-  // };
 
-  // const handleRemoveField = (index: number) => {
-  //   const newTemplateQuestion = form.getFieldValue("newTemplateQuestion") || [];
-  //   form.setFieldsValue({
-  //     newTemplateQuestion: newTemplateQuestion.filter(
-  //       (_: any, i: number) => i !== index
-  //     ),
-  //   });
-  // };
   const initialValues = {
     questions: [{ question: "", inputType: "", subsection_name: "" }],
   };
 
   const { mutate, isLoading } = usePostSectionOneQuestion("section-three");
   const handleSubmit = (val: any) => {
-    console.log("form values", val);
     const formattedValues = {
       template_id: resId as unknown as number,
-      questions: val.questions.map((question: any) => ({
-        form_question: question.question,
-        input_type: question.inputType,
-        subsection_name: question.subsection_name
-      })),
-    };
+      questions: val.questions.map((question: any) => {
+        const baseQuestion = {
+          form_question: question.question,
+          input_type: question.inputType,
+          subsection_name: question.subsection_name,
+        };
+      if (["select", "check_box"].includes(question.inputType)) {
+        const optionsArray = question.options
+          ? question.options.split(",").map((option: string) => option.trim())
+          : [];
+        return {
+          ...baseQuestion,
+          options: optionsArray,
+        };
+      }
+
+      return baseQuestion;
+    }),
+  }
     mutate(formattedValues, {
       onError: (error: any) => {
         openNotification({
           state: "error",
-          title: "Error Occured",
+          title: "Error Occurred",
           description: error.response.data.message,
           duration: 5,
         });
@@ -141,17 +139,36 @@ export const ApplicantPeculiaritesTemplate = ({
                           placeholder="Select Input Type"
                           options={[
                             {
-                              value: "immigrationCourtProcedings",
-                              label:
-                                "Immigration And Court Proceedings",
+                              value: "personalDetails",
+                              label: "Personal Details",
                             },
-                            { value: "criminalHistory", label: "Criminal History" },
-
-                           
+                            {
+                              value: "contactDetails",
+                              label: "Contact Details",
+                            },
                           ]}
                         />
                       </Form.Item>
                     </div>
+
+                        {/* Render text area for "select" or "check_box" */}
+                        {["select", "check_box"].includes(
+                      form.getFieldValue(["questions", name, "inputType"])
+                    ) && (
+                      <div className="w-1/3">
+                        <Form.Item
+                          {...restField}
+                          name={[name, "options"]}
+                          label="Options (seperate each option by a comma)"
+                          rules={optionInputValidationRules}
+                        >
+                          <Input.TextArea
+                            placeholder="Enter options seperated by a comma"
+                            rows={4}
+                          />
+                        </Form.Item>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex justify-end my-4 w-[5%]">
@@ -195,3 +212,4 @@ export const ApplicantPeculiaritesTemplate = ({
     </>
   );
 };
+ 

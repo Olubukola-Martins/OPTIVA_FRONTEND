@@ -4,18 +4,25 @@ import { AppButton } from "src/components/button/AppButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import { Form, Input, InputNumber, Modal, Select } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
-import { useCreateApplication } from "../hooks/NewApplicationHooks/useCreateApplication";
+import { useCreateApplication } from "../hooks/useCreateApplication";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
 import { useFetchCurrentBranch } from "src/ExtraSettings/hooks/useFetchCurrentBranch";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/ApplicationHooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
+import {
+  generalValidationRules,
+  textInputValidationRules,
+} from "src/utils/formHelpers/validations";
+import { useGlobalContext } from "src/stateManagement/GlobalContext";
+
+export let applicantId: number | undefined;
 
 const Applications = () => {
   const [form] = Form.useForm();
@@ -25,11 +32,12 @@ const Applications = () => {
   const { data: investmentData } = useGetInvestmentRoute();
   const { data: branchData } = useFetchCurrentBranch();
   const queryClient = useQueryClient();
-
-  console.log('current branch', branchData)
-
+  // const [applicantId, setApplicantId] = useState<number>();
+  // const [templateId, setTemplateId]= useState<number>()
+const { setSharedData}=  useGlobalContext()
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const navigate = useNavigate();
   const handleSubmit = (val: any) => {
-    console.log("values", val);
     mutate(
       { branch_id: branchData?.id, ...val },
       {
@@ -49,11 +57,22 @@ const Applications = () => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
-          // handleClose();
+          setFormSubmitted(true);
+          navigate(appRoute.new_application);
+          console.log("application submitted successfully", res);
+          console.log("id of applicant", res.data.data.applicant.application_id);
+          // setApplicantId(res.data.data.application_id);
+          // setTemplateId(res.data.data.question.template_id)
+          setSharedData((prevData:any) => ({
+            ...prevData,
+            applicantId: res.data.data.applicant.application_id,
+            templateId: res.data.data.template_id,
+          }));
         },
       }
     );
   };
+
   // New Applications Modal
   const [openNewApplicationsModal, setOpenNewApplicationsModal] =
     useState(false);
@@ -98,7 +117,7 @@ const Applications = () => {
               <h2 className="py-1">
                 Which country passport/residency is applicant applying for?
               </h2>
-              <Form.Item required label="" name="country_id">
+              <Form.Item rules={generalValidationRules} name="country_id">
                 <Select>
                   {countryData?.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
@@ -112,7 +131,7 @@ const Applications = () => {
               <h2 className="py-1">
                 Which program is the applicant interested in?
               </h2>
-              <Form.Item required name="programtype_id">
+              <Form.Item rules={generalValidationRules} name="programtype_id">
                 <Select>
                   {programData?.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
@@ -126,7 +145,10 @@ const Applications = () => {
               <h2 className="py-1">
                 Which investment route is the applicant interested in?
               </h2>
-              <Form.Item required name="investmentroute_id">
+              <Form.Item
+                rules={generalValidationRules}
+                name="investmentroute_id"
+              >
                 <Select>
                   {investmentData?.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
@@ -138,37 +160,38 @@ const Applications = () => {
             </div>
             <div>
               <h2 className="py-1">Number of dependents</h2>
-              <Form.Item required name="no_of_dependents" className="w-full">
+              <Form.Item
+                rules={generalValidationRules}
+                name="no_of_dependents"
+                className="w-full"
+              >
                 <InputNumber className="w-full" />
               </Form.Item>
             </div>
             <div>
               <h2>What is the applicant full name?</h2>
-              <Form.Item name="full_name" required>
+              <Form.Item name="full_name" rules={textInputValidationRules}>
                 <Input />
               </Form.Item>
             </div>
             <div>
               <h2>What is the applicant email?</h2>
-              <Form.Item name="email_address" required>
+              <Form.Item name="email_address" rules={textInputValidationRules}>
                 <Input />
               </Form.Item>
             </div>
             <div className="flex items-center justify-center gap-4 p-4">
-               <AppButton
+              <AppButton
                 type="reset"
                 label="Cancel"
                 variant="transparent"
                 containerStyle="border border-secondary text-secondary"
               />
-              {!isLoading ? (
-                <Link to={appRoute.new_application}>
-                  <AppButton label="Next" type="submit" />
-                </Link>
+              {formSubmitted ? (
+                <Link to={appRoute.new_application}>Next</Link>
               ) : (
                 <AppButton label="Next" type="submit" isLoading={isLoading} />
               )}
-              
             </div>
           </div>
         </Form>
@@ -208,7 +231,7 @@ const Applications = () => {
         </div>
       </div>
 
-      <ApplicationsTab />
+      <ApplicationsTab  />
     </>
   );
 };

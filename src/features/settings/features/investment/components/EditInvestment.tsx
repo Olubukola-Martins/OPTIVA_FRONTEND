@@ -22,7 +22,6 @@ export const EditInvestment = ({
 }: IEditInvestmentProps) => {
   const { data } = useGetSingleInvestmentRoute({
     id: investmentId as number,
-    queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
   });
   const { data: countryData } = useGetCountry();
 
