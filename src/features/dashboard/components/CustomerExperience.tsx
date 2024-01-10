@@ -10,7 +10,7 @@ export const CustomerExperience = () => {
   const { data } = useGetAdminDashboardCounts();
   const { data: rolesData } = useFetchUserProfile();
   const count = data?.customer_experience;
-    
+
   return (
     <>
       <Banner title={rolesData?.roles.name || ""} />
@@ -48,11 +48,11 @@ export const CustomerExperience = () => {
               <Progress
                 strokeColor={"var(--card-yellow)"}
                 type="circle"
-                percent={5}
+                percent={count?.application_status.inactive}
                 format={(percent) => (
                   <div className="text-accent">
                     <span>{percent}%</span>
-                    <span className="block text-sm pt-1">Pending</span>
+                    <span className="block text-sm pt-1">Inactive</span>
                   </div>
                 )}
                 size={130}

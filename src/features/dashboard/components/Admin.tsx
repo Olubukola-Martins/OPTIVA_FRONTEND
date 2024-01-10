@@ -47,11 +47,11 @@ export const Admin = () => {
               <Progress
                 strokeColor={"var(--card-yellow)"}
                 type="circle"
-                percent={5}
+                percent={count?.application_status.inactive}
                 format={(percent) => (
                   <div className="text-accent">
                     <span>{percent}%</span>
-                    <span className="block text-sm pt-1">Pending</span>
+                    <span className="block text-sm pt-1">Inactive</span>
                   </div>
                 )}
               />

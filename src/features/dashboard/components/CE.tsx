@@ -43,7 +43,7 @@ export const CE = () => {
               <Progress
                 strokeColor={"var(--card-yellow)"}
                 type="circle"
-                percent={5}
+                percent={count?.application_status.pending}
                 format={(percent) => (
                   <div className="text-accent">
                     <span>{percent}%</span>

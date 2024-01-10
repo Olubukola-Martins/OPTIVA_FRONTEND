@@ -47,7 +47,7 @@ interface Administrator {
 
 interface ApplicationStatus {
   under_review: number;
-  rejected: number;
+  inactive: number;
   submitted: number;
 }
 // Dms
@@ -131,7 +131,10 @@ interface Customer_engager {
   total_applications_added: number;
   total_applications_submitted: number;
   total_quotes_generated: number;
-  application_status: ApplicationStatus;
+  application_status: {
+    pending: number;
+    submitted: number;
+  };
 }
 
 // customer experience

@@ -46,18 +46,6 @@ export const ServiceManager = () => {
           <div className="flex justify-center">
             <div className="flex gap-y-6 flex-col">
               <Progress
-                strokeColor={"var(--card-yellow)"}
-                type="circle"
-                percent={5}
-                format={(percent) => (
-                  <div className="text-accent">
-                    <span>{percent}%</span>
-                    <span className="block text-sm pt-1">Pending</span>
-                  </div>
-                )}
-                size={130}
-              />
-              <Progress
                 strokeColor={"var(--card-green)"}
                 type="circle"
                 percent={count?.application_status.submitted}
