@@ -8,5 +8,6 @@ export interface rolesProps {
   name: string;
   created_at: string;
   updated_at: string;
+  is_deletable: boolean;
 }
  

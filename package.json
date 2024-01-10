@@ -17,6 +17,7 @@
     "antd": "^5.9.4",
     "axios": "^1.4.0",
     "chart.js": "^4.4.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "dayjs": "^1.11.10",
     "file-saver": "^2.0.5",
     "html-to-pdf": "^0.1.11",

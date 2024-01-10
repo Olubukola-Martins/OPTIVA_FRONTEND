@@ -7,14 +7,17 @@ export interface employeesProps {
   email: string;
   last_sent: string;
   department_id: string;
-  roles: number[];
+  role_id: number;
   branches: number[];
   department: {
     name: string;
   };
   user: {
     branches: branchProps[];
-    roles: rolesProps[];
+    roles: {
+      id: number;
+      name: string;
+    };
   };
   created_at: string;
 }
