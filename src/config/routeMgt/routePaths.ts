@@ -6,6 +6,7 @@ export const appRoute = {
 
   // Settings
   settings: `/settings`,
+  branches: `/branches`,
   dependents: `/settings/dependents`,
   document_requirement: `/settings/document-requirement`,
   investment_route: `/settings/investment-route`,
@@ -17,23 +18,30 @@ export const appRoute = {
     path: `/settings/escalation/editEscalation/${id}`,
   }),
   contractsEmailTemplates: `/settings/contractsEmailTemplates`,
-  contractsTemplate: `/settings/contractsEmailTemplates/Contract`,
-  onboardingWelcomeTempl: `/settings/contractsEmailTemplates/onboardingWelcome`,
-  collationAppointmentConfirmTempl: `/settings/contractsEmailTemplates/collationAppointmentConfirmation`,
-  cbiBankDDclearance: `/settings/contractsEmailTemplates/CBIBankDDclearance`,
-  cbiBAsoftPassportReceipt: `/settings/contractsEmailTemplates/CBIbankAppSoftPassportReceipt`,
-  cbiBAapprovalMailTemp: `/settings/contractsEmailTemplates/CBIbankAppApprovalMailTemplate`,
-  cbiApplicationSubmissionMailTemp: `/settings/contractsEmailTemplates/CBIapplicationSubmissioneEMailTemplate`,
+  viewEditEmailTemplate: (type?: string) => ({
+    format: `/settings/contractsEmailTemplates/:type-email-template`,
+    path: `/settings/contractsEmailTemplates/${type}-email-template`,
+  }),
   documentRequirements: `/settings/documentsRequirements`,
   applicationTemplate: `/settings/applicationTemplate`,
   newApplicationTemplate: `/settings/newApplicationTemplate`,
-  countryMilestonesProgram: `/settings/ countryMilestonesProgram`,
+  countryMilestonesProgram: `/settings/countryMilestonesProgram`,
   createProgramType: `/settings/createProgramRoute`,
   defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
   addFees: `/settings/addfees`,
   editProgramType: (id?: number) => ({
     format: `/settings/editProgramType/:id`,
     path: `/settings/editProgramType/${id}`,
+  }),
+  department: `/settings/department`,
+  employees: `/settings/employees`,
+  roles: `/settings/roles`,
+  companyProfile: `company-profile`,
+  workflow: `/settings/workflow`,
+  addWorkflow: `/settings/add-workflow`,
+  workflow_details: (id?: number) => ({
+    format: `/settings/workflow/:id`,
+    path: `/settings/workflow/${id}`,
   }),
 
   // Applications
@@ -65,7 +73,7 @@ export const appRoute = {
 
   // Payments
   payments: `/payments`,
-  generateInvoice: (id?: number) => ({
+  viewInvoice: (id?: number) => ({
     format: `/payments/:id/generateInvoice`,
     path: `/payments/${id}/generateInvoice`,
   }),

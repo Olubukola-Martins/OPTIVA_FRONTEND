@@ -1,0 +1,48 @@
+import { useMutation, useQueryClient } from "react-query";
+import {  QUERY_KEY_MEETINGS, meetingsURL } from "../pages/Meetings";
+import { postItemData } from "src/features/settings/utils/settingsAPIHelpers";
+import { openNotification } from "src/utils/notification";
+// import { useContext } from "react";
+
+const useChangeMeetingStatus = () => {
+    // const {  newfetch } = useContext(MeetingContext);
+
+      const queryClient = useQueryClient();
+      const { mutate, isLoading: statusChangeLoading } =
+        useMutation(postItemData);
+      const changeMeetingStatus = (
+        meetingId: number,
+        newData: { response: number }
+      ) =>
+        mutate(
+          {
+            url: `${meetingsURL}/${meetingId}/status`,
+            newData,
+          },
+          {
+            onError: (error: any) => {
+              openNotification({
+                state: "error",
+                title: "Error Occured",
+                description: error.response.message,
+                duration: 5,
+              });
+            },
+            onSuccess: (response: any) => {
+              openNotification({
+                state: "success",
+                title: "Success",
+                duration: 5,
+                description: response.message,
+              });
+              //   form.resetFields();
+                        // newfetch();
+              queryClient.invalidateQueries([QUERY_KEY_MEETINGS, meetingId]);
+            },
+          }
+        );
+      return { changeMeetingStatus, statusChangeLoading };
+
+};
+
+export default useChangeMeetingStatus

@@ -5,11 +5,13 @@ interface IProps {
   description?: string;
   open: boolean;
   handleClose: () => void;
+  buttonLabel?: string
 }
 const SuccessModal = ({
   open,
   handleClose,
   description,
+  buttonLabel
 }: IProps) => {
   return (
     <Modal
@@ -51,7 +53,7 @@ const SuccessModal = ({
           {description}
         </h4>
         <div className="flex justify-center w-fit gap-4 mb-3">
-          <AppButton label="Back" handleClick={() => handleClose()} />
+          <AppButton label={`${buttonLabel ? buttonLabel : "Ok"}`} handleClick={() => handleClose()} />
         </div>
       </div>
     </Modal>

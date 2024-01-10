@@ -284,7 +284,6 @@ export const NewOtherDependentDetails = () => {
           <h2 className="p-1">Dependent's Name (First, Middle & Last Name)</h2>
           <Form.Item name="dependentName">
             <Input
-              size="large"
               value={editApplicantData?.dependentName}
               onChange={(e) => {
                 setEditApplicantData((prev: any) => ({

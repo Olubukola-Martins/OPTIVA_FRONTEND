@@ -58,6 +58,9 @@ const TimelineExtensions = () => {
     console.log(date, dateString);
   };
 
+  console.log(onChangeDate);
+  
+
   // Columns
   const columns: ColumnsType<DataSourceItem> = [
     {

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
-// import { MICROSERVICE_ENDPOINTS } from "config/enviroment";
-// import { ICurrentCompany } from "types";
-// import { openNotification } from "utils/notifications";
+import { IUserToken } from "src/types";
+import { openNotification } from "src/utils/notification";
 
-interface IDeleteItem extends ICurrentCompany {
+interface IDeleteItem extends IUserToken {
   itemId: number;
+  token: string;
   deleteEndpointUrl: string;
   queryKey: string;
 }
@@ -17,14 +17,13 @@ interface IDProps {
 }
 
 export const handleDeleteData = async (props: IDeleteItem) => {
-  //   const url = `${MICROSERVICE_ENDPOINTS.RECRUITMENT}/${props.deleteEndpointUrl}/${props.itemId}`;
-     const url = `${MICROSERVICE_ENDPOINTS.RECRUITMENT}/${props.deleteEndpointUrl}/${props.itemId}`;
+  //   const url = `${END_POINT.BASE_URL}/${props.deleteEndpointUrl}/${props.itemId}`;
+    const url = `${props.deleteEndpointUrl}/${props.itemId}`;
 
   const config = {
     headers: {
       Accept: "application/json",
       Authorization: `Bearer ${props.token}`,
-    //   "x-company-id": props.companyId,
     },
   };
 
@@ -39,7 +38,6 @@ export const useDeleteItem = ({ queryKey, deleteEndpointUrl }: IDProps) => {
   const deleteData = (itemId: number) => {
     mutate(
       {
-        companyId,
         deleteEndpointUrl,
         itemId,
         token,

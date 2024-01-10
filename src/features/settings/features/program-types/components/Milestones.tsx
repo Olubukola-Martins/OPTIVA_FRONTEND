@@ -1,25 +1,59 @@
-import { Dropdown, Form, Input, Menu, Modal, Select, Table } from "antd";
+import { Dropdown, Menu, Skeleton, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
-import { AppButton } from "src/components/button/AppButton";
-import DeleteIcon from "../assets/img/warning.png";
+import React, { useEffect, useState } from "react";
+import {
+  QUERY_KEY_FOR_MILESTONE,
+  useGetMilestone,
+} from "../hooks/useGetMilestone";
+import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
+import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { AddMilestoneModal } from "./AddMilestoneModal";
 
 type DataSourceItem = {
   key: React.Key;
   sn: number;
   milestones: string;
-  duration: string;
+  duration: number[];
   dateCreated: string;
   lastModified: string;
 };
 
 export const Milestones = () => {
+  // GET REQUEST
+  const { data, isLoading } = useGetMilestone();
+  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      const milestone: DataSourceItem[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          dateCreated: formatDate(item.created_at),
+          duration: item.processes.map((item) => item.duration),
+          lastModified: formatDate(item.updated_at),
+          milestones: item.milestone,
+        };
+      });
+      setDataArray(milestone);
+    }
+  }, [data]);
+
+  const [milestoneId, setMilestoneId] = useState<number>();
+
+  const { removeData, deleteIsLoading } = useDeleteHandler({
+    deleteEndPointUrl: "admin/milestone",
+    queryKey: QUERY_KEY_FOR_MILESTONE,
+  });
+
   // Milestone Modal
   const [openMilestoneModal, setOpenMilestoneModal] = useState<boolean>(false);
   const showMilestoneModal = () => {
     setOpenMilestoneModal(true);
   };
-  const handleMilestoneModalCancel = () => {
+
+  const handleAddMilestoneModalCancel = () => {
     setOpenMilestoneModal(false);
   };
 
@@ -32,6 +66,16 @@ export const Milestones = () => {
     setOpenDeleteModal(false);
   };
 
+  //    //Add Milestone Modal
+  //    const [openAddMilestoneModal, setOpenAddMilestoneModal] =
+  //    useState<boolean>(false);
+  //  const showAddMilestoneModal = () => {
+  //    setOpenAddMilestoneModal(true);
+  //  };
+  //  const handleAddMilestoneModalCancel = () => {
+  //    setOpenAddMilestoneModal(false);
+  //   };
+
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -39,21 +83,25 @@ export const Milestones = () => {
       dataIndex: "sn",
     },
     {
-      title: "Country",
-      dataIndex: "country",
+      title: "Milestones",
+      dataIndex: "milestones",
       key: "2",
+    },
+    {
+      title: "Duration",
+      dataIndex: "duration",
+      key: "3",
     },
     {
       title: "Date Created",
       dataIndex: "dateCreated",
-      key: "3",
+      key: "4",
     },
     {
       title: "Last Modified",
       dataIndex: "lastModified",
-      key: "4",
+      key: "5",
     },
-
     {
       title: "Action",
       dataIndex: "action",
@@ -63,10 +111,22 @@ export const Milestones = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={showMilestoneModal}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setMilestoneId(val.key as unknown as number);
+                    showMilestoneModal();
+                  }}
+                >
                   Edit
                 </Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    setMilestoneId(val.key as unknown as number);
+                    showDeleteModal();
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu>
@@ -78,107 +138,48 @@ export const Milestones = () => {
       ),
     },
   ];
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      milestones: "Grenada",
-      duration: "1 week",
-      dateCreated: "dd/mm/yyyy",
-      lastModified: "dd/mm/yyyy",
-    });
-  }
-  const handleEditMilestoneSubmit = (val: any) => {};
-
-  const selectTimeAfter = (
-    <Select
-      defaultValue="Day(s)"
-      options={[
-        {
-          value: "Day(s)",
-          label: "Day(s)",
-        },
-      ]}
-    />
-  );
 
   return (
     <>
       {/* TABLE */}
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        className="bg-white rounded-md shadow border mt-2"
-        scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
+      <Skeleton active loading={isLoading}>
+        <Table
+          columns={columns}
+          dataSource={dataArray}
+          className="bg-white rounded-md shadow border mt-2"
+          scroll={{ x: 600 }}
+          rowSelection={{
+            type: "checkbox",
+            onChange: (
+              selectedRowKeys: React.Key[],
+              selectedRows: DataSourceItem[]
+            ) => {
+              console.log(
+                `selectedRowKeys: ${selectedRowKeys}`,
+                "selectedRows: ",
+                selectedRows
+              );
+            },
+          }}
+        />
+      </Skeleton>
+
+      {/*ADD MILESTONE MODAL */}
+      <AddMilestoneModal
+        handleClose={handleAddMilestoneModalCancel}
+        open={openMilestoneModal}
+        milestoneId={milestoneId as unknown as number}
       />
 
-      {/* MILESTONE MODAL */}
-      <Modal
-        open={openMilestoneModal}
-        footer={null}
-        onCancel={handleMilestoneModalCancel}
-      >
-        <h2 className="text-center text-lg font-bold">Edit Milestone</h2>
-        <Form layout="vertical" onFinish={handleEditMilestoneSubmit}>
-          <Form.Item name="milestone" label="Milestone" required>
-            <Input size="large" />
-          </Form.Item>
-          <Form.Item name="timeline" label="Timeline" required>
-            <Input size="large" addonAfter={selectTimeAfter} />
-          </Form.Item>
-          <Form.Item name="processes" label="Processes">
-            <Select
-              size="large"
-              options={[
-                {
-                  label: "",
-                  value: "",
-                },
-              ]}
-            />
-          </Form.Item>
-          <div className="flex items-center justify-center gap-5">
-            <AppButton
-              label="Cancel"
-              type="reset"
-              handleClick={handleMilestoneModalCancel}
-              variant="transparent"
-            />
-            <AppButton label="Save" type="submit" />
-          </div>
-        </Form>
-      </Modal>
-
       {/* DELETE MODAL */}
-      <Modal open={openDeleteModal} onCancel={handleDeleteCancel} footer={null}>
-        <img src={DeleteIcon} className="mx-auto" />
-        <h2 className="text-center font-bold p-2">Delete Milestone</h2>
-        <p className="text-center">
-          Are you sure you would like to delete this investment route?
-        </p>
-        <div className="flex items-center justify-center gap-5 mt-5">
-          <AppButton
-            label="Cancel"
-            handleClick={handleDeleteCancel}
-            variant="transparent"
-          />
-          <AppButton label="Delete" type="submit" />
-        </div>
-      </Modal>
+      <DeleteModal
+        open={openDeleteModal}
+        header="Milestone"
+        text="milestone"
+        onCancel={handleDeleteCancel}
+        onDelete={() => removeData(milestoneId as unknown as number)}
+        isLoading={deleteIsLoading}
+      />
     </>
   );
 };

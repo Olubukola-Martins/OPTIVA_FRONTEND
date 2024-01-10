@@ -22,6 +22,6 @@ export const CountryMilestonesAndProgramsTab = () => {
       children: <ProgramTypes />,
     },
   ];
-  const operations = <Select placeholder="Filter" className="" />;
+  const operations = <Select placeholder="Filter" />;
   return <Tabs items={tabItems} tabBarExtraContent={operations} />;
 };

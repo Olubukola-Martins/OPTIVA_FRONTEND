@@ -10,7 +10,6 @@ import ApplicantDetails from "src/features/applications/pages/ApplicantDetails";
 import Payments from "src/features/payment/pages/Payments";
 import PaymentDetails from "src/features/payment/pages/PaymentDetails";
 import GenerateReceipt from "src/features/payment/pages/GenerateReceipt";
-import GenerateInvoice from "src/features/payment/pages/GenerateInvoice";
 import GenerateFinancialStatement from "src/features/payment/pages/GenerateFinancialStatement";
 import GenerateContract from "src/features/payment/pages/GenerateContract";
 import Reports from "src/features/report/pages/Reports";
@@ -18,7 +17,6 @@ import TimelineExtensions from "src/features/applications/pages/TimelineExtensio
 import ProcessingStrategyAndSteps from "src/features/applications/pages/ProcessingStrategyAndSteps";
 import Comments from "src/features/applications/pages/Comments";
 import Meetings from "src/features/meetings/pages/Meetings";
-
 import { RequireAuth } from "react-auth-kit";
 import NewApplication from "src/features/applications/pages/NewApplication";
 import ApplicantDocument from "src/features/applications/pages/ApplicantDocument";
@@ -34,13 +32,20 @@ import Escalation from "src/features/settings/features/escalation/pages/Escalati
 import NewEscalation from "src/features/settings/features/escalation/pages/NewEscalation";
 import EditEscalation from "src/features/settings/features/escalation/pages/EditEscalation";
 import AllContractsEmailTemplates from "src/features/settings/features/contractsEmailTemplates/pages/AllContractsEmailTemplates";
-import ContractTemplate from "src/features/settings/features/contractsEmailTemplates/pages/ContractTemplate";
-import OnboardingWelcomeEmailTemplate from "src/features/settings/features/contractsEmailTemplates/pages/OnboardingWelcomeEmailTemplate";
-import CollationAppointConfirmationTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CollationAppointConfirmationTemplate";
-import CBIBankDDClearanceTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankDDClearanceTemplate";
-import CBIBankAppECopyPassportReceiptTemp from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppECopyPassportReceiptTemp";
-import CBIBankAppApprovalTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIBankAppApprovalTemplate";
-import CBIAppSubmissionTemplate from "src/features/settings/features/contractsEmailTemplates/pages/CBIAppSubmissionTemplate";
+import ForgotPassword from "src/features/authentication/pages/ForgotPassword";
+import ResetPassword from "src/features/authentication/pages/ResetPassword";
+import { GlobalContextProvider } from "src/stateManagement/GlobalContext";
+import Department from "src/features/settings/features/department/pages/Department";
+import Employees from "src/features/settings/features/employees/pages/Employees";
+import Branches from "src/features/settings/features/branch/pages/Branches";
+import Roles from "src/features/settings/features/rolesAndPermissions/pages/Roles";
+import CompanyProfile from "src/features/settings/features/companyProfile/page/CompanyProfile";
+import SettingsTemplate from "src/features/settings/features/contractsEmailTemplates/pages/SettingsTemplate";
+import EditProgramType from "src/features/settings/features/program-types/pages/EditProgramType";
+import Workflow from "src/features/settings/features/workFlow/pages/Workflow";
+import AddWorkflow from "src/features/settings/features/workFlow/pages/AddWorkflow";
+import WorkflowDetails from "src/features/settings/features/workFlow/pages/WorkflowDetails";
+import ViewInvoice from "src/features/payment/pages/ViewInvoice";
 
 const routesArray = [
   {
@@ -56,30 +61,9 @@ const routesArray = [
     path: appRoute.contractsEmailTemplates,
     element: <AllContractsEmailTemplates />,
   },
-  { path: appRoute.contractsTemplate, element: <ContractTemplate /> },
   {
-    path: appRoute.onboardingWelcomeTempl,
-    element: <OnboardingWelcomeEmailTemplate />,
-  },
-  {
-    path: appRoute.collationAppointmentConfirmTempl,
-    element: <CollationAppointConfirmationTemplate />,
-  },
-  {
-    path: appRoute.cbiBankDDclearance,
-    element: <CBIBankDDClearanceTemplate />,
-  },
-  {
-    path: appRoute.cbiBAsoftPassportReceipt,
-    element: <CBIBankAppECopyPassportReceiptTemp />,
-  },
-  {
-    path: appRoute.cbiBAapprovalMailTemp,
-    element: <CBIBankAppApprovalTemplate />,
-  },
-  {
-    path: appRoute.cbiApplicationSubmissionMailTemp,
-    element: <CBIAppSubmissionTemplate />,
+    path: appRoute.viewEditEmailTemplate().format,
+    element: <SettingsTemplate />,
   },
   { path: appRoute.applications, element: <Applications /> },
   { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
@@ -87,7 +71,7 @@ const routesArray = [
   { path: appRoute.payments, element: <Payments /> },
   { path: appRoute.paymentDetails().format, element: <PaymentDetails /> },
   { path: appRoute.generateReciept().format, element: <GenerateReceipt /> },
-  { path: appRoute.generateInvoice().format, element: <GenerateInvoice /> },
+  { path: appRoute.viewInvoice().format, element: <ViewInvoice /> },
   {
     path: appRoute.financialStatement().format,
     element: <GenerateFinancialStatement />,
@@ -131,6 +115,10 @@ const routesArray = [
     element: <CreateProgramType />,
   },
   {
+    path: appRoute.editProgramType().format,
+    element: <EditProgramType />,
+  },
+  {
     path: appRoute.defineFeesAndAuthorizedPersons,
     element: <DefineFeesAndAuthorizedPersons />,
   },
@@ -142,31 +130,43 @@ const routesArray = [
   { path: appRoute.document_requirement, element: <DocumentRequirements /> },
   { path: appRoute.investment_route, element: <InvestmentRoute /> },
   { path: appRoute.app_template, element: <ApplicationTemplate /> },
+  { path: appRoute.department, element: <Department /> },
+  { path: appRoute.employees, element: <Employees /> },
+  { path: appRoute.branches, element: <Branches /> },
+  { path: appRoute.roles, element: <Roles /> },
+  { path: appRoute.companyProfile, element: <CompanyProfile /> },
+  { path: appRoute.workflow, element: <Workflow /> },
+  { path: appRoute.addWorkflow, element: <AddWorkflow /> },
+  { path: appRoute.workflow_details().format, element: <WorkflowDetails /> },
 ];
 
 export const AllRoutes = () => {
   return (
     <Router>
-      <Routes>
-        <Route element={<DashboardLayout />}>
-          {routesArray.map((route, index) => (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                route.path === appRoute.login_in ? (
-                  route.element
-                ) : (
-                  <RequireAuth loginPath={appRoute.login_in}>
-                    {route.element}
-                  </RequireAuth>
-                )
-              }
-            />
-          ))}
-        </Route>
-        <Route path={appRoute.login_in} element={<Login />} />
-      </Routes>
+      <GlobalContextProvider>
+        <Routes>
+          <Route element={<DashboardLayout />}>
+            {routesArray.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  route.path === appRoute.login_in ? (
+                    route.element
+                  ) : (
+                    <RequireAuth loginPath={appRoute.login_in}>
+                      {route.element}
+                    </RequireAuth>
+                  )
+                }
+              />
+            ))}
+          </Route>
+          <Route path={appRoute.login_in} element={<Login />} />
+          <Route path={appRoute.forgot_password} element={<ForgotPassword />} />
+          <Route path={appRoute.reset_password} element={<ResetPassword />} />
+        </Routes>
+      </GlobalContextProvider>
     </Router>
   );
 };

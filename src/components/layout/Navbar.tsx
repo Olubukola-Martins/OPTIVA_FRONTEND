@@ -1,21 +1,36 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Drawer, Input } from "antd";
 import { Icon } from "@iconify/react";
-import { Badge, Select, Dropdown } from "antd";
+import { Badge, Dropdown } from "antd";
 import logo from "src/assets/miniLogo.png";
 import { useState } from "react";
 import { SideBar } from "./SideBar";
 import avatar from "src/assets/user.png";
 import { SignOut } from "./SignOut";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { EditProfile } from "src/ExtraSettings/components/EditProfile";
+import { ChangePassword } from "src/ExtraSettings/components/ChangePassword";
+import { CurrentBranch } from "src/ExtraSettings/components/CurrentBranch";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
+import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export const Navbar = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
+  const [editProfile, setEditProfile] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
-  const { userInfo } = useGetUserInfo();
+  const [passwordChange, setPasswordChange] = useState(false);
+  const { data: userInfo } = useFetchUserProfile();
 
   return (
     <>
+      <EditProfile
+        open={editProfile}
+        handleClose={() => setEditProfile(false)}
+      />
+      <ChangePassword
+        open={passwordChange}
+        handleClose={() => setPasswordChange(false)}
+      />
       <div className="w-full bg-white sticky top-0 z-50 shadow-sm border-b py-3 Container flex justify-between items-center">
         <div className="flex items-center gap-x-2">
           <Icon
@@ -31,25 +46,7 @@ export const Navbar = () => {
           />
         </div>
         <div className="flex items-center gap-x-5 text-gray-600">
-          <Select
-            placeholder="Select branch"
-            options={[
-              {
-                value: 1,
-                label: "Abuja branch",
-              },
-              {
-                value: 2,
-                label: "Lagos branch",
-              },
-            ]}
-            style={{
-              borderRadius: "7px",
-              border: "1.5px solid var(--app-color-primary)",
-              width: "150px",
-            }}
-            className="lg:flex hidden"
-          />
+          <CurrentBranch />
           <Icon icon="tabler:search" className="lg:hidden flex text-xl" />
           <Badge dot>
             <Icon icon="radix-icons:bell" className="text-xl font-medium" />
@@ -76,47 +73,46 @@ export const Navbar = () => {
 
                     <div className="flex items-center gap-2">
                       <i className="ri-phone-line text-green-600"></i>
-                      <span> 09023865543 </span>
+                      <span>{userInfo?.phone}</span>
                     </div>
                   </div>
                 </div>
                 <ul className="flex flex-col gap-2">
-                  <li className="menuStyle">
+                  <li
+                    className="menuStyle"
+                    onClick={() => setEditProfile(true)}
+                  >
                     <Icon icon="mingcute:user-4-line" className="text-xl" />
                     <span>Edit Profile</span>
                   </li>
-                  <li className="menuStyle">
+                  <Link to={appRoute.roles} className="menuStyle">
                     <Icon icon="mdi:user-badge-outline" className="text-xl" />
                     <span>Roles and Permission</span>
-                  </li>
-                  <li className="menuStyle">
-                    <Icon icon="mingcute:department-fill" className="text-xl" />
-                    <span>Department</span>
-                  </li>
-                  <li className="menuStyle">
-                    <Icon icon="mdi:users-add" className="text-xl" />
-                    <span>Employees</span>
-                  </li>
-                  <li className="menuStyle">
+                  </Link>
+
+                  <Link to={appRoute.workflow} className="menuStyle">
                     <Icon
                       icon="carbon:workflow-automation"
                       className="text-xl"
                     />
                     <span>Workflow</span>
-                  </li>
-                  <li className="menuStyle">
+                  </Link>
+                  {/* <li className="menuStyle">
                     <Icon icon="mdi:partnership" className="text-xl" />
                     <span>International Partners</span>
-                  </li>
-                  <li className="menuStyle">
+                  </li> */}
+                  <Link to={appRoute.companyProfile} className="menuStyle">
                     <Icon icon="mdi:company" className="text-xl" />
                     <span>Company Profile</span>
-                  </li>
-                  <li className="menuStyle">
+                  </Link>
+                  {/* <li className="menuStyle">
                     <Icon icon="ion:key-outline" className="text-xl" />
                     <span>Enable 2FA</span>
-                  </li>
-                  <li className="menuStyle">
+                  </li> */}
+                  <li
+                    className="menuStyle"
+                    onClick={() => setPasswordChange(true)}
+                  >
                     <Icon icon="uis:padlock" className="text-xl" />
                     <span>Change Password</span>
                   </li>

@@ -1,15 +1,31 @@
 import { PageIntro } from "src/components/PageIntro";
 import { Icon } from "@iconify/react";
 import { AppButton } from "src/components/button/AppButton";
-import { useState } from "react";
-import { Modal, Select, Form, Dropdown, Menu, Tabs, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { Select, Dropdown, Menu, Tabs, Tag } from "antd";
 import type { MenuProps, TabsProps } from "antd";
-import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { DownOutlined } from "@ant-design/icons";
 import Table, { ColumnsType } from "antd/es/table";
 import Search from "antd/es/input/Search";
 import ImportModal from "src/features/settings/components/ImportModal";
+import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+} from "react-query";
+import { IAllDocRequirementData } from "src/features/settings/types/settingsType";
+import {
+  QUERY_KEY_DOC_REQUIREMENT,
+  documentRequirementURL,
+  useCreateDocumentRequirement,
+} from "../hooks/useCreateDocumentRequirement";
+import { AddDocument } from "../components/AddDocument";
+import { EditDocument } from "../components/EditDocument";
+import useUpdateDocumentRequirement from "../hooks/useUpdateDocumentRequirement";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useDelete } from "src/hooks/useDelete";
 
 interface DataType {
   key: React.Key;
@@ -20,18 +36,78 @@ interface DataType {
   documentSize: string;
 }
 
+interface IQueryDataType<TPageData> {
+  data: TPageData | undefined;
+  isLoading: boolean;
+  refetch: (
+    options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+  ) => Promise<QueryObserverResult<any, any>>;
+}
+const deleteEndpointUrl = "admin/document-requirement/";
+const queryKey = QUERY_KEY_DOC_REQUIREMENT;
+
 const DocumentRequirements = () => {
+  const {
+    data: allDocRequirementData,
+    isLoading: allDocRequirementLoading,
+    refetch,
+  }: IQueryDataType<IAllDocRequirementData> = useFetchAllItems({
+    queryKey,
+    urlEndPoint: documentRequirementURL,
+  });
+  const { removeData } = useDelete({
+    EndPointUrl: deleteEndpointUrl,
+    queryKey,
+  });
+
+  // const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
+  const [docType, setDocType] = useState("required");
+  const [currentId, setCurrentId] = useState<number>();
+  const [submitted, setSubmitted] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [hideDeleteBtn, setHideDeleteBtn] = useState<boolean>(true);
   const [dataRequiredDoc, setDataRecuiredDoc] = useState<DataType[]>([]);
   const [dataSupportDoc, setDataSupportDoc] = useState<DataType[]>([]);
-    const [openImportModal, setOpenImportModal] = useState(false);
-    const showImportModal = () => {
-      setOpenImportModal(true);
-    };
-    const handleImportCancel = () => {
-      setOpenImportModal(false);
-    };
+  const [openImportModal, setOpenImportModal] = useState(false);
+  const showImportModal = () => {
+    setOpenImportModal(true);
+  };
+  const handleImportCancel = () => {
+    setOpenImportModal(false);
+  };
+  const { editDocumentRequirement, isLoading: editLoading } =
+    useUpdateDocumentRequirement();
+  const { addDocumentRequirement, postDocLoading } =
+    useCreateDocumentRequirement();
+
+  // Handle add new document
+  const handleAddNewDocument = (val: any) => {
+    addDocumentRequirement({
+      name: val.name,
+      document_category_id: val.category,
+      document_format: val.format,
+      document_size: val.size,
+      document_type: docType,
+      eligible_dependants: val.dependents,
+      other_requirement: "None",
+    });
+    handleNewDocumentCancel();
+  };
+  // Handle edit document
+  const handleEditNewDocument = (val: any) => {
+    currentId &&
+      editDocumentRequirement(currentId, {
+        name: val.name,
+        document_category_id: val.category,
+        document_format: val.format,
+        document_size: val.size,
+        document_type: docType,
+        eligible_dependants: val.dependents,
+        other_requirement: "None",
+      });
+    handleNewDocumentCancel();
+    setSubmitted(true);
+  };
 
   const operations = (
     <div className="gap-4 flex">
@@ -84,20 +160,21 @@ const DocumentRequirements = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">
-                  <Link
-                    to={
-                      appRoute.editEscalation(record.key as unknown as number)
-                        .path
-                    }
-                  >
-                    Edit
-                  </Link>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    showEditgDocumentModal();
+                    setDocType("required");
+                    setCurrentId(record.key as number);
+                  }}
+                >
+                  Edit
                 </Menu.Item>
                 <Menu.Item
                   key="2"
                   onClick={() => {
                     setShowDeleteModal(true);
+                    setCurrentId(record.key as number);
                   }}
                 >
                   Delete
@@ -111,29 +188,61 @@ const DocumentRequirements = () => {
       ),
     },
   ];
-  for (let i = 1; i <= 4; i++) {
-    dataRequiredDoc.push({
-      key: i,
-      sn: i,
-      documentName: "Passport",
-      documentCategory: "Family & Education Document",
-      documentFormat: (
-        <>
-          <Tag>png</Tag>
-          <Tag>pdf</Tag>
-          <Tag>jpeg</Tag>
-        </>
-      ),
-      documentSize: "10 mb",
-    });
-  }
+  useEffect(() => {
+    setSubmitted(false);
+    if (
+      allDocRequirementData?.data &&
+      Array.isArray(allDocRequirementData?.data)
+    ) {
+      const responseData = allDocRequirementData.data;
+      // Required Doc Data
+      const newDataRequi: DataType[] = responseData
+        .filter((item) => item.document_type === "required")
+        .map((item, index) => ({
+          key: item.id,
+          sn: index + 1,
+          documentName: item.name,
+          documentCategory: item.document_category.name,
+          documentFormat: (
+            <>
+              {item.document_format.map((item) => {
+                return <Tag>{item}</Tag>;
+              })}
+            </>
+          ),
+          documentSize: `${item.document_size} mb`,
+        }));
+      setDataRecuiredDoc(newDataRequi);
+      // Supporting Doc Data
+      const newDataSupport: DataType[] = responseData
+        .filter((item) => item.document_type === "supporting")
+        .map((item, index) => ({
+          key: item.id,
+          sn: index + 1,
+          documentName: item.name,
+          documentCategory: item.document_category.name,
+          documentFormat: (
+            <>
+              {item.document_format.map((item) => {
+                return <Tag>{item}</Tag>;
+              })}
+            </>
+          ),
+          documentSize: `${item.document_size} mb`,
+        }));
+      setDataSupportDoc(newDataSupport);
+    }
+  }, [allDocRequirementData, allDocRequirementLoading]);
+  useEffect(() => {
+    refetch();
+  }, [submitted, editLoading]);
   const rowSelectionRequiredDoc = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (_: React.Key[], selectedRows: DataType[]) => {
       selectedRows.length === 0 || !selectedRows
         ? setHideDeleteBtn(true)
         : setHideDeleteBtn(false);
     },
-    getCheckboxProps: (record: DataType) => ({}),
+    getCheckboxProps: (_: DataType) => ({}),
   };
 
   // Supporting Documents table
@@ -172,20 +281,21 @@ const DocumentRequirements = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">
-                  <Link
-                    to={
-                      appRoute.editEscalation(record.key as unknown as number)
-                        .path
-                    }
-                  >
-                    Edit
-                  </Link>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    showEditgDocumentModal();
+                    setDocType("supporting");
+                    setCurrentId(record.key as number);
+                  }}
+                >
+                  Edit
                 </Menu.Item>
                 <Menu.Item
                   key="2"
                   onClick={() => {
                     setShowDeleteModal(true);
+                    setCurrentId(record.key as number);
                   }}
                 >
                   Delete
@@ -199,29 +309,13 @@ const DocumentRequirements = () => {
       ),
     },
   ];
-  for (let i = 1; i <= 4; i++) {
-    dataSupportDoc.push({
-      key: i,
-      sn: i,
-      documentName: "Passport",
-      documentCategory: "Family & Education Document",
-      documentFormat: (
-        <>
-          <Tag>png</Tag>
-          <Tag>pdf</Tag>
-          <Tag>jpeg</Tag>
-        </>
-      ),
-      documentSize: "10 mb",
-    });
-  }
   const rowSelectionSupportDoc = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+    onChange: (_: React.Key[], selectedRows: DataType[]) => {
       selectedRows.length === 0 || !selectedRows
         ? setHideDeleteBtn(true)
         : setHideDeleteBtn(false);
     },
-    getCheckboxProps: (record: DataType) => ({}),
+    getCheckboxProps: (_: DataType) => ({}),
   };
 
   // Tab items
@@ -242,6 +336,7 @@ const DocumentRequirements = () => {
             />
           </div>
           <Table
+            loading={allDocRequirementLoading}
             rowSelection={{
               type: "checkbox",
               ...rowSelectionRequiredDoc,
@@ -270,6 +365,7 @@ const DocumentRequirements = () => {
             />
           </div>
           <Table
+            loading={allDocRequirementLoading}
             rowSelection={{
               type: "checkbox",
               ...rowSelectionSupportDoc,
@@ -284,115 +380,89 @@ const DocumentRequirements = () => {
     },
   ];
 
-  // New Applications Modal
-  const [openSupportingDocumentModal, setSupportingDocumentModal] =
-    useState(false);
-  const showSupportingDocumentModal = () => {
-    setSupportingDocumentModal(true);
+  // Edit Document Modat
+  const [openEditDocumentModal, setEditDocumentModal] = useState(false);
+  const showEditgDocumentModal = () => {
+    setEditDocumentModal(true);
   };
-  const handleSupportingDocumentCancel = () => {
-    setSupportingDocumentModal(false);
+  const handleEditDocumentCancel = () => {
+    setEditDocumentModal(false);
+  };
+
+  //Add New Document Modal
+  const [openNewDocumentModal, setNewDocumentModal] = useState(false);
+  const showNewgDocumentModal = () => {
+    setNewDocumentModal(true);
+  };
+  const handleNewDocumentCancel = () => {
+    setNewDocumentModal(false);
   };
   const onMenuClick: MenuProps["onClick"] = (e) => {
     console.log("click", e);
+    if (e.key === "required") {
+      showNewgDocumentModal();
+      setDocType("required");
+    } else {
+      showNewgDocumentModal();
+      setDocType("supporting");
+    }
   };
   const items = [
     {
-      key: "1",
+      key: "required",
       label: "Required Document",
     },
     {
-      key: "2",
+      key: "supporting",
       label: "Supporting Document",
     },
   ];
 
   return (
     <>
-      <ImportModal heading="Document(s)" open={openImportModal} handleClose={handleImportCancel} />
-      {/* New Applications Modal */}
-      <Modal
-        open={openSupportingDocumentModal}
-        onCancel={handleSupportingDocumentCancel}
-        footer={null}
-      >
-        <div className="flex flex-col items-center">
-          <h1 className="p-4 font-bold text-center text-lg">
-            Select Country/Program Type
-          </h1>
-          <Form.Item
-            required
-            label="Which country passport/residency is applicant applying for?"
-            name="passportCountry"
-            className="md:w-96"
-          >
-            <Select
-              className="w-full"
-              defaultValue={1}
-              options={[
-                {
-                  value: 1,
-                  label: "Grenada",
-                },
-              ]}
-              size="large"
-            />
-          </Form.Item>
-          <Form.Item
-            required
-            label="Which program is the applicant interested in?"
-            name="interestedProgram"
-            className="md:w-96"
-          >
-            <Select
-              size="large"
-              defaultValue={1}
-              options={[
-                {
-                  value: 1,
-                  label: "Grenada",
-                },
-              ]}
-              className="w-full"
-            />
-          </Form.Item>
-          <Form.Item
-            required
-            label="Which investment route is the applicant interested in?"
-            name="investmentRoute"
-            className="md:w-96"
-          >
-            <Select
-              size="large"
-              defaultValue={1}
-              options={[
-                {
-                  value: 1,
-                  label: "Grenada",
-                },
-              ]}
-              className="w-full"
-            />
-          </Form.Item>
-          <div className="flex items-center justify-center gap-4 p-4">
-            <Form.Item>
-              <AppButton
-                type="reset"
-                label="Cancel"
-                variant="transparent"
-                containerStyle="border border-secondary text-secondary"
-              />
-            </Form.Item>
-          </div>
-        </div>
-      </Modal>
+      <DeleteModal
+        open={showDeleteModal}
+        header="Document"
+        text="document"
+        onCancel={() => {
+          setShowDeleteModal(false);
+        }}
+        onDelete={() => {
+          removeData(currentId as number);
+          setShowDeleteModal(false)
+        }}
+      />
+
+      <ImportModal
+        heading="Document(s)"
+        open={openImportModal}
+        handleClose={handleImportCancel}
+      />
+      {/* New Document Modal */}
+      <AddDocument
+        open={openNewDocumentModal}
+        handleClose={handleNewDocumentCancel}
+        docType={docType}
+        handleAddNewDocument={handleAddNewDocument}
+        postDocLoading={postDocLoading}
+      />
+      {currentId && (
+        <EditDocument
+          open={openEditDocumentModal}
+          editLoading={editLoading}
+          handleClose={handleEditDocumentCancel}
+          docType={docType}
+          handleEditNewDocument={handleEditNewDocument}
+          id={currentId}
+        />
+      )}
       <div className=" flex flex-col md:flex-row justify-between p-3">
         <PageIntro
           title="Document Requirements"
           description="Create, View & edit document requirements on the system"
           linkBack={appRoute.settings}
         />
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-between">
           <div className="flex items-center gap-2">
             <Icon
               icon="uil:file-import"
@@ -405,8 +475,7 @@ const DocumentRequirements = () => {
             />
           </div>
           <Dropdown.Button
-            className="bg-secondary rounded-lg "
-            // onClick={()=>{console.log("clicked ")}}
+            className="bg-secondary rounded-lg w-fit "
             arrow={true}
             icon={
               <DownOutlined className="text-white font-medium hover:text-white" />
