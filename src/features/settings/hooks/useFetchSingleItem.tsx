@@ -27,16 +27,19 @@ export const useFetchSingleItem = ({
   itemId,
   queryKey,
   urlEndPoint,
+  // onSuccessAction
 }: {
   itemId: number;
   queryKey: string;
   urlEndPoint: string;
-  }) => {
+  // onSuccessAction?: any;
+}) => {
   // const queryClient = useQueryClient();
   const queryData = useQuery(
-    [queryKey,itemId],
+    [queryKey, itemId],
     () => getData({ itemId, urlEndPoint }),
-    {enabled:!!itemId,
+    {
+      enabled: !!itemId,
       onError: () => {
         openNotification({
           state: "error",
@@ -47,7 +50,8 @@ export const useFetchSingleItem = ({
         });
       },
       onSuccess: (res) => {
-        console.log("res",res)
+        console.log("res", res);
+        // {onSuccessAction}
         // queryClient.invalidateQueries([queryKey,itemId])
       },
     }
