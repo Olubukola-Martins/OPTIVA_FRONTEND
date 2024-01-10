@@ -1,7 +1,10 @@
 import { Modal, Input, Form, Select } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
-import { generalValidationRules, textInputValidationRules } from "src/utils/formHelpers/validations";
+import {
+  generalValidationRules,
+  textInputValidationRules,
+} from "src/utils/formHelpers/validations";
 import { useGetSingleInvestmentRoute } from "../hooks/useGetSingleInvestmentRoute";
 import { QUERY_KEY_FOR_INVESTMENT_ROUTE } from "../hooks/useGetInvestmentRoute";
 import { useEffect } from "react";
@@ -41,6 +44,8 @@ export const EditInvestment = ({
   const handleSubmit = (values: any) => {
     console.log("values of form", values);
     putData(investmentId as unknown as number, values.name, values.country);
+    form.resetFields()
+    handleClose();
   };
 
   return (
@@ -64,7 +69,7 @@ export const EditInvestment = ({
         >
           <Input />
         </Form.Item>
-        
+
         <Form.Item
           name="country"
           label="Select Country"
@@ -81,6 +86,7 @@ export const EditInvestment = ({
 
         <AppButton type="submit" isLoading={putLoading} />
       </Form>
+      {putLoading && handleClose()}
     </Modal>
   );
 };

@@ -1,35 +1,21 @@
 export interface IAuthorizedPerson{
-    created_at: string
-    employee: string
-    id: number
-    signature: string
-    updated_at:string
+  id: number;
+  employee_id: number;
+  signature: string;
+  created_at: string;
+  updated_at: string;
+  employee: Employee;
 }
 
-// EMPLOYEE TYPES TO BE DELETED
-// interface Meta {
-//   current_page: number;
-//   from: number;
-//   last_page: number;
-//   links: Link[];
-//   path: string;
-//   per_page: number;
-//   to: number;
-//   total: number;
-// }
-
-// interface Link {
-//   url?: string;
-//   label: string;
-//   active: boolean;
-// }
-
-// interface Links {
-//   first: string;
-//   last: string;
-//   prev?: any;
-//   next?: any;
-// }
+interface Employee {
+  id: number;
+  name: string;
+  email: string;
+  department_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+}
 
 export interface IEmployee {
   id: number;

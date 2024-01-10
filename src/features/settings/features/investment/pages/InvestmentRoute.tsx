@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Dropdown, Menu, Skeleton } from "antd";
+import { Dropdown, Menu,  } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -15,7 +15,7 @@ import {
 } from "../hooks/useGetInvestmentRoute";
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
 import { EditInvestment } from "../components/EditInvestment";
-import { useDeleteHandler } from "src/features/settings/hooks/handleDelete";
+import { useDelete } from "src/hooks/useDelete";
 
 interface DataType {
   key: React.Key;
@@ -33,11 +33,11 @@ const InvestmentRoute = () => {
   const [id, setId] = useState<number>();
   const [addInvRoute, setAddInvRoute] = useState<boolean>(false);
   const [editInvRoute, setEditInvRoute] = useState<boolean>(false);
-
-  const { removeData, deleteIsLoading } = useDeleteHandler({
+  const { removeData } = useDelete({
+    EndPointUrl: "admin/investment-route/",
     queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
-    deleteEndPointUrl: "admin/investment-route",
   });
+
   const [editId, setEditId] = useState<number>();
 
   useEffect(() => {
@@ -61,9 +61,7 @@ const InvestmentRoute = () => {
   const showDeleteModal = () => {
     setOpenDeleteModal(true);
   };
-  const handleDeleteCancel = () => {
-    setOpenDeleteModal(false);
-  };
+
 
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
@@ -176,14 +174,14 @@ const InvestmentRoute = () => {
         </div>
       </div>
 
-      <Skeleton loading={isLoading} active>
-        <Table
-          className="bg-white rounded-md shadow border mt-8"
-          columns={columns}
-          dataSource={dataArray}
-          scroll={{ x: 768 }}
-        />
-      </Skeleton>
+      {/* Table */}
+      <Table
+        className="bg-white rounded-md shadow border mt-8"
+        columns={columns}
+        dataSource={dataArray}
+        scroll={{ x: 768 }}
+        loading={isLoading}
+      />
 
       {/* Import Modal */}
       <ImportModal
@@ -199,14 +197,18 @@ const InvestmentRoute = () => {
       />
 
       {/* Delete Modal */}
-      <DeleteModal
-        open={openDeleteModal}
-        header="Investment Route"
-        text="investment route"
-        onCancel={handleDeleteCancel}
-        onDelete={() => removeData(id as unknown as number)}
-        isLoading={deleteIsLoading}
-      />
+      {id && (
+        <DeleteModal
+          open={openDeleteModal}
+          header="Investment Route"
+          text="investment route"
+          onCancel={() => setOpenDeleteModal(false)}
+          onDelete={() => {
+            removeData(id);
+          }}
+          // isLoading={deleteIsLoading}
+        />
+      )}
     </>
   );
 };

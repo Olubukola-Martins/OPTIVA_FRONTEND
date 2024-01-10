@@ -1,107 +1,112 @@
-import { Form, Input, Select } from "antd";
+import { Form, InputNumber, } from "antd";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const StLuciaNefiRealEstate = () => {
-  const currency = (
-    <Select
-      options={[
-        { value: "USD", label: "USD" },
-        { label: "Naira", value: "Naira" },
-      ]}
-      defaultValue="USD"
-    />
-  );
   return (
     <div className="flex gap-8">
       <div className="w-1/2">
         <Form.Item
           label="NEFI Contribution for Main Applicant"
-          name="nefiContributionApplicant"
-          required
+          name="nefi_bution_for_main_applicant"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="NEFI Contribution for Additional Dependents (if there's a spouse, maximum of 2)"
           name="nefiContributionAdditionalDependentSpouse"
-          required
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item
+          label="NEFI Contribution for Additional Dependents (if there's a spouse)"
+          name="nefi_bution_for_add_depn"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="NEFI Contribution for Additional Dependents (if there's no spouse)"
-          name="nefiContributionAdditionalDependent"
-          required
+          name="nefi_bution_for_add_depn_no_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't Processing Fee for Spouse"
-          name="govtProcessingFeeSpouse"
-          required
+          name="govt_prc_fee_for_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't Due Diligence Fee for Main Applicant"
-          name="govtDueDiligenceApplicant"
-          required
+          name="govt_due_dil_fee_for_main_applicant"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label=" Gov't Due Diligence Fee for Dependents >16yrs"
-          name="govtDependentDueDiligenceSixteen"
-          required
+          name="govt_due_dil_fee_for_depn_gt_than_sixteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
-        <Form.Item label="Passport Fee" name="passportFee" required>
-          <Input addonAfter={currency} />
+        <Form.Item label="Legal & Advisory Fee" name="legal_and_advisory_fee"  rules={generalValidationRules}>
+        <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item label="Passport Fee" name="passport_fee"  rules={generalValidationRules}>
+        <InputNumber className="w-full" />
         </Form.Item>
       </div>
       <div className="w-1/2">
         <Form.Item
           label="NEFI Contribution for Spouse"
-          name="nefiContributionSpouse"
-          required
+          name="nefi_bution_for_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="NEFI Contribution for More Dependents (if there's a spouse and 2 additonal dependents)"
-          name="nefiContributionMoreDependent"
-          required
+          name="nefi_bution_for_more_depn"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't  Processing for Main Applicant"
-          name="govtProcessingApplicant"
-          required
+          name="govt_prc_fee_for_main_applicant"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't  Processing Fee for Additional Dependents"
-          name="govtProcessingFeeAdditionalDependents"
-          required
+          name="govt_prc_fee_for_add_depn"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
 
         <Form.Item
           label="Gov't Due Diligence for Spouse"
-          name="govtDueDiligenceSpouse"
-          required
+          name="govt_due_dil_fee_for_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't Due Diligence for Dependents <16"
-          name="govtDueDiligenceDependentSixteen"
-          required
+          name="govt_due_dil_fee_for_depn_ls_than_sixteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item label="Local Agent + VAT Fee" name="local_agent_and_vat_fee"  rules={generalValidationRules}>
+        <InputNumber className="w-full" />
         </Form.Item>
       </div>
     </div>

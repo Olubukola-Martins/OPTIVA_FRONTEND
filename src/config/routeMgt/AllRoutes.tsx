@@ -42,6 +42,8 @@ import Roles from "src/features/settings/features/rolesAndPermissions/pages/Role
 import CompanyProfile from "src/features/settings/features/companyProfile/page/CompanyProfile";
 import SettingsTemplate from "src/features/settings/features/contractsEmailTemplates/pages/SettingsTemplate";
 import EditProgramType from "src/features/settings/features/program-types/pages/EditProgramType";
+import EditFees from "src/features/settings/features/authorizedPersons/pages/EditFees";
+import ApplicationTemplateDetails from "src/features/settings/features/appTemplate/pages/ApplicationTemplateDetails";
 import Workflow from "src/features/settings/features/workFlow/pages/Workflow";
 import AddWorkflow from "src/features/settings/features/workFlow/pages/AddWorkflow";
 import WorkflowDetails from "src/features/settings/features/workFlow/pages/WorkflowDetails";
@@ -107,6 +109,10 @@ const routesArray = [
     element: <NewApplicationTemplate />,
   },
   {
+    path: appRoute.applicationTemplateDetails().format,
+    element: <ApplicationTemplateDetails />,
+  },
+  {
     path: appRoute.countryMilestonesProgram,
     element: <CountryMilestonesAndPrograms />,
   },
@@ -126,7 +132,10 @@ const routesArray = [
     path: appRoute.addFees,
     element: <AddFees />,
   },
-
+  {
+    path: appRoute.editFees().format,
+    element: <EditFees />,
+  },
   { path: appRoute.document_requirement, element: <DocumentRequirements /> },
   { path: appRoute.investment_route, element: <InvestmentRoute /> },
   { path: appRoute.app_template, element: <ApplicationTemplate /> },

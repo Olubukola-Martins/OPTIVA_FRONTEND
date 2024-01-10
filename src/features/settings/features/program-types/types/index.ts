@@ -74,18 +74,11 @@ interface IProcess {
   created_at: string;
   updated_at: string;
 }
-interface ICountryType {
+
+export interface IPutCountry {
   country_name: string;
   created_at: string;
   id: number;
-  updated_at: string;
-}
-export interface IPutCountry {
-  country: ICountryType;
-  country_id: number;
-  created_at: string;
-  id: number;
-  investment_name: string;
   updated_at: string;
 }
 export interface ICountry {

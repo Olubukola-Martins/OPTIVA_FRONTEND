@@ -1,162 +1,174 @@
-import { Form, Input, Select } from "antd";
+import { Form, InputNumber } from "antd";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const StKittsNevisQuestions = () => {
-  const currency = (
-    <Select
-      options={[
-        { value: "USD", label: "USD" },
-        { label: "Naira", value: "Naira" },
-      ]}
-      defaultValue="USD"
-    />
-  );
+
+
   return (
     <div className="flex gap-8">
       <div className="w-1/2">
         <Form.Item
           label="SGF Donation for Principal Applicant"
-          name="sgfDonationApplicant"
-          required
+          name="sgf_dona_for_principal_applicant"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="SGF Donation for Family of 4 (PA + Spouse + 2 dependents OR PA + any 3 dependents)"
-          name="sgfDonationFamilyFour"
-          required
+          name="sgf_dona_for_family_of_four"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="SGF Donation Application Fee (Per Individual)"
-          name="sgfDonationIndividual"
-          required
+          name="sgf_dona_application_fee"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Due Diligence & Processing Fees for Spouse"
-          name="dueDiligenceSpouse"
-          required
+          name="due_dil_and_prc_fee_for_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Due Diligence Fee for Children 16-18"
-          name="childrenDueDiligence"
-          required
+          name="due_dil_and_prc_fee_for_children_sixteen_to_eighteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
-          <Form.Item
-            label="Due Diligence Fee for Parents 65+"
-            name="parentDueDiligence"
-            required
-          >
-            <Input addonAfter={currency} />
-          </Form.Item>
+          <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item
+          label="Due Diligence Fee for Parents 65+"
+          name="due_dil_and_prc_fee_for_parents_gt_than_or_eq_sixty_five"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Due Diligence Fee for  Siblings 0-15"
-          name="siblingsDueDiligence"
-          required
+          name="due_dil_and_prc_fee_for_siblings_zero_to_fifteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item
+          label="Due Diligence Fee for  Siblings 15+"
+          name="due_dil_and_prc_fee_for_siblings_gt_than_or_eq_fifteen"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Gov't Passport & Oath of Allegiance Fee "
-          name="gov'tPassportOath"
-          required
+          name="govt_passport_and_oath_of_allegiance_fee"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Bank Due Diligence & Processing Fees for Principal Applicant"
-          name="bankDueDiligenceApplicant"
-          required
+          name="bank_due_dil_fee_for_principal_applicant"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Bank Due Diligence & Processing Fees for Dependents <15yrs old"
-          name="bankDueDiligenceDependentFifteen"
-          required
+          name="bank_due_dil_fee_for_depn_ls_than_fifteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Legal & Advisory Fees"
-          name="legalAdvisoryFee"
-          required
+          name="legal_advisory_fee"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
       </div>
       <div className="w-1/2">
         <Form.Item
           label="SGF Donation for Spouse/Other Dependent"
-          name="sgfDonationSpouse"
-          required
+          name="sgf_dona_for_spouse_or_other_dependent"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="SGF Donation for Additional Dependents <18yrs (Per Individual)"
-          name="sgfDonationAdditionalDependent"
-          required
+          name="sgf_dona_for_additional_dependents_ls_than_eighteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
-          label="Due Diligence & Processing Fees for Main Applicant"
-          name="applicantDueDiligenceProcessing"
-          required
+          label="SGF Donation for Additional Dependents >18yrs (Per Individual)"
+          name="sgf_dona_for_additional_dependents_gt_than_eighteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
+        </Form.Item> 
+        <Form.Item
+          label="Due Diligence & Processing Fees for Main Applicant"
+          name="due_dil_and_prc_fee_for_main_applicant"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Due Diligence & Processing Fees for Children 0-15"
-          name="childrenDueDiligenceProcessing"
-          required
+          name="due_dil_and_prc_fee_for_children_zero_to_fifteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Due Diligence & Processing Fees for Children 18+"
-          name="childrenDueDiligenceProcessingEighteen"
-          required
+          name="due_dil_and_prc_fee_for_children_gt_than_eighteen"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Due Diligence & Processing Fees for Grandparents 55+"
-          name="grandparentsDueDiligenceProcessing"
-          required
+          name="due_dil_and_prc_fee_for_grand_parents_gt_than_or_eq_fifty_five"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="FedEx Courier + Bank Transfer Fee"
-          name="fedExCourierFee"
-          required
+          name="courier_fee_and_bank_transfer_fee"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
         <Form.Item
           label="Bank Due Diligence & Processing Fees for  Spouse"
-          name="bankSpouseDueDiligenceProcessing"
-          required
+          name="bank_due_dil_fee_for_spouse"
+          rules={generalValidationRules}
         >
-          <Input addonAfter={currency} />
-              </Form.Item>
-              <Form.Item
-          label="Bank Due Diligence & Processing Fees for Dependents >15yrs old"
-          name="bankDependentDueDiligenceProcessing"
-          required
-        >
-          <Input addonAfter={currency} />
+          <InputNumber className="w-full" />
         </Form.Item>
-        <Form.Item label="Local Agent Fee + VAT" name="localAgentFee" required>
-          <Input addonAfter={currency} />
+        <Form.Item
+          label="Bank Due Diligence & Processing Fees for Dependents >15yrs old"
+          name="bank_due_dil_fee_for_depn_gt_than_fifteen"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
+        </Form.Item>
+        <Form.Item
+          label="Local Agent Fee + VAT"
+          name="local_agent_fee_and_vat"
+          rules={generalValidationRules}
+        >
+          <InputNumber className="w-full" />
         </Form.Item>
       </div>
     </div>

@@ -24,11 +24,19 @@ export const appRoute = {
   }),
   documentRequirements: `/settings/documentsRequirements`,
   applicationTemplate: `/settings/applicationTemplate`,
+  applicationTemplateDetails: (id?: number) => ({
+    format: `/settings/applicationTemplateDetails/:id`,
+    path: `/settings/applicationTemplateDetails/${id}`,
+  }),
   newApplicationTemplate: `/settings/newApplicationTemplate`,
   countryMilestonesProgram: `/settings/countryMilestonesProgram`,
   createProgramType: `/settings/createProgramRoute`,
   defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
   addFees: `/settings/addfees`,
+  editFees: (id?: number) => ({
+    format: `/settings/editFees/:id`,
+    path: `/settings/editFees/${id}`,
+  }),
   editProgramType: (id?: number) => ({
     format: `/settings/editProgramType/:id`,
     path: `/settings/editProgramType/${id}`,

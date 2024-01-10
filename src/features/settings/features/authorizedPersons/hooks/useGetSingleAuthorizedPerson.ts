@@ -14,7 +14,6 @@ const getData = async (props: { token: string; authorizedId: number }) => {
   };
 
   const res = await axios.get(url, config);
-  console.log("authorized persons:", res);
   return res;
 };
 
