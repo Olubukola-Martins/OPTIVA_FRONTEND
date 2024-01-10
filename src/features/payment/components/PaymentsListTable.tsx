@@ -48,7 +48,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
   const { generateInvoice, generateInvoiceLoading } = useGenerateInvoice();
 
   // Handle generate invoice
-  const handleGenerateInvoice = (values: any) => {
+  const handleGenerateInvoice = (values: { description: any; quantity: any; paymentUSD: any; }) => {
     const newData = {
       description: values.description,
       quantity: values.quantity,
@@ -127,7 +127,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_: any, record) => (
+      render: ( record) => (
         <Dropdown
           trigger={["click"]}
           overlay={

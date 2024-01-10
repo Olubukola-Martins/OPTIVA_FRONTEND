@@ -19,7 +19,7 @@ const useGenerateInvoice = () => {
         newData,
       },
       {
-        onError: (error: any) => {
+        onError: (error:any) => {
           openNotification({
             state: "error",
             title: "Error Occured",

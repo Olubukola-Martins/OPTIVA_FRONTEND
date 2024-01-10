@@ -109,7 +109,7 @@ useEffect(() => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_: any, record: { key: unknown }) => (
+      render: (record: { key: unknown }) => (
         <Dropdown
           trigger={["click"]}
           overlay={
