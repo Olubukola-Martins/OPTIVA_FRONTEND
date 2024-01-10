@@ -1,8 +1,11 @@
-import { Dropdown, Menu, Modal, Table } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
-import DeleteIcon from "../assets/img/warning.png";
-import { AppButton } from "src/components/button/AppButton";
+import React, { useEffect, useState } from "react";
+import { QUERY_KEY_FOR_FEES, useGetFees } from "../hooks/useGetFees";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useDelete } from "src/hooks/useDelete";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 type DataSourceItem = {
   key: React.Key;
@@ -15,7 +18,36 @@ type DataSourceItem = {
   balancePayment: string;
 };
 
+
 export const Fees = () => {
+  const { data, isLoading } = useGetFees();
+  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+  const [feeId, setFeeId] = useState<number>();
+
+  const { removeData } = useDelete({
+    queryKey: QUERY_KEY_FOR_FEES,
+    EndPointUrl: "admin/fee/",
+  });
+
+ 
+  useEffect(() => {
+    if (data) {
+      const feesArray: DataSourceItem[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          country: item.country.country_name,
+          programName: item.fee_name,
+          balancePayment: item.program_balance_payment,
+          investmentRoute: item.investment_route.investment_name,
+          localProcessingFee: item.local_processing_fee,
+          thresholdPayment: item.program_threshold_payment,
+        };
+      });
+      setDataArray(feesArray);
+    }
+  }, [data]);
+
   // DELETE MODAL
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
@@ -45,7 +77,7 @@ export const Fees = () => {
     },
     {
       title: "Investment Route",
-      dataIndex: "investment Route",
+      dataIndex: "investmentRoute",
       key: "4",
     },
     {
@@ -72,8 +104,27 @@ export const Fees = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">Edit</Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>Delete</Menu.Item>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setFeeId(val.key as unknown as number);
+                  }}
+                >
+                  <Link
+                    to={appRoute.editFees(val.key as number).path}
+                  >
+                    Edit
+                  </Link>
+                </Menu.Item>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    setFeeId(val.key as unknown as number);
+                    showDeleteModal();
+                  }}
+                >
+                  Delete
+                </Menu.Item>
               </Menu>
             }
           >
@@ -83,26 +134,16 @@ export const Fees = () => {
       ),
     },
   ];
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      country: "Grenada",
-      programName: "Citizenship By Investment",
-      investmentRoute: "Donation",
-      localProcessingFee: "$400",
-      thresholdPayment: "0%",
-      balancePayment: "0%",
-    });
-  }
+
+
 
   return (
     <>
       {/* TABLE */}
       <Table
+        loading={isLoading}
         columns={columns}
-        dataSource={dataSource}
+        dataSource={dataArray}
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         rowSelection={{
@@ -121,20 +162,16 @@ export const Fees = () => {
       />
 
       {/* DELETE MODAL */}
-      <Modal open={isDeleteModalOpen} footer={null} onCancel={handleDeleteModalCancel}>
-        <img src={DeleteIcon} className="mx-auto"/>
-        <h2 className="text-center font-bold py-1">Delete Fee</h2>
-        <p className="text-center py-2">Are you sure you would like to delete this fee?</p>
-        <div className="py-3 flex items-center justify-center gap-4">
-          <AppButton
-            variant="transparent"
-            label="Cancel"
-            handleClick={handleDeleteModalCancel}
-          />
-          <AppButton label="Delete" />
-        </div>
-      </Modal>
-      
+      {feeId && (
+        <DeleteModal
+          header="Delete Fee"
+          onCancel={handleDeleteModalCancel}
+          open={isDeleteModalOpen}
+          onDelete={() => removeData(feeId)}
+          // isLoading={deleteIsLoading}
+          text="fee"
+        />
+      )}
     </>
   );
 };

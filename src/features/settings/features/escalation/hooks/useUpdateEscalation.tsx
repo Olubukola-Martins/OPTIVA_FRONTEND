@@ -1,17 +1,20 @@
-import { QUERY_KEY_ESCALATION, escalationURL } from './useAddEscalation';
-import { editItemData } from 'src/features/settings/assets/variablesForHooks';
-import { IEscalationBody } from 'src/features/settings/types/settingsType';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from 'react-query';
+import { QUERY_KEY_ESCALATION, escalationURL } from "./useAddEscalation";
+import { editItemData } from "src/features/settings/utils/settingsAPIHelpers";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
+import { openNotification } from "src/utils/notification";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 const useUpdateEscalation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { token, companyId } = useApiAuth();
   const { mutate, isLoading, isSuccess } = useMutation(editItemData);
-  const editEscalation = (id: number, newData: IEscalationBody) => {
+  const editEscalation = (
+    id: number,
+    newData: any
+  ) => {
     mutate(
-      { url: `${escalationURL}/${id}`, companyId, token, newData },
+      { url: escalationURL, newData ,id},
       {
         onError: (error: any) => {
           openNotification({
@@ -21,20 +24,19 @@ const useUpdateEscalation = () => {
             duration: 5,
           });
         },
-        onSuccess: (response: any) => {
-          //   navigate(appRoutes.recruitmentDashboard);
+        onSuccess: (response: { data: { message: string } }) => {
+            navigate(appRoute.escalation);
           openNotification({
             state: "success",
             title: "Success",
             description: response.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_ESCALATION]);
+          queryClient.invalidateQueries([QUERY_KEY_ESCALATION, id]);
         },
       }
     );
   };
-  return { editEscalation };
+  return { editEscalation, isLoading, isSuccess };
 };
 
-
-export default useUpdateEscalation
+export default useUpdateEscalation;

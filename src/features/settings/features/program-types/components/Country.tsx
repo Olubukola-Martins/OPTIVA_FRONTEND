@@ -1,9 +1,11 @@
-import { Dropdown, Form, Input, Menu, Modal, Select, Table } from "antd";
+import { Dropdown, Menu,  Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
-import { AppButton } from "src/components/button/AppButton";
-import Success from "../assets/img/success.png";
-import DeleteIcon from "../assets/img/warning.png";
+import React, { useEffect, useState } from "react";
+import { QUERY_KEY_FOR_COUNTRY, useGetCountry } from "../hooks/useGetCountry";
+import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
+import { EditCountryModal } from "./EditCountryModal";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useDelete } from "src/hooks/useDelete";
 
 type DataSourceItem = {
   key: React.Key;
@@ -14,6 +16,30 @@ type DataSourceItem = {
 };
 
 export const Country = () => {
+  // GET REQUEST
+  const { data, isLoading } = useGetCountry();
+  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+  useEffect(() => {
+    if (data) {
+      const country: DataSourceItem[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          country: item.country_name,
+          dateCreated: formatDate(item.created_at),
+          lastModified: formatDate(item.updated_at),
+        };
+      });
+      setDataArray(country);
+    }
+  }, [data]);
+
+  const [countryId, setCountryId] = useState<number>();
+
+
+
+const {removeData}=  useDelete({queryKey: QUERY_KEY_FOR_COUNTRY, EndPointUrl:"admin/countries/",})
+
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -35,7 +61,6 @@ export const Country = () => {
       dataIndex: "lastModified",
       key: "4",
     },
-
     {
       title: "Action",
       dataIndex: "action",
@@ -45,10 +70,22 @@ export const Country = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={showCountryModal}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setCountryId(val.key as unknown as number);
+                    showCountryModal();
+                  }}
+                >
                   Edit
                 </Menu.Item>
-                <Menu.Item key="2" onClick={showDeleteModal}>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    setCountryId(val.key as unknown as number);
+                    showDeleteModal();
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu>
@@ -60,35 +97,13 @@ export const Country = () => {
       ),
     },
   ];
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      country: "Grenada",
-      dateCreated: "dd/mm/yyyy",
-      lastModified: "dd/mm/yyyy",
-    });
-  }
 
-  // Country Modal
   const [openCountryModal, setOpenCountryModal] = useState<boolean>(false);
   const showCountryModal = () => {
     setOpenCountryModal(true);
   };
   const handleCountryModalCancel = () => {
     setOpenCountryModal(false);
-  };
-  const handleEditCountrySubmit = (val: any) => {};
-
-  // Add Success
-  const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
-
-  const renderSuccessModal = () => {
-    setShowSuccessModal(true);
-  };
-  const cancelSuccessModal = () => {
-    setShowSuccessModal(false);
   };
 
   // Delete Modal
@@ -102,96 +117,45 @@ export const Country = () => {
   return (
     <>
       {/* TABLE */}
-      <Table
-        columns={columns}
-        dataSource={dataSource}
-        className="bg-white rounded-md shadow border mt-2"
-        scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
-      />
+        <Table
+          loading={isLoading}
+          columns={columns}
+          dataSource={dataArray}
+          className="bg-white rounded-md shadow border mt-2"
+          scroll={{ x: 600 }}
+          rowSelection={{
+            type: "checkbox",
+            onChange: (
+              selectedRowKeys: React.Key[],
+              selectedRows: DataSourceItem[]
+            ) => {
+              console.log(
+                `selectedRowKeys: ${selectedRowKeys}`,
+                "selectedRows: ",
+                selectedRows
+              );
+            },
+          }}
+        />
 
       {/* Country MODAL */}
-      <Modal
+      {countryId &&  <EditCountryModal
+        handleClose={handleCountryModalCancel}
         open={openCountryModal}
-        footer={null}
-        onCancel={handleCountryModalCancel}
-      >
-        <h2 className="text-center text-lg font-bold">Edit Country</h2>
-        <Form layout="vertical" onFinish={handleEditCountrySubmit}>
-          <Form.Item name="country" label="Country" required>
-            <Input size="large" />
-          </Form.Item>
-          <Form.Item name="programType" label="Select Program Type" required>
-            <Select
-              size="large"
-              options={[{ value: "Grenda,", label: "Grenada" }]}
-            />
-          </Form.Item>
-
-          <div className="flex items-center justify-center gap-5">
-            <AppButton
-              label="Cancel"
-              type="reset"
-              handleClick={handleCountryModalCancel}
-              variant="transparent"
-            />
-            <AppButton
-              label="Save"
-              type="submit"
-              handleClick={() => {
-                renderSuccessModal();
-                handleCountryModalCancel();
-              }}
-            />
-          </div>
-        </Form>
-      </Modal>
-
-      {/* ADD SUCCESS MODAL */}
-      <Modal
-        open={showSuccessModal}
-        footer={null}
-        onCancel={cancelSuccessModal}
-      >
-        <div className="flex flex-col items-center gap-4 font-bold">
-          <img src={Success} className="mx-auto" />
-          <div className="text-center text-lg">
-            <h2>Country</h2>
-            <h2>Added Successfully</h2>
-          </div>
-
-          <AppButton label="Back" handleClick={cancelSuccessModal} />
-        </div>
-      </Modal>
+        countryId={countryId}
+      />}
+     
 
       {/* DELETE MODAL */}
-      <Modal open={openDeleteModal} onCancel={handleDeleteCancel} footer={null}>
-        <img src={DeleteIcon} className="mx-auto" />
-        <h2 className="text-center font-bold p-2">Delete Country</h2>
-        <p className="text-center">
-          Are you sure you would like to delete this country?
-        </p>
-        <div className="flex items-center justify-center gap-5 mt-5">
-          <AppButton
-            label="Cancel"
-            handleClick={handleDeleteCancel}
-            variant="transparent"
-          />
-          <AppButton label="Delete" type="submit" />
-        </div>
-      </Modal>
+      {countryId && <DeleteModal
+        open={openDeleteModal}
+        header="Country"
+        text="country"
+        onCancel={handleDeleteCancel}
+        onDelete={() => removeData(countryId)}
+        // isLoading={deleteIsLoading}
+      />}
+      
     </>
   );
 };

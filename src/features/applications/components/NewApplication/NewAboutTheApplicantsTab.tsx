@@ -1,5 +1,4 @@
 import { Tabs } from "antd";
-import React from "react";
 import { NewPersonalDetails } from "./NewPersonalDetails";
 import { NewContactDetails } from "./NewContactDetails";
 import { NewMarriageDetails } from "./NewMarriageDetails";
@@ -66,15 +65,23 @@ export const NewAboutTheApplicantsTab = () => {
     },
   ];
   return (
-    <div className="w-full">
-      <Tabs
-        items={tabItems}
-        defaultActiveKey="1"  
-        size="small"
-        moreIcon
-        tabBarStyle={{ display: "flex", flexWrap: "wrap", maxWidth: "1250px", }}
-      />
-    </div>
-    
+    <Tabs items={tabItems}/>
+    // <div className="w-full">
+      // <Tabs
+      //   items={tabItems}
+      //   // defaultActiveKey="1"
+      //   size="small"
+      //   moreIcon
+      //   // tabBarStyle={{
+      //   //   display: "flex",
+      //   //   flexWrap: "wrap",
+      //   //   maxWidth: "1250px",
+      //   //   // flex: "auto",
+      //   //   // alignSelf: "stretch",
+      //   //   // overflow: "hidden",
+      //   //   // whiteSpace: "nowrap",
+      //   // }}
+      // />
+    // </div>
   );
 };

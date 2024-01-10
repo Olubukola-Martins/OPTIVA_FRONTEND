@@ -3,12 +3,6 @@ import { ActiveApplications } from "../ActiveApplications";
 import { InactiveApplications } from "../InactiveApplications";
 
 export const ApplicationsTab = () => {
-  const operations = (
-    <div className="hidden lg:flex gap-4 w-full">
-      <Input.Search placeholder="Search" className="w-1/2"></Input.Search>
-      <Select placeholder="Filter" className="w-1/2" />
-    </div>
-  );
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -30,7 +24,19 @@ export const ApplicationsTab = () => {
       <Tabs
         items={tabItems}
         className="hover:bg-caramel active:text-primary"
-        tabBarExtraContent={operations}
+        tabBarExtraContent={
+          <div className="flex gap-4">
+            <Input.Search
+              placeholder="Search"
+              className="md:flex hidden w-[250px]"
+            />
+            <Select
+              allowClear
+              placeholder="Filter"
+              className="md:flex hidden w-[250px]"
+            />
+          </div>
+        }
       />
     </>
   );

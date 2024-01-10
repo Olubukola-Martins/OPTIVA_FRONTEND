@@ -1,123 +1,202 @@
-import { Form, Input, Select } from "antd";
-import { useParams } from "react-router-dom";
+import { Form, Input, Select, Skeleton } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-// import { useState } from "react";
+import { useGetSingleProgram } from "../hooks/useGetSingleProgram";
+import { useParams } from "react-router-dom";
+import { QUERY_KEY_FOR_PROGRAM_TYPE } from "../hooks/useGetProgramType";
+import { useEffect } from "react";
+import { useGetApplicationTemplate } from "../../appTemplate/hooks/useGetApplicationTemplate";
+import { useGetDocumentRequirement } from "../hooks/useGetDocumentRequirement";
+import { useGetEligibleDependent } from "../hooks/useGetEligibleDependent";
+import { useGetMilestone } from "../hooks/useGetMilestone";
+import { useGetWorkflow } from "../hooks/useGetWorkflow";
+import type { SelectProps } from "antd";
+import { useUpdateProgramType } from "../hooks/useUpdateProgramType";
+import { useGetCountry } from "../hooks/useGetCountry";
+import { generalValidationRules, textInputValidationRules, textInputValidationRulesOpt } from "src/utils/formHelpers/validations";
 
 const EditProgramType = () => {
-   
   const [form] = Form.useForm();
-//   const [isEditMode, setIsEditMode] = useState(false);
+  const params = useParams();
+  const id = params.id;
+  const { data: programData, isLoading: programLoading } = useGetSingleProgram({
+    id: id as unknown as number,
+    queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
+  });
+  const { data: dependentData } = useGetEligibleDependent();
+  const { data: documentData } = useGetDocumentRequirement();
+  const { data: applicationData } = useGetApplicationTemplate();
+  const { data: milestoneData } = useGetMilestone();
+  const { data: workflowData } = useGetWorkflow();
+  const { data: countryData } = useGetCountry();
+
+  const { putData, isLoading: putLoading } = useUpdateProgramType({
+    queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
+  });
+
+  // DEPENDENT OPTION
+  const dependentOptions: SelectProps["options"] =
+    dependentData?.map((item) => ({
+      value: item.id,
+      label: item.dependant,
+      key: item.id,
+    })) || [];
+
+  // DOCUMENT OPTION
+  const documentOptions: SelectProps["options"] =
+    documentData?.map((item) => ({
+      value: item.id,
+      label: item.name,
+      key: item.id,
+    })) || [];
+
+  // APPLICANT OPTION
+  const applicantOptions: SelectProps["options"] =
+    applicationData?.map((item) => ({
+      value: item.id,
+      label: item.template_name,
+      key: item.id,
+    })) || [];
+
+  // MILESTONE OPTION
+  const milestoneOptions: SelectProps["options"] =
+    milestoneData?.map((item) => ({
+      value: item.id,
+      label: item.milestone,
+      key: item.id,
+    })) || [];
+
+  // WORKFLOW OPTION
+  const workflowOptions: SelectProps["options"] =
+    workflowData?.map((item) => ({
+      value: item.id,
+      label: item.name,
+      key: item.id,
+    })) || [];
+
+  // COUNTRY OPTION
+  const countryOptions: SelectProps["options"] =
+    countryData?.map((item) => ({
+      value: item.id,
+      label: item.country_name,
+      key: item.id,
+    })) || [];
+  
+ 
+
+  useEffect(() => {
+    if (programData) {
+      form.setFieldsValue({
+        programName: programData.program_name,
+        programLink: programData.program_link,
+        eligibleDependents: programData.eligibledependents,
+        applicationTemplate: programData.template_id,
+        documentRequirement: programData.documentrequirements,
+        milestones: programData.milestones,
+        selectWorkflow: programData.workflow_id,
+      });
+    }
+  }, [programData]);
 
   const handleSubmit = (values: any) => {
-    console.log("Form values submitted:", values);
+    putData(
+      id as unknown as number,
+      values.programName,
+      values.selectCountry,
+      values.programLink,
+      values.documentRequirement,
+      values.applicationTemplate,
+      values.selectWorkflow,
+      values.milestones,
+      values.eligibleDependents,
+      
+    );
   };
 
-  const handleUpdate = () => {
-    const formValues = form.getFieldsValue();
-    console.log("Form values updated:", formValues);
-  };
   return (
     <>
       <PageIntro
         title="Edit Program Type"
-        // title={isEditMode ? "Edit Program Type" : "Create Program Type"}
-        // description={
-        //   isEditMode
-        //     ? "Edit program type on the system"
-        //     : "Create new program type on the system"
-        // }
         description="Edit program type on the system"
         linkBack={appRoute.countryMilestonesProgram}
       />
-      <div className="border rounded-lg p-4">
-        <Form form={form} onFinish={handleSubmit} layout="vertical">
-          <div className="flex gap-7 lg:flex-row flex-col">
-            <div className="w-1/2">
-              <Form.Item label="Program Name" required name="programName">
-                <Input />
-              </Form.Item>
+      <Skeleton active loading={programLoading}>
+        <div className="border rounded-lg p-4">
+          <Form
+            form={form}
+            onFinish={handleSubmit}
+            layout="vertical"
+            requiredMark={false}
+          >
+            <div className="flex lg:gap-7 lg:flex-row flex-col">
+              <div className="lg:w-1/2">
+                <Form.Item label="Program Name" rules={textInputValidationRules} name="programName">
+                  <Input />
+                </Form.Item>
 
-              <Form.Item name="programLink" label="Program Link">
-                <Input />
-              </Form.Item>
+                <Form.Item name="programLink" label="Program Link" rules={textInputValidationRulesOpt}>
+                  <Input />
+                </Form.Item>
 
-              <Form.Item
-                label="Eligible Dependents"
-                name="eligibleDependents"
-                required
-              >
-                <Select
-                  mode="multiple"
-                  options={[
-                    {
-                      value: "Real Estate",
-                      label: "Real Estate",
-                    },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item
-                label="Application Template"
-                name="applicationTemplate"
-                required
-              >
-                <Select
-                  options={[
-                    {
-                      value: "Real Estate",
-                      label: "Real Estate",
-                    },
-                  ]}
-                />
-              </Form.Item>
+                <Form.Item
+                  label="Eligible Dependents"
+                  name="eligibleDependents"
+                  rules={generalValidationRules}
+                >
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    options={dependentOptions}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Application Template"
+                  name="applicationTemplate"
+                  rules={generalValidationRules}
+                >
+                  <Select allowClear options={applicantOptions} />
+                </Form.Item>
+              </div>
+              <div className="lg:w-1/2">
+                <Form.Item
+                  label="Document Requirement"
+                  name="documentRequirement"
+                  rules={generalValidationRules}
+                >
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    options={documentOptions}
+                  />
+                </Form.Item>
+                <Form.Item name="milestones" label="Milestones"  rules={generalValidationRules}>
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    options={milestoneOptions}
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="selectWorkflow"
+                  label="Select Workflow"
+                  rules={generalValidationRules}
+                >
+                  <Select allowClear options={workflowOptions} />
+                </Form.Item>
+                <Form.Item name="selectCountry" label="Select Country"  rules={generalValidationRules}>
+                  <Select allowClear options={countryOptions} mode="multiple" />
+                </Form.Item>
+              </div>
             </div>
-            <div className="w-1/2">
-              <Form.Item
-                label="Document Requirement"
-                name="documentRequirement"
-                required
-              >
-                <Select
-                  mode="multiple"
-                  options={[
-                    {
-                      value: "Real Estate",
-                      label: "Real Estate",
-                    },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item name="milestones" label="Milestones" required>
-                <Select
-                  options={[
-                    {
-                      value: "lorem",
-                      label: "lorem",
-                    },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item name="selectWorkflow" label="Select Workflow" required>
-                <Select
-                  options={[
-                    {
-                      value: "lorem",
-                      label: "lorem",
-                    },
-                  ]}
-                />
-              </Form.Item>
-            </div>
-          </div>
 
-          <div className="flex justify-end items-center gap-4">
-            <AppButton label="Cancel" type="reset" variant="transparent" />
-            <AppButton label="Save" type="submit" />
-          </div>
-        </Form>
-      </div>
+            <div className="flex justify-end items-center gap-4">
+              <AppButton label="Cancel" type="reset" variant="transparent" />
+              <AppButton label="Save" type="submit" isLoading={putLoading} />
+            </div>
+          </Form>
+        </div>
+      </Skeleton>
     </>
   );
 };

@@ -1,50 +1,43 @@
 import { useQuery } from "react-query";
 import axios from "axios";
-// import { useApiAuth } from "hooks/useApiAuth";
-// import { MICROSERVICE_ENDPOINTS } from "config/enviroment";
-// import { IGetJobDataType, IJobOpeningData, IGetSingleJobData } from "../types";
-// import { openNotification } from "utils/notifications";
-
-// export const QUERY_KEY_FOR_JOB_OPENINGS = "JobOpenings";
+import { openNotification } from "src/utils/notification";
+import { useGetToken } from "src/hooks/useGetToken";
 
 const getData = async (props: {
-  token: string;
-  companyId: number;
     itemId: number;
   urlEndPoint: string
-}): Promise<IGetSingleJobData> => {
-  // const url = `${MICROSERVICE_ENDPOINTS.RECRUITMENT}/jobs/${props.itemId}`;
+}) => {
   const url = `${props.urlEndPoint}/${props.itemId}`;
+  const token = useGetToken();
 
   const config = {
     headers: {
       Accept: "application/json",
-      Authorization: `Bearer ${props.token}`,
-      "x-company-id": props.companyId,
+      Authorization: `Bearer ${token}`,
     },
   };
 
   const res = await axios.get(url, config);
-  const item: IGetSingleJobData = res.data.data;
-
+  const item = res.data;
+// return res
   return item;
 };
 
 export const useFetchSingleItem = ({
   itemId,
-  QUERY_KEY,
+  queryKey,
   urlEndPoint,
 }: {
   itemId: number;
-  QUERY_KEY: string;
+  queryKey: string;
   urlEndPoint: string;
-}) => {
-  const { companyId, token } = useApiAuth();
+  }) => {
+  // const queryClient = useQueryClient();
   const queryData = useQuery(
-    [QUERY_KEY],
-    () => getData({ token, companyId, itemId,urlEndPoint }),
-    {
-      onError: (error: any) => {
+    [queryKey,itemId],
+    () => getData({ itemId, urlEndPoint }),
+    {enabled:!!itemId,
+      onError: () => {
         openNotification({
           state: "error",
           title: "Error Occured",
@@ -53,7 +46,10 @@ export const useFetchSingleItem = ({
           duration: 5,
         });
       },
-      onSuccess: (response) => {},
+      onSuccess: (res) => {
+        console.log("res",res)
+        // queryClient.invalidateQueries([queryKey,itemId])
+      },
     }
   );
 

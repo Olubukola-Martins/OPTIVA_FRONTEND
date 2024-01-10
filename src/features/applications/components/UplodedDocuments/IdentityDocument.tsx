@@ -11,6 +11,7 @@ export type DataSourceItem = {
   handoverStatus: string;
   comments: number;
 };
+
 export const columns: ColumnsType<DataSourceItem> = [
   {
     key: "1",
@@ -55,7 +56,7 @@ export const columns: ColumnsType<DataSourceItem> = [
   {
     title: "Action",
     dataIndex: "action",
-    render: (_, val) => (
+    render: () => (
       <div>
         <Dropdown
           trigger={["click"]}

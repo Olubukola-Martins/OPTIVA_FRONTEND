@@ -1,63 +1,45 @@
-import React, { useState } from "react";
 import { NewDepartment } from "../components/NewDepartment";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
-import { Dropdown, Menu, Table } from "antd";
-import { ColumnsType } from "antd/es/table";
-
-export interface DataType {
-  key: React.Key;
-  dependent: string;
-  ageBracket: string;
-  conditions: string;
-}
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: "Id",
-    dataIndex: "id",
-  },
-
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "head",
-    dataIndex: "head",
-  },
-  {
-    title: "description",
-    dataIndex: "description",
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-
-    render: (_, val) => (
-      <div>
-        <Dropdown
-          trigger={["click"]}
-          overlay={
-            <Menu>
-              <Menu.Item key="1">Edit</Menu.Item>
-              <Menu.Item key="2">Delete</Menu.Item>
-            </Menu>
-          }
-        >
-          <i className="ri-more-2-fill text-lg cursor-pointer"></i>
-        </Dropdown>
-      </div>
-    ),
-  },
-];
+import { ActiveDepartment } from "../components/ActiveDepartment";
+import { InactivateDepartment } from "../components/InactivateDepartment";
+import { Input, Tabs } from "antd";
+import { useHandleDepartment } from "../hooks/useHandleDepartment";
+import { useState } from "react";
+import { useDebounce } from "src/hooks/useDebounce";
 
 const Department = () => {
-  const [addDepartment, setAddDepartment] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const {addDepartment, departmentId, setAddDepartment, handleAddDepartment} = useHandleDepartment()
+
+  // const { removeData } = useDelete({
+  //   EndPointUrl: "admin/departments/",
+  //   queryKey: QUERY_KEY_FOR_DEPARTMENT,
+  // });
+
+  const tabItems: {
+    label: string;
+    children: React.ReactNode;
+    key: string;
+  }[] = [
+    {
+      label: "Active Departments",
+      children: <ActiveDepartment searchValue={debouncedSearchTerm} />,
+      key: "Active Employees",
+    },
+    {
+      label: "Inactive Departments",
+      children: <InactivateDepartment searchValue={debouncedSearchTerm} />,
+      key: "Inactive Employees",
+    },
+  ];
+
   return (
     <>
       <NewDepartment
+        id={departmentId}
         open={addDepartment}
         handleClose={() => setAddDepartment(false)}
       />
@@ -71,17 +53,26 @@ const Department = () => {
         <div>
           <AppButton
             label="Add New"
-            handleClick={() => setAddDepartment(true)}
+            handleClick={() => handleAddDepartment()}
           />
         </div>
       </div>
 
-      <Table
-        className="bg-white rounded-md shadow border mt-8"
-        columns={columns}
-        dataSource={[]}
-        // scroll={{ x: 500 }}
-      />
+      <div>
+        <Tabs
+          items={tabItems}
+          className="hover:bg-caramel active:text-primary"
+          tabBarExtraContent={
+            <Input.Search
+              allowClear
+              placeholder="Search"
+              className="md:flex hidden"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
+            />
+          }
+        />
+      </div>
     </>
   );
 };

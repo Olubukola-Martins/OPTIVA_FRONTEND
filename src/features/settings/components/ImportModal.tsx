@@ -1,8 +1,8 @@
-import { Form, Input, Modal, message, Upload, Button } from "antd";
+import { Form,  Modal, Upload, Button } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import React, { ReactElement, useState } from "react";
+import  { ReactElement, useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import type {  UploadFile, UploadProps } from "antd/es/upload/interface";
 
 interface IProps {
   heading?: string;
@@ -20,36 +20,36 @@ const ImportModal = ({ heading, open, extraContent, handleClose }: IProps) => {
   //   };
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [uploading, setUploading] = useState(false);
-    const handleFileChange = ({ fileList: newFileList }) => {
+  // const [uploading, setUploading] = useState(false);
+    const handleFileChange = ({ fileList: newFileList }:{fileList:any}) => {
       const uniqueFiles = newFileList.filter(
-        (file) => !fileList.some((existingFile) => existingFile.uid === file.uid)
+        (file: { uid: string; }) => !fileList.some((existingFile) => existingFile.uid === file.uid)
       );
       setFileList([...fileList, ...uniqueFiles]);
     };
-  const handleUpload = () => {
-    const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append("files[]", file as RcFile);
-    });
-    setUploading(true);
-    // You can use any AJAX library / Your API request here
-    fetch("https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setFileList([]);
-        message.success("upload successfully.");
-      })
-      .catch(() => {
-        message.error("upload failed.");
-      })
-      .finally(() => {
-        setUploading(false);
-      });
-  };
+  // const handleUpload = () => {
+  //   const formData = new FormData();
+  //   fileList.forEach((file) => {
+  //     formData.append("files[]", file as RcFile);
+  //   });
+  //   setUploading(true);
+  //   // You can use any AJAX library / Your API request here
+  //   fetch("https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188", {
+  //     method: "POST",
+  //     body: formData,
+  //   })
+  //     .then((res) => res.json())
+  //     .then(() => {
+  //       setFileList([]);
+  //       message.success("upload successfully.");
+  //     })
+  //     .catch(() => {
+  //       message.error("upload failed.");
+  //     })
+  //     .finally(() => {
+  //       setUploading(false);
+  //     });
+  // };
   const props: UploadProps = {
     onRemove: (file) => {
       const index = fileList.indexOf(file);

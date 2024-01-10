@@ -1,4 +1,3 @@
-import React from "react";
 import { AppButton } from "src/components/button/AppButton";
 
 export const AppStatus = () => {

@@ -1,8 +1,13 @@
-import { Dropdown, Menu, Modal, Table } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import React, { useState } from "react";
-import DeleteIcon from "../assets/img/warning.png";
+import React, { useEffect, useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
+import {
+  QUERY_KEY_FOR_AUTHORIZED_PERSON,
+  useGetAuthorizedPersons,
+} from "../hooks/useGetAuthorizedPersons";
+import { DeleteModal } from "src/components/modals/DeleteModal";
+import { useDelete } from "src/hooks/useDelete";
 
 type DataSourceItem = {
   key: React.Key;
@@ -10,7 +15,51 @@ type DataSourceItem = {
   name: string;
   dateCreated: string;
 };
+
+export const formatDate = (dateString: string) => {
+  const dateObj = new Date(dateString);
+  const date = dateObj.getDate();
+  const month = dateObj.getDay() + 1;
+  const year = dateObj.getFullYear();
+  if (date < 10 && month < 10) {
+    return `0${date}/0${month}/${year}`;
+  }
+  return `${date}/${month}/${year}`;
+};
+
 export const AuthorizedPersons = () => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  // GET REQUEST
+  const { data, isLoading } = useGetAuthorizedPersons();
+  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+  const [authorizedId, setAuthorizedId] = useState<number>();
+
+const {removeData}=  useDelete({
+    queryKey: QUERY_KEY_FOR_AUTHORIZED_PERSON,
+    EndPointUrl: "/admin/authorized-person",
+  });
+
+  console.log("authorized person", data);
+
+  const handleDeleteCheckbox = () => {
+    console.log("Deleting rows:", selectedRowKeys);
+    setSelectedRowKeys([]);
+  };
+
+  useEffect(() => {
+    if (data) {
+      const authorizedPerson: DataSourceItem[] = data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          name: item.employee.name,
+          dateCreated: formatDate(item.created_at),
+        };
+      });
+      setDataArray(authorizedPerson);
+    }
+  }, [data]);
+
   // DELETE MODAL
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const showDeleteModal = () => {
@@ -46,7 +95,13 @@ export const AuthorizedPersons = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={showDeleteModal}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setAuthorizedId(val.key as unknown as number);
+                    showDeleteModal();
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu>
@@ -58,56 +113,47 @@ export const AuthorizedPersons = () => {
       ),
     },
   ];
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 4; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      name: "Ruth Godwin",
-      dateCreated: "dd/mm/yyyy",
-    });
-  }
+
   return (
     <>
       {/* TABLE */}
+      {/* DELETE CHECKBOX BUTTON */}
+      {selectedRowKeys.length > 0 && (
+        <div>
+          <AppButton
+            variant="transparent"
+            label="Delete"
+            handleClick={handleDeleteCheckbox}
+          />
+        </div>
+      )}
+
       <Table
+        loading={isLoading}
         columns={columns}
-        dataSource={dataSource}
+        dataSource={dataArray}
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         rowSelection={{
           type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
+          selectedRowKeys,
+          onChange: (keys: React.Key[], rows: DataSourceItem[]) => {
+            setSelectedRowKeys(keys);
+            console.log("selectedRowKeys:", keys, "selectedRows:", rows);
           },
         }}
       />
 
       {/* DELETE MODAL */}
-      <Modal open={isDeleteModalOpen} footer={null} onCancel={handleDeleteModalCancel}>
-        <img src={DeleteIcon} className="mx-auto" />
-        <h2 className="text-center font-bold py-1">
-          Delete Authorized Person(s)
-        </h2>
-        <p className="text-center py-2">
-          Are you sure you would like to delete this authorized person(s)?
-        </p>
-        <div className="py-3 flex items-center justify-center gap-4">
-          <AppButton
-            variant="transparent"
-            label="Cancel"
-            handleClick={handleDeleteModalCancel}
-          />
-          <AppButton label="Delete" />
-        </div>
-      </Modal>
+      
+      <DeleteModal
+        open={isDeleteModalOpen}
+        header="Authorized Person"
+        text="authorized person"
+        onCancel={handleDeleteModalCancel}
+        onDelete={() => removeData(authorizedId as unknown as number)}
+        // isLoading={deleteIsLoading}
+      />
     </>
   );
 };

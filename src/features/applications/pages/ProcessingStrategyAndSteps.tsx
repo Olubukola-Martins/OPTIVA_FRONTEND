@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -6,7 +6,7 @@ import { ProcessingStrategyandStepsTab } from "../components/ProcessingStrategya
 
 const ProcessingStrategyAndSteps = () => {
   const [form] = Form.useForm();
-  const handleSubmit = (val: any) => {};
+  const handleSubmit = () => {};
   return (
     <>
       <PageIntro

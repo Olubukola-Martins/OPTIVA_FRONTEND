@@ -1,17 +1,21 @@
-import { Input, Select, Tabs } from "antd";
+import { Input, Tabs } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { ActiveEmployees } from "../components/ActiveEmployees";
 import { InvitedEmployees } from "../components/InvitedEmployees";
+import { NewEmployee } from "../components/NewEmployee";
+import { useHandleUpdate } from "../hooks/useHandleUpdate";
+import { useState } from "react";
+import { useDebounce } from "src/hooks/useDebounce";
+import { DisabledEmployees } from "../components/DisabledEmployees";
 
 const Employees = () => {
-  const operations = (
-    <div className="hidden lg:flex gap-4 w-full">
-      <Input.Search placeholder="Search" className="w-1/2"></Input.Search>
-      <Select placeholder="Filter" className="w-1/2" />
-    </div>
-  );
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const { addEmployee, setAddEmployee, employeeId, handleAddEmployee } =
+    useHandleUpdate();
+
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -19,21 +23,27 @@ const Employees = () => {
   }[] = [
     {
       label: "Active Employees",
-      children: <ActiveEmployees />,
+      children: <ActiveEmployees searchValue={debouncedSearchTerm} />,
       key: "Active Employees",
     },
     {
-      label: "Inactive Employees",
-      children: <InvitedEmployees />,
-      key: "Inactive Employees",
+      label: "Invited Employees",
+      children: <InvitedEmployees searchValue={debouncedSearchTerm} />,
+      key: "InvitedEmployees",
+    },
+    {
+      label: "Disabled Employees",
+      children: <DisabledEmployees searchValue={debouncedSearchTerm} />,
+      key: "Disabled Employees",
     },
   ];
   return (
     <>
-      {/* <NewDepartment
-        open={addDepartment}
-        handleClose={() => setAddDepartment(false)}
-      /> */}
+      <NewEmployee
+        id={employeeId}
+        open={addEmployee}
+        handleClose={() => setAddEmployee(false)}
+      />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
           title="Employees"
@@ -42,19 +52,24 @@ const Employees = () => {
         />
 
         <div>
-          <AppButton
-            label="Add New"
-            // handleClick={() => setAddDepartment(true)}
-          />
+          <AppButton label="Add New" handleClick={() => handleAddEmployee()} />
         </div>
       </div>
 
       <div>
-      <Tabs
-        items={tabItems}
-        className="hover:bg-caramel active:text-primary"
-        tabBarExtraContent={operations}
-      />
+        <Tabs
+          items={tabItems}
+          className="hover:bg-caramel active:text-primary"
+          tabBarExtraContent={
+            <Input.Search
+              allowClear
+              placeholder="Search"
+              className="md:flex hidden"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
+            />
+          }
+        />
       </div>
     </>
   );

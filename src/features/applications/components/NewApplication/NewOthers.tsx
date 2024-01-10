@@ -1,6 +1,6 @@
-import { Form, FormInstance, Input } from "antd";
+import { Form, Input } from "antd";
 
-export const NewOthers = ({ form }: { form: FormInstance }) => {
+export const NewOthers = () => {
   return (
     <>
       <h2 className="p-1">

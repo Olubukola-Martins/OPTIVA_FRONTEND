@@ -25,6 +25,7 @@ interface IPaymentItem {
   datePaid: JSX.Element;
   paymentsUSD: JSX.Element;
   paymentsNGN: JSX.Element;
+  updatedBy:JSX.Element;
   balanceDue: JSX.Element;
 }
 const PaymentDetails = () => {
@@ -33,7 +34,7 @@ const PaymentDetails = () => {
   const { id } = useParams();
   const [modalForm] = Form.useForm();
   const navigate = useNavigate();
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
   const [data, setData] = useState<IPaymentItem[]>([]);
   const [isEditingNewDetails, setIsEditingNewDetails] = useState(false);
   const [indexEdited, setIndexEdited] = useState<undefined | number>(undefined);
@@ -41,9 +42,12 @@ const PaymentDetails = () => {
     console.log("form values", values);
   };
 
+
+
+
   // MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleAddNewPayment = (values) => {
+  const handleAddNewPayment = (values: any) => {
     const newdateCreated = values.dateCreated;
     const newdatePaid = values.datePaid;
     const key = isEditingNewDetails ? values.key : data.length + 1;
@@ -80,18 +84,26 @@ const PaymentDetails = () => {
       ),
       paymentsUSD: (
         <Form.Item name={`${key}paymentsUSD`} initialValue={values.paymentsUSD}>
-          <Text>{values.paymentUSD} USD</Text>
+          <Text>{values.paymentsUSD} USD</Text>
         </Form.Item>
       ),
       paymentsNGN: (
         <Form.Item name={`${key}paymentsNGN`} initialValue={values.paymentsNGN}>
-          <Text>{values.paymentNGN} NGN</Text>
+          <Text>{values.paymentsNGN} NGN</Text>
         </Form.Item>
       ),
       balanceDue: (
         <Form.Item name={`${key}balanceDue`} initialValue={values.balanceDue}>
           <Text className="text-red-600">
             {values.balanceDue} <span className="text-gray-800">USD</span>
+          </Text>
+        </Form.Item>
+      ),
+      updatedBy: (
+        <Form.Item name={`${key}updatedBy`} initialValue="James Brown">
+          <Text>
+            {values.updatedBy} 
+
           </Text>
         </Form.Item>
       ),
@@ -189,7 +201,7 @@ const PaymentDetails = () => {
   const editableColumns: ColumnsType<IPaymentItem> = [
     {
       title: "SN",
-      render: (_: any, record: IPaymentItem, index: number) => {
+      render: (_: any, _record: IPaymentItem, index: number) => {
         return index + 1;
       },
     },
@@ -220,9 +232,14 @@ const PaymentDetails = () => {
       dataIndex: "balanceDue",
     },
     {
+      title: "Updated By",
+      dataIndex: "updatedBy",
+    },
+
+    {
       title: "Action",
       dataIndex: "action",
-      render: (_, record: IPaymentItem, index) => (
+      render: (_, record: IPaymentItem) => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -242,6 +259,8 @@ const PaymentDetails = () => {
                       datePaid: record.datePaid.props.initialValue,
                       paymentsUSD: record.paymentsUSD.props.initialValue,
                       paymentsNGN: record.paymentsNGN.props.initialValue,
+                      // updatedBy: record.updatedBy.props.initialValue,
+                      updatedBy: record.updatedBy.props.initialValue,
                       balanceDue: record.balanceDue.props.initialValue,
                     };
                     const currentItem = data.find(

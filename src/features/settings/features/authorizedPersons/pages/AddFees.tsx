@@ -1,7 +1,6 @@
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import AddFeesTab from "../components/AddFeesTab";
-import { AppButton } from "src/components/button/AppButton";
 
 export const AddFees = () => {
   return (
@@ -12,10 +11,7 @@ export const AddFees = () => {
       />
 
       <AddFeesTab />
-      <div className="flex items-center justify-end gap-4">
-        <AppButton label="Cancel" type="reset" variant="transparent" />
-        <AppButton label="Save" type="submit" />
-      </div>
+     
     </>
   );
 };
