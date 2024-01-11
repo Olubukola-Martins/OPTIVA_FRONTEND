@@ -127,7 +127,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
     {
       title: "Action",
       dataIndex: "action",
-      render: ( record) => (
+      render: ( _,record) => (
         <Dropdown
           trigger={["click"]}
           overlay={
@@ -143,7 +143,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
                 Generate Invoice
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to={appRoute.paymentDetails(record.key as number).path}>
+                <Link to={appRoute.paymentDetails(record.key as unknown as number).path}>
                   Payment Details
                 </Link>
               </Menu.Item>
