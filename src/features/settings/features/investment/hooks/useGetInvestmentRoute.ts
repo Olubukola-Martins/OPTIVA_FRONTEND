@@ -17,8 +17,7 @@ const getData = async (props: { token: string }):Promise<IInvestmentRoute[]> => 
 
   const res = await axios.get(url, config);
   const data: IInvestmentRoute[] = res.data.data
-  // console.log('investment', typeof(data))
-
+  
   return data
 };
 

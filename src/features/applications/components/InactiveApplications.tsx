@@ -1,6 +1,6 @@
 import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { DataSourceItem } from "./ActiveApplications";
+import { DataSourceItem, capitalizeName } from "./ActiveApplications";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
@@ -27,7 +27,7 @@ export const InactiveApplications = () => {
           key: item.id,
           sn: index + 1,
           applicantId: item.applicant_unique_id,
-          applicantName: item.applicant_name,
+          applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
           numberOfDependents: item.number_of_dependents,
@@ -41,7 +41,6 @@ export const InactiveApplications = () => {
   }, [data]);
 
   const changeToInactive = () => {
-    // console.log('active table to inactive', val)
     mutate(
       { id: id as unknown as number, status: "active" },
       {

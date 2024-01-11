@@ -6,7 +6,7 @@ import { IReassignApplicant } from "../types/types";
 
 const postData = async (props: IReassignApplicant) => {
     const token = useGetToken();
-    const url = `${END_POINT.BASE_URL}/admin/applicants/assign`;
+    const url = `${END_POINT.BASE_URL}/admin/assign/application`;
   
     const config = {
       headers: {

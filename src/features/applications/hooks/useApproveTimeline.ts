@@ -32,7 +32,6 @@ export const useApproveTimeline = (endpoint: string) => {
           },
           {
             onError: (error: any) => {
-              console.log("error", error);
               openNotification({
                 state: "error",
                 title: "Error Occured",
@@ -41,7 +40,6 @@ export const useApproveTimeline = (endpoint: string) => {
               });
             },
             onSuccess: (res: any) => {
-              console.log("response", res);
               openNotification({
                 state: "success",
                 title: "Success",

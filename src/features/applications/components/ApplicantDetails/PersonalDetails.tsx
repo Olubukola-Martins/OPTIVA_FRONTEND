@@ -15,7 +15,6 @@ export const PersonalDetails: React.FC<IApplicationFormResponseProps> = ({
     id: id as unknown as number,
     section: "sectiontworesponse",
   });
-  console.log("sect 2", data);
   return (
     <Skeleton active loading={isLoading}>
       {data?.map(

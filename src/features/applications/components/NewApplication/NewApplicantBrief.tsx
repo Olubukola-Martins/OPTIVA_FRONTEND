@@ -1,6 +1,7 @@
 import {
   Checkbox,
   DatePicker,
+  Empty,
   Form,
   Input,
   InputNumber,
@@ -49,7 +50,7 @@ export const renderInput = (inputType: string, options?: any[]) => {
 
 export const NewApplicantBrief = ({ onSuccess }: { onSuccess: () => void }) => {
   const { sharedData } = useGlobalContext();
-  
+
   const { data, isLoading } = useGetSingleQuestion({
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-one",
@@ -91,44 +92,48 @@ export const NewApplicantBrief = ({ onSuccess }: { onSuccess: () => void }) => {
           description: res.data.message,
         });
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-        onSuccess()
+        onSuccess();
       },
     });
   };
 
   return (
     <>
-      <Skeleton active loading={isLoading}>
-        <Form onFinish={handleSubmit} form={form} layout="vertical">
-          {data?.map((item) => (
-            <div className="w-full">
-              <Form.Item
-                name={item.schema_name}
-                label={
-                  item.form_question.charAt(0).toUpperCase() +
-                  item.form_question.slice(1)
-                }
-                key={item.id}
-                className="w-full"
-              >
-                {renderInput(item.input_type, item.options)}
-              </Form.Item>
-            </div>
-          ))}
-          {!isSuccess && (
-            <div className="flex justify-end items-center gap-5">
-              <AppButton label="Cancel" type="reset" variant="transparent" />
-              <AppButton
-                label="Save"
-                type="submit"
-                isLoading={postLoading}
-                isDisabled={isSuccess}
-                containerStyle={isSuccess ? "cursor-not-allowed" : ""}
-              />
-            </div>
-          )}
-        </Form>
-      </Skeleton>
+      {data?.length === 0 ? (
+        <Empty />
+      ) : (
+        <Skeleton active loading={isLoading}>
+          <Form onFinish={handleSubmit} form={form} layout="vertical">
+            {data?.map((item) => (
+              <div className="w-full">
+                <Form.Item
+                  name={item.schema_name}
+                  label={
+                    item.form_question.charAt(0).toUpperCase() +
+                    item.form_question.slice(1)
+                  }
+                  key={item.id}
+                  className="w-full"
+                >
+                  {renderInput(item.input_type, item.options)}
+                </Form.Item>
+              </div>
+            ))}
+            {!isSuccess && (
+              <div className="flex justify-end items-center gap-5">
+                <AppButton label="Cancel" type="reset" variant="transparent" />
+                <AppButton
+                  label="Save"
+                  type="submit"
+                  isLoading={postLoading}
+                  isDisabled={isSuccess}
+                  containerStyle={isSuccess ? "cursor-not-allowed" : ""}
+                />
+              </div>
+            )}
+          </Form>
+        </Skeleton>
+      )}
     </>
   );
 };

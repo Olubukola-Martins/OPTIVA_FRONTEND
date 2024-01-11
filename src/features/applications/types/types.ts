@@ -10,30 +10,6 @@ export interface ICreateApplication {
 }
 
 // FETCH ALL APPLICANTS
-interface Meta {
-  current_page: number;
-  from: number;
-  last_page: number;
-  links: Link[];
-  path: string;
-  per_page: number;
-  to: number;
-  total: number;
-}
-
-interface Link {
-  url?: string;
-  label: string;
-  active: boolean;
-}
-
-interface Links {
-  first: string;
-  last: string;
-  prev?: any;
-  next?: any;
-}
-
 export interface IApplications {
   id: number;
   applicant_unique_id: string;
@@ -186,4 +162,22 @@ interface User {
 export interface ICreateComment {
   application_id: number;
   comment: string;
+}
+
+// GET PROCESSING STRATEGY
+export interface IGetProcessingStrategy {
+  id: number;
+  strategy: string;
+  steps: string;
+  application_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// CREATE PROCESSING STRATEGY
+export interface ICreateProcessingStrategy {
+  application_id: number;
+  steps: string;
+  strategy: string;
 }

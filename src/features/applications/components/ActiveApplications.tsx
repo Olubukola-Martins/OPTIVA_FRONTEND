@@ -10,7 +10,10 @@ import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
 import { useQueryClient } from "react-query";
 import { useAcceptApplicant } from "../hooks/useAcceptApplicant";
-import { FormEmployeeInput } from "src/features/settings/features/employees/components/FormEmployeeInput";
+import { useFetchRoles } from "src/features/settings/features/rolesAndPermissions/hooks/useFetchRoles";
+import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
+import { useReassignApplicant } from "../hooks/useReassignApplicant";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -24,6 +27,14 @@ export type DataSourceItem = {
   comment?: string;
 };
 
+export const capitalizeName = (name: string) => {
+  const words = name.split(" ");
+  const capitalizedWords = words.map(
+    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+  );
+  return capitalizedWords.join(" ");
+};
+
 export const ActiveApplications = () => {
   const { data, isLoading } = useFetchAllApplicants();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -31,10 +42,21 @@ export const ActiveApplications = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
   const { mutate: acceptApplicantMutate } = useAcceptApplicant();
-  // const { mutate: reassignMutate, isLoading: reassignLoading } =
-  //   useReassignApplicant();
-  
+  const { mutate: reassignApplicantMutate, isLoading: reassignLoading } =
+    useReassignApplicant();
+  const [form] = Form.useForm();
+  const { data: rolesData } = useFetchRoles();
+  const { data: employeesData } = useFetchEmployees({
+    currentUrl: "active-employees",
+  });
+
+  console.log("aplicant data", data);
+
+  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+
   useEffect(() => {
+  
+
     if (data) {
       const inactiveApplicant: DataSourceItem[] = data
         .filter((item) => item.active === true)
@@ -42,7 +64,7 @@ export const ActiveApplications = () => {
           key: item.id,
           sn: index + 1,
           applicantId: item.applicant_unique_id,
-          applicantName: item.applicant_name,
+          applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
           numberOfDependents: item.number_of_dependents,
@@ -104,6 +126,34 @@ export const ActiveApplications = () => {
     );
   };
 
+  const reassignApplicant = (val: any) => {
+    reassignApplicantMutate(
+      {
+        id: id as unknown as number,
+        role_id: val.role,
+        assigned_user_id: val.employee,
+      },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          setOpenInactiveModal(false);
+        },
+      }
+    );
+  };
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -199,7 +249,13 @@ export const ActiveApplications = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="6" onClick={showReassignModal}>
+                <Menu.Item
+                  key="6"
+                  onClick={() => {
+                    setId(val.key as unknown as number);
+                    showReassignModal();
+                  }}
+                >
                   Reassign Applicants
                 </Menu.Item>
                 <Menu.Item
@@ -222,7 +278,6 @@ export const ActiveApplications = () => {
     },
   ];
 
-  const [form] = Form.useForm();
   // Reassign Modal
   const [openReassignModal, setOpenReassignModal] = useState(false);
   const showReassignModal = () => {
@@ -253,8 +308,37 @@ export const ActiveApplications = () => {
           <h1 className="p-4 font-bold text-center text-lg">
             Assign Applicant To Service Manager
           </h1>
-          <Form layout="vertical" form={form} name="" requiredMark={false}>
-            <FormEmployeeInput Form={Form} />
+          <Form
+            layout="vertical"
+            form={form}
+            requiredMark={false}
+            onFinish={reassignApplicant}
+          >
+            <Form.Item label="Role" name="role" rules={generalValidationRules}>
+              <Select onChange={(value) => setSelectedRoleId(value)}>
+                {rolesData?.map((item) => (
+                  <Select.Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label="Employee"
+              name="employee"
+              rules={generalValidationRules}
+            >
+              <Select>
+                {employeesData?.data
+                  .filter((item) => item.user.roles.id === selectedRoleId)
+                  .map((item) => (
+                    <Select.Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </Form.Item>
 
             <Form.Item
               label="Reason for Reassignment"
@@ -262,15 +346,19 @@ export const ActiveApplications = () => {
             >
               <Input.TextArea rows={2} />
             </Form.Item>
+            <div className="flex items-center justify-center gap-4 p-4">
+              <AppButton
+                label="Cancel"
+                variant="transparent"
+                containerStyle="border border-blue"
+              />
+              <AppButton
+                label="Submit"
+                isLoading={reassignLoading}
+                type="submit"
+              />
+            </div>
           </Form>
-          <div className="flex items-center justify-center gap-4 p-4">
-            <AppButton
-              label="Cancel"
-              variant="transparent"
-              containerStyle="border border-blue"
-            />
-            <AppButton label="Submit" />
-          </div>
         </div>
       </Modal>
       {/* INACTIVE MODAL */}

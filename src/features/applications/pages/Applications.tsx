@@ -59,10 +59,6 @@ const { setSharedData}=  useGlobalContext()
           form.resetFields();
           setFormSubmitted(true);
           navigate(appRoute.new_application);
-          console.log("application submitted successfully", res);
-          console.log("id of applicant", res.data.data.applicant.application_id);
-          // setApplicantId(res.data.data.application_id);
-          // setTemplateId(res.data.data.question.template_id)
           setSharedData((prevData:any) => ({
             ...prevData,
             applicantId: res.data.data.applicant.application_id,

@@ -41,7 +41,6 @@ export const EditInvestment = ({
   }, [data]);
 
   const handleSubmit = (values: any) => {
-    console.log("values of form", values);
     putData(investmentId as unknown as number, values.name, values.country);
     form.resetFields()
     handleClose();

@@ -1,4 +1,4 @@
-import { Form, Skeleton } from "antd";
+import { Empty, Form, Skeleton } from "antd";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "./NewApplicantBrief";
 import { AppButton } from "src/components/button/AppButton";
@@ -15,34 +15,40 @@ export const NewAcademicHistory: React.FC<IApplicationFormResponseProps> = ({
     endpointUrl: "section-two",
   });
 
-
   return (
     <>
-       <Skeleton active loading={isLoading}>
-        {data?.map(
-          (item) =>
-            item.subsection_name === subsectionName && (
-              <div className="w-full" key={item.id}>
-                <Form.Item
-                  name={item.schema_name}
-                  label={item.form_question.charAt(0).toUpperCase() + item.form_question.slice(1)} 
-                  key={item.id}
-                  className="w-full"
-                >
-                  {renderInput(item.input_type, item.options)}
-                </Form.Item>
-              </div>
-            )
-        )}
-       
-        <AppButton
-          label="Next"
-          type="button"
-          handleClick={() => {
-            onNext();
-          }}
-        />
-      </Skeleton>
+      {data?.length === 0 ? (
+        <Empty />
+      ) : (
+        <Skeleton active loading={isLoading}>
+          {data?.map(
+            (item) =>
+              item.subsection_name === subsectionName && (
+                <div className="w-full" key={item.id}>
+                  <Form.Item
+                    name={item.schema_name}
+                    label={
+                      item.form_question.charAt(0).toUpperCase() +
+                      item.form_question.slice(1)
+                    }
+                    key={item.id}
+                    className="w-full"
+                  >
+                    {renderInput(item.input_type, item.options)}
+                  </Form.Item>
+                </div>
+              )
+          )}
+
+          <AppButton
+            label="Next"
+            type="button"
+            handleClick={() => {
+              onNext();
+            }}
+          />
+        </Skeleton>
+      )}
     </>
   );
 };

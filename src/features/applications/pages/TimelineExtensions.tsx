@@ -31,7 +31,6 @@ import { useRejectTimeline } from "../hooks/useRejectTimeline";
 
 type DataSourceItem = {
   key: React.Key;
-  name: string;
   role: string;
   proposedEndDate: string;
   reasonForExtension: string;
@@ -50,22 +49,21 @@ const TimelineExtensions = () => {
   const { mutate, isLoading: createTimelineLoading } =
     useCreateTimelineExtension();
   const { patchData } = useApproveTimeline("approve");
-  const {patchData:rejectData}=useRejectTimeline('reject')
-  const [timelineId, setTimelineId] = useState<number>();
+  const { patchData: rejectData } = useRejectTimeline("reject");
   useEffect(() => {
     if (data) {
       const timelineExtension: DataSourceItem[] = data.map((item, index) => {
         return {
           key: item.id,
           sn: index + 1,
-          name: item.user.name,
           proposedEndDate: formatDate(item.end_date),
-          reasonForExtension: item.reason,
+          reasonForExtension:
+            item.reason.charAt(0).toUpperCase() + item.reason.slice(1),
           role:
             item.user.user_type.charAt(0).toUpperCase() +
             item.user.user_type.slice(1),
-          status: "status",
-          requestedBy: "employee",
+          status: item.is_approved === true ? "Approved" : "Rejected",
+          requestedBy: item.user.name,
         };
       });
       setDataArray(timelineExtension);
@@ -73,11 +71,23 @@ const TimelineExtensions = () => {
   }, [data]);
 
   const createTimelineExtension = (val: any) => {
-    console.log("form vals", val);
+    const formatDateToString = (endDate: string) => {
+      const dateObject = new Date(endDate);
+
+      const day = dateObject.getDate().toString().padStart(2, "0");
+      const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+      const year = dateObject.getFullYear().toString();
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const formattedDate = formatDateToString(val.endDate.$d);
+    console.log("Formatted Date:", formattedDate);
+
     mutate(
       {
         application_id: id as unknown as number,
-        end_date: val.endDate,
+        end_date: formattedDate,
         reason: val.extensionReason,
       },
       {
@@ -97,21 +107,20 @@ const TimelineExtensions = () => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_TIMELINE_EXTENSIONS]);
           setOpenRequestModal(false);
+          form.resetFields();
         },
       }
     );
   };
 
   const approveTimeline = () => {
-    patchData(timelineId as unknown as number);
+    patchData(id as unknown as number);
   };
 
   const rejectTimeline = (val: any) => {
-    rejectData(timelineId as unknown as number, val.extensionReject)
-    setOpenRejectModal(false)
-  }
-  
-
+    rejectData(id as unknown as number, val.extensionReject);
+    setOpenRejectModal(false);
+  };
 
   //Request Modal
   const [openRequestModal, setOpenRequestModal] = useState(false);
@@ -139,8 +148,8 @@ const TimelineExtensions = () => {
       dataIndex: "sn",
     },
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Requested by",
+      dataIndex: "requestedBy",
       key: "2",
     },
     {
@@ -158,15 +167,11 @@ const TimelineExtensions = () => {
       dataIndex: "reasonForExtension",
       key: "5",
     },
-    {
-      title: "Requested by",
-      dataIndex: "requestedBy",
-      key: "5",
-    },
+
     {
       title: "Status",
       dataIndex: "status",
-      key: "6",
+      key: "5",
     },
     {
       title: "Action",
@@ -183,7 +188,6 @@ const TimelineExtensions = () => {
                 <Menu.Item
                   key="1"
                   onClick={() => {
-                    setTimelineId(val.key as unknown as number);
                     approveTimeline();
                   }}
                 >
@@ -278,7 +282,7 @@ const TimelineExtensions = () => {
               name="endDate"
               rules={generalValidationRules}
             >
-              <DatePicker className="w-full"  />
+              <DatePicker className="w-full" />
             </Form.Item>
             <div className="flex items-center justify-center gap-4 p-4">
               <AppButton
@@ -298,26 +302,34 @@ const TimelineExtensions = () => {
         </div>
       </Modal>
 
-      <Modal open={openRejectModal} onCancel={handleRejectCancel} footer={null} >
+      <Modal open={openRejectModal} onCancel={handleRejectCancel} footer={null}>
         <div>
           <h1 className="p-4 font-bold text-center text-lg">
             Reason for Rejection
           </h1>
-          <Form layout="vertical" form={form} onFinish={rejectTimeline} requiredMark={false}>
-            <Form.Item label="Reject Extension" name="extensionReject" rules={textInputValidationRules}>
+          <Form
+            layout="vertical"
+            form={form}
+            onFinish={rejectTimeline}
+            requiredMark={false}
+          >
+            <Form.Item
+              label="Reject Extension"
+              name="extensionReject"
+              rules={textInputValidationRules}
+            >
               <Input.TextArea rows={4} />
             </Form.Item>
             <div className="flex items-center justify-center gap-4 p-4">
-            <AppButton
-              label="Cancel"
-              variant="transparent"
-              containerStyle="border border-blue"
-              handleClick={handleRejectCancel}
-            />
-            <AppButton label="Submit" type="submit"/>
-          </div>
+              <AppButton
+                label="Cancel"
+                variant="transparent"
+                containerStyle="border border-blue"
+                handleClick={handleRejectCancel}
+              />
+              <AppButton label="Submit" type="submit" />
+            </div>
           </Form>
-          
         </div>
       </Modal>
 
