@@ -77,7 +77,7 @@ const columnsSecondTable: ColumnsType<DataTypeSecondTable> = [
         return {
           rowSpan: 5,
         };
-      } else if (10 > 5) {
+      } else if ((index as number) > 5) {
         return {
           rowSpan: 0,
         };
@@ -152,7 +152,11 @@ const ViewInvoice = () => {
           key: id,
           description,
           qty: quantity,
-          amount: `₦ ${amountsList[0].amount}`,
+          amount: amountsList[0].amount.toLocaleString("en-US", {
+            style: "currency",
+            currency: "NGN",
+            maximumFractionDigits: 2,
+          }),
         },
       ]);
       setProgramType(application.programtype.program_name);
@@ -206,7 +210,11 @@ const ViewInvoice = () => {
                           index={3}
                           className="whitespace-nowrap "
                         >
-                          $ {totalAmount}
+                          {totalAmount.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 2,
+                          })}
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                       <Table.Summary.Row className="font-bold sm:text-lg">
@@ -220,7 +228,11 @@ const ViewInvoice = () => {
                           index={3}
                           className="whitespace-nowrap "
                         >
-                          ₦ {totalAmount}
+                          {totalAmount.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "NGN",
+                            maximumFractionDigits: 2,
+                          })}
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                     </>

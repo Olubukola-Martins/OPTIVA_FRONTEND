@@ -48,14 +48,18 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
   const { generateInvoice, generateInvoiceLoading } = useGenerateInvoice();
 
   // Handle generate invoice
-  const handleGenerateInvoice = (values: { description: any; quantity: any; paymentUSD: any; }) => {
+  const handleGenerateInvoice = (values: {
+    description: any;
+    quantity: any;
+    paymentUSD: any;
+  }) => {
     const newData = {
       description: values.description,
       quantity: values.quantity,
       amount: values.paymentUSD,
     };
     generateInvoice(newData, currentApplicationId as number);
-    setIsModalOpen(false)
+    setIsModalOpen(false);
   };
 
   const rowSelection = {
@@ -127,7 +131,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
     {
       title: "Action",
       dataIndex: "action",
-      render: ( _,record) => (
+      render: (_, record) => (
         <Dropdown
           trigger={["click"]}
           overlay={
@@ -137,13 +141,18 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
                 onClick={() => {
                   setCurrentProgram(record.programName as string);
                   setCurrentApplicationId(record.applicationId as number);
-                  setIsModalOpen(true)
+                  setIsModalOpen(true);
                 }}
               >
                 Generate Invoice
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to={appRoute.paymentDetails(record.key as unknown as number).path}>
+                <Link
+                  to={
+                    appRoute.paymentDetails(record.key as unknown as number)
+                      .path
+                  }
+                >
                   Payment Details
                 </Link>
               </Menu.Item>
@@ -207,8 +216,19 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           country: payment.application.country.country_name,
           investmentRoute: payment.application.investmentroute.investment_name,
           dependents: payment.application.no_of_dependents,
-          amountPaid: `$ ${payment.amount_paid}`,
-          outstandingPayment: `$ ${payment.outstanding_payment}`,
+          amountPaid: (+payment.amount_paid).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
+          outstandingPayment: (+ payment.outstanding_payment).toLocaleString(
+            "en-US",
+            {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 2,
+            }
+          ),
           lastUpdated: formattedDate(payment.updated_at),
           programName: payment.application.programtype.program_name,
         };
@@ -253,9 +273,8 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
             name="program"
             rules={generalValidationRules}
             initialValue={currentProgram}
-            
           >
-            <Input disabled={true}/>
+            <Input disabled={true} />
           </Form.Item>
           <Form.Item
             name="description"
@@ -280,7 +299,10 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           </Form.Item>
 
           <div className="flex justify-between">
-            <AppButton label="Cancel" />
+            <AppButton
+              label="Cancel"
+              handleClick={() => setIsModalOpen(false)}
+            />
             <AppButton type="submit" isLoading={generateInvoiceLoading} />
           </div>
         </Form>

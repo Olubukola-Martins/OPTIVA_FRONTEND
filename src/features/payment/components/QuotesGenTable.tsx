@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Spin } from "antd";
+import { Dropdown, Form, Input, InputNumber, Menu, Modal, Spin } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
@@ -12,6 +12,11 @@ import {
 // import { END_POINT } from "src/config/environment";
 // import { openNotification } from "src/utils/notification";
 import { useDownloadQuote, useSendQuote } from "../hooks/useSendOrDownloadQuote";
+import useGenerateInvoice from "../hooks/useGenerateInvoice";
+import { useForm } from "antd/es/form/Form";
+import { generalValidationRules, textInputValidationRules } from "src/utils/formHelpers/validations";
+import TextArea from "antd/es/input/TextArea";
+import { AppButton } from "src/components/button/AppButton";
 
 type DataSourceItem = {
   key: number;
@@ -23,6 +28,8 @@ type DataSourceItem = {
   dependents: number;
   dateCreated: string;
   createdBy: string;
+  programName: string;
+  applicationId: number;
 };
 
 interface IProps {
@@ -32,23 +39,41 @@ interface IProps {
 
 const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
-  const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>(
-    // undefined
-  );
+  const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>();
+  // undefined
   const [downloadQuoteKey, setDownloadQuoteKey] = useState<number | undefined>(
     undefined
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalForm] = useForm();
+  const [currentProgram, setCurrentProgram] = useState<string>();
+  const [currentApplicationId, setCurrentApplicationId] = useState<number>();
+  const { generateInvoice, generateInvoiceLoading } = useGenerateInvoice();
 
- const {isLoading:sendingQuote} = useSendQuote({
+  const { isLoading: sendingQuote } = useSendQuote({
     itemId: sendQuoteKey as number,
   });
 
- const { isLoading:downloadinGQuote } = useDownloadQuote({
-   itemId: downloadQuoteKey as number,
- });
+  const { isLoading: downloadinGQuote } = useDownloadQuote({
+    itemId: downloadQuoteKey as number,
+  });
 
-useEffect(() => {
-}, [sendQuoteKey,downloadQuoteKey])
+  // Handle generate invoice
+  const handleGenerateInvoice = (values: {
+    description: any;
+    quantity: any;
+    paymentUSD: any;
+  }) => {
+    const newData = {
+      description: values.description,
+      quantity: values.quantity,
+      amount: values.paymentUSD,
+    };
+    generateInvoice(newData, currentApplicationId as number);
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {}, [sendQuoteKey, downloadQuoteKey,currentApplicationId,currentProgram]);
 
   const rowSelection = {
     onChange: (
@@ -109,7 +134,7 @@ useEffect(() => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (record: { key: unknown }) => (
+      render: (_, record) => (
         <Dropdown
           trigger={["click"]}
           overlay={
@@ -133,16 +158,23 @@ useEffect(() => {
                 Send Quote
               </Menu.Item>
 
-              <Menu.Item key="3">
+              <Menu.Item
+                key="3"
+                onClick={() => {
+                  setCurrentProgram(record.programName as string);
+                  setCurrentApplicationId(record.applicationId as number);
+                  setIsModalOpen(true);
+                }}
+              >
                 {/* <Link to={appRoute.generateInvoice(record.key as number).path}> */}
-                  Generate Invoice
+                Generate Invoice
                 {/* </Link> */}
               </Menu.Item>
 
               <Menu.Item
                 key="4"
                 onClick={() => {
-                  setDownloadQuoteKey(record.key as number)
+                  setDownloadQuoteKey(record.key as number);
                   // handleDownloadQuote(record.key as number);
                   // const {} = useFetchSingleItem({
                   //   itemId: record.key as number,
@@ -184,6 +216,7 @@ useEffect(() => {
           number_of_dependents,
           created_at,
           generated_by,
+          applicant,
         } = quote;
         return {
           key: id,
@@ -195,6 +228,8 @@ useEffect(() => {
           dependents: +number_of_dependents,
           dateCreated: formattedDate(created_at),
           createdBy: generated_by,
+          programName: "",
+          applicationId: applicant.application_id,
         };
       });
       setDataSource(data);
@@ -214,6 +249,62 @@ useEffect(() => {
         scroll={{ x: 900 }}
         className="border-gray-100 border-t-0 border-2 rounded-b-md"
       />
+      <Modal
+        title="Generate Invoice"
+        footer={null}
+        open={isModalOpen}
+        onCancel={() => {
+          modalForm.resetFields();
+          setIsModalOpen(false);
+        }}
+      >
+        {/* make everything compulsory */}
+        <Form
+          name="generateInvoice"
+          form={modalForm}
+          layout="vertical"
+          className="pt-8 px-4"
+          onFinish={handleGenerateInvoice}
+        >
+          <Form.Item
+            label={"Program"}
+            name="program"
+            rules={generalValidationRules}
+            initialValue={currentProgram}
+          >
+            <Input disabled={true} />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label={"Description"}
+            rules={textInputValidationRules}
+          >
+            <TextArea placeholder="Enter Description" rows={4} />
+          </Form.Item>
+          <Form.Item
+            label={"Payment (USD)"}
+            name="paymentUSD"
+            rules={generalValidationRules}
+          >
+            <InputNumber addonAfter="$" />
+          </Form.Item>
+          <Form.Item
+            label={"Quantity"}
+            name="quantity"
+            rules={generalValidationRules}
+          >
+            <InputNumber />
+          </Form.Item>
+
+          <div className="flex justify-between">
+            <AppButton
+              label="Cancel"
+              handleClick={() => setIsModalOpen(false)}
+            />
+            <AppButton type="submit" isLoading={generateInvoiceLoading} />
+          </div>
+        </Form>
+      </Modal>
     </Spin>
   );
 };

@@ -85,8 +85,28 @@ interface IUpdatePaymentDetailBody {
   paid_by: number;
   naira_payment: number;
   dollar_payment: number;
-  file: RcFile;
+  file: File;
 }
+
+// interface RootObject {
+//   file: File;
+//   fileList: FileList[];
+// }
+
+// interface FileList {
+//   uid: string;
+//   lastModified: number;
+//   lastModifiedDate: string;
+//   name: string;
+//   size: number;
+//   type: string;
+//   percent: number;
+//   originFileObj: File;
+// }
+
+// interface File {
+//   uid: string;
+// }
 
 const PaymentDetails = () => {
   // Payments list data
@@ -409,34 +429,58 @@ const PaymentDetails = () => {
         {
           key: 1,
           item: `Total ${investment_route} Fee`,
-          amount: `${country_investment_total} USD`,
+          amount: country_investment_total.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
         {
           key: 2,
           item: "Total Local Processing Fee",
-          amount: `${local_prc_fee} USD`,
+          amount: local_prc_fee.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
         {
           key: 3,
           item: "Total Program Fee",
-          amount: `${quotation_total} USD`,
+          amount: quotation_total.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
       ]);
       setDataSourceSecond([
         {
           key: 1,
           item: "Total to be paid",
-          amount: `${(+outstanding_payment - +amount_paid) as number} USD`,
+          amount: (+outstanding_payment - +amount_paid) .toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
         {
           key: 2,
           item: "Total Amount paid",
-          amount: `${amount_paid} USD`,
+          amount: (+amount_paid).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
         {
           key: 3,
           item: "Balance Outstanding",
-          amount: `${outstanding_payment} USD`,
+          amount: (+outstanding_payment).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
       ]);
     }
@@ -467,8 +511,13 @@ const PaymentDetails = () => {
           paid_by: values.paidBy,
           narration: values.narration,
           dollar_payment: values.paymentsUSD,
+          file: values.paymentProof.file,
           naira_payment: values.paymentsNGN,
-          file: values.paymentProof.fileList[0].originFileObj,
+          // file: values.paymentProof.fileList[0].originFileObj,
+          // file: new Blob([values.paymentProof.file], {
+          //   type: values.paymentProof.file.type,
+          // }),
+          // file: new File([values.paymentProof.file], values.paymentProof.file.name),
         },
         itemId as number
       );
@@ -894,14 +943,14 @@ const PaymentDetails = () => {
             <Form.Item
               label={"Payments USD"}
               name="paymentsUSD"
-              rules={textInputValidationRules}
+              rules={generalValidationRules}
             >
               <InputNumber addonAfter="$" />
             </Form.Item>
             <Form.Item
               label={"Payments NGN"}
               name="paymentsNGN"
-              rules={textInputValidationRules}
+              rules={generalValidationRules}
             >
               <InputNumber addonAfter="₦" />
             </Form.Item>

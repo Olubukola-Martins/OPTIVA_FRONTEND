@@ -172,34 +172,61 @@ const GenerateFinancialStatement = () => {
         {
           key: 1,
           item: `Total ${investment_route} Fee`,
-          amount: `${country_investment_total} USD`,
+          amount: country_investment_total.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
         {
           key: 2,
           item: "Total Local Processing Fee",
-          amount: `${local_prc_fee} USD`,
+          amount: local_prc_fee.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
         {
           key: 3,
           item: "Total Program Fee",
-          amount: `${quotation_total} USD`,
+          amount: quotation_total.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
       ]);
       setDataSourceSecond([
         {
           key: 1,
           item: "Total to be paid",
-          amount: `${(+outstanding_payment - +amount_paid) as number} USD`,
+          amount: (+outstanding_payment - +amount_paid).toLocaleString(
+            "en-US",
+            {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 2,
+            }
+          ),
         },
         {
           key: 2,
           item: "Total Amount paid",
-          amount: `${amount_paid} USD`,
+          amount: (+amount_paid).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
         {
           key: 3,
           item: "Balance Outstanding",
-          amount: `${outstanding_payment} USD`,
+          amount: (+outstanding_payment).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
         },
       ]);
     }
@@ -220,13 +247,35 @@ const GenerateFinancialStatement = () => {
           key: id,
           sn: index + 1,
           narration,
-          paymentsNGN: <div className="text-green-600">₦ {naira_payment}</div>,
+          paymentsNGN: (
+            <div className="text-green-600">
+              {(+naira_payment).toLocaleString("en-US", {
+                style: "currency",
+                currency: "NGN",
+                maximumFractionDigits: 2,
+              })}
+            </div>
+          ),
           fxRate: fx_rate,
           // paidBy: paid_by,
           paidBy: "James Brown",
-          paymentsUSD: <div className="text-green-600">$ {dollar_payment}</div>,
+          paymentsUSD: (
+            <div className="text-green-600">
+              {(+dollar_payment).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 2,
+              })}
+            </div>
+          ),
           balanceDue: (
-            <div className="text-red-500">$ {outstanding_payment}</div>
+            <div className="text-red-500">
+              {(+outstanding_payment).toLocaleString("en-US", {
+                style: "currency",
+                currency: "NGN",
+                maximumFractionDigits: 2,
+              })}
+            </div>
           ),
         };
       });
@@ -383,14 +432,22 @@ const GenerateFinancialStatement = () => {
                         colSpan={3}
                       ></Table.Summary.Cell>
                       <Table.Summary.Cell index={3} className="text-green-600">
-                        ₦ {totalAmountNGN}
+                        {totalAmountNGN.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "NGN",
+                          maximumFractionDigits: 2,
+                        })}
                       </Table.Summary.Cell>
                       <Table.Summary.Cell
                         index={4}
                         colSpan={2}
                       ></Table.Summary.Cell>
                       <Table.Summary.Cell index={6} className="text-green-600">
-                        $ {totalAmountUSD}
+                        {totalAmountUSD.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          maximumFractionDigits: 2,
+                        })}
                       </Table.Summary.Cell>
                     </Table.Summary.Row>
                   );

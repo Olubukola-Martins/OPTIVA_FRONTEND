@@ -8,6 +8,7 @@ import { generateReceipt } from "../hooks/useGenerate";
 import { Spin } from "antd";
 import { IGenReceipt } from "src/features/meetings/types/types";
 import { formatDate } from "./GenerateFinancialStatement";
+import { Dayjs } from "dayjs";
 
 interface DataType {
   key: number;
@@ -70,8 +71,12 @@ const GenerateReceipt = () => {
           key: id,
           narration,
           // payments: `N ${paymentsList[0].payment}`,
-          payments: `₦ ${naira_payment}`,
-          datePaid: date_paid,
+          payments: (+naira_payment).toLocaleString("en-US", {
+            style: "currency",
+            currency: "NGN",
+            maximumFractionDigits: 2,
+          }),
+          datePaid: new Date(date_paid).toLocaleDateString("en-GB"),
         },
       ]);
       setProgramType(payment.application.programtype.program_name);
@@ -125,7 +130,14 @@ const GenerateReceipt = () => {
                         className="whitespace-nowrap"
                       >
                         {/* N {totalPayments} */}
-                        ₦ {receiptData.data.payment.amount_paid}
+                        {(+receiptData.data.payment.amount_paid).toLocaleString(
+                          "en-US",
+                          {
+                            style: "currency",
+                            currency: "NGN",
+                            maximumFractionDigits: 2,
+                          }
+                        )}
                       </Table.Summary.Cell>
                     </Table.Summary.Row>
                   </>
