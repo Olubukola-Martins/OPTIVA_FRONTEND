@@ -1,5 +1,4 @@
 import { branchProps } from "../../branch/types";
-import { rolesProps } from "../../rolesAndPermissions/types";
 
 export interface employeesProps {
   id: number;
