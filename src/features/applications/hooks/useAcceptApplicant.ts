@@ -1,12 +1,12 @@
 import axios from "axios";
-import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
-import { ICreateApplication } from "../../types/types";
+import { IAcceptApplicant } from "../types/types";
+import { useMutation } from "react-query";
 
-const postData = async (props: ICreateApplication) => {
+const postData = async (props: IAcceptApplicant) => {
     const token = useGetToken();
-    const url = `${END_POINT.BASE_URL}/admin/application`;
+    const url = `${END_POINT.BASE_URL}/admin/applicants/accept`;
   
     const config = {
       headers: {
@@ -21,8 +21,6 @@ const postData = async (props: ICreateApplication) => {
     const response = await axios.post(url, data, config);
     return response;
   };
-
-
-export const useCreateApplication = () => {
-    return useMutation(postData);
+export const useAcceptApplicant = () => {
+  return  useMutation(postData);
 }

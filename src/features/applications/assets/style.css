@@ -20,20 +20,24 @@
 /* Stepper color */
 .ant-steps .ant-steps-item-process .ant-steps-item-icon {
   background-color: var(--app-color-primary);
-  border-color:  var(--app-color-primary);
+  border-color: var(--app-color-primary);
 }
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon{
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon {
   background-color: var(--app-color-primary);
-  border-color:  var(--app-color-primary);
+  border-color: var(--app-color-primary);
 }
-.ant-steps .ant-steps-item-finish .ant-steps-item-icon svg{
-  color: var(--app-color-secondary);
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon svg {
+  color: white;
 }
-.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after{
+.ant-steps
+  .ant-steps-item-finish
+  > .ant-steps-item-container
+  > .ant-steps-item-tail::after {
   background-color: var(--app-color-secondary);
 }
 
 /* Tab color */
-.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn{
+.ant-tabs .ant-tabs-tab .ant-tabs-tab-active .ant-tabs-tab-btn {
   color: var(--app-color-primary);
 }
+
