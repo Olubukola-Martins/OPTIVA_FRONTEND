@@ -3,12 +3,12 @@ import { Calendar, IEvent } from "../components/Calendar";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import {
-  EditMeetingModal,
+  // EditMeetingModal,
   NewMeetingModal,
 } from "../components/MeetingModals";
 import { IMeetingData } from "../components/MeetingModals";
 import { END_POINT } from "src/config/environment";
-import { useQueryClient } from "react-query";
+import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useQueryClient } from "react-query";
 import useAddMeeting from "../hooks/useAddMeeting";
 import { INewMeeting, ISingleMeeting } from "../types/types";
 import { openNotification } from "src/utils/notification";
@@ -17,23 +17,39 @@ import { useForm } from "antd/es/form/Form";
 import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { Spin } from "antd";
+import React from "react";
 
 export const QUERY_KEY_MEETINGS = "Meetings";
 export const meetingsURL = `${END_POINT.BASE_URL}/admin/meetings`;
 
-const Meetings = () => {
-  // const {
-  //   data: allMeetingsData,
-  //   isLoading: allMeetingsLoading,
-  // }: IQueryDataType<IFetchAllMeetings> = useFetchAllItems({
-  //   queryKey: QUERY_KEY_MEETINGS,
-  //   urlEndPoint: meetingsURL,
-  // });
+export const MeetingContext = React.createContext<{
+  editLoading: boolean;
+  setEditLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  newfetch: any;
+  setNewFetch: React.Dispatch<React.SetStateAction<any>>;
+}>({
+  editLoading: false,
+  setEditLoading: () => {},
+  setNewFetch: function (
+    _value: React.SetStateAction<
+      <TPageData>(
+        options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+      ) => Promise<QueryObserverResult<any, unknown>>
+    >
+  ): void {
+    throw new Error("Function not implemented.");
+  },
+  newfetch: () => {},
+});
 
+
+
+const Meetings = () => {
+  const [editLoading, setEditLoading] = useState(false);
   const queryClient = useQueryClient();
   const [newForm] = useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [iEditsModalVisible, setIsEditModalVisible] = useState(false);
+  // const [iEditsModalVisible, setIsEditModalVisible] = useState(false);
   const { userInfo } = useGetUserInfo();
   const {
     data: userEvents,
@@ -45,6 +61,8 @@ const Meetings = () => {
     urlEndPoint: `${meetingsURL}/user`,
   });
   const { mutate, isLoading: newMeetingLoading } = useAddMeeting();
+    const [newfetch, setNewFetch] = useState(refetch);
+
 
   const addNewMeeting = (newData: INewMeeting) => {
     mutate(
@@ -79,9 +97,11 @@ const Meetings = () => {
   const [events, setEvents] = useState<any>([]);
 
   useEffect(() => {
+    console.log("editLoadingInParent", editLoading);
+    // if (!editLoading) { refetch(); };
     if (userEvents && userEvents.data) {
+    console.log("editLoadingInParent", editLoading);
       const userEventsData = userEvents.data;
-      console.log("allMeetings", userEventsData);
       const userEventsList: IEvent[] = userEventsData.map(
         (event: ISingleMeeting) => {
           const {
@@ -140,16 +160,14 @@ const Meetings = () => {
       );
       setEvents(userEventsList);
     }
-  }, [userEvents, userEvents?.data, userInfo, userInfo?.id]);
-  // useEffect(() => {
-    
-  //   console.log("editing", editing);
-  // }, [editing, handleSetEditing]);
+  }, [ userEvents?.data, userInfo, userInfo?.id]);
 
-  // const [isCreateMeetingModalVisible, setCreateMeetingModalVisible] =
-  //   useState(false);
-  // const [meetingActionsModal, setMeetingActionsModal] = useState(false);
-// console.log(meetingActionsModal)
+  useEffect(() => {
+    setNewFetch(refetch());
+    // if (editLoading) { refetch(); };
+  }, [editLoading])
+  
+  
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -157,17 +175,10 @@ const Meetings = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-    const handleCancelEdit = () => {
-      setIsEditModalVisible(false);
-    };
+    // const handleCancelEdit = () => {
+    //   setIsEditModalVisible(false);
+    // };
 
-
-  // const showModalActions = () => {
-  //   setMeetingActionsModal(true);
-  // };
-  // const handleCancelModalActions = () => {
-  //   setMeetingActionsModal(false);
-  // };
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {
     console.log("data", meetingData);
@@ -196,29 +207,30 @@ const Meetings = () => {
 
   return (
     <>
-      <Spin spinning={userEventsLoading || userEventsFetching} size="large">
-        <div className="flex justify-between items-center py-4">
-          <PageIntro
-            arrowBack={false}
-            title="Meetings"
-            description="View  & Create New Bookings"
+      <MeetingContext.Provider value={{ editLoading, setEditLoading , newfetch , setNewFetch}}>
+        <Spin spinning={userEventsLoading || userEventsFetching} size="large">
+          <div className="flex justify-between items-center py-4">
+            <PageIntro
+              arrowBack={false}
+              title="Meetings"
+              description="View  & Create New Bookings"
+            />
+            <AppButton label="New Meeting" handleClick={showModal} />
+          </div>
+          <Calendar events={events} />
+          <NewMeetingModal
+            open={isModalVisible}
+            onCancel={handleCancel}
+            onCreate={handleCreateMeeting}
+            newForm={newForm}
+            newMeetingsLoading={newMeetingLoading}
           />
-          <AppButton label="New Meeting" handleClick={showModal} />
-        </div>
-        <Calendar events={events} />
-        <NewMeetingModal
-          open={isModalVisible}
-          onCancel={handleCancel}
-          onCreate={handleCreateMeeting}
-          newForm={newForm}
-          newMeetingsLoading={newMeetingLoading}
-        />
-        <EditMeetingModal
-          open={iEditsModalVisible}
-          onCancel={handleCancelEdit}
-          refetchUserMeetins={refetch}
-        />
-      </Spin>
+          {/* <EditMeetingModal
+            open={iEditsModalVisible}
+            onCancel={handleCancelEdit}
+          /> */}
+        </Spin>
+      </MeetingContext.Provider>
     </>
   );
 };
