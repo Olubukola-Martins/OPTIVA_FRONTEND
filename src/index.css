@@ -9,6 +9,10 @@
   --app-color-secondary: #801d22;
   --app-color-accent: #333333;
   /* --app-color-neutral: #fcfcfd; */
+  --card-blue: #012168;
+  --card-green: #28a745;
+  --card-yellow: #ff9500;
+  --card-oxblood: #801d23;
 }
 
 body {

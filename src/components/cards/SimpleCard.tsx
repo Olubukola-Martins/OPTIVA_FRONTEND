@@ -9,10 +9,10 @@ export const SimpleCard = ({
 }: simpleCardProps) => {
   // Define a color mapping
   const colorMap: Record<string, string> = {
-    blue: "#012168",
-    green: "#28A745",
-    yellow: "#FF9500",
-    oxblood: "#801D23",
+    blue: 'var(--card-blue)',
+    green: 'var(--card-green)',
+    yellow: 'var(--card-yellow)',
+    oxblood: 'var(--card-oxblood)',
   };
 
   // Get the selected color from the mapping
@@ -20,7 +20,7 @@ export const SimpleCard = ({
 
   return (
     <div
-      className={`border border-${cardColor}-600 rounded-lg py-2 px-3 relative`}
+      className={`border border-${cardColor}-600 rounded-lg py-3 px-3 relative`}
       style={{ borderColor: selectedColor }}
     >
       <div className="flex gap-x-4">

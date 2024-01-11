@@ -37,22 +37,7 @@ export const InvitedEmployees = ({ searchValue }: searchValueProps) => {
     {
       title: "Role",
       dataIndex: "role",
-      render: (_, val) => (
-        <div>
-          <Dropdown
-            trigger={["click"]}
-            overlay={
-              <Menu>
-                {val?.user?.roles?.map((item) => (
-                  <Menu.Item key={item.id}>{item.name}</Menu.Item>
-                ))}
-              </Menu>
-            }
-          >
-            <i className="ri-eye-line text-lg cursor-pointer font-medium"></i>
-          </Dropdown>
-        </div>
-      ),
+      render: (_, val) => <div>{val?.user?.roles?.name}</div>,
     },
     {
       title: "Branch",

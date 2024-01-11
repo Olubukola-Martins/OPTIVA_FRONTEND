@@ -4,6 +4,7 @@ import logo from "src/assets/logoSvg.svg";
 import { Collapse } from "antd";
 import { CollapseProps } from "antd/lib";
 import { ProfileForm } from "../components/ProfileForm";
+import { BankDetails } from "../components/BankDetails";
 
 const CompanyProfile = () => {
   const items: CollapseProps["items"] = [
@@ -15,7 +16,7 @@ const CompanyProfile = () => {
     {
       key: "2",
       label: "Bank Details",
-      children: <p>Bank details here</p>,
+      children: <BankDetails />,
     },
   ];
   return (
