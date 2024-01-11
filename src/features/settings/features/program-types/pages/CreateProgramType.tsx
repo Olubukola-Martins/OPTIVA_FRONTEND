@@ -81,7 +81,6 @@ const CreateProgramType = () => {
     })) || [];
 
   const handleSubmit = (values: any) => {
-    console.log("values of form", values);
     mutate(
       {
         token,

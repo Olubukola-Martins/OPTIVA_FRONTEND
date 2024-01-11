@@ -7,6 +7,11 @@ type GlobalProviderProps = {
 type GlobalContext = {
   branchId: number;
   setBranchId: (state: any) => void;
+  sharedData: {
+    applicantId: number | undefined;
+    templateId: number | undefined;
+  };
+  setSharedData: (data: any) => void;
 };
 
 const theGlobalContext = createContext({} as GlobalContext);
@@ -18,9 +23,15 @@ export function useGlobalContext() {
 export function GlobalContextProvider({ children }: GlobalProviderProps) {
   // Define actions here
   const [branchId, setBranchId] = useState<number>(1);
+  const [sharedData, setSharedData] = useState({
+    applicantId: undefined,
+    templateId: undefined,
+  });
 
   return (
-    <theGlobalContext.Provider value={{ setBranchId, branchId }}>
+    <theGlobalContext.Provider
+      value={{ setBranchId, branchId, sharedData, setSharedData }}
+    >
       {children}
     </theGlobalContext.Provider>
   );

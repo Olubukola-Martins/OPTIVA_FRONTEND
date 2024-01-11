@@ -48,7 +48,6 @@ export const useUpdateCountry = ({ queryKey }: IPProps) => {
       },
       {
         onError: (error: any) => {
-          console.log("error", error);
           openNotification({
             state: "error",
             title: "Error Occured",
@@ -57,7 +56,6 @@ export const useUpdateCountry = ({ queryKey }: IPProps) => {
           });
         },
         onSuccess: (res: any) => {
-          console.log("success", res.data.message);
           openNotification({
             state: "success",
             title: "Success",

@@ -39,7 +39,6 @@ const {removeData}=  useDelete({
     EndPointUrl: "/admin/authorized-person",
   });
 
-  console.log("authorized person", data);
 
   const handleDeleteCheckbox = () => {
     console.log("Deleting rows:", selectedRowKeys);

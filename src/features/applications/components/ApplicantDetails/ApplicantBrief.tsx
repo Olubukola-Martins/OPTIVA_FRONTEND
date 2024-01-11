@@ -1,66 +1,46 @@
+import { useParams } from "react-router-dom";
+import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { Skeleton } from "antd";
+
+export const renderPTag = (input_type: string, text: any) => {
+  const formattedText = text ? text.join(", ") : text;
+  if (
+    input_type === "checkbox" ||
+    "text_input" ||
+    "select" ||
+    "number_input" ||
+    "date_input"
+  ) {
+    return <p className="applicantDetailsSinglePTag">{formattedText}</p>;
+  } else if (input_type === "textarea") {
+    return (
+      <p className="applicantDetailsDiv h-24 border rounded-md">
+        {formattedText}
+      </p>
+    );
+  }
+};
+
 export const ApplicantBrief = () => {
+  const { id } = useParams();
+  const { data, isLoading } = useGetApplicationResponse({
+    id: id as unknown as number,
+    section: "sectiononeresponse",
+  });
+
   return (
     <>
-      <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10">
-        <div className="w-full lg:w-1/2">
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              Which country passport/residency is applicant applying for?
+      <Skeleton active loading={isLoading}>
+        {data?.map((item) => (
+          <div className="mt-2 py-2" key={item.id}>
+            <h2 className="py-3">
+              {item.question.form_question.charAt(0).toUpperCase() +
+                item.question.form_question.slice(1)}
             </h2>
-            <p className="applicantDetailsSinglePTag"></p>
+            {renderPTag(item.question.input_type, item.response)}
           </div>
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              Which program is the applicant interested in?
-            </h2>
-            <p className="applicantDetailsSinglePTag"></p>
-          </div>
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              Which investment route is the applicant interested in?
-            </h2>
-            <p className="applicantDetailsSinglePTag"></p>
-          </div>
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              Why is the applicant applying for the program above?
-            </h2>
-            <p className="applicantDetailsDiv h-24 border rounded-md"></p>
-          </div>
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              Has the applicant started a CBI/RBI application previously?
-            </h2>
-            <p className="applicantDetailsSinglePTag"></p>
-          </div>
-        </div>
-        <div className="w-full lg:w-1/2">
-          <div className="w-full my-2">
-            <h2 className="p-1">Which Country?</h2>
-            <p className="applicantDetailsSinglePTag"></p>
-          </div>
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              Did the Applicant mention a budget amount that they are willing to
-              spend?
-            </h2>
-            <p className="applicantDetailsSinglePTag"></p>
-          </div>
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              How much is the Applicant willing to invest?
-            </h2>
-            <p className="applicantDetailsSinglePTag"></p>
-          </div>
-          <div className="w-full my-2">
-            <h2 className="p-1">
-              Please enter below any other information gleaned from discussion
-              with the Applicant
-            </h2>
-            <p className="applicantDetailsDiv h-20 border rounded-md"></p>
-          </div>
-        </div>
-      </div>
+        ))}
+      </Skeleton>
     </>
   );
 };

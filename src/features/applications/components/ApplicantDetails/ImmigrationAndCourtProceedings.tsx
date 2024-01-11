@@ -1,99 +1,40 @@
-export const ImmigrationAndCourtProceedings = () => {
+import { Skeleton } from "antd";
+import { useParams } from "react-router-dom";
+import { AppButton } from "src/components/button/AppButton";
+import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
+import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { renderPTag } from "./ApplicantBrief";
+
+export const ImmigrationAndCourtProceedings: React.FC<
+  IApplicationFormResponseProps
+> = ({ onNext, subsectionName }) => {
+  const { id } = useParams();
+  const { data, isLoading } = useGetApplicationResponse({
+    id: id as unknown as number,
+    section: "sectionthreeresponse",
+  });
+
   return (
-    <div className="flex flex-col lg:flex-row justify-center p-4 lg:gap-10">
-      <div className="w-full lg:w-1/2">
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            Have you or your spouse ever been deported or subject to deportation
-            from any country? If yes, please explain
-          </h2>
-          <div className="applicantDetailsDiv h-20 rounded-md"></div>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            Have you or your spouse ever applied for an immigrant (citizenship)
-            and been denied? If yes, please explain
-          </h2>
-          <p className="applicantDetailsDiv h-20 rounded-md"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            Have you or your spouse ever applied for a non-immigrant,
-            non-tourist visa and been denied? If yes, please explain
-          </h2>
-          <p className="applicantDetailsDiv h-20 rounded-md"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            Have you or your spouse ever applied for a non-immigrant,
-            non-tourist visa and been denied? If yes, please explain
-          </h2>
-          <p className="applicantDetailsDiv h-20 rounded-md"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            Have you ever been refused admission into a country at a port of
-            entry? If “Yes”, please provide a detailed explanation
-          </h2>
-          <p className="applicantDetailsDiv h-20 rounded-md"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            The Applicant has had a UK/US/Schengen/Canada Visa revoked
-          </h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            The Applicant has been unlawfully present in any country?
-          </h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-      </div>
-      <div className="w-full lg:w-1/2">
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            The Applicant has been banned from any country? If yes, name
-            countries
-          </h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            The Applicant has been the subject of a deportation or a deportation
-            hearing?
-          </h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            The Applicant wants employer to know about their application
-          </h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">
-            The Applicant wants spouse to know about this application
-          </h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">The Applicant has BVN and NIN</h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">The Applicant has Tax ID number (TIN)</h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">The Applicant has a current a passport</h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-        <div className="w-full my-2">
-          <h2 className="p-1">The Applicant has a bank account</h2>
-          <p className="applicantDetailsSinglePTag"></p>
-        </div>
-      </div>
-    </div>
+    <Skeleton active loading={isLoading}>
+      {data?.map(
+        (item) =>
+          item.question.subsection_name === subsectionName && (
+            <div className="mt-2 py-2" key={item.id}>
+              <h2 className="py-3">
+                {item.question.form_question.charAt(0).toUpperCase() +
+                  item.question.form_question.slice(1)}
+              </h2>
+              {renderPTag(item.question.input_type, item.response)}
+            </div>
+          )
+      )}
+      <AppButton
+        label="Next"
+        type="button"
+        handleClick={() => {
+          onNext();
+        }}
+      />
+    </Skeleton>
   );
 };

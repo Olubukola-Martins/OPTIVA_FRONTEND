@@ -9,71 +9,134 @@ import { EmploymentDetails } from "./EmploymentDetails";
 import { BusinessIncomeAndNetwork } from "./BusinessIncomeAndNetwork";
 import { AcademicHistory } from "./AcademicHistory";
 import { TravelDetailsAndHistory } from "./TravelDetailsAndHistory";
-import type { TabsProps } from "antd";
+import { useState } from "react";
 
 export const AboutTheApplicantsTab = () => {
-  const tabItems: TabsProps["items"] = [
+  const [currentTab, setCurrentTab] = useState<number>(0);
+
+  const tabItems: {
+    label: string;
+    children: React.ReactNode;
+    key: string;
+    subsectionName: string;
+  }[] = [
     {
       label: "Personal Details",
       key: "Personal Details",
-      children: <PersonalDetails />,
+      subsectionName: "personalDetails",
+      children: (
+        <PersonalDetails
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="personalDetails"
+        />
+      ),
     },
     {
       label: "Contact Details",
       key: "Contact Details",
-      children: <ContactDetails />,
+      children: (
+        <ContactDetails
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="contactDetails"
+        />
+      ),
+      subsectionName: "contactDetails",
     },
     {
       label: "Marriage Details",
       key: "Marriage Details",
-      children: <MarriageDetails />,
+      subsectionName: "marriageDetails",
+      children: (
+        <MarriageDetails
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="marriageDetails"
+        />
+      ),
     },
     {
       label: "Children Details",
       key: "Children Details",
-      children: <ChildrenDetails />,
+      subsectionName: "childrenDetails",
+      children: (
+        <ChildrenDetails
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="childrenDetails"
+        />
+      ),
     },
     {
       label: "Other Dependent Details",
       key: "Other Dependent Details",
-      children: <OtherDependentDetails />,
+      subsectionName: "otherDependentsDetails",
+      children: (
+        <OtherDependentDetails
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="otherDependentsDetails"
+        />
+      ),
     },
     {
       label: "PEP",
       key: "PEP",
-      children: <PEP />,
+      subsectionName: "PEP",
+      children: (
+        <PEP
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="PEP"
+        />
+      ),
     },
     {
       label: "Employment Details",
       key: "Employment Details",
-      children: <EmploymentDetails />,
+      subsectionName: "employmentDetails",
+      children: (
+        <EmploymentDetails
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="employmentDetails"
+        />
+      ),
     },
     {
-      label: "Business, Income amd Network",
-      key: "Business, Income and Network",
-      children: <BusinessIncomeAndNetwork />,
+      label: "Business, Income and Network",
+      key: "Business, Income and Networks",
+      subsectionName: "businessIncomeNetworth",
+      children: (
+        <BusinessIncomeAndNetwork
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="businessIncomeNetworth"
+        />
+      ),
     },
     {
       label: "Academic History",
       key: "Academic History",
-      children: <AcademicHistory />,
+      subsectionName: "academicHistory",
+      children: (
+        <AcademicHistory
+          onNext={() => setCurrentTab(currentTab + 1)}
+          subsectionName="academicHistory"
+        />
+      ),
     },
     {
       label: "Travel Details and History",
       key: "Travel Details and History",
-      children: <TravelDetailsAndHistory />,
+      subsectionName: "travelDetails",
+      children: <TravelDetailsAndHistory subsectionName="travelDetails" />,
     },
   ];
   return (
-    <div className="w-full">
     <Tabs
-      items={tabItems}
-      defaultActiveKey="1"  
-      size="small"
-      moreIcon
-      tabBarStyle={{ display: "flex", flexWrap: "wrap", maxWidth: "1150px", }}
-    />
-  </div>
-  
+      activeKey={currentTab.toString()}
+      onChange={(key) => setCurrentTab(Number(key))}
+      tabBarGutter={50}
+    >
+      {tabItems.map((tab, index) => (
+        <Tabs.TabPane tab={tab.label} key={index.toString()}>
+          {tab.children}
+        </Tabs.TabPane>
+      ))}
+    </Tabs>
   );
 };

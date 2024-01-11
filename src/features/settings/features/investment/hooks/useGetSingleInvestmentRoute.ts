@@ -7,11 +7,13 @@ import { IInvestmentRoute } from "../types";
 
 export interface IDataProps extends IUserToken {
   id: number;
+  section?:string
 }
 
 export interface ISingleInvestment {
   id: number;
   queryKey?: string;
+  section?:string
 }
 
 const getData = async (props: IDataProps) => {
@@ -29,9 +31,9 @@ const getData = async (props: IDataProps) => {
   return data;
 };
 
-export const useGetSingleInvestmentRoute = ({ id, queryKey }: ISingleInvestment) => {
+export const useGetSingleInvestmentRoute = ({ id }: ISingleInvestment) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
+  const queryData = useQuery([ id], () => getData({ id, token }), {
     onError: () => {},
     onSuccess: () => {},
   });
