@@ -176,7 +176,7 @@ const TimelineExtensions = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: (_, ) => (
         <div>
           <Dropdown
             trigger={["click"]}

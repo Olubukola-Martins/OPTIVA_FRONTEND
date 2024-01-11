@@ -50,7 +50,7 @@ export const ActiveApplications = () => {
     currentUrl: "active-employees",
   });
 
-  console.log("aplicant data", data);
+  console.log("employee", employeesData);
 
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
