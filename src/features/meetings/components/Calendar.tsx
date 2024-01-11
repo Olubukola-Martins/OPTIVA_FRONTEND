@@ -3,12 +3,15 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import {
-  // IMeetingData,
   MeetingDetailsModal,
   MeetingModalActions,
 } from "./MeetingModals";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
-// import { IMeetingData } from "./MeetingModals";
+// import { QUERY_KEY_MEETINGS, meetingsURL } from "../pages/Meetings";
+// import { openNotification } from "src/utils/notification";
+// import { useQueryClient } from "react-query";
+import useRespondToMeeting from "../hooks/useRespondToMeeting";
+import useChangeMeetingStatus from "../hooks/useChangeMeetingStatus";
 
 export interface IEvent {
   id: number;
@@ -57,16 +60,96 @@ const localizer = momentLocalizer(moment);
 export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
   const { userInfo } = useGetUserInfo();
   const [currentEvetId, setCurrentEventId] = useState<number>();
-  // const [openNewMeetingModal, setOpenNewMeetingModal] =
-  //   useState<boolean>(false);
-  // const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [actionModal, setActionModal] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
 
-  //   const handleEventClick = () => {
-  //     // setSelectedEvent(true);
-  //     setActionModal(true);
-  //   };
+
+  ///////// meeting modal ///////////////
+  // const queryClient = useQueryClient();
+  const {  responseLoading } = useRespondToMeeting();
+  const {  statusChangeLoading } = useChangeMeetingStatus();
+  // const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  // const [meetingDeclineVisible, setDeclineModalVisible] =
+  //   useState<boolean>(false);
+  // const [meetingDetailVisible, setMeetingDetailModalVisible] =
+  //   useState<boolean>(false);
+
+  // // Schedule Modal
+  // const [openAcceptModal, setOpenAcceptModal] = useState<boolean>(false);
+
+    // console.log(
+    //   changeMeetingStatus,
+    //   editModalVisible,
+    //   meetingDeclineVisible,
+    //   meetingDetailVisible,
+    //   openAcceptModal
+    // );
+
+  // const showAcceptModal = () => {
+  //   setOpenAcceptModal(true);
+  // };
+  // const handleAcceptCancel = () => {
+  //   setOpenAcceptModal(false);
+  // };
+
+  //Handle meeting response
+
+  // const respondMeeting = (meetingId: number, newData: { response: string }) =>
+  //   mutate(
+  //     {
+  //       url: `${meetingsURL}/${meetingId}/respond`,
+  //       newData,
+  //     },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occured",
+  //           description: error.response.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (response: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: response.data.message,
+  //         });
+  //         setDeclineModalVisible(false);
+  //         showAcceptModal;
+  //         queryClient.invalidateQueries([QUERY_KEY_MEETINGS, meetingId]);
+  //       },
+  //     }
+  //   );
+
+  // const handleMenuClick = (action: string) => {
+  //   if (action === "editDetails") {
+  //     setEditModalVisible(true);
+  //   } else if (action === "viewDetails") {
+  //     setMeetingDetailModalVisible(true);
+  //   } else if (action === "declineMeeting") {
+  //     setDeclineModalVisible(true);
+  //   }
+  // };
+
+  // const handleCancelModals = (action: string) => {
+  //   if (action === "viewDetails") {
+  //     setMeetingDetailModalVisible(false);
+  //   } else if (action === "editDetails") {
+  //     setEditModalVisible(false);
+  //   } else if (action === "declineMeeting") {
+  //     setDeclineModalVisible(false);
+  //   }
+  // };
+
+  // const handleAttendMeeting = (data?: any) => {
+  //   console.log(data);
+  // };
+  // const handleDeclineMeeting = (data?: any) => {
+  //   console.log(data);
+  // };
+  ////////// meeting modal end ////////////////
+
   useEffect(() => {
     console.log("allEvents", events);
     const event = events.find((event) => event.id === currentEvetId);
@@ -75,15 +158,20 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
     }
   }, [events, currentEvetId, selectedEvent]);
 
-  useEffect(() => {
-    setActionModal(false)
-  },[events])
+    useEffect(() => {
+      setActionModal(false);
+    }, [ responseLoading, statusChangeLoading]);
+
+
+  // useEffect(() => {
+  //   setActionModal(false);
+  // }, [events, responseLoading, statusChangeLoading]);
 
   const handleEventClick = (eventId: number) => {
-    setCurrentEventId(eventId);
+   if(eventId !== currentEvetId) {setCurrentEventId(eventId)};
     const event = events.find((event) => event.id === eventId);
     if (event) {
-      setSelectedEvent(event);
+      setSelectedEvent(event );
       setActionModal(true);
     }
   };
@@ -96,18 +184,9 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
         },
       };
     }
-    return {}; // Return empty object for default event style
+    return {}; 
   };
 
-  // const handleNewMeetingCancel = () => {
-  //   setOpenNewMeetingModal(false);
-  // };
-
-  // const handleCreateMeeting = (meetingData: IMeetingData) => {
-  //   // const updatedEvents = [...events, meetingData];
-
-  //   setOpenNewMeetingModal(false);
-  // };
 
   return (
     <div className="h-[500px]">
@@ -125,9 +204,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
         // })}
         startAccessor="start"
         endAccessor="end"
-        // onSelectEvent={handleEventClick}
         onSelectEvent={(event) => handleEventClick(event.id)}
-        //   onSelectEvent={}
       />
 
       {selectedEvent && (
@@ -148,7 +225,7 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
         onCreate={handleCreateMeeting}
       />*/}
       {/* {selectedEvent && <EditMeetingModal currentEvent={selectedEvent} />} */}
-      {actionModal && (
+      {actionModal && selectedEvent && (
         <MeetingModalActions
           open={actionModal}
           onCancel={() => setActionModal(false)}
@@ -156,6 +233,142 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
           userInfo={userInfo}
           // handleEditMeeting=
         />
+
+        // NEW
+        // <>
+        //   <Modal
+        //     open={actionModal}
+        //     onCancel={() => setActionModal(false)}
+        //     footer={null}
+        //   >
+        //     <Card size="small" className="my-3 border-0">
+        //       <div className="p-1">
+        //         <button onClick={() => handleMenuClick("viewDetails")}>
+        //           View Meeting Details
+        //         </button>
+        //       </div>
+        //       {selectedEvent?.organizer_id === userInfo.id &&
+        //         selectedEvent?.status === 0 && (
+        //           <div className="p-1">
+        //             <button onClick={() => {handleMenuClick("editDetails")}}>
+        //               Edit Meeting Details
+        //             </button>
+        //           </div>
+        //         )}
+        //       {selectedEvent?.organizer_id === userInfo.id &&
+        //         selectedEvent?.status === 0 && (
+        //           <Popconfirm
+        //             title="Cancel Meeting"
+        //             description="Are you sure you would like to cancel this meeting?"
+        //             onConfirm={() => {
+        //               changeMeetingStatus(selectedEvent.id, { response: 1 });
+        //             }}
+        //             okText="Yes"
+        //             cancelText="No"
+        //           >
+        //             <div className="p-1">
+        //               <button onClick={() => handleMenuClick("cancel")}>
+        //                 Cancel Meeting
+        //               </button>
+        //             </div>
+        //           </Popconfirm>
+        //         )}
+
+        //       {selectedEvent?.status === 0 && (
+        //         <div className="p-1">
+        //           <button
+        //             onClick={() => {
+        //               respondMeeting(selectedEvent?.id, {
+        //                 response: "accepted",
+        //               });
+        //             }}
+        //           >
+        //             Accept Meeting
+        //           </button>
+        //         </div>
+        //       )}
+        //       {selectedEvent?.status === 0 && (
+        //         <div className="p-1">
+        //           <button
+        //             onClick={() => {
+        //               handleMenuClick("declineMeeting");
+        //             }}
+        //           >
+        //             Decline Meeting
+        //           </button>
+        //         </div>
+        //       )}
+        //     </Card>
+        //   </Modal>
+        //   {/* Accept Meeting */}
+        //   <Modal
+        //     open={openAcceptModal}
+        //     onCancel={handleAcceptCancel}
+        //     footer={null}
+        //   >
+        //     <div className="p-3 flex flex-col items-center gap-5">
+        //       <img src={SuccessIcon} alt="" />
+        //       <h2 className="font-bold text-lg text-center">
+        //         Meeting Scheduled
+        //       </h2>
+        //       <h2 className="font-bold text-lg text-center">Successfully</h2>
+        //       <div className="flex gap-5">
+        //         <AppButton label="Back" handleClick={handleAcceptCancel} />
+        //       </div>
+        //     </div>
+        //   </Modal>
+
+        //   {/* Cancel Meeting Modal */}
+        //   <Modal
+        //     open={cancelModalVisible}
+        //     onCancel={() => {
+        //       setCancelModalVisible(false);
+        //     }}
+        //     footer={null}
+        //   >
+        //     <div className="p-3 flex flex-col items-center gap-5">
+        //       <img src={SuccessIcon} alt="" />
+        //       <h2 className="font-bold text-lg text-center">
+        //         Meeting Cancelled
+        //       </h2>
+        //       <h2 className="font-bold text-lg text-center">Successfully</h2>
+        //       <div className="flex gap-5">
+        //         <AppButton label="Back" handleClick={() => {}} />
+        //       </div>
+        //     </div>
+        //   </Modal>
+
+        //   {meetingDetailVisible && (
+        //     <MeetingDetailsModal
+        //       open={meetingDetailVisible}
+        //       meetingData={selectedEvent as IEvent}
+        //       onAttend={handleAttendMeeting}
+        //       onDecline={handleDeclineMeeting}
+        //       onCancel={() => handleCancelModals("viewDetails")}
+        //     />
+        //   )}
+        //   {editModalVisible && (
+        //     <EditMeetingModal
+        //       currentEvent={selectedEvent as IEvent}
+        //       open={editModalVisible}
+        //       onCancel={() => {
+        //         setEditModalVisible(false);
+        //       }}
+        //     />
+        //   )}
+        //   {meetingDeclineVisible && (
+        //     <DeclineMeetingsModal
+        //       open={meetingDeclineVisible}
+        //       responseLoading={responseLoading}
+        //       onCancel={() => handleCancelModals("declineMeeting")}
+        //       handleResponse={() =>
+        //         respondMeeting(selectedEvent?.id as number, {
+        //           response: "rejected",
+        //         })
+        //       }
+        //     />
+        //   )}
+        // </>
       )}
     </div>
   );

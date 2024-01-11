@@ -1,15 +1,20 @@
-import { Dropdown, Menu } from "antd";
+import { Dropdown, Menu, Spin } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { appRoute } from "src/config/routeMgt/routePaths";
+// import { Link } from "react-router-dom";
+// import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   IAllGeneratedQuotes,
   IGeneratedQuoteDatum,
 } from "src/features/meetings/types/types";
+// import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
+// import { QUERY_KEY_QUOTES } from "../pages/Payments";
+// import { END_POINT } from "src/config/environment";
+// import { openNotification } from "src/utils/notification";
+import { useDownloadQuote, useSendQuote } from "../hooks/useSendOrDownloadQuote";
 
 type DataSourceItem = {
-  key: React.Key;
+  key: number;
   SN: number;
   applicantID: string;
   applicantName: string;
@@ -27,6 +32,23 @@ interface IProps {
 
 const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
+  const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>(
+    // undefined
+  );
+  const [downloadQuoteKey, setDownloadQuoteKey] = useState<number | undefined>(
+    undefined
+  );
+
+ const {isLoading:sendingQuote} = useSendQuote({
+    itemId: sendQuoteKey as number,
+  });
+
+ const { isLoading:downloadinGQuote } = useDownloadQuote({
+   itemId: downloadQuoteKey as number,
+ });
+
+useEffect(() => {
+}, [sendQuoteKey,downloadQuoteKey])
 
   const rowSelection = {
     onChange: (
@@ -87,26 +109,50 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_: any, record: { key: unknown }) => (
+      render: (record: { key: unknown }) => (
         <Dropdown
           trigger={["click"]}
           overlay={
             <Menu>
               <Menu.Item key="1">View</Menu.Item>
-              <Menu.Item key="2">Send Quote</Menu.Item>
-
-              <Menu.Item key="3">
-                <Link
-                  to={
-                    appRoute.generateInvoice(record.key as unknown as number)
-                      .path
+              <Menu.Item
+                key="2"
+                onClick={
+                  () => {
+                    // handleSendQuote(record.key as number);
+                    setSendQuoteKey(record.key as number);
                   }
-                >
-                  Generate Invoice
-                </Link>
+
+                  // useFetchSingleItem({
+                  //   itemId: record.key as number,
+                  //   queryKey: QUERY_KEY_QUOTES,
+                  //   urlEndPoint: `${END_POINT.BASE_URL}/admin/send-quote`,
+                  // })
+                }
+              >
+                Send Quote
               </Menu.Item>
 
-              <Menu.Item key="4">Download</Menu.Item>
+              <Menu.Item key="3">
+                {/* <Link to={appRoute.generateInvoice(record.key as number).path}> */}
+                  Generate Invoice
+                {/* </Link> */}
+              </Menu.Item>
+
+              <Menu.Item
+                key="4"
+                onClick={() => {
+                  setDownloadQuoteKey(record.key as number)
+                  // handleDownloadQuote(record.key as number);
+                  // const {} = useFetchSingleItem({
+                  //   itemId: record.key as number,
+                  //   queryKey: QUERY_KEY_QUOTES,
+                  //   urlEndPoint: `${END_POINT.BASE_URL}/admin/download-quote`,
+                  // });
+                }}
+              >
+                Download
+              </Menu.Item>
             </Menu>
           }
         >
@@ -125,7 +171,6 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
     return `${day}/${month}/${year}`;
   };
 
-
   useEffect(() => {
     if (allData) {
       const mainData = allData.data;
@@ -137,7 +182,8 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
           country,
           investment_route,
           number_of_dependents,
-          created_at,generated_by
+          created_at,
+          generated_by,
         } = quote;
         return {
           key: id,
@@ -148,7 +194,7 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
           investmentRoute: investment_route,
           dependents: +number_of_dependents,
           dateCreated: formattedDate(created_at),
-          createdBy: generated_by, 
+          createdBy: generated_by,
         };
       });
       setDataSource(data);
@@ -156,17 +202,19 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
   }, [allData, dataLoading]);
 
   return (
-    <Table
-      loading={dataLoading}
-      rowSelection={{
-        type: "checkbox",
-        ...rowSelection,
-      }}
-      columns={columns}
-      dataSource={dataSource}
-      scroll={{ x: 900 }}
-      className="border-gray-100 border-t-0 border-2 rounded-b-md"
-    />
+    <Spin spinning={sendingQuote || downloadinGQuote}>
+      <Table
+        loading={dataLoading}
+        rowSelection={{
+          type: "checkbox",
+          ...rowSelection,
+        }}
+        columns={columns}
+        dataSource={dataSource}
+        scroll={{ x: 900 }}
+        className="border-gray-100 border-t-0 border-2 rounded-b-md"
+      />
+    </Spin>
   );
 };
 

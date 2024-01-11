@@ -20,14 +20,15 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
   const queryClient = useQueryClient();
   const { mutate, isLoading: loadAddEmp } = useCreateAndUpdateEmployee();
   const { data, isSuccess } = useGetSingleEmployee({ id: id as number });
+
   const branches = data?.user?.branches.map((item) => item.id);
-  const roles = data?.user?.roles.map((item) => item.id);
+
   useEffect(() => {
     if (isSuccess && id) {
       form.setFieldsValue({
         ...data,
         branches,
-        roles,
+        role_id: data.user.roles.id,
       });
     } else {
       form.resetFields();
@@ -92,9 +93,10 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
             mode="multiple"
             control={{ name: "branches", label: "Branches" }}
           />
-
-         
-          <FormRolesInput Form={Form} mode="multiple"/>
+          <FormRolesInput
+            Form={Form}
+            control={{ name: "role_id", label: "Role" }}
+          />
         </div>
         <FormDepartmentInput Form={Form} />
 

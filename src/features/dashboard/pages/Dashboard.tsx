@@ -1,70 +1,32 @@
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
-import { SimpleCard } from "src/components/cards/SimpleCard";
-import welcomeVector from ".././assets/welcomeVector.svg";
-import introBg from ".././assets/introBg.png";
-import { LatestActivities } from "../components/LatestActivities";
-import { AppStatus } from "../components/AppStatus";
-import { PopularCountries } from "../components/PopularCountries";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+import { Admin } from "../components/Admin";
+import { ServiceManager } from "../components/ServiceManager";
+import { DSM } from "../components/DSM";
+import { DPO } from "../components/DPO";
+import { Audit } from "../components/Audit";
+import { DR } from "../components/DR";
+import { CustomerExperience } from "../components/CustomerExperience";
+import { CE } from "../components/CE";
 
 const Dashboard = () => {
-  const { data: userInfo } = useFetchUserProfile();
+  const { data } = useFetchUserProfile();
+
   return (
     <>
       <div className="flex items-center justify-between">
         <PageIntro title="Dashboard" arrowBack={false} />
         <AppButton label="Add Applicants" />
       </div>
-
-      <div
-        className="flex justify-between rounded-lg Container"
-        style={{ background: `url(${introBg})` }}
-      >
-        <div className="text-white flex flex-col justify-center py-4">
-          <h2 className="font-semibold text-lg md:text-2xl pb-1">
-            Hello {userInfo?.name}!
-          </h2>
-          <p className="text-sm md:text-base">Welcome to your dashboard</p>
-        </div>
-        <div className="pt-5 md:flex hidden">
-          <img src={welcomeVector} alt="dashboard" />
-        </div>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-7">
-        <SimpleCard
-          icon="ph:user-list-duotone"
-          cardColor="blue"
-          title="Master List"
-          count={0}
-        />
-        <SimpleCard
-          icon="ph:user-list-duotone"
-          cardColor="oxblood"
-          title="Authorized  
-            Applicants"
-          count={0}
-        />
-        <SimpleCard
-          icon="ph:user-list-duotone"
-          cardColor="green"
-          title="Paid
-          Applicants"
-          count={0}
-        />
-        <SimpleCard
-          icon="ph:user-list-duotone"
-          cardColor="yellow"
-          title="Prospects"
-          count={0}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
-        <PopularCountries />
-        <AppStatus />
-        <LatestActivities />
-      </div>
+      {data?.roles.id === 1 && <Admin />}
+      {data?.roles.id === 2 && <ServiceManager />}
+      {data?.roles.id === 3 && <DSM />}
+      {data?.roles.id === 4 && <DPO />}
+      {data?.roles.id === 5 && <Audit />}
+      {data?.roles.id === 6 && <DR />}
+      {data?.roles.id === 8 && <CustomerExperience />}
+      {data?.roles.id === 9 && <CE />}
     </>
   );
 };

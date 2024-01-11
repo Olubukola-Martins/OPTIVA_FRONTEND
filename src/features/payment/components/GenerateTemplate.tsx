@@ -2,9 +2,25 @@ import logo from "src/assets/logoSvg.svg";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { AppButton } from "src/components/button/AppButton";
 
-interface IPropsGenerateTemplate { title: string; templateNumber: string; children:React.ReactNode}
+interface IPropsGenerateTemplate {
+  title: string;
+  templateNumber: string;
+  receipientName: string;
+  reciepientPhone: string;
+  reciepientEmail: string;
+  date_created: string;
+  children: React.ReactNode;
+}
 
-const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemplate) => {
+const GenerateTemplate = ({
+  title,
+  templateNumber,
+  children,
+  receipientName,
+  reciepientPhone,
+  reciepientEmail,
+  date_created,
+}: IPropsGenerateTemplate) => {
   return (
     <div className="border-2 rounded-md border-gray-100 mt-10 mb-16 pb-16 pt-7 px-4 flex flex-col gap-10 w-full">
       <div className="flex flex-row w-full h-fit gap-0">
@@ -18,7 +34,9 @@ const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemp
 
       <div className=" flex flex-row align-bottom justify-between">
         <address className="leading-loose max-sm:text-sm">
-          <span className="font-semibold sm:text-lg text-base"> Mr John Doe & Family</span>
+          <span className="font-semibold sm:text-lg text-base">
+            {receipientName}
+          </span>
           <br />
           14th Floor, Churchgate Towers 2,
           <br />
@@ -30,15 +48,17 @@ const GenerateTemplate = ({ title,templateNumber, children }: IPropsGenerateTemp
           <br />
           <div className="inline-flex place-items-baseline gap-2">
             <Icon icon="solar:phone-bold" />
-            (+234) 0000 0000 000
+            {reciepientPhone}
           </div>
           <br />
           <div className="inline-flex place-items-baseline gap-2">
             <Icon icon="clarity:email-solid" />
-            johndoe@gmail.com
+            {reciepientEmail}
           </div>
         </address>
-        <p className="mt-auto max-sm:text-sm">7th July, 2023</p>
+        <p className="mt-auto max-sm:text-sm">
+          {date_created}
+        </p>
       </div>
 
       <p className="underline decoration-gray-200 underline-offset-2 decoration-2 text-gray-500 font-semibold text-lg sm:text-2xl text-center">

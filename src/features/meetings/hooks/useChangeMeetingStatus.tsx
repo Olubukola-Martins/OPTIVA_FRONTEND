@@ -1,9 +1,12 @@
 import { useMutation, useQueryClient } from "react-query";
-import { QUERY_KEY_MEETINGS, meetingsURL } from "../pages/Meetings";
+import {  QUERY_KEY_MEETINGS, meetingsURL } from "../pages/Meetings";
 import { postItemData } from "src/features/settings/utils/settingsAPIHelpers";
 import { openNotification } from "src/utils/notification";
+// import { useContext } from "react";
 
 const useChangeMeetingStatus = () => {
+    // const {  newfetch } = useContext(MeetingContext);
+
       const queryClient = useQueryClient();
       const { mutate, isLoading: statusChangeLoading } =
         useMutation(postItemData);
@@ -33,6 +36,7 @@ const useChangeMeetingStatus = () => {
                 description: response.message,
               });
               //   form.resetFields();
+                        // newfetch();
               queryClient.invalidateQueries([QUERY_KEY_MEETINGS, meetingId]);
             },
           }
