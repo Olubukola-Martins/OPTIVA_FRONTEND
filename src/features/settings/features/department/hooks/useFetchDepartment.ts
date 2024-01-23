@@ -27,9 +27,11 @@ const getData = async (
   };
   const res = await axios.get(url, config);
 
-  const data: departmentProps[] = res.data.data.map((item: departmentProps) => ({
-    ...item,
-  }));
+  const data: departmentProps[] = res.data.data.map(
+    (item: departmentProps) => ({
+      ...item,
+    })
+  );
 
   const ans = {
     data,
@@ -55,4 +57,3 @@ export const useFetchDepartment = ({
 
   return queryData;
 };
-

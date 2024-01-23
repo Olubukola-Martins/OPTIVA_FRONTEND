@@ -1,9 +1,9 @@
 import { Empty, Skeleton } from "antd";
-import { useGetActivityLog } from "../hooks/useGetActivityLog";
 import dayjs from "dayjs";
+import { useGetAdminActivityLog } from "../hooks/useGetAdminActivityLog";
 
-export const LatestActivities = () => {
-  const { data, isLoading } = useGetActivityLog();
+export const AdminActivityLog = () => {
+  const { data, isLoading } = useGetAdminActivityLog();
 
   return (
     <div className="rounded shadow-sm border p-3">
@@ -18,7 +18,7 @@ export const LatestActivities = () => {
         <thead>
           <tr className="bg-gray-200 text-sm rounded">
             <th className="py-1 font-normal pl-2">Date</th>
-
+            <th className="py-1 font-normal">User</th>
             <th className="py-1 font-normal pr-2">Details</th>
           </tr>
         </thead>
@@ -32,11 +32,11 @@ export const LatestActivities = () => {
               data?.map((item) => (
                 <tr key={item.id} className="text-xs text-accent">
                   <td className="p-[5px]">
-                    {dayjs(item.created_at).format("YYYY/MM/DD HH:mm a")}
+                    {dayjs(item?.created_at).format("YYYY/MM/DD HH:mm a")}
                   </td>
-
+                  <td className="p-[5px]">{item?.user?.name}</td>
                   <td className="p-[5px]">
-                    {item.action_type} {item.item}
+                   {item?.action_type} {item?.item}
                   </td>
                 </tr>
               ))
