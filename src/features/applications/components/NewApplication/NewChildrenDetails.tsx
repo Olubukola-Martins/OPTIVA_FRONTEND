@@ -1,41 +1,51 @@
-import {  Form,  Skeleton } from "antd";
-import { AppButton } from "src/components/button/AppButton";
-import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetSingleQuestion";
+import { Form, Skeleton } from "antd";
+import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "./NewApplicantBrief";
+import { AppButton } from "src/components/button/AppButton";
+import { IApplicationFormResponseProps } from "./NewImmigrationAndCourtProceedings";
+import { useGlobalContext } from "src/stateManagement/GlobalContext";
 
-export const NewChildrenDetails = () => {
-  
+export const NewChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
+  onNext,
+  subsectionName,
+}) => {
+  const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
-    id: 3,
+    id: sharedData.templateId as unknown as number,
     endpointUrl: "section-two",
   });
-  const [form] = Form.useForm();
-  const handleSubmit = (val: any) => {
-    console.log("Values of form:", val);
-  };
-  return (
-    <Skeleton active loading={isLoading}>
-        <Form onFinish={handleSubmit} form={form} layout="vertical">
-      {data?.map(
-        (item) =>
-          item.subsection_name === "childrenDetails" && (
-            <div className="w-full">
-            <Form.Item
-              name={item.form_question}
-              label={item.form_question}
-              key={item.id}
-              className="w-full"
-            >
-              {renderInput(item.input_type)}
-            </Form.Item>
-          </div>
-          )
-      )}
 
-      <AppButton label="Save" type="submit" />
-    </Form>
-    </Skeleton>
-  
-    
+
+  return (
+    <>
+      <Skeleton active loading={isLoading}>
+        {data?.map(
+          (item) =>
+            item.subsection_name === subsectionName && (
+              <div className="w-full" key={item.id}>
+                <Form.Item
+                  name={item.schema_name}
+                  label={
+                    item.form_question.charAt(0).toUpperCase() +
+                    item.form_question.slice(1)
+                  }
+                  key={item.id}
+                  className="w-full"
+                >
+                  {renderInput(item.input_type, item.options)}
+                </Form.Item>
+              </div>
+            )
+        )}
+
+        <AppButton
+          label="Next"
+          type="button"
+          handleClick={() => {
+            onNext();
+          }}
+        />
+      </Skeleton>
+    </>
   );
 };

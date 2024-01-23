@@ -1,54 +1,41 @@
-export const AcademicHistory = () => {
+import { Skeleton } from "antd";
+import { AppButton } from "src/components/button/AppButton";
+import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
+import { renderPTag } from "./ApplicantBrief";
+import { useParams } from "react-router-dom";
+import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+
+export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
+  onNext,
+  subsectionName,
+}) => {
+  const { id } = useParams();
+  const { data, isLoading } = useGetApplicationResponse({
+    id: id as unknown as number,
+    section: "sectiontworesponse",
+  });
+
   return (
-    <div className="flex justify-center p-4">
-      <div className="w-full ">
-        <div className="my-2">
-          <h2 className="my-3 p-1">School 1</h2>
-          <div className="flex flex-col gap-5 my-2">
-            <div className="flex flex-col lg:flex-row gap-5 w-full ">
-              <div className=" lg:w-1/2">
-                <div className="applicantDetailsPTag">
-                  Course of Study <p className="my-3"> </p>
-                </div>
-              </div>
-              <div className="lg:w-1/2">
-                <div className="applicantDetailsPTag">
-                  Name of Institution <p className="my-3"> </p>
-                </div>
-              </div>
+    <Skeleton active loading={isLoading}>
+      {data?.map(
+        (item) =>
+          item.question.subsection_name === subsectionName && (
+            <div className="mt-2 py-2" key={item.id}>
+              <h2 className="py-3">
+                {item.question.form_question.charAt(0).toUpperCase() +
+                  item.question.form_question.slice(1)}
+              </h2>
+              {renderPTag(item.question.input_type, item.response)}
             </div>
-            <div className="flex flex-col lg:flex-row gap-5 w-full ">
-              <div className=" lg:w-1/2">
-                <div className="applicantDetailsPTag">
-                  City <p className="my-3"> </p>
-                </div>
-              </div>
-              <div className="lg:w-1/2">
-                <div className="applicantDetailsPTag">
-                  Country <p className="my-3"> </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col lg:flex-row gap-5 w-full ">
-              <div className=" lg:w-1/2">
-                <p className="applicantDetailsPTag">Qualification Obtained </p>
-              </div>
-              <div className="lg:w-1/2">
-                <div className="applicantDetailsPTag">
-                  Start date <p className="my-3"> </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col lg:flex-row gap-5 lg:w-[98.5%]">
-              <div className="lg:w-1/2">
-                <div className="applicantDetailsPTag">
-                  End date <p className="my-3">text </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          )
+      )}
+      <AppButton
+        label="Next"
+        type="button"
+        handleClick={() => {
+          onNext();
+        }}
+      />
+    </Skeleton>
   );
 };

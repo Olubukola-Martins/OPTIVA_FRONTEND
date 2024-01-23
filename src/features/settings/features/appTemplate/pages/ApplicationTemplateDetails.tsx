@@ -2,7 +2,7 @@ import { PageIntro } from "src/components/PageIntro";
 import { AppTemplateDetails } from "../components/ApplicationTemplateDetails/AppTemplateDetails";
 import { ApplicationTemplateDetailsTab } from "../components/ApplicationTemplateDetails/ApplicationTemplateDetailsTab";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { useGetSingleQuestion } from "../hooks/useGetSingleQuestion";
+import { useGetSingleQuestion } from "../hooks/useGetTemplateQuestion";
 import { useParams } from "react-router-dom";
 import { QUERY_KEY_FOR_FEES } from "../../authorizedPersons/hooks/useGetFees";
 import { Skeleton } from "antd";

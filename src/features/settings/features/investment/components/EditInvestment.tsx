@@ -22,7 +22,6 @@ export const EditInvestment = ({
 }: IEditInvestmentProps) => {
   const { data } = useGetSingleInvestmentRoute({
     id: investmentId as number,
-    queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
   });
   const { data: countryData } = useGetCountry();
 
@@ -42,7 +41,6 @@ export const EditInvestment = ({
   }, [data]);
 
   const handleSubmit = (values: any) => {
-    console.log("values of form", values);
     putData(investmentId as unknown as number, values.name, values.country);
     form.resetFields()
     handleClose();

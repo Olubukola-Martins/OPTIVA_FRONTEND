@@ -1,17 +1,28 @@
+import { Skeleton } from "antd";
+import { useParams } from "react-router-dom";
+import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { renderPTag } from "./ApplicantBrief";
 
 export const Others = () => {
+  const { id } = useParams();
+  const { data, isLoading } = useGetApplicationResponse({
+    id: id as unknown as number,
+    section: "sectionfourresponse",
+  });
+
   return (
-    <div className=" p-4 ">
-      <div className="w-full my-2">
-        <h2 className="p-1">
-          Please enter below any other information gleaned from discusion with
-          the Applicant
-        </h2>
-        <div className="applicantDetailsDiv h-48 rounded-md p-2">
-          <p className="my-3"> </p>
-        </div>
-      </div>
-     
-    </div>
+    <>
+      <Skeleton active loading={isLoading}>
+        {data?.map((item) => (
+          <div className="mt-2 py-2" key={item.id}>
+            <h2 className="py-3">
+              {item.question.form_question.charAt(0).toUpperCase() +
+                item.question.form_question.slice(1)}
+            </h2>
+            {renderPTag(item.question.input_type, item.response)}
+          </div>
+        ))}
+      </Skeleton>
+    </>
   );
 };

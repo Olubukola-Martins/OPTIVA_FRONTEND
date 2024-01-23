@@ -4,8 +4,7 @@ export const ProcessingStrategy = () => {
   return (
     <>
       <h2 className="p-1">
-        Fill out this section after deliberations with Mr. Franklin Nechi & Ms.
-        Chinonye Eke. Given all the information above, what is the strategy for
+        Fill out this section after deliberations with the applicant. Given all the information above, what is the strategy for
         a successful application for this Applicant?
       </h2>
       <Form.Item name="processingStrategy" className="p-3 my-4">
