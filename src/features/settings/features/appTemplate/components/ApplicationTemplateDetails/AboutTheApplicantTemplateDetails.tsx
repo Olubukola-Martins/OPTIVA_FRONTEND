@@ -55,7 +55,7 @@ export const AboutTheApplicantTemplateDetails = () => {
   return (
     <>
       {data?.length === 0 ? (
-        <Empty description='No questions has been created for this section'/>
+        <Empty description="No questions has been created for this section" />
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
           {data?.map((item) => (
@@ -63,7 +63,7 @@ export const AboutTheApplicantTemplateDetails = () => {
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">
                   <p className="py-2 text-base">
-                    <span className="font-medium">Question:</span>
+                  <span className="font-medium">Question:</span>{" "}
                     {item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)}
                   </p>
@@ -96,6 +96,18 @@ export const AboutTheApplicantTemplateDetails = () => {
           ))}
         </List>
       )}
+
+      {/* <Tabs
+          activeKey={currentTab.toString()}
+          onChange={(key) => setCurrentTab(Number(key))}
+          // className="w-[80%]"
+        >
+          {tabItems.map((tab, index) => (
+            <Tabs.TabPane tab={tab.label} key={index.toString()}>
+              {tab.children}
+            </Tabs.TabPane>
+          ))}
+        </Tabs> */}
     </>
   );
 };

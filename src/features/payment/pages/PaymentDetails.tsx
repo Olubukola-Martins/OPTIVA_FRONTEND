@@ -461,7 +461,7 @@ const PaymentDetails = () => {
     const newdatePaid = values.datePaid;
     if (!isEditingNewDetails) {
       addDetail(
-        {
+        { 
           fx_rate: values.fxRate,
           date_paid: newdatePaid,
           paid_by: values.paidBy,

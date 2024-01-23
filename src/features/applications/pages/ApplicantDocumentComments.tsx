@@ -1,18 +1,22 @@
+import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
-import { appRoute } from "src/config/routeMgt/routePaths";
-import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
-import { useEffect, useState } from "react";
-import { QUERY_KEY_FOR_COMMENT, useGetComment } from "../hooks/useGetComment";
-import { useParams } from "react-router-dom";
-import { formatDate } from "src/features/settings/features/authorizedPersons/components/AuthorizedPersons";
 import { DeleteModal } from "src/components/modals/DeleteModal";
-import { useDelete } from "src/hooks/useDelete";
-import { useQueryClient } from "react-query";
-import { openNotification } from "src/utils/notification";
+import { appRoute } from "src/config/routeMgt/routePaths";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
-import { useCreateInactiveComment } from "../hooks/useCreateInactiveComment";
+import {
+  QUERY_KEY_FOR_DOCUMENT_COMMENT,
+  useGetDocumentComments,
+} from "../hooks/useGetDocumentComments";
+import { useQueryClient } from "react-query";
+import { useParams } from "react-router-dom";
+import { formatDate } from "src/features/payment/pages/GenerateFinancialStatement";
+import { useDelete } from "src/hooks/useDelete";
+import { openNotification } from "src/utils/notification";
+import { useCreateDocComment } from "../hooks/useCreateDocComment";
+import { formatTime } from "./Comments";
 
 type DataSourceItem = {
   key: React.Key;
@@ -24,30 +28,14 @@ type DataSourceItem = {
   timeSent: string;
 };
 
-export const formatTime = (time: string) => {
-  const timeObj = new Date(time);
-  let hours = timeObj.getHours();
-  const minutes = timeObj.getMinutes();
-
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-
-  // Determine whether it's AM or PM
-  const amPm = hours >= 12 ? "PM" : "AM";
-
-  // Convert hours to 12-hour format
-  hours = hours % 12 || 12;
-
-  return `${hours}:${formattedMinutes} ${amPm}`;
-};
-
-const Comments = () => {
+export const ApplicantDocumentComments = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
-  const { data, isLoading } = useGetComment(id as unknown as number);
+  const { data, isLoading } = useGetDocumentComments(id as unknown as number);
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [commentId, setCommentId] = useState<number>();
   const queryClient = useQueryClient();
-  const { mutate, isLoading: postLoading } = useCreateInactiveComment();
+  const { mutate, isLoading: postLoading } = useCreateDocComment();
 
   useEffect(() => {
     if (data) {
@@ -55,12 +43,11 @@ const Comments = () => {
         return {
           key: item.id,
           sn: index + 1,
-          comment: item.comment.charAt(0).toUpperCase() + item.comment.slice(1),
+          comment: item.content,
           dateSent: formatDate(item.created_at),
-          name: item.user.name,
-          role:
-            item.user.user_type.charAt(0).toUpperCase() +
-            item.user.user_type.slice(1),
+          name: item.name,
+          role: "role",
+
           timeSent: formatTime(item.created_at),
         };
       });
@@ -70,7 +57,7 @@ const Comments = () => {
 
   const createComment = (val: any) => {
     mutate(
-      { application_id: id as unknown as number, comment: val.comment },
+      { applicant_document_id: id as unknown as number, content: val.comment },
       {
         onError: (error: any) => {
           openNotification({
@@ -86,7 +73,7 @@ const Comments = () => {
             title: "Success",
             description: res.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_COMMENT]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_DOCUMENT_COMMENT]);
           form.resetFields();
           setOpenNewCommentModal(false);
         },
@@ -94,9 +81,10 @@ const Comments = () => {
     );
   };
   const { removeData } = useDelete({
-    EndPointUrl: "admin/application/comment/",
-    queryKey: QUERY_KEY_FOR_COMMENT,
+    EndPointUrl: "admin/comments/",
+    queryKey: QUERY_KEY_FOR_DOCUMENT_COMMENT,
   });
+
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -194,28 +182,29 @@ const Comments = () => {
   const handleDeleteCancel = () => {
     setOpenDeleteModal(false);
   };
+
   return (
     <>
       {/* View Comment Modal */}
-
-      <Modal
-        open={openDetailsModal}
-        onCancel={handleDetailsCancel}
-        footer={null}
-      >
-        <div className="p-3 my-3 mx-auto">
-          <h2 className="font-bold text-lg text-center">Comment Details</h2>
-          <div className="border rounded p-2 my-4">{selectedComment}</div>
-          <div className="flex justify-end">
-            <AppButton
-              type="button"
-              label="Back"
-              handleClick={handleDetailsCancel}
-            />
+    
+        <Modal
+          open={openDetailsModal}
+          onCancel={handleDetailsCancel}
+          footer={null}
+        >
+          <div className="p-3 my-3 mx-auto">
+            <h2 className="font-bold text-lg text-center">Comment Details</h2>
+            <div className="border rounded p-2 my-4">{selectedComment}</div>
+            <div className="flex justify-end">
+              <AppButton
+                type="button"
+                label="Back"
+                handleClick={handleDetailsCancel}
+              />
+            </div>
           </div>
-        </div>
-      </Modal>
-
+        </Modal>
+    
       {/* Delete Modal */}
       <DeleteModal
         header="Comment"
@@ -241,23 +230,15 @@ const Comments = () => {
           requiredMark={false}
         >
           <h2 className="font-bold text-lg text-center p-2">New Comment</h2>
-          {/* <Form.Item name="participant" label="Select Participant">
-            <FormEmployeeInput Form={Form} showLabel={false} />
-          </Form.Item> */}
+
           <Form.Item
             name="comment"
             label="Comment"
             rules={textInputValidationRules}
-            // required
           >
             <Input.TextArea rows={5} />
           </Form.Item>
 
-          {/* <Form.Item name="addAttachment">
-            <Upload className="text-primary" {...props}>
-              Add Attachment
-            </Upload>
-          </Form.Item> */}
           <div className="flex gap-5 justify-center p-3">
             <AppButton label="Cancel" type="reset" variant="transparent" />
             <AppButton label="Save" type="submit" isLoading={postLoading} />
@@ -268,7 +249,7 @@ const Comments = () => {
       <div className=" flex flex-col md:flex-row items-center justify-between p-1">
         <PageIntro
           title="Comments"
-          description="View and make comments on applicants"
+          description="View and make comments on applicant documents"
           linkBack={appRoute.applications}
         />
         <div>
@@ -302,5 +283,3 @@ const Comments = () => {
     </>
   );
 };
-
-export default Comments;

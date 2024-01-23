@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
-import { Skeleton } from "antd";
+import { Empty, Skeleton } from "antd";
 
 export const renderPTag = (input_type: string, text: any) => {
   const formattedText = text ? text.join(", ") : text;
@@ -31,7 +31,7 @@ export const ApplicantBrief = () => {
   return (
     <>
       <Skeleton active loading={isLoading}>
-        {data?.map((item) => (
+        {data?.length !==0 ? data?.map((item) => (
           <div className="mt-2 py-2" key={item.id}>
             <h2 className="py-3">
               {item.question.form_question.charAt(0).toUpperCase() +
@@ -39,7 +39,7 @@ export const ApplicantBrief = () => {
             </h2>
             {renderPTag(item.question.input_type, item.response)}
           </div>
-        ))}
+        )): <Empty/>}
       </Skeleton>
     </>
   );

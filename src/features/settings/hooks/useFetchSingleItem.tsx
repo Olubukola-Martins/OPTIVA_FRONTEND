@@ -40,7 +40,7 @@ export const useFetchSingleItem = ({
     () => getData({ itemId, urlEndPoint }),
     {
       enabled: !!itemId,
-      onError: () => {
+      onError: (error) => {
         openNotification({
           state: "error",
           title: "Error Occured",

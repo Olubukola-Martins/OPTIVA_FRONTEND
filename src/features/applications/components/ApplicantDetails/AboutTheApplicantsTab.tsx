@@ -13,7 +13,7 @@ import { useState } from "react";
 
 export const AboutTheApplicantsTab = () => {
   const [currentTab, setCurrentTab] = useState<number>(0);
-
+  
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -37,6 +37,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <ContactDetails
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="contactDetails"
         />
       ),
@@ -49,6 +50,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <MarriageDetails
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="marriageDetails"
         />
       ),
@@ -60,6 +62,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <ChildrenDetails
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="childrenDetails"
         />
       ),
@@ -71,6 +74,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <OtherDependentDetails
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="otherDependentsDetails"
         />
       ),
@@ -82,6 +86,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <PEP
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="PEP"
         />
       ),
@@ -93,6 +98,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <EmploymentDetails
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="employmentDetails"
         />
       ),
@@ -104,6 +110,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <BusinessIncomeAndNetwork
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="businessIncomeNetworth"
         />
       ),
@@ -115,6 +122,7 @@ export const AboutTheApplicantsTab = () => {
       children: (
         <AcademicHistory
           onNext={() => setCurrentTab(currentTab + 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="academicHistory"
         />
       ),
@@ -126,17 +134,23 @@ export const AboutTheApplicantsTab = () => {
       children: <TravelDetailsAndHistory subsectionName="travelDetails" />,
     },
   ];
-  return (
-    <Tabs
-      activeKey={currentTab.toString()}
-      onChange={(key) => setCurrentTab(Number(key))}
-      tabBarGutter={50}
-    >
-      {tabItems.map((tab, index) => (
-        <Tabs.TabPane tab={tab.label} key={index.toString()}>
-          {tab.children}
-        </Tabs.TabPane>
-      ))}
-    </Tabs>
+
+    return (
+        <Tabs
+        tabPosition="top"
+        defaultActiveKey="1"
+      tabBarStyle={{ maxWidth: "1200px",  }}
+       
+        activeKey={currentTab.toString()}
+        onChange={(key) => setCurrentTab(Number(key))}
+          tabBarGutter={15}
+      >
+         {tabItems.map((tab, index) => (
+          <Tabs.TabPane tab={tab.label} key={index.toString()} >
+            {tab.children}
+          </Tabs.TabPane>
+         ))}
+      </Tabs>
+      
   );
 };

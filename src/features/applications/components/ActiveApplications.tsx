@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { useFetchAllApplicants } from "../hooks/useFetchAllApplicants";
 import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
@@ -14,6 +13,9 @@ import { useFetchRoles } from "src/features/settings/features/rolesAndPermission
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 import { useReassignApplicant } from "../hooks/useReassignApplicant";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
+import { useFetchActiveApplications } from "../hooks/useFetchActiveApplications";
+import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
+import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -24,7 +26,7 @@ export type DataSourceItem = {
   programType: string;
   numberOfDependents: number;
   assignedTo: string;
-  comment?: string;
+  comment?: number;
 };
 
 export const capitalizeName = (name: string) => {
@@ -36,8 +38,21 @@ export const capitalizeName = (name: string) => {
 };
 
 export const ActiveApplications = () => {
-  const { data, isLoading } = useFetchAllApplicants();
+  const { data, isLoading } = useFetchActiveApplications();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
+  const { data: countryData } = useGetCountry();
+  const { data: programData } = useGetProgramType();
+
+  const getCountryName = (countryId: number) => {
+    const country = countryData?.find((country) => country.id === countryId);
+    return country && country.country_name;
+  };
+
+  const getProgramName = (programId: number) => {
+    const program = programData?.find((program) => program.id === programId);
+    return program && program.program_name;
+  };
+
   const [id, setId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
@@ -50,30 +65,31 @@ export const ActiveApplications = () => {
     currentUrl: "active-employees",
   });
 
-  console.log("employee", employeesData);
-
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
 
   useEffect(() => {
-  
-
-    if (data) {
-      const inactiveApplicant: DataSourceItem[] = data
-        .filter((item) => item.active === true)
-        .map((item, index) => ({
+    if (data && employeesData) {
+      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
+        const assignedEmployee = employeesData.data.find(
+          (employee) =>
+            employee.user.roles.id === item.assigned_role_id &&
+            employee.id === item.assigned_user_id
+        );
+        return {
           key: item.id,
           sn: index + 1,
-          applicantId: item.applicant_unique_id,
-          applicantName: capitalizeName(item.applicant_name),
-          country: item.country,
-          programType: item.program_type,
-          numberOfDependents: item.number_of_dependents,
-          assignedTo: item.assigned_to !== null ? item.assigned_to : "-",
-        }));
+          applicantId: item.applicant.applicant_unique_id,
+          applicantName: capitalizeName(item.applicant.full_name),
+          country: getCountryName(item.country_id) || "-",
+          programType: getProgramName(item.programtype_id) || "-",
+          numberOfDependents: item.no_of_dependents,
+          assignedTo: assignedEmployee ? assignedEmployee.name : "-",
+        };
+      });
 
-      setDataArray(inactiveApplicant);
+      setDataArray(activeApplicant);
     }
-  }, [data]);
+  }, [data, employeesData]);
 
   const changeToInactive = () => {
     mutate(

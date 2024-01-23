@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import {
@@ -14,7 +14,7 @@ type DataSourceItem = {
   key: React.Key;
   sn: number;
   milestones: string;
-  duration: number[];
+  duration: string;
   dateCreated: string;
   lastModified: string;
 };
@@ -31,7 +31,7 @@ export const Milestones = () => {
           key: item.id,
           sn: index + 1,
           dateCreated: formatDate(item.created_at),
-          duration: item.processes.map((item) => item.duration),
+          duration: item.timeline + ' days',
           lastModified: formatDate(item.updated_at),
           milestones: item.milestone,
         };
@@ -81,6 +81,11 @@ export const Milestones = () => {
       title: "Duration",
       dataIndex: "duration",
       key: "3",
+      // render(_, record) {
+      //   return record.duration.map((item) => (
+      //     <Tag key={item} className="m-1">{item}</Tag>
+      //   ));
+      // },
     },
     {
       title: "Date Created",

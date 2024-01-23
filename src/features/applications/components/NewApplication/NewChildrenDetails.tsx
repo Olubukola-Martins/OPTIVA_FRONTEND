@@ -4,6 +4,7 @@ import { renderInput } from "./NewApplicantBrief";
 import { AppButton } from "src/components/button/AppButton";
 import { IApplicationFormResponseProps } from "./NewImmigrationAndCourtProceedings";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const NewChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
   onNext,
@@ -24,6 +25,7 @@ export const NewChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
             item.subsection_name === subsectionName && (
               <div className="w-full" key={item.id}>
                 <Form.Item
+                  rules={generalValidationRules}
                   name={item.schema_name}
                   label={
                     item.form_question.charAt(0).toUpperCase() +
@@ -38,13 +40,13 @@ export const NewChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
             )
         )}
 
-        <AppButton
+        {/* <AppButton
           label="Next"
           type="button"
           handleClick={() => {
-            onNext();
+            onNext && onNext();
           }}
-        />
+        /> */}
       </Skeleton>
     </>
   );

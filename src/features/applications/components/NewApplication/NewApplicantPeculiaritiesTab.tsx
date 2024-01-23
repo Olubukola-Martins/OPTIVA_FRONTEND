@@ -11,7 +11,7 @@ import { useGlobalContext } from "src/stateManagement/GlobalContext";
 
 export const NewApplicantPeculiaritiesTab = () => {
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useCreateApplicationResponse(
+  const { mutate, isLoading, isSuccess } = useCreateApplicationResponse(
     "sectionthreeresponse"
   );
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -82,6 +82,7 @@ export const NewApplicantPeculiaritiesTab = () => {
           onCollectResponses={handleTabSubmit}
           subsectionName="criminalHistory"
           isLoading={isLoading}
+          isSuccess={isSuccess}
         />
       ),
       label: "Criminal History",

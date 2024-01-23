@@ -25,6 +25,7 @@ import { useGlobalContext } from "src/stateManagement/GlobalContext";
 export let applicantId: number | undefined;
 
 const Applications = () => {
+  
   const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateApplication();
   const { data: countryData } = useGetCountry();

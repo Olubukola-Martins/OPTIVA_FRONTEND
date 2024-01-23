@@ -54,7 +54,7 @@ export const appRoute = {
 
   // Applications
   applications: `/applications`,
-  applicantDetails: `/applicant-details`,
+  // applicantDetails: `/applicant-details`,
   applicant_details: (id?: number) => ({
     format: `/applicant-details/:id`,
     path: `/applicant-details/${id}`,
@@ -76,6 +76,11 @@ export const appRoute = {
     format: `/applications/applicant_documents/:id`,
     path: `/applications/applicant_documents/${id}`,
   }),
+  applicant_documents_comments: (id?: number) => ({
+    format: `/applications/applicant_documents_comments/:id`,
+    path: `/applications/applicant_documents_comments/${id}`,
+  }),
+
   // Reports
   reports: `/reports`,
 

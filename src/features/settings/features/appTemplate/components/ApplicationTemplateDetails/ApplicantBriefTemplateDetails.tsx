@@ -52,9 +52,9 @@ export const ApplicantBriefTemplateDetails = () => {
                 <div className="my-3 p-2">
                   <p className="py-2 text-base">
                     <span className="font-medium">Question:</span>{" "}
-                    {/* {item.form_question.charAt(0).toUpperCase() +
-                      item.form_question.slice(1)} */}
-                    {item.form_question}
+                    {item.form_question.charAt(0).toUpperCase() +
+                      item.form_question.slice(1)}
+                    {/* {item.form_question} */}
                   </p>
                   <p className="py-2 text-base">
                     <span className="font-medium">Input type:</span>{" "}

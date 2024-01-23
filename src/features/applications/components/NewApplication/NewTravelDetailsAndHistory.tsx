@@ -4,16 +4,16 @@ import { renderInput } from "./NewApplicantBrief";
 import { ISubmitApplicationResponseProps } from "./NewCriminalHistory";
 import { AppButton } from "src/components/button/AppButton";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const NewTravelDetailsAndHistory: React.FC<
   ISubmitApplicationResponseProps
-> = ({ onCollectResponses, subsectionName, isLoading: postLoading }) => {
+> = ({ onCollectResponses, subsectionName, isLoading: postLoading, isSuccess }) => {
   const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-two",
   });
-
 
   return (
     <>
@@ -24,6 +24,7 @@ export const NewTravelDetailsAndHistory: React.FC<
               <div className="w-full" key={item.id}>
                 <Form.Item
                   name={item.schema_name}
+                  rules={generalValidationRules}
                   label={
                     item.form_question.charAt(0).toUpperCase() +
                     item.form_question.slice(1)
@@ -36,14 +37,30 @@ export const NewTravelDetailsAndHistory: React.FC<
               </div>
             )
         )}
-        <AppButton
+        {!isSuccess && (
+          <div className="flex justify-end items-center gap-5">
+            <AppButton label="Cancel" type="reset" variant="transparent" />
+            <AppButton
+              label="Save"
+              type="submit"
+              // isLoading={postLoading}
+              handleClick={() => {
+                onCollectResponses(data || [], subsectionName);
+              }}
+              isLoading={postLoading}
+              isDisabled={isSuccess}
+              containerStyle={isSuccess ? "cursor-not-allowed" : ""}
+            />
+          </div>
+        )}
+        {/* <AppButton
           label="Save"
           type="submit"
           handleClick={() => {
             onCollectResponses(data || [], subsectionName);
           }}
           isLoading={postLoading}
-        />
+        /> */}
       </Skeleton>
     </>
   );

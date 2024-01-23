@@ -1,4 +1,4 @@
-import { Skeleton } from "antd";
+import { Empty, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
@@ -8,6 +8,7 @@ import { renderPTag } from "./ApplicantBrief";
 export const ChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
   onNext,
   subsectionName,
+  onPrev
 }) => {
   const { id } = useParams();
   const { data, isLoading } = useGetApplicationResponse({
@@ -17,7 +18,7 @@ export const ChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
 
   return (
     <Skeleton active loading={isLoading}>
-      {data?.map(
+      {data?.length !==0 ? data?.map(
         (item) =>
           item.question.subsection_name === subsectionName && (
             <div className="mt-2 py-2" key={item.id}>
@@ -28,14 +29,25 @@ export const ChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
               {renderPTag(item.question.input_type, item.response)}
             </div>
           )
-      )}
-      <AppButton
-        label="Next"
-        type="button"
-        handleClick={() => {
-          onNext();
-        }}
-      />
+      ) : <Empty/>}
+      {/* <div className="flex justify-end gap-3 my-5 py-2">
+          <AppButton
+            label="Previous"
+            variant="transparent"
+            type="button"
+            handleClick={() => {
+              onPrev && onPrev();
+            }}
+          />
+
+          <AppButton
+            label="Next"
+            type="button"
+            handleClick={() => {
+              onNext && onNext();
+            }}
+          />
+        </div> */}
     </Skeleton>
   );
 };

@@ -19,12 +19,12 @@ import { useGlobalContext } from "src/stateManagement/GlobalContext";
 
 export const NewAboutTheApplicantsTab = () => {
   const queryClient = useQueryClient();
-  const { mutate, isLoading } =
+  const { mutate, isLoading, isSuccess } =
     useCreateApplicationResponse("sectiontworesponse");
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [form] = Form.useForm();
   const { sharedData } = useGlobalContext();
-  
+
   const handleTabSubmit = (responses: any) => {
     const applicationId = sharedData.applicantId as unknown as number;
     const applicationData: ICreateApplicationResponse = {
@@ -181,6 +181,7 @@ export const NewAboutTheApplicantsTab = () => {
           isLoading={isLoading}
           onCollectResponses={handleTabSubmit}
           subsectionName="travelDetails"
+          isSuccess={isSuccess}
         />
       ),
     },
@@ -188,11 +189,14 @@ export const NewAboutTheApplicantsTab = () => {
 
   return (
     <>
-      <Form onFinish={ ()=>handleTabSubmit} form={form} layout="vertical">
+      <Form onFinish={() => handleTabSubmit} form={form} layout="vertical">
         <Tabs
-          activeKey={currentTab.toString()}
-          onChange={(key) => setCurrentTab(Number(key))}
-          // className="w-[80%]"
+          tabPosition="top"
+          defaultActiveKey="1"
+          tabBarStyle={{ maxWidth: "1200px" }}
+          // activeKey={currentTab.toString()}
+          // onChange={(key) => setCurrentTab(Number(key))}
+          tabBarGutter={15}
         >
           {tabItems.map((tab, index) => (
             <Tabs.TabPane tab={tab.label} key={index.toString()}>

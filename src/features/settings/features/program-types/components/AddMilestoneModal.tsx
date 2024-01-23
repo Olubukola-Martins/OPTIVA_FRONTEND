@@ -6,7 +6,10 @@ import { usePostMilestone } from "../hooks/usePostMilestone";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
-import { textInputValidationRules } from "src/utils/formHelpers/validations";
+import {
+  generalValidationRules,
+  textInputValidationRules,
+} from "src/utils/formHelpers/validations";
 import { useGetSingleMilestone } from "../hooks/useGetSingleMilestone";
 import { useEffect } from "react";
 import { useUpdateMilestone } from "../hooks/useUpdateMilestone";
@@ -26,12 +29,33 @@ export const AddMilestoneModal = ({
   const queryClient = useQueryClient();
   const { data: singleMilestone } = useGetSingleMilestone({
     id: milestoneId as unknown as number,
-    queryKey: QUERY_KEY_FOR_MILESTONE,
   });
   const { putData, isLoading: putLoading } = useUpdateMilestone({
     queryKey: QUERY_KEY_FOR_MILESTONE,
   });
+
+  // useEffect(() => {
+  //   if (singleMilestone) {
+
+  //     const {
+  //       milestone,
+  //       timeline,
+  //       processes,
+  //     } = singleMilestone;
+
+  //     form.setFieldsValue({
+  //       milestone,
+  //       timeline,
+  //       newProcess: processes.map((process) => ({
+  //         newTitle: process.title,
+  //         newDuration: process.duration,
+  //       })),
+  //     });
+  //   }
+  // }, [singleMilestone,  milestoneId]);
+
   useEffect(() => {
+    console.log("single mules", singleMilestone);
     if (singleMilestone) {
       const { milestone, timeline, processes } = singleMilestone;
       form.setFieldsValue({
@@ -39,8 +63,8 @@ export const AddMilestoneModal = ({
         timeline,
       });
       form.setFieldsValue({
-        title: processes.map((item) => item.title),
-        duration: processes.map((item) => item.duration),
+        title: processes[0].title,
+        duration: processes[0].duration,
       });
       if (processes.length > 1) {
         const newProcesses = processes.slice(1).map((item, index) => ({
@@ -55,6 +79,7 @@ export const AddMilestoneModal = ({
       }
     }
   }, [singleMilestone]);
+
 
   const handleAddProcess = () => {
     const newProcess = form.getFieldValue("newProcess") || [];
@@ -84,7 +109,8 @@ export const AddMilestoneModal = ({
         milestoneId as number,
         milestoneTitle,
         milestoneTimeline,
-        "days",  processes
+        "days",
+        processes
       );
     } else {
       mutate(
@@ -112,7 +138,7 @@ export const AddMilestoneModal = ({
             });
             queryClient.invalidateQueries([QUERY_KEY_FOR_MILESTONE]);
             form.resetFields();
-            handleClose()
+            handleClose();
           },
         }
       );
@@ -146,7 +172,7 @@ export const AddMilestoneModal = ({
             <Input />
           </Form.Item>
 
-          <h2>Processes</h2>
+          <h2 className="font-medium text-base">Processes</h2>
           <div>
             <h2 className="p-1">What is the title of the process?</h2>
             <Form.Item name="title" rules={textInputValidationRules}>
@@ -156,7 +182,12 @@ export const AddMilestoneModal = ({
 
           <div>
             <h2 className="p-1">What is the duration of the process?</h2>
-            <Form.Item name="duration" rules={textInputValidationRules}>
+            <Form.Item
+              name="duration"
+              rules={
+                milestoneId ? generalValidationRules : textInputValidationRules
+              }
+            >
               <Input />
             </Form.Item>
           </div>
@@ -181,7 +212,11 @@ export const AddMilestoneModal = ({
                           {...field}
                           name={[field.name, "newDuration"]}
                           label="What is the duration of the process?"
-                          rules={textInputValidationRules}
+                          rules={
+                            milestoneId
+                              ? generalValidationRules
+                              : textInputValidationRules
+                          }
                         >
                           <Input placeholder="Enter process duration" />
                         </Form.Item>

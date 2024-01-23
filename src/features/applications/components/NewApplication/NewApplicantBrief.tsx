@@ -15,7 +15,12 @@ import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
 import { useQueryClient } from "react-query";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
+import React from "react";
 
+interface IProps {
+  onSuccess: () => void;
+}
 export const renderInput = (inputType: string, options?: any[]) => {
   if (inputType === "textarea") {
     return <Input.TextArea className="w-full" />;
@@ -48,10 +53,10 @@ export const renderInput = (inputType: string, options?: any[]) => {
   }
 };
 
-export const NewApplicantBrief = ({ onSuccess }: { onSuccess: () => void }) => {
+export const NewApplicantBrief: React.FC<IProps> = ({ onSuccess }) => {
   const { sharedData } = useGlobalContext();
-
   const { data, isLoading } = useGetSingleQuestion({
+    // id: 9,
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-one",
   });
@@ -108,6 +113,7 @@ export const NewApplicantBrief = ({ onSuccess }: { onSuccess: () => void }) => {
               <div className="w-full">
                 <Form.Item
                   name={item.schema_name}
+                  rules={generalValidationRules}
                   label={
                     item.form_question.charAt(0).toUpperCase() +
                     item.form_question.slice(1)

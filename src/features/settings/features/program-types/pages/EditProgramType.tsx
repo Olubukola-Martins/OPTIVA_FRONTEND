@@ -1,4 +1,4 @@
-import { Form, Input, Select, Skeleton } from "antd";
+import { Form, Input, Select, Skeleton, Spin } from "antd";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -14,7 +14,11 @@ import { useGetWorkflow } from "../hooks/useGetWorkflow";
 import type { SelectProps } from "antd";
 import { useUpdateProgramType } from "../hooks/useUpdateProgramType";
 import { useGetCountry } from "../hooks/useGetCountry";
-import { generalValidationRules, textInputValidationRules, textInputValidationRulesOpt } from "src/utils/formHelpers/validations";
+import {
+  generalValidationRules,
+  textInputValidationRules,
+  textInputValidationRulesOpt,
+} from "src/utils/formHelpers/validations";
 
 const EditProgramType = () => {
   const [form] = Form.useForm();
@@ -24,32 +28,24 @@ const EditProgramType = () => {
     id: id as unknown as number,
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
   });
-  const { data: dependentData } = useGetEligibleDependent();
-  const { data: documentData } = useGetDocumentRequirement();
+  const { data: dependentData, isSuccess: dependentDataSucess } =
+    useGetEligibleDependent();
+  const { data: documentData, isSuccess: documentDataSuccess } =
+    useGetDocumentRequirement();
   const { data: applicationData } = useGetApplicationTemplate();
-  const { data: milestoneData } = useGetMilestone();
-  const { data: workflowData } = useGetWorkflow();
-  const { data: countryData } = useGetCountry();
+  const { data: milestoneData, isSuccess: milestoneDataSucess } =
+    useGetMilestone();
+  const { data: workflowData, isSuccess: workflowDataSuccess } =
+    useGetWorkflow();
+  const { data: countryData, isSuccess: countryDataSuccess } = useGetCountry();
 
   const { putData, isLoading: putLoading } = useUpdateProgramType({
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
   });
 
-  // DEPENDENT OPTION
-  const dependentOptions: SelectProps["options"] =
-    dependentData?.map((item) => ({
-      value: item.id,
-      label: item.dependant,
-      key: item.id,
-    })) || [];
+  console.log("document data", documentData);
 
-  // DOCUMENT OPTION
-  const documentOptions: SelectProps["options"] =
-    documentData?.map((item) => ({
-      value: item.id,
-      label: item.name,
-      key: item.id,
-    })) || [];
+ 
 
   // APPLICANT OPTION
   const applicantOptions: SelectProps["options"] =
@@ -59,42 +55,20 @@ const EditProgramType = () => {
       key: item.id,
     })) || [];
 
-  // MILESTONE OPTION
-  const milestoneOptions: SelectProps["options"] =
-    milestoneData?.map((item) => ({
-      value: item.id,
-      label: item.milestone,
-      key: item.id,
-    })) || [];
-
-  // WORKFLOW OPTION
-  const workflowOptions: SelectProps["options"] =
-    workflowData?.map((item) => ({
-      value: item.id,
-      label: item.name,
-      key: item.id,
-    })) || [];
-
-  // COUNTRY OPTION
-  const countryOptions: SelectProps["options"] =
-    countryData?.map((item) => ({
-      value: item.id,
-      label: item.country_name,
-      key: item.id,
-    })) || [];
-  
  
-
   useEffect(() => {
     if (programData) {
       form.setFieldsValue({
         programName: programData.program_name,
         programLink: programData.program_link,
-        eligibleDependents: programData.eligibledependents,
+        eligibleDependents: programData.eligibledependents.map(
+          (item) => item.id
+        ),
         applicationTemplate: programData.template_id,
-        documentRequirement: programData.documentrequirements,
-        milestones: programData.milestones,
+        documentRequirement: programData.documentrequirements.map((item)=>item.id),
+        milestones: programData.milestones.map((item) => item.id),
         selectWorkflow: programData.workflow_id,
+        selectCountry:programData.countries.map((item)=>item.id)
       });
     }
   }, [programData]);
@@ -109,8 +83,8 @@ const EditProgramType = () => {
       values.applicationTemplate,
       values.selectWorkflow,
       values.milestones,
-      values.eligibleDependents,
-      
+      values.eligibleDependents
+
     );
   };
 
@@ -131,11 +105,19 @@ const EditProgramType = () => {
           >
             <div className="flex lg:gap-7 lg:flex-row flex-col">
               <div className="lg:w-1/2">
-                <Form.Item label="Program Name" rules={textInputValidationRules} name="programName">
+                <Form.Item
+                  label="Program Name"
+                  rules={textInputValidationRules}
+                  name="programName"
+                >
                   <Input />
                 </Form.Item>
 
-                <Form.Item name="programLink" label="Program Link" rules={textInputValidationRulesOpt}>
+                <Form.Item
+                  name="programLink"
+                  label="Program Link"
+                  rules={textInputValidationRulesOpt}
+                >
                   <Input />
                 </Form.Item>
 
@@ -144,12 +126,21 @@ const EditProgramType = () => {
                   name="eligibleDependents"
                   rules={generalValidationRules}
                 >
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    options={dependentOptions}
-                  />
+                  <Select mode="multiple" placeholder="Select" allowClear>
+                    {dependentDataSucess ? (
+                      dependentData.map((item) => (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.dependant}
+                        </Select.Option>
+                      ))
+                    ) : (
+                      <div className="flex justify-center items-center w-full">
+                        <Spin size="small" />
+                      </div>
+                    )}
+                  </Select>
                 </Form.Item>
+
                 <Form.Item
                   label="Application Template"
                   name="applicationTemplate"
@@ -164,28 +155,77 @@ const EditProgramType = () => {
                   name="documentRequirement"
                   rules={generalValidationRules}
                 >
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    options={documentOptions}
-                  />
+                   <Select mode="multiple" placeholder="Select" allowClear>
+                    {documentDataSuccess ? (
+                      documentData.map((item) => (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.name}
+                        </Select.Option>
+                      ))
+                    ) : (
+                      <div className="flex justify-center items-center w-full">
+                        <Spin size="small" />
+                      </div>
+                    )}
+                  </Select>
                 </Form.Item>
-                <Form.Item name="milestones" label="Milestones"  rules={generalValidationRules}>
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    options={milestoneOptions}
-                  />
+
+                <Form.Item
+                  name="milestones"
+                  label="Milestones"
+                  rules={generalValidationRules}
+                >
+                  <Select mode="multiple" placeholder="Select" allowClear>
+                    {milestoneDataSucess ? (
+                      milestoneData.map((item) => (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.milestone}
+                        </Select.Option>
+                      ))
+                    ) : (
+                      <div className="flex justify-center items-center w-full">
+                        <Spin size="small" />
+                      </div>
+                    )}
+                  </Select>
                 </Form.Item>
                 <Form.Item
                   name="selectWorkflow"
                   label="Select Workflow"
                   rules={generalValidationRules}
                 >
-                  <Select allowClear options={workflowOptions} />
+                  <Select mode="multiple" placeholder="Select" allowClear>
+                    {workflowDataSuccess ? (
+                      workflowData.map((item) => (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.name}
+                        </Select.Option>
+                      ))
+                    ) : (
+                      <div className="flex justify-center items-center w-full">
+                        <Spin size="small" />
+                      </div>
+                    )}
+                  </Select>
                 </Form.Item>
-                <Form.Item name="selectCountry" label="Select Country"  rules={generalValidationRules}>
-                  <Select allowClear options={countryOptions} mode="multiple" />
+                <Form.Item
+                  name="selectCountry"
+                  label="Select Country"
+                  rules={generalValidationRules}
+                >
+                  <Select mode="multiple" placeholder="Select" allowClear>
+                    {countryDataSuccess ? (
+                      countryData.map((item) => (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.country_name}
+                        </Select.Option>
+                      ))
+                    ) : (
+                      <div className="flex justify-center items-center w-full">
+                        <Spin size="small" />
+                      </div>
+                    )}
+                  </Select>
                 </Form.Item>
               </div>
             </div>

@@ -38,13 +38,13 @@ export const NewMarriageDetails: React.FC<IApplicationFormResponseProps> = ({
             )
         )}
 
-        <AppButton
+        {/* <AppButton
           label="Next"
           type="button"
           handleClick={() => {
-            onNext();
+            onNext && onNext();
           }}
-        />
+        /> */}
       </Skeleton>
     </>
   );

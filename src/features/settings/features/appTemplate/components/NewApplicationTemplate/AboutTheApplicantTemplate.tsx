@@ -10,6 +10,7 @@ import { QUERY_KEY_FOR_APPLICATION_TEMPLATE } from "../../hooks/useGetApplicatio
 import { usePostSectionOneQuestion } from "../../hooks/usePostTemplateQuestion";
 import { ITemplateCreatedProps } from "./ApplicationTemplateTab";
 import { optionInputValidationRules } from "./ApplicantBriefTemplate";
+import { useState } from "react";
 
 export const AboutTheApplicantTemplate = ({
   templateCreated,
@@ -17,8 +18,9 @@ export const AboutTheApplicantTemplate = ({
 }: ITemplateCreatedProps) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  const [selectedInputTypes, setSelectedInputTypes] = useState<string[]>([]);
 
-   const initialValues = {
+  const initialValues = {
     questions: [{ question: "", inputType: "" }],
   };
 
@@ -32,19 +34,19 @@ export const AboutTheApplicantTemplate = ({
           input_type: question.inputType,
           subsection_name: question.subsection_name,
         };
-      if (["select", "check_box"].includes(question.inputType)) {
-        const optionsArray = question.options
-          ? question.options.split(",").map((option: string) => option.trim())
-          : [];
-        return {
-          ...baseQuestion,
-          options: optionsArray,
-        };
-      }
+        if (["select", "check_box"].includes(question.inputType)) {
+          const optionsArray = question.options
+            ? question.options.split(",").map((option: string) => option.trim())
+            : [];
+          return {
+            ...baseQuestion,
+            options: optionsArray,
+          };
+        }
 
-      return baseQuestion;
-    }),
-  }
+        return baseQuestion;
+      }),
+    };
     mutate(formattedValues, {
       onError: (error: any) => {
         openNotification({
@@ -81,7 +83,7 @@ export const AboutTheApplicantTemplate = ({
               {fields.map(({ key, name, ...restField }) => (
                 <div key={key} className="flex gap-5 items-center">
                   <div className="flex gap-5 w-[90%]">
-                    <div className="w-1/3">
+                    <div className="w-1/4">
                       <Form.Item
                         {...restField}
                         label="Question"
@@ -95,7 +97,7 @@ export const AboutTheApplicantTemplate = ({
                       </Form.Item>
                     </div>
 
-                    <div className="w-1/3">
+                    <div className="w-1/4">
                       <Form.Item
                         {...restField}
                         name={[name, "inputType"]}
@@ -116,17 +118,18 @@ export const AboutTheApplicantTemplate = ({
                               label: "Date Picker",
                             },
                             { value: "check_box", label: "Checkbox" },
-                            // { value: "Date Range", label: "Date Range" },
-                            // {
-                            //   value: "Multiple Select",
-                            //   label: "Multiple Select",
-                            // },
                           ]}
+                          onChange={(value) => {
+                            // Update selected input type for the current question
+                            const updatedInputTypes = [...selectedInputTypes];
+                            updatedInputTypes[name] = value;
+                            setSelectedInputTypes(updatedInputTypes);
+                          }}
                         />
                       </Form.Item>
                     </div>
 
-                    <div className="w-1/3">
+                    <div className="w-1/4">
                       <Form.Item
                         {...restField}
                         name={[name, "subsection_name"]}
@@ -181,12 +184,11 @@ export const AboutTheApplicantTemplate = ({
                         />
                       </Form.Item>
                     </div>
-
-                        {/* Render text area for "select" or "check_box" */}
-                        {["select", "check_box"].includes(
+                    {/* Render text area for "select" or "check_box" */}
+                    {["select", "check_box"].includes(
                       form.getFieldValue(["questions", name, "inputType"])
                     ) && (
-                      <div className="w-1/3">
+                      <div className="w-1/4">
                         <Form.Item
                           {...restField}
                           name={[name, "options"]}

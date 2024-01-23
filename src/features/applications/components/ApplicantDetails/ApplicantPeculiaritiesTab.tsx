@@ -27,6 +27,7 @@ export const ApplicantPeculiaritiesTab = () => {
     {
       children: (
         <CriminalHistory
+        onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="criminalHistory"
         />
       ),

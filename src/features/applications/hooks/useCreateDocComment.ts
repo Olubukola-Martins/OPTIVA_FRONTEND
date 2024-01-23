@@ -2,11 +2,11 @@ import axios from "axios";
 import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
-import { ICreateComment } from "../types/types";
+import {  ICreateDocComment } from "../types/types";
 
-const postData = async (props: ICreateComment) => {
+const postData = async (props: ICreateDocComment) => {
     const token = useGetToken();
-    const url = `${END_POINT.BASE_URL}/admin/application/comment`;
+    const url = `${END_POINT.BASE_URL}/admin/comments`;
   
     const config = {
       headers: {
@@ -21,6 +21,6 @@ const postData = async (props: ICreateComment) => {
     const response = await axios.post(url, data, config);
     return response;
   };
-export const useCreateComment = () => {
+export const useCreateDocComment = () => {
     return useMutation(postData);
 }

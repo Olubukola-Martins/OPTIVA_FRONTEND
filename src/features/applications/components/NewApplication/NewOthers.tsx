@@ -7,6 +7,7 @@ import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const NewOthers = () => {
   const { sharedData } = useGlobalContext();
@@ -16,7 +17,7 @@ export const NewOthers = () => {
   });
 
 
-  const { mutate, isLoading: postLoading } = useCreateApplicationResponse(
+  const { mutate, isLoading: postLoading, isSuccess } = useCreateApplicationResponse(
     "sectionfourresponse"
   );
   const queryClient = useQueryClient();
@@ -64,6 +65,7 @@ export const NewOthers = () => {
             <div className="w-full">
               <Form.Item
                 name={item.schema_name}
+                rules={generalValidationRules}
                 label={
                   item.form_question.charAt(0).toUpperCase() +
                   item.form_question.slice(1)
@@ -76,8 +78,19 @@ export const NewOthers = () => {
             </div>
           ))}
           <div className="flex justify-end items-center gap-5">
-            <AppButton label="Cancel" type="reset" variant="transparent" />
-            <AppButton label="Save" type="submit" isLoading={postLoading} />
+            {/* <AppButton label="Cancel" type="reset" variant="transparent" /> */}
+            {!isSuccess && (
+              <div className="flex justify-end items-center gap-5">
+                <AppButton label="Cancel" type="reset" variant="transparent" />
+                <AppButton
+                  label="Save"
+                  type="submit"
+                  isLoading={postLoading}
+                  isDisabled={isSuccess}
+                  containerStyle={isSuccess ? "cursor-not-allowed" : ""}
+                />
+              </div>
+            )}
           </div>
         </Form>
       </Skeleton>

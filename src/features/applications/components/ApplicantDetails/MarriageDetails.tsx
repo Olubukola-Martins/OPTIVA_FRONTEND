@@ -1,4 +1,4 @@
-import { Skeleton } from "antd";
+import { Empty, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
@@ -8,6 +8,7 @@ import { renderPTag } from "./ApplicantBrief";
 export const MarriageDetails: React.FC<IApplicationFormResponseProps> = ({
   onNext,
   subsectionName,
+  onPrev,
 }) => {
   const { id } = useParams();
   const { data, isLoading } = useGetApplicationResponse({
@@ -17,25 +18,52 @@ export const MarriageDetails: React.FC<IApplicationFormResponseProps> = ({
 
   return (
     <Skeleton active loading={isLoading}>
-      {data?.map(
-        (item) =>
-          item.question.subsection_name === subsectionName && (
-            <div className="mt-2 py-2" key={item.id}>
-              <h2 className="py-3">
-                {item.question.form_question.charAt(0).toUpperCase() +
-                  item.question.form_question.slice(1)}
-              </h2>
-              {renderPTag(item.question.input_type, item.response)}
-            </div>
-          )
+      {data?.length !== 0 ? (
+        data?.map(
+          (item) =>
+            item.question.subsection_name === subsectionName && (
+              <div className="mt-2 py-2" key={item.id}>
+                <h2 className="py-3">
+                  {item.question.form_question.charAt(0).toUpperCase() +
+                    item.question.form_question.slice(1)}
+                </h2>
+                {renderPTag(item.question.input_type, item.response)}
+                <div className="flex justify-between  my-5 py-2">
+                  <i
+                    className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"
+                    onClick={() => {
+                      onPrev && onPrev();
+                    }}
+                  ></i>
+                  <i
+                    className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"
+                    onClick={() => {
+                      onNext && onNext();
+                    }}
+                  ></i>
+                </div>
+              </div>
+            )
+        )
+      ) :(
+        <>
+          <Empty />
+          <div className="flex justify-between  my-5 py-2">
+            <i
+              className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"
+              onClick={() => {
+                onPrev && onPrev();
+              }}
+            ></i>
+            <i
+              className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"
+              onClick={() => {
+                onNext && onNext();
+              }}
+            ></i>
+          </div>
+        </>
       )}
-      <AppButton
-        label="Next"
-        type="button"
-        handleClick={() => {
-          onNext();
-        }}
-      />
     </Skeleton>
   );
 };
