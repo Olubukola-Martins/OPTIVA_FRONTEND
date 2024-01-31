@@ -90,8 +90,8 @@ const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
           trigger={["click"]}
           overlay={
             <Menu>
-              <Menu.Item key="1">View Proof of Payment</Menu.Item>
-              <Menu.Item key="2">
+              {/* <Menu.Item key="1">View Proof of Payment</Menu.Item> */}
+              <Menu.Item key="1">
                 <Link
                   to={
                     appRoute.paymentDetails(record.key as unknown as number)

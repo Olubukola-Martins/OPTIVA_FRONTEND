@@ -1,16 +1,18 @@
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { postItemData } from "src/features/settings/utils/settingsAPIHelpers";
 import { openNotification } from "src/utils/notification";
+import { QUERY_KEY_INVOICES } from "../pages/Payments";
 
 interface IGenInvoiceBody {
   description: string;
-  quantity: string;
-  amount: string;
+  quantity: number;
+  amount_in_naira: number;
+  amount: number;
+  fx_rate: string;
 }
-
 const useGenerateInvoice = () => {
-  //   const queryClient = useQueryClient();
+    const queryClient = useQueryClient();
   const { mutate, isLoading } = useMutation(postItemData);
   const generateInvoice = (newData: IGenInvoiceBody, applicationID: number) => {
     mutate(
@@ -33,7 +35,7 @@ const useGenerateInvoice = () => {
             title: "Success",
             description: response.data.message,
           });
-          //   queryClient.invalidateQueries([QUERY_KEY_ELIGIBLE_DEPENDENTS]);
+            queryClient.invalidateQueries([QUERY_KEY_INVOICES]);
         },
       }
     );

@@ -1,5 +1,4 @@
 import {
-  Button,
   DatePicker,
   Dropdown,
   Form,
@@ -7,15 +6,14 @@ import {
   InputNumber,
   Menu,
   Modal,
+  Select,
   Skeleton,
   Typography,
-  Upload,
-  UploadFile,
   UploadProps,
 } from "antd";
 import "../style.css";
 import Table, { ColumnsType } from "antd/es/table";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -47,7 +45,10 @@ import {
 } from "./Payments";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import { FormEmployeeInput } from "src/features/settings/features/employees/components/FormEmployeeInput";
-import { generateFinancialStatement } from "../hooks/useGenerate";
+import {
+  generateFinancialStatement,
+  viewProofOfPayment,
+} from "../hooks/useGenerate";
 import dayjs from "dayjs";
 import FxRatesFormInput, {
   QUERY_KEY_FOR_FXRATES,
@@ -55,12 +56,16 @@ import FxRatesFormInput, {
 } from "../components/FxRatesFormInput";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 // import { useDebounce } from "src/hooks/useDebounce";
-import { UploadOutlined } from "@ant-design/icons";
-import { RcFile } from "antd/es/upload";
+import { UploadFile } from "antd/es/upload";
 import {
+  TFileType,
+  createFileValidationRule,
   generalValidationRules,
+  generalValidationRulesOpt,
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
+import useUploadFile from "../hooks/useUploadFile";
+import UploadFileComp from "src/components/formItem/UploadFileComp";
 
 export const QUERY_KEY_ALLPAYMENT_DETAILS = "AllPaymentDetailsPerApplication";
 export const paymentDetailsURL = `${END_POINT.BASE_URL}/admin/paymentDetails`;
@@ -76,6 +81,7 @@ interface IPaymentItem {
   paymentsNGN: JSX.Element;
   updatedBy: JSX.Element;
   balanceDue: JSX.Element;
+  paymentProof: string;
 }
 
 interface IUpdatePaymentDetailBody {
@@ -85,28 +91,9 @@ interface IUpdatePaymentDetailBody {
   paid_by: number;
   naira_payment: number;
   dollar_payment: number;
-  file: File;
+  proof_of_payment_file: string;
+  // file: File;
 }
-
-// interface RootObject {
-//   file: File;
-//   fileList: FileList[];
-// }
-
-// interface FileList {
-//   uid: string;
-//   lastModified: number;
-//   lastModifiedDate: string;
-//   name: string;
-//   size: number;
-//   type: string;
-//   percent: number;
-//   originFileObj: File;
-// }
-
-// interface File {
-//   uid: string;
-// }
 
 const PaymentDetails = () => {
   // Payments list data
@@ -130,14 +117,17 @@ const PaymentDetails = () => {
   const { TextArea } = Input;
   const { Text } = Typography;
   const { id } = useParams();
+  const paymentsId = Number(id);
   // const [searchTerm, setSearchTerm] = useState<string>("");
   // const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-  const [itemId, setItemId] = useState<number>();
+  // const [itemId, setItemId] = useState<number>();
+  const [preSelectedFile, setPreSelectedFile] = useState<string>();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   // const {paymentsData} = useContext(AllPaymentsContext);
   const [modalForm] = Form.useForm();
   const navigate = useNavigate();
   const [data, setData] = useState<IPaymentItem[]>();
+  const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
   const [allRatesData, setAllRatesData] = useState<any>();
   const [allEmployeesData, setAllEmployeesData] = useState<any>();
   const [dataSourceFirst, setDataSourceFirst] = useState<DataSource[]>();
@@ -146,16 +136,23 @@ const PaymentDetails = () => {
   const [selectedApplication, setSelectedApplication] = useState<
     PaymentsDatum | undefined
   >();
-  const [indexEdited, setIndexEdited] = useState<undefined | number>(undefined);
-  console.log(indexEdited)
-  const [currentDetailId, setCurrentDetailId] = useState<number>();
 
+  const [indexEdited, setIndexEdited] = useState<undefined | number>(undefined);
+  const [currentDetailId, setCurrentDetailId] = useState<number>();
+  const [currentDetailIdForProof, setCurrentDetailIdForProof] =
+    useState<number>();
+  const { fileData, fileUploading, fileMutate } = useUploadFile();
+  const [fileDataUrl, setFileDataUrl] = useState<string>();
+  console.log(fileDataUrl,indexEdited)
+  const { data: paymentProofData, isLoading: paymentProofLoading } =
+    viewProofOfPayment({ paymentDetailId: currentDetailIdForProof as number });
   // Fetch Financial Statement
   const {
     data: finStatementData,
     isLoading: finStatementLoading,
   }: IQueryDataType<IGenFinancialState> = generateFinancialStatement({
-    itemId: itemId as number,
+    itemId: paymentsId,
+    // itemId: itemId as number,
   });
 
   // Fetch all employees
@@ -177,14 +174,19 @@ const PaymentDetails = () => {
       options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
     ) => Promise<QueryObserverResult<any, unknown>>;
   } = useFetchSingleItem({
-    itemId: itemId as number,
+    // itemId: itemId as number,
+    itemId: paymentsId,
     queryKey: QUERY_KEY_ALLPAYMENT_DETAILS,
     urlEndPoint: paymentDetailsURL,
   });
   const queryClient = useQueryClient();
 
   // Add new payment detail
-  const { mutate, isLoading: addingPaymentDetail } = useAddPaymentDetail();
+  const {
+    mutate,
+    isLoading: addingPaymentDetail,
+    // data: paymentDetailUpdate,
+  } = useAddPaymentDetail();
   const addDetail = (newData: IUpdatePaymentDetailBody, itemId: number) => {
     mutate(
       { newData, url: `${paymentDetailsURL}/${itemId}` },
@@ -282,6 +284,15 @@ const PaymentDetails = () => {
     fileList,
   };
 
+  const fileRuleOptions = {
+    required: true,
+    allowedFileTypes: [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "application/pdf",
+    ] as TFileType[],
+  };
   const formattedDate = (inputTimestamp: string) => {
     const date = new Date(inputTimestamp);
     const day = date.getDate().toString().padStart(2, "0");
@@ -292,24 +303,25 @@ const PaymentDetails = () => {
   const onFinish = (values: any) => {
     console.log("form values", values);
   };
-  useEffect(() => {
-    if (id) {
-      setItemId(+id);
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     setItemId(+id);
+  //   }
+  // }, [id]);
 
   useEffect(() => {
     if (
       // !allPaymentsLoading &&
-      (itemId as number) > 0 &&
+      // (itemId as number) > 0 &&
+      paymentsId > 0 &&
       allPaymentsData?.data
     ) {
       const currentApplication = allPaymentsData.data.find(
-        (item) => item.id === itemId
+        (item) => item.id === paymentsId
       );
       setSelectedApplication(currentApplication);
     }
-  }, [allPaymentsData, allPaymentsLoading, selectedApplication, itemId]);
+  }, [allPaymentsData, allPaymentsLoading, selectedApplication, paymentsId]);
 
   useEffect(() => {
     if (paymentDetailsData?.data && allRatesData && allEmployeesData) {
@@ -325,11 +337,11 @@ const PaymentDetails = () => {
           naira_payment,
           updated_by,
           outstanding_payment,
+          proof_of_payment_file,
         } = paymentDetail;
-
-        const currentRate = allRatesData.find(
-          (rate: { id: number }) => rate.id === +fx_rate
-        );
+        // const currentRate = allRatesData.find(
+        //   (rate: { id: number }) => rate.id === +fx_rate
+        // );
         const currentPaidByEmployee = allEmployeesData.find(
           (employee: { id: number }) => employee.id === paid_by
         );
@@ -341,7 +353,12 @@ const PaymentDetails = () => {
               initialValue={outstanding_payment}
             >
               <Text className="text-red-600">
-                {outstanding_payment} <span className="text-gray-800">USD</span>
+                {Number(outstanding_payment).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                })}
+                {/* <span className="text-gray-800">USD</span> */}
               </Text>
             </Form.Item>
           ),
@@ -356,12 +373,8 @@ const PaymentDetails = () => {
             </Form.Item>
           ),
           fxRate: (
-            <Form.Item name={`${id}narration`} initialValue={+fx_rate}>
-              <Text className="max-w-[200px]">
-                {allPaymentsData &&
-                  fx_rate &&
-                  `${currentRate?.source_currency} ${currentRate?.source_currency_amount} ~ ${currentRate?.target_currency} ${currentRate?.target_currency_amount}`}
-              </Text>
+            <Form.Item name={`${id}narration`} initialValue={fx_rate}>
+              <Text className="max-w-[200px]">{fx_rate}</Text>
             </Form.Item>
           ),
           narration: (
@@ -378,12 +391,24 @@ const PaymentDetails = () => {
           ),
           paymentsNGN: (
             <Form.Item name={`${id}paymentsNGN`} initialValue={naira_payment}>
-              <Text>{naira_payment} NGN</Text>
+              <Text>
+                {Number(naira_payment).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "NGN",
+                  maximumFractionDigits: 2,
+                })}
+              </Text>
             </Form.Item>
           ),
           paymentsUSD: (
             <Form.Item name={`${id}paymentsUSD`} initialValue={dollar_payment}>
-              <Text>{dollar_payment} USD</Text>
+              <Text>
+                {Number(dollar_payment).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 2,
+                })}
+              </Text>
             </Form.Item>
           ),
           updatedBy: (
@@ -391,6 +416,7 @@ const PaymentDetails = () => {
               <Text className="max-w-[200px]">{updated_by.name}</Text>
             </Form.Item>
           ),
+          paymentProof: proof_of_payment_file,
         } as IPaymentItem;
       });
       setData(allPaymentDetails);
@@ -415,7 +441,7 @@ const PaymentDetails = () => {
   ]);
 
   useEffect(() => {
-    if (finStatementData?.data) {
+    if (finStatementData?.data && finStatementData?.data[0]?.payment) {
       const finStatementPaymentDetails = finStatementData.data[0].payment;
       const { quote, amount_paid, outstanding_payment } =
         finStatementPaymentDetails;
@@ -458,11 +484,14 @@ const PaymentDetails = () => {
         {
           key: 1,
           item: "Total to be paid",
-          amount: (+outstanding_payment - +amount_paid) .toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            maximumFractionDigits: 2,
-          }),
+          amount: (+outstanding_payment - +amount_paid).toLocaleString(
+            "en-US",
+            {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 2,
+            }
+          ),
         },
         {
           key: 2,
@@ -484,61 +513,124 @@ const PaymentDetails = () => {
         },
       ]);
     }
-  }, [selectedApplication, itemId, finStatementData, finStatementLoading]);
+  }, [selectedApplication, paymentsId, finStatementData, finStatementLoading]);
 
-  useEffect(() => {}, [
+  useEffect(() => {
+    console.log("paymentProof", paymentProofData?.data.proof_of_payment_file);
+    console.log("fileData in effect", fileData);
+    if (fileData?.data) {
+      setFileDataUrl(fileData.data.path);
+    }
+  }, [
     data,
+    fileData,
+    fileUploading,
     dataSourceFirst,
     dataSourceSecond,
-    allRatesData,
-    allEmployeesData,
+    currentDetailId,
+    currentDetailIdForProof,
+    paymentProofData,
+    paymentProofLoading,
+    preSelectedFile,
   ]);
+
+  useEffect(() => {
+    paymentCurrency === "enterUSD"
+      ? modalForm.setFieldValue("paymentsNGN", null)
+      : modalForm.setFieldValue("paymentsUSD", null);
+  }, [paymentCurrency]);
+
   // MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleAddNewOrEditPayment = (values: any) => {
-    const fileUploadData = new FormData();
-    fileList.forEach((file) => {
-      fileUploadData.append("files[]", file as RcFile);
-    });
-    console.log("fileUploadData", fileUploadData);
-    console.log("valueofUpload", values.paymentProof);
+  const handleAddNewOrEditPayment = async (values: any) => {
+    // const fileUploadData = new FormData();
+    // fileList.forEach((file) => {
+    //   fileUploadData.append("files[]", file as RcFile);
+    // });
+    const selectedFile = Array.isArray(values.paymentProof)
+      ? values.paymentProof[0]?.originFileObj
+      : undefined;
     const newdatePaid = values.datePaid;
-    if (!isEditingNewDetails) {
-      addDetail(
+    console.log("selectedFile", selectedFile);
+
+    if (fileList.length > 0) {
+      fileMutate(
         {
-          fx_rate: values.fxRate,
-          date_paid: newdatePaid,
-          paid_by: values.paidBy,
-          narration: values.narration,
-          dollar_payment: values.paymentsUSD,
-          file: values.paymentProof.file,
-          naira_payment: values.paymentsNGN,
-          // file: values.paymentProof.fileList[0].originFileObj,
-          // file: new Blob([values.paymentProof.file], {
-          //   type: values.paymentProof.file.type,
-          // }),
-          // file: new File([values.paymentProof.file], values.paymentProof.file.name),
+          newData: { file: selectedFile },
+          url: `${END_POINT.BASE_URL}/admin/upload-file`,
         },
-        itemId as number
+        {
+          onError: (error: any) => {
+            openNotification({
+              state: "error",
+              title: "Error Occured",
+              description: error.response.data.message,
+              duration: 5,
+            });
+          },
+          onSuccess: (res: any) => {
+            queryClient.invalidateQueries([
+              QUERY_KEY_ALLPAYMENT_DETAILS,
+              selectedFile,
+            ]);
+            if (!isEditingNewDetails) {
+              addDetail(
+                {
+                  fx_rate: values.fxRate.label,
+                  date_paid: newdatePaid,
+                  paid_by: values.paidBy,
+                  narration: values.narration,
+                  dollar_payment: values.paymentsUSD
+                    ? values.paymentsUSD
+                    : values.paymentsNGN / values.fxRate.value,
+                  naira_payment: values.paymentsNGN
+                    ? values.paymentsNGN
+                    : values.paymentsUSD * values.fxRate.value,
+                  proof_of_payment_file: res.data.path,
+                },
+                paymentsId
+              );
+            } else {
+              updateDetail({
+                newData: {
+                  fx_rate: values.fxRate || values.fxRate.label,
+                  date_paid: newdatePaid,
+                  paid_by: values.paidBy,
+                  narration: values.narration,
+                  dollar_payment: values.paymentsUSD
+                    ? values.paymentsUSD
+                    : values.paymentsNGN / values.fxRate.value,
+                  naira_payment: values.paymentsNGN
+                    ? values.paymentsNGN
+                    : values.paymentsUSD * values.fxRate.value,
+                  proof_of_payment_file: res.data.path,
+                },
+                paymentId: paymentsId,
+                paymentDetailId: currentDetailId as number,
+              });
+            }
+          },
+        }
       );
     } else {
       updateDetail({
         newData: {
-          fx_rate: values.fxRate,
+          fx_rate: values.fxRate || values.fxRate.label,
           date_paid: newdatePaid,
           paid_by: values.paidBy,
           narration: values.narration,
-          dollar_payment: values.paymentsUSD,
-          naira_payment: values.paymentsNGN,
-          file: values.paymentProof.fileList[0].originFileObj,
+          dollar_payment: values.paymentsUSD
+            ? values.paymentsUSD
+            : values.paymentsNGN / values.fxRate.value,
+          naira_payment: values.paymentsNGN
+            ? values.paymentsNGN
+            : values.paymentsUSD * values.fxRate.value,
+          proof_of_payment_file: preSelectedFile as string,
         },
-        paymentId: itemId as number,
+        paymentId: paymentsId,
         paymentDetailId: currentDetailId as number,
       });
     }
-
-    setIsModalOpen(false);
-    modalForm.resetFields();
   };
 
   // TABLES
@@ -619,7 +711,17 @@ const PaymentDetails = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1">View Payment Proof</Menu.Item>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setCurrentDetailIdForProof(record.key);
+                    // setOpenDrawer(true);
+                  }}
+                >
+                  <a href={record.paymentProof} target="_blank">
+                    View Payment Proof
+                  </a>
+                </Menu.Item>
                 <Menu.Item
                   key="2"
                   onClick={() => {
@@ -629,6 +731,7 @@ const PaymentDetails = () => {
                       narration: record.narration.props.initialValue,
                       paidBy: record.paidBy.props.initialValue,
                       fxRate: record.fxRate.props.initialValue || undefined,
+                      paymentProof: record.paymentProof,
                       // dateCreated: record.dateCreated.props.initialValue,
                       datePaid: dayjs(record.datePaid.props.initialValue),
                       paymentsUSD: record.paymentsUSD.props.initialValue,
@@ -637,6 +740,7 @@ const PaymentDetails = () => {
                       balanceDue: record.balanceDue.props.initialValue,
                     };
                     console.log(getPaymentDetails);
+                    setPreSelectedFile(record.paymentProof);
                     const currentItem = data?.find(
                       (item) => item.key === record.key
                     );
@@ -660,6 +764,16 @@ const PaymentDetails = () => {
                     Generate Receipt
                   </Link>
                 </Menu.Item>
+                <Menu.Item>
+                  <a
+                    href={`https://optiva-backend.techmur.com/api/admin/receipt/${
+                      record.key as number
+                    }/download-pdf`}
+                    target="_blank"
+                  >
+                    Download Receipt
+                  </a>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -669,6 +783,11 @@ const PaymentDetails = () => {
       ),
     },
   ];
+
+  // const fileUrl =
+  //   "https://optivateststorage.blob.core.windows.net/optiva/uploads/1706193541_Daniel Ayeni - FD.pdf";
+  // const fileNameMatch = fileUrl.match(/\/([^\/]+)$/);
+  // const fileName = fileNameMatch ? fileNameMatch[1] : null;
 
   return (
     <>
@@ -895,8 +1014,9 @@ const PaymentDetails = () => {
         open={isModalOpen}
         onCancel={() => {
           modalForm.resetFields();
-          setFileList([]);
           setIsModalOpen(false);
+          setFileList([]);
+          setPreSelectedFile(undefined);
         }}
       >
         {/* make everything compulsory */}
@@ -908,24 +1028,35 @@ const PaymentDetails = () => {
           onFinish={handleAddNewOrEditPayment}
         >
           <div className="flex gap-8">
-            {/* <Form.Item label={"Date Created"} name="dateCreated">
-              <DatePicker />
-            </Form.Item> */}
-            <Form.Item label={"Date Paid"} name="datePaid" rules={generalValidationRules}>
+            <Form.Item
+              label={"Date Paid"}
+              name="datePaid"
+              rules={generalValidationRules}
+            >
               <DatePicker />
             </Form.Item>
           </div>
           <div>
-            <Form.Item
-              name="paymentProof"
+            <UploadFileComp
               label="Upload Payment Proof"
-              rules={generalValidationRules}
-            >
-              <Upload {...props} maxCount={1}>
-                <Button icon={<UploadOutlined />}>Select File</Button>
-              </Upload>
-            </Form.Item>
-            <FxRatesFormInput />
+              name="paymentProof"
+              rules={
+                preSelectedFile && isEditingNewDetails
+                  ? generalValidationRulesOpt
+                  : [createFileValidationRule(fileRuleOptions)]
+              }
+              uploadProps={props}
+            />
+            {preSelectedFile && (
+              <Text
+                className={`p-1 bg-gray-200 border-2 rounded ${
+                  fileList.length !== 0 && "hidden"
+                }`}
+              >
+                {preSelectedFile}
+              </Text>
+            )}
+            <FxRatesFormInput extraStyles="pt-6" />
           </div>
           <FormEmployeeInput
             control={{ name: "paidBy", label: "Paid By" }}
@@ -941,29 +1072,78 @@ const PaymentDetails = () => {
           </Form.Item>
           <div className="flex gap-8">
             <Form.Item
+              label={"Choose payment currency"}
+              name="selectPaymentCurrency"
+            >
+              <Select
+                defaultValue={"enterUSD"}
+                onChange={(val) => {
+                  setPaymentCurrency(val);
+                }}
+                options={[
+                  { value: "enterUSD", label: "Enter USD payment" },
+                  { value: "enterNGN", label: "Enter NGN payment" },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item
               label={"Payments USD"}
               name="paymentsUSD"
-              rules={generalValidationRules}
+              rules={
+                paymentCurrency === "enterUSD"
+                  ? generalValidationRules
+                  : generalValidationRulesOpt
+              }
+              className={`${paymentCurrency === "enterNGN" ? "hidden" : ""}`}
             >
               <InputNumber addonAfter="$" />
             </Form.Item>
             <Form.Item
               label={"Payments NGN"}
               name="paymentsNGN"
-              rules={generalValidationRules}
+              className={`${paymentCurrency === "enterUSD" ? "hidden" : ""}`}
+              rules={
+                paymentCurrency === "enterNGN"
+                  ? generalValidationRules
+                  : generalValidationRulesOpt
+              }
             >
               <InputNumber addonAfter="₦" />
             </Form.Item>
           </div>
-          {/* <Form.Item label={"Balance Due USD"} name="balanceDue">
-            <InputNumber addonAfter="$" />
-          </Form.Item> */}
           <AppButton
             type="submit"
-            isLoading={addingPaymentDetail || updatingingPaymentDetail}
+            isLoading={
+              addingPaymentDetail || updatingingPaymentDetail || fileUploading
+            }
           />
         </Form>
       </Modal>
+      {/* <Drawer
+        title={`View Payment Proof`}
+        placement="right"
+        onClose={() => {
+          setOpenDrawer(false);
+        }}
+        open={openDrawer}
+        size={drawerSize}
+      >
+        <Skeleton loading={paymentProofLoading} active={paymentDetailsLoading}>
+          {paymentProofData?.data && (
+            // <img
+            //   alt="payment-proof"
+            //   src={`${paymentProofData?.data.proof_of_payment_file}`}
+            // />
+
+            //   <ViewFile docUrl={`https://optivateststorage.blob.core.windows.net/optiva/uploads/${encodeURIComponent(fileName)}`
+            // } />
+
+            // <iframe src={paymentProofData?.data.proof_of_payment_file} width="100%" height="600px"></iframe>
+
+          )}
+        </Skeleton>
+      </Drawer> */}
     </>
   );
 };

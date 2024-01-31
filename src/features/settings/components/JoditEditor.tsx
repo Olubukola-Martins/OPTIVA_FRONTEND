@@ -1,12 +1,8 @@
-
-
-import React, { useRef,  useEffect } from "react";
+import React, { useRef } from "react";
 import { Form } from "antd";
 import "jodit";
 import "jodit/build/jodit.min.css";
 import JoditEditor, { Jodit } from "jodit-react";
-import { END_POINT } from "src/config/environment";
-import { useGetToken } from "src/hooks/useGetToken";
 
 interface JoditEditorComponentProps {
   showLabel?: boolean;
@@ -19,41 +15,37 @@ export const JoditEditorComponent: React.FC<JoditEditorComponentProps> = ({
 }) => {
   const editor = useRef<Jodit>(null);
   // const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
- const selectedFiles: File[] = [];
-  const token = useGetToken(); 
+  //  const selectedFiles: File[] = [];
 
-const handleFileUpload = async (file: File) => {
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
 
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+  // const handleFileUpload = async (file: File) => {
+  //   const uploadFile = async () => {
+  //     const url = `${END_POINT.BASE_URL}/admin/upload-file`;
+  //     const config = {
+  //       headers: {
+  //         Accept: "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     };
 
-    const response = await fetch(`${END_POINT.BASE_URL}/admin/upload-file`, {
-      method: "POST",
-      body: formData,
-      headers: headers,
-    });
+  //     const data = {
+  //       "file": file,
+  //     };
 
-    if (response.ok) {
-      // File uploaded successfully
-      const responseData = await response.json();
-      // Perform any necessary actions with the response data
-      console.log("File uploaded:", responseData);
-    } else {
-      // Handle error when upload fails
-      console.error("Upload failed:", response.statusText);
-    }
-  } catch (error) {
-    console.error("Error occurred during upload:", error);
-  }
-};
+  //     const response = await axios.postForm(url, data, config);
+
+  //     return response;
+  //   };
+  // //  return useMutation(() => uploadFile())
+  //   return useMutation(() => uploadFile(), {onError:(err)=>{console.log("err",err)}, onSuccess:(res)=>{console.log("response",res)}})
+
+  // };
 
   // const handleFileUpload = async (file: File) => {
   //   const formData = new FormData();
   //   formData.append("file", file);
+  //   console.log("file", file);
+  //   console.log("formData", formData);
 
   //   try {
   //     const response = await fetch(`${END_POINT.BASE_URL}/admin/upload-file`, {
@@ -97,9 +89,101 @@ const handleFileUpload = async (file: File) => {
     minHeight: 0,
     minWidth: 0,
     allowResizeY: false,
+    // filebrowser: {
+    //   permissionsPresets: {
+    //     allowFiles: false,
+    //     allowFileMove: false,
+    //     allowFileUpload: false,
+    //     allowFileUploadRemote: false,
+    //     allowFileRemove: false,
+    //     allowFileRename: false,
+    //     allowFolders: false,
+    //     allowFolderCreate: false,
+    //     allowFolderMove: false,
+    //     allowFolderRemove: false,
+    //     allowFolderRename: false,
+    //     allowImageResize: false,
+    //     allowImageCrop: false,
+    //   },
+    //   ajax: {
+    //     url: `${END_POINT.BASE_URL}/admin/upload-file`, // Replace with your server-side file browser URL
+    //     data: {
+    //       // You can include additional parameters or headers here
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     contentType: "application/json",
+    //   },
+    // },
     uploader: {
-      insertImageAsBase64URI: true, 
-      fileUpload: handleFileUpload,
+      insertImageAsBase64URI: true,
+      // url: `${END_POINT.BASE_URL}/admin/upload-file`,
+      // format: "json",
+      // method: "POST",
+      // // filesVariableName:'files[0]',
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
+      // withCredentials: true,
+      // prepareData: (formData: FormData) => {
+      //   // Wrap formData inside an object with key 'file'
+      //   const wrappedFormData = new FormData();
+      //   wrappedFormData.append("file", formData);
+      //   // const wrappedFormData = { file: formData.files[0] };
+      //   return wrappedFormData;
+      // },
+      // filesVariableName: "file",
+      // prepareData: function (formData: any) {
+      //   // formData.append("file",formData);
+      //   // Intercept the upload process and store uploaded files for later action
+      //   // const file = formData.get("files[]"); // Assuming input name is 'files[]'
+      //   // const file = formData.get("fileList"); // Assuming input name is 'files[]'
+      //   // setSelectedFiles(file);
+      //   setSelectedFiles(formData);
+      //   // uploadedFiles.push(file);
+
+      //   // Clear the formData so that the file doesn't get uploaded immediately
+      //   // formData.delete("files[]");
+      //   return formData.delete();
+      // },
+      // process: handleFileUpload,
+      // process: function (files: any) {
+      //   console.log("files", files);
+      //   // // Store uploaded files in the state
+      //   // setSelectedFiles([...files]);
+      //   // handleFileUpload(files);
+      //   // // handleFileUpload(files[0]);
+      //   // // handleFileUpload(files.file[0]);
+
+      //   // // Upload each selected file to the server
+      //   // // files.forEach((file: File) => {
+      //   // //   handleFileUpload(file);
+      //   // // })
+      //   // return false;
+      //   return files;
+      // },
+      // process: function (files: any) {
+      //   // Store uploaded files in the state
+      //   console.log("files")
+      //   setSelectedFiles([...files]);
+
+      //   // Upload the first selected file to the server
+      //   if (files.length > 0) {
+      //     const file = files[0];
+      //     // handleFileUpload(file);
+      //   }
+      //   // Return false to prevent Jodit from further processing
+      //   return false;
+      // },
+
+      // fileUpload: handleFileUpload,
+      // isSuccess: function (response: any) {
+      //   console.log("Response from upload:", response);
+      //   // Handle success response if needed
+      // },
+      // getMessage: function (response: any) {
+      //   console.error("Error message from upload:", response);
+      //   // Handle error message if needed
+      // },
     },
     // uploader: {
     //   insertImageAsBase64URI: true,
@@ -138,14 +222,6 @@ const handleFileUpload = async (file: File) => {
     //   headers: {
     //     Authorization: `Bearer ${token}`,
     //   },
-    //   isSuccess: function (response: any) {
-    //     console.log("Response from upload:", response);
-    //     // Handle success response if needed
-    //   },
-    //   getMessage: function (response: any) {
-    //     console.error("Error message from upload:", response);
-    //     // Handle error message if needed
-    //   },
 
     //   process: function (files: any) {
     //     // Store uploaded files in the state
@@ -172,9 +248,6 @@ const handleFileUpload = async (file: File) => {
     toolbarAdaptive: false,
   };
 
-  useEffect(() => {
-    console.log("selectedFilesE", selectedFiles);
-  }, [selectedFiles]);
 
   // useEffect(() => {
   // console.log("files",selectedFiles)
@@ -197,10 +270,14 @@ const handleFileUpload = async (file: File) => {
       label={showLabel ? control?.label ?? "Template" : null}
       className=""
     >
-      <JoditEditor config={config}
-        value={""} 
-        ref={editor} />
+      <JoditEditor
+        config={config}
+        onChange={(value) => {
+          console.log("valueOnChange", value);
+        }}
+        value={""}
+        ref={editor}
+      />
     </Form.Item>
   );
 };
-
