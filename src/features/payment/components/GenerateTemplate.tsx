@@ -10,6 +10,7 @@ interface IPropsGenerateTemplate {
   reciepientEmail: string;
   date_created: string;
   children: React.ReactNode;
+  handleDownload?: () => void;
 }
 
 const GenerateTemplate = ({
@@ -19,7 +20,7 @@ const GenerateTemplate = ({
   receipientName,
   reciepientPhone,
   reciepientEmail,
-  date_created,
+  date_created,handleDownload
 }: IPropsGenerateTemplate) => {
   return (
     <div className="border-2 rounded-md border-gray-100 mt-10 mb-16 pb-16 pt-7 px-4 flex flex-col gap-10 w-full">
@@ -164,8 +165,8 @@ const GenerateTemplate = ({
 
       {/* buttons */}
       <div className="place-self-end pt-6 flex flex-row gap-7">
-        <AppButton label="Cancel" type="button" variant="transparent" />{" "}
-        <AppButton label="Download" type="button" />
+        <AppButton label="Cancel" type="button" variant="transparent" />
+        <AppButton label="Download" type="button" handleClick={handleDownload}/>
         <AppButton label="Send" type="submit" />
       </div>
     </div>

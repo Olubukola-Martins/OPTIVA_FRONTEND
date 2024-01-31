@@ -10,6 +10,7 @@ export interface IPropData {
   content: string;
   name: string;
   type: string;
+  file?: string
 }
 
 const editTemplatemData = async(newData: IPropData) => {

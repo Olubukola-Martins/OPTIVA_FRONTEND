@@ -94,6 +94,11 @@ export const appRoute = {
     format: `/payments/:id/generateInvoice`,
     path: `/payments/${id}/generateInvoice`,
   }),
+  viewQuote: (id?: number) => ({
+    format: `/payments/:id/viewQuoteBreakdown`,
+    path: `/payments/${id}/viewQuoteBreakdown`,
+  }),
+
   paymentDetails: (id?: number) => ({
     format: `/payments/:id/paymentDetails`,
     path: `/payments/${id}/paymentDetails`,

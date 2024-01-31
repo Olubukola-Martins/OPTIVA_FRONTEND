@@ -1,4 +1,4 @@
-import { Dropdown, Input, InputNumber, Menu, Form, Modal } from "antd";
+import { Dropdown, Input, InputNumber, Menu, Form, Modal, Select } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -8,11 +8,13 @@ import useMoveApplicantToMastersList from "../hooks/useMoveApplicantToMastersLis
 import { useForm } from "antd/es/form/Form";
 import {
   generalValidationRules,
+  generalValidationRulesOpt,
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
 import TextArea from "antd/es/input/TextArea";
 import { AppButton } from "src/components/button/AppButton";
 import useGenerateInvoice from "../hooks/useGenerateInvoice";
+import FxRatesFormInput from "./FxRatesFormInput";
 
 type DataSourceItem = {
   key: React.Key;
@@ -46,16 +48,34 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
   const [currentProgram, setCurrentProgram] = useState<string>();
   const [currentApplicationId, setCurrentApplicationId] = useState<number>();
   const { generateInvoice, generateInvoiceLoading } = useGenerateInvoice();
+  const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
 
   // Handle generate invoice
-  const handleGenerateInvoice = (values: { description: any; quantity: any; paymentUSD: any; }) => {
+  const handleGenerateInvoice = (values: {
+    fxRate: {
+      value: number;
+      label: string;
+    };
+    paymentsNGN: number;
+    description: string;
+    quantity: number;
+    paymentsUSD: number;
+  }) => {
+    // const { fxRateString, exchangeRate } = values.fxRate;
     const newData = {
       description: values.description,
       quantity: values.quantity,
-      amount: values.paymentUSD,
+      amount_in_naira: values.paymentsNGN
+        ? values.paymentsNGN
+        : values.paymentsUSD * values.fxRate.value,
+      // amount in USD
+      amount: values.paymentsUSD
+        ? values.paymentsUSD
+        : values.paymentsNGN / values.fxRate.value,
+      fx_rate: values.fxRate.label,
     };
     generateInvoice(newData, currentApplicationId as number);
-    setIsModalOpen(false)
+    setIsModalOpen(false);
   };
 
   const rowSelection = {
@@ -127,7 +147,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
     {
       title: "Action",
       dataIndex: "action",
-      render: ( _,record) => (
+      render: (_, record) => (
         <Dropdown
           trigger={["click"]}
           overlay={
@@ -137,13 +157,18 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
                 onClick={() => {
                   setCurrentProgram(record.programName as string);
                   setCurrentApplicationId(record.applicationId as number);
-                  setIsModalOpen(true)
+                  setIsModalOpen(true);
                 }}
               >
                 Generate Invoice
               </Menu.Item>
               <Menu.Item key="2">
-                <Link to={appRoute.paymentDetails(record.key as unknown as number).path}>
+                <Link
+                  to={
+                    appRoute.paymentDetails(record.key as unknown as number)
+                      .path
+                  }
+                >
                   Payment Details
                 </Link>
               </Menu.Item>
@@ -157,17 +182,22 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
                   Generate Receipt
                 </Link>
               </Menu.Item> */}
-              <Menu.Item key="3">
+
+              <Menu.Item
+                key="3"
+                onClick={() => {
+                  setCurrentProgram(record.programName as string);
+                }}
+              >
                 <Link
                   to={
-                    appRoute.generateContract(record.key as unknown as number)
+                    appRoute.generateContract(record.applicationId as number)
                       .path
                   }
                 >
-                  Generate Contract
+                Generate Contract
                 </Link>
               </Menu.Item>
-
               <Menu.Item
                 key="4"
                 onClick={() => {
@@ -207,8 +237,19 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           country: payment.application.country.country_name,
           investmentRoute: payment.application.investmentroute.investment_name,
           dependents: payment.application.no_of_dependents,
-          amountPaid: `$ ${payment.amount_paid}`,
-          outstandingPayment: `$ ${payment.outstanding_payment}`,
+          amountPaid: (+payment.amount_paid).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 2,
+          }),
+          outstandingPayment: (+payment.outstanding_payment).toLocaleString(
+            "en-US",
+            {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 2,
+            }
+          ),
           lastUpdated: formattedDate(payment.updated_at),
           programName: payment.application.programtype.program_name,
         };
@@ -218,6 +259,20 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
   }, [allData, dataLoading]);
 
   useEffect(() => {}, [currentApplicationId, currentProgram]);
+  useEffect(() => {
+    paymentCurrency === "enterUSD"
+      ? modalForm.setFieldValue("paymentsNGN", null)
+      : modalForm.setFieldValue("paymentsUSD", null);
+  }, [paymentCurrency]);
+
+  // useEffect(() => {
+  //   if (paymentCurrency === "enterUSD") {
+  //     modalForm.setFieldValue("paymentsNGN", null);
+  //   } else {
+  //     modalForm.setFieldValue("paymentsUSD", null);
+  //   }
+  // }, [paymentCurrency, modalForm]);
+
   return (
     <>
       <Table
@@ -253,9 +308,8 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
             name="program"
             rules={generalValidationRules}
             initialValue={currentProgram}
-            
           >
-            <Input disabled={true}/>
+            <Input disabled={true} />
           </Form.Item>
           <Form.Item
             name="description"
@@ -264,13 +318,49 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           >
             <TextArea placeholder="Enter Description" rows={4} />
           </Form.Item>
+          <FxRatesFormInput />
           <Form.Item
-            label={"Payment (USD)"}
-            name="paymentUSD"
-            rules={generalValidationRules}
+            label={"Choose payment currency"}
+            name="selectPaymentCurrency"
+            // rules={generalValidationRules}
+            
+          >
+            <Select
+              defaultValue={"enterUSD"}
+              onChange={(val) => {
+                setPaymentCurrency(val);
+              }}
+              options={[
+                { value: "enterUSD", label: "Enter USD payment" },
+                { value: "enterNGN", label: "Enter NGN payment" },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item
+            label={"Payments USD"}
+            name="paymentsUSD"
+            rules={
+              paymentCurrency === "enterUSD"
+                ? generalValidationRules
+                : generalValidationRulesOpt
+            }
+            className={`${paymentCurrency === "enterNGN" ? "hidden" : ""}`}
           >
             <InputNumber addonAfter="$" />
           </Form.Item>
+          <Form.Item
+            label={"Payments NGN"}
+            name="paymentsNGN"
+            className={`${paymentCurrency === "enterUSD" ? "hidden" : ""}`}
+            rules={
+              paymentCurrency === "enterNGN"
+                ? generalValidationRules
+                : generalValidationRulesOpt
+            }
+          >
+            <InputNumber addonAfter="₦" />
+          </Form.Item>
+
           <Form.Item
             label={"Quantity"}
             name="quantity"
@@ -280,7 +370,10 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           </Form.Item>
 
           <div className="flex justify-between">
-            <AppButton label="Cancel" />
+            <AppButton
+              label="Cancel"
+              handleClick={() => setIsModalOpen(false)}
+            />
             <AppButton type="submit" isLoading={generateInvoiceLoading} />
           </div>
         </Form>

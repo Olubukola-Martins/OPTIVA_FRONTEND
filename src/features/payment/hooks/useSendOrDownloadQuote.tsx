@@ -7,14 +7,16 @@ import { QUERY_KEY_QUOTES } from "../pages/Payments";
 import jsPDF from "jspdf";
 
 
-const convertHtmlToPdf = (htmlContent: string | HTMLElement, fileName:string) => {
+const convertHtmlToPdf = (htmlContent:  HTMLElement, fileName:string) => {
   const pdf = new jsPDF();
   pdf.html(htmlContent, {
     callback: (pdf) => {
       pdf.save(`${fileName}.pdf`);
     },
   });
+
 };
+
 
 
 const getData = async (props: { itemId: number; urlEndPoint: string }) => {
@@ -76,7 +78,7 @@ export const useSendQuote = ({
 
 export const useDownloadQuote = ({
   itemId,
-  onSuccessAction,
+  // onSuccessAction,
 }: {
   itemId: number;
   onSuccessAction?: any;
@@ -109,7 +111,7 @@ export const useDownloadQuote = ({
                   duration: 5,
                 });
 
-                onSuccessAction;
+                // onSuccessAction;
         },
       }
     );
