@@ -9,11 +9,10 @@ import { useParams } from "react-router-dom";
 import { formatDate } from "src/features/settings/features/authorizedPersons/components/AuthorizedPersons";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import { useDelete } from "src/hooks/useDelete";
-import { useCreateComment } from "../hooks/useCreateComment";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { FormEmployeeInput } from "src/features/settings/features/employees/components/FormEmployeeInput";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
+import { useCreateInactiveComment } from "../hooks/useCreateInactiveComment";
 
 type DataSourceItem = {
   key: React.Key;
@@ -27,10 +26,18 @@ type DataSourceItem = {
 
 export const formatTime = (time: string) => {
   const timeObj = new Date(time);
-  const hours = timeObj.getHours();
+  let hours = timeObj.getHours();
   const minutes = timeObj.getMinutes();
 
-  return `${hours}:${minutes}`;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+  // Determine whether it's AM or PM
+  const amPm = hours >= 12 ? "PM" : "AM";
+
+  // Convert hours to 12-hour format
+  hours = hours % 12 || 12;
+
+  return `${hours}:${formattedMinutes} ${amPm}`;
 };
 
 const Comments = () => {
@@ -40,7 +47,7 @@ const Comments = () => {
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [commentId, setCommentId] = useState<number>();
   const queryClient = useQueryClient();
-  const { mutate, isLoading: postLoading } = useCreateComment();
+  const { mutate, isLoading: postLoading } = useCreateInactiveComment();
 
   useEffect(() => {
     if (data) {
@@ -48,7 +55,7 @@ const Comments = () => {
         return {
           key: item.id,
           sn: index + 1,
-          comment: item.comment,
+          comment: item.comment.charAt(0).toUpperCase() + item.comment.slice(1),
           dateSent: formatDate(item.created_at),
           name: item.user.name,
           role:
@@ -80,13 +87,14 @@ const Comments = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_COMMENT]);
+          form.resetFields();
           setOpenNewCommentModal(false);
         },
       }
     );
   };
   const { removeData } = useDelete({
-    EndPointUrl: "admin/comments/",
+    EndPointUrl: "admin/application/comment/",
     queryKey: QUERY_KEY_FOR_COMMENT,
   });
   const columns: ColumnsType<DataSourceItem> = [
@@ -129,14 +137,19 @@ const Comments = () => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={showDetailsModal}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setSelectedComment(val.comment);
+                    showDetailsModal();
+                  }}
+                >
                   View
                 </Menu.Item>
                 <Menu.Item
                   key="8"
                   onClick={() => {
                     setCommentId(val.key as unknown as number);
-                    console.log('after clicking',val.key as unknown as number);
                     showDeleteModal();
                   }}
                 >
@@ -151,6 +164,9 @@ const Comments = () => {
       ),
     },
   ];
+
+  // SELECTED COMMENT
+  const [selectedComment, setSelectedComment] = useState<string>();
 
   // View Details Modal
   const [openDetailsModal, setOpenDetailsModal] = useState<boolean>(false);
@@ -181,31 +197,26 @@ const Comments = () => {
   return (
     <>
       {/* View Comment Modal */}
-      {data?.map((item) => (
-        <Modal
-          open={openDetailsModal}
-          onCancel={handleDetailsCancel}
-          footer={null}
-        >
-          <div className="p-3 my-3 mx-auto">
-            <h2 className="font-bold text-lg text-center">Comment Details</h2>
-            <div className="border rounded p-2 my-4">
-              {item.comment}
-            </div>
-            <div className="flex justify-end">
+
+      <Modal
+        open={openDetailsModal}
+        onCancel={handleDetailsCancel}
+        footer={null}
+      >
+        <div className="p-3 my-3 mx-auto">
+          <h2 className="font-bold text-lg text-center">Comment Details</h2>
+          <div className="border rounded p-2 my-4">{selectedComment}</div>
+          <div className="flex justify-end">
             <AppButton
               type="button"
               label="Back"
               handleClick={handleDetailsCancel}
             />
-            </div>
-           
           </div>
-        </Modal>
-      ))}
+        </div>
+      </Modal>
 
       {/* Delete Modal */}
-
       <DeleteModal
         header="Comment"
         text="comment"
@@ -213,7 +224,6 @@ const Comments = () => {
         onCancel={handleDeleteCancel}
         onDelete={() => {
           removeData(commentId as unknown as number);
-          console.log('remove data',commentId);
           setOpenDeleteModal(false);
         }}
       />
@@ -231,9 +241,9 @@ const Comments = () => {
           requiredMark={false}
         >
           <h2 className="font-bold text-lg text-center p-2">New Comment</h2>
-          <Form.Item name="participant" label="Select Participant">
+          {/* <Form.Item name="participant" label="Select Participant">
             <FormEmployeeInput Form={Form} showLabel={false} />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             name="comment"
             label="Comment"
@@ -258,7 +268,7 @@ const Comments = () => {
       <div className=" flex flex-col md:flex-row items-center justify-between p-1">
         <PageIntro
           title="Comments"
-          description="View and make comments on applicants documents"
+          description="View and make comments on applicants"
           linkBack={appRoute.applications}
         />
         <div>

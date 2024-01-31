@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import {
@@ -29,20 +29,20 @@ export const ProgramTypes = () => {
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
     EndPointUrl: "admin/programtypes/",
   });
+
   useEffect(() => {
     if (data) {
       const programType: DataSourceItem[] = data.map((item, index) => {
         return {
           key: item.id,
           sn: index + 1,
-          programType: item.program_name,
+          programType: item.program_name.charAt(0).toUpperCase() + item.program_name.slice(1),
           eligibleDependent: item.eligibledependents.map(
             (item) => item.dependant
           ),
           applicationTemplate: item.program_link,
-          documentRequirements: item.documentrequirements.map(
-            (item) => item.name
-          ),
+          documentRequirements: item.documentrequirements
+            .map((item) => item.name),
           milestones: item.milestones.map((item) => item.milestone),
         };
       });
@@ -65,6 +65,11 @@ export const ProgramTypes = () => {
       title: "Eligible Dependents",
       dataIndex: "eligibleDependent",
       key: "3",
+      render(_, record) {
+        return record.eligibleDependent.map((item) => (
+          <Tag key={item} className="m-1">{item}</Tag>
+        ));
+      },
     },
     {
       title: "Application Template",
@@ -75,11 +80,17 @@ export const ProgramTypes = () => {
       title: "Document Requirements",
       dataIndex: "documentRequirements",
       key: "5",
+      render(_, record) {
+        return record.documentRequirements.map((item) => <Tag key={item} className="m-1">{item}</Tag>);
+      },
     },
     {
       title: "Milestones",
       dataIndex: "milestones",
       key: "6",
+      render(_, record) {
+        return record.milestones.map((item) =>   <Tag key={item} className="m-1">{item}</Tag>);
+      },
     },
     {
       title: "Action",

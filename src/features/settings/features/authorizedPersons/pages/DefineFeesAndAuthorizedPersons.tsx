@@ -15,12 +15,15 @@ import { DownOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { AddAuthorizedPerson } from "../components/AddAuthorizedPerson";
 import { usePostCurrency } from "../hooks/usePostCurrency";
-import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_CURRENCY } from "../hooks/useGetCurrency";
-import { useQueryClient } from "react-query";
+import {
+  useGetCurrency,
+} from "../hooks/useGetCurrency";
 
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
+  const { data } = useGetCurrency();
+  console.log("currency data", data);
+  form.setFieldsValue({ ...data });
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
   const showImportModal = () => {
@@ -48,37 +51,13 @@ const DefineFeesAndAuthorizedPersons = () => {
     setOpenSetFxModal(false);
   };
 
-  const { mutate, isLoading } = usePostCurrency();
-  const queryClient = useQueryClient();
+  const { putData, isLoading } = usePostCurrency();
 
   // Submit Function
   const handleRateSubmit = (val: any) => {
-    console.log("Values of form", val);
-    mutate(
-      {
-        ...val,
-      },
-      {
-        onError: (err: any) => {
-          openNotification({
-            title: "Error",
-            state: "error",
-            description: err.response.data.message,
-            duration: 8.0,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            title: "Success",
-            state: "success",
-            description: res.data.message,
-            duration: 6.0,
-          });
-          form.resetFields();
-          queryClient.invalidateQueries([QUERY_KEY_FOR_CURRENCY]);
-        },
-      }
-    );
+    putData({
+      ...val,
+    });
   };
 
   // Authorized Person Modal
@@ -137,15 +116,12 @@ const DefineFeesAndAuthorizedPersons = () => {
               onClick={showExportModal}
             />
           </div>
-          <div className="flex  gap-1 items-center">
-            <div className="w-1/2">
-              <button
-                onClick={showSetFxModal}
-                className="border border-secondary rounded text-primary px-3 py-1"
-              >
-                Set rates
-              </button>
-            </div>
+          <div className="flex gap-4 items-center">
+            <AppButton
+              variant="transparent"
+              handleClick={showSetFxModal}
+              label=" Set rates"
+            />
 
             <div className="w-1/2">
               <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
@@ -153,12 +129,6 @@ const DefineFeesAndAuthorizedPersons = () => {
               </Dropdown.Button>
             </div>
           </div>
-
-          {/* <AppButton
-            label="Set Rates"
-            variant="transparent"
-            handleClick={showSetFxModal}
-          /> */}
         </div>
       </div>
       {/* Import Modal */}
@@ -182,13 +152,13 @@ const DefineFeesAndAuthorizedPersons = () => {
         </p>
         <Form layout="vertical" form={form} onFinish={handleRateSubmit}>
           <div className="flex gap-2 justify-center items-center">
-          <div className="w-1/2">
+            <div className="w-1/2">
               <Form.Item
                 name="source_currency"
                 className="mt-5 p-2"
                 // label="USD"
               >
-                <Input className="w-full" placeholder="Source Currency"/>
+                <Input className="w-full" placeholder="Source Currency" />
               </Form.Item>
             </div>
             <img src={Switch} />
@@ -198,7 +168,7 @@ const DefineFeesAndAuthorizedPersons = () => {
                 className="mt-5 p-2"
                 // label="USD"
               >
-                <Input className="w-full"  placeholder="Target Currency"/>
+                <Input className="w-full" placeholder="Target Currency" />
               </Form.Item>
             </div>
           </div>
@@ -210,7 +180,10 @@ const DefineFeesAndAuthorizedPersons = () => {
                 className="mt-5 p-2"
                 // label="EURO"
               >
-                <InputNumber className="w-full" placeholder="Source Currency Amount"/>
+                <InputNumber
+                  className="w-full"
+                  placeholder="Source Currency Amount"
+                />
               </Form.Item>
             </div>
 
@@ -221,7 +194,10 @@ const DefineFeesAndAuthorizedPersons = () => {
                 className="mt-5 p-2"
                 // label="USD"
               >
-                <InputNumber className="w-full" placeholder="Target Currency Amount"/>
+                <InputNumber
+                  className="w-full"
+                  placeholder="Target Currency Amount"
+                />
               </Form.Item>
             </div>
           </div>
@@ -230,7 +206,7 @@ const DefineFeesAndAuthorizedPersons = () => {
             <AppButton
               label="Cancel"
               variant="transparent"
-              type="reset"
+              // type="reset"
               handleClick={handleFxCancel}
             />
             <AppButton label="Save" type="submit" isLoading={isLoading} />

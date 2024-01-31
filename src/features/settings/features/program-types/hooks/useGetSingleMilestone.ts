@@ -4,6 +4,7 @@ import axios from "axios";
 import { ISingleMilestone } from "../types";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { useQuery } from "react-query";
+import { QUERY_KEY_FOR_MILESTONE } from "./useGetMilestone";
 
 const getData = async (props: IDataProps) => {
     const url = `${END_POINT.BASE_URL}/admin/milestone/${props.id}`;
@@ -21,9 +22,9 @@ const getData = async (props: IDataProps) => {
   };
   
   
-export const useGetSingleMilestone =({ id, queryKey }: ISingleInvestment) => {
+export const useGetSingleMilestone =({ id,  }: ISingleInvestment) => {
     const { token } = useGetUserInfo();
-    const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
+    const queryData = useQuery([QUERY_KEY_FOR_MILESTONE, id], () => getData({ id, token }), {
       onError: () => {},
       onSuccess: () => {},
     });

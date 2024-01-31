@@ -1,5 +1,5 @@
 import { Empty, List } from "antd";
-import { useState } from "react";
+import {  useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE,
@@ -12,11 +12,12 @@ import { showInputName } from "./ApplicantBriefTemplateDetails";
 
 export const ApplicantPeculiaritesTemplateDetails = () => {
   const { id } = useParams();
-  const { data, isLoading } = useGetSingleQuestion({
+  const { data, isLoading, } = useGetSingleQuestion({
     id: id as unknown as number,
     endpointUrl: "section-three",
   });
-
+  
+  const dataSectionThree = data;
   const { removeData } = useDelete({
     EndPointUrl: "admin/templates/section-three/",
     queryKey: QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE,
@@ -28,11 +29,11 @@ export const ApplicantPeculiaritesTemplateDetails = () => {
 
   return (
     <>
-      {data?.length === 0 ? (
+      { dataSectionThree ?.length === 0 ? (
         <Empty description='No questions has been created for this section'/>
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
-          {data?.map((item) => (
+          { dataSectionThree ?.map((item) => (
             <List.Item key={item.id}>
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">

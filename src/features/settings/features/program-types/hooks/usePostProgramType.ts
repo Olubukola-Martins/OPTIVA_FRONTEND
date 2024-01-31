@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { IUserToken } from "src/types";
 
-interface IProgram extends IUserToken {
+export interface IProgram extends IUserToken {
   program_name: string;
   program_link: string;
   template_id: number;
@@ -11,7 +11,8 @@ interface IProgram extends IUserToken {
   milestones: number[];
   eligible_dependants: number[];
   document_requirements: number[];
-  countries:number[]
+  countries: number[]
+  id?:number
 }
 const postRequest = async (props: IProgram) => {
   const url = `${END_POINT.BASE_URL}/admin/programtypes`;

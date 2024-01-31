@@ -19,7 +19,6 @@ import Comments from "src/features/applications/pages/Comments";
 import Meetings from "src/features/meetings/pages/Meetings";
 import { RequireAuth } from "react-auth-kit";
 import NewApplication from "src/features/applications/pages/NewApplication";
-import ApplicantDocument from "src/features/applications/pages/ApplicantDocument";
 import DocumentRequirements from "src/features/settings/features/documents/pages/DocumentRequirements";
 import ApplicationTemplate from "src/features/settings/features/appTemplate/pages/ApplicationTemplate";
 import NewApplicationTemplate from "src/features/settings/features/appTemplate/pages/NewApplicationTemplate";
@@ -48,6 +47,9 @@ import Workflow from "src/features/settings/features/workFlow/pages/Workflow";
 import AddWorkflow from "src/features/settings/features/workFlow/pages/AddWorkflow";
 import WorkflowDetails from "src/features/settings/features/workFlow/pages/WorkflowDetails";
 import ViewInvoice from "src/features/payment/pages/ViewInvoice";
+import { ApplicantDocument } from "src/features/applications/pages/ApplicantDocument";
+import { ApplicantDocumentComments } from "src/features/applications/pages/ApplicantDocumentComments";
+import { GenerateQuote } from "src/features/applications/pages/GenerateQuote";
 
 const routesArray = [
   {
@@ -68,7 +70,6 @@ const routesArray = [
     element: <SettingsTemplate />,
   },
   { path: appRoute.applications, element: <Applications /> },
-  { path: appRoute.applicantDetails, element: <ApplicantDetails /> },
   { path: appRoute.meetings, element: <Meetings /> },
   { path: appRoute.payments, element: <Payments /> },
   { path: appRoute.paymentDetails().format, element: <PaymentDetails /> },
@@ -91,6 +92,11 @@ const routesArray = [
     element: <ProcessingStrategyAndSteps />,
   },
   { path: appRoute.comments().format, element: <Comments /> },
+  { path: appRoute.new_application, element: <NewApplication /> },
+  {
+    path: appRoute.applicant_documents_comments().format,
+    element: <ApplicantDocumentComments />,
+  },
   { path: appRoute.new_application, element: <NewApplication /> },
   {
     path: appRoute.applicant_documents().format,
@@ -147,6 +153,7 @@ const routesArray = [
   { path: appRoute.workflow, element: <Workflow /> },
   { path: appRoute.addWorkflow, element: <AddWorkflow /> },
   { path: appRoute.workflow_details().format, element: <WorkflowDetails /> },
+  { path: appRoute.generate_quotes().format, element: <GenerateQuote /> },
 ];
 
 export const AllRoutes = () => {

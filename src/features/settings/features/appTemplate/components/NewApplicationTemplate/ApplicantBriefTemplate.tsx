@@ -1,4 +1,4 @@
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Tooltip } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import {
   generalValidationRules,
@@ -29,6 +29,7 @@ export const optionInputValidationRules: Rule[] = [
 export const ApplicantBriefTemplate = ({
   templateCreated,
   resId,
+  onNext,
 }: ITemplateCreatedProps) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
@@ -37,7 +38,8 @@ export const ApplicantBriefTemplate = ({
     questions: [{ question: "", inputType: "" }],
   };
 
-  const { mutate, isLoading } = usePostSectionOneQuestion("section-one");
+  const { mutate, isLoading, isSuccess } =
+    usePostSectionOneQuestion("section-one");
   const [selectedInputTypes, setSelectedInputTypes] = useState<string[]>([]);
 
   const handleSubmit = (val: any) => {
@@ -192,20 +194,31 @@ export const ApplicantBriefTemplate = ({
           )}
         </Form.List>
 
+        <div className="flex justify-end my-5 py-2">
+          <Tooltip title="Click to go to the next section of the form" >
+            <i
+              className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"
+              onClick={() => {
+                onNext && onNext();
+              }}
+            ></i>
+          </Tooltip>
+        </div>
+
         {/* BUTTONS TO SUBMIT FORM */}
-        <div className="flex justify-end items-center gap-4 mt-5 ">
+        <div className="flex justify-end items-center gap-4 mt-5 pt-3">
           <AppButton
             label="Cancel"
             type="reset"
             variant="transparent"
-            isDisabled={templateCreated}
+            isDisabled={templateCreated || isSuccess}
             containerStyle={templateCreated ? "cursor-not-allowed" : ""}
           />
           <AppButton
             label="Save"
             type="submit"
             isLoading={isLoading}
-            isDisabled={templateCreated}
+            isDisabled={templateCreated || isSuccess}
             containerStyle={templateCreated ? "cursor-not-allowed" : ""}
           />
         </div>

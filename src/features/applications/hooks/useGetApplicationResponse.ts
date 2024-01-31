@@ -7,6 +7,7 @@ import {
   ISingleInvestment,
 } from "src/features/settings/features/investment/hooks/useGetSingleInvestmentRoute";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { QUERY_KEY_FOR_APPLICATIONS } from "./useGetApplication";
 
 const getData = async (props: IDataProps) => {
   const url = `${END_POINT.BASE_URL}/admin/application/${props.id}/${props.section}`;
@@ -28,10 +29,14 @@ export const useGetApplicationResponse = ({
   section,
 }: ISingleInvestment) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery([id], () => getData({ id, token, section }), {
-    onError: () => {},
-    onSuccess: () => {},
-  });
+  const queryData = useQuery(
+    [QUERY_KEY_FOR_APPLICATIONS, id, section],
+    () => getData({ id, token, section }),
+    {
+      onError: () => {},
+      onSuccess: () => {},
+    }
+  );
 
   return queryData;
 };

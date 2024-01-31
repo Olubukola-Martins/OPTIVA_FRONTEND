@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
-import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { QUERY_KEY_FOR_ROLES, useFetchRoles } from "../hooks/useFetchRoles";
 import dayjs from "dayjs";
@@ -22,10 +21,10 @@ const Roles = () => {
     setAddRole(true);
   };
 
-  const handleAddRole = () => {
-    setRolesId(undefined);
-    setAddRole(true);
-  };
+  // const handleAddRole = () => {
+  //   setRolesId(undefined);
+  //   setAddRole(true);
+  // };
 
   return (
     <>
@@ -40,9 +39,9 @@ const Roles = () => {
           description="Create, View & edit roles on the system"
           linkBack={appRoute.settings}
         />
-        <div>
+        {/* <div>
           <AppButton label="Add New" handleClick={handleAddRole} />
-        </div>
+        </div> */}
       </div>
 
       {/* main body */}

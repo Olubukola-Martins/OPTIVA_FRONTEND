@@ -2,8 +2,6 @@ import { Form, InputNumber } from "antd";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const AntiguaBarbacudaDonationQuestions = () => {
-  // label={`Gov't Processing for Additional Dependents \u226416yrs`}
-  //  needs work
   return (
     <div className="flex gap-8">
       <div className="w-1/2">

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { useQuery } from "react-query";
 import { IDataProps, ISingleInvestment } from "../../investment/hooks/useGetSingleInvestmentRoute";
+import { QUERY_KEY_FOR_COUNTRY } from "./useGetCountry";
 
 const getData = async (props: IDataProps) => {
   const url = `${END_POINT.BASE_URL}/admin/countries/${props.id}`;
@@ -20,9 +21,9 @@ const getData = async (props: IDataProps) => {
   return data;
 };
 
-export const useGetSingleCountry = ({ id, queryKey }: ISingleInvestment) => {
+export const useGetSingleCountry = ({ id, }: ISingleInvestment) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
+  const queryData = useQuery([QUERY_KEY_FOR_COUNTRY, id], () => getData({ id, token }), {
     onError: () => {},
     onSuccess: () => {},
   });
