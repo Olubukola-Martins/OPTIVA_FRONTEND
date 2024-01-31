@@ -143,7 +143,7 @@ const PaymentDetails = () => {
     useState<number>();
   const { fileData, fileUploading, fileMutate } = useUploadFile();
   const [fileDataUrl, setFileDataUrl] = useState<string>();
-  console.log(fileDataUrl,indexEdited)
+  console.log(fileDataUrl,indexEdited )
   const { data: paymentProofData, isLoading: paymentProofLoading } =
     viewProofOfPayment({ paymentDetailId: currentDetailIdForProof as number });
   // Fetch Financial Statement
