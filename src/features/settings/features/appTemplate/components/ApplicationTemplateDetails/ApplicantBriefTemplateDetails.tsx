@@ -35,18 +35,20 @@ export const ApplicantBriefTemplateDetails = () => {
     queryKey: QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE,
   });
 
+  const dataSectionOne = data;
+
   const [showDeleteModalForItem, setShowDeleteModalForItem] = useState<
     number | null
-    >(null);
-  
+  >(null);
 
+  console.log("data", data);
   return (
     <>
-      {data?.length === 0 ? (
-        <Empty description='No questions has been created for this section'/>
+      {dataSectionOne?.length === 0 ? (
+        <Empty description="No questions has been created for this section" />
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
-          {data?.map((item) => (
+          {dataSectionOne?.map((item) => (
             <List.Item key={item.id}>
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">

@@ -7,6 +7,7 @@ import {
   ISingleInvestment,
 } from "../../investment/hooks/useGetSingleInvestmentRoute";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { QUERY_KEY_FOR_INVESTMENT_ROUTE } from "../../investment/hooks/useGetInvestmentRoute";
 
 const getData = async (props: IDataProps) => {
   const url = `${END_POINT.BASE_URL}/admin/fee/investment-routes/${props.id}`;
@@ -24,10 +25,9 @@ const getData = async (props: IDataProps) => {
 
 export const useGetInvestmentByCountry = ({
   id,
-  queryKey,
 }: ISingleInvestment) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
+  const queryData = useQuery([QUERY_KEY_FOR_INVESTMENT_ROUTE, id], () => getData({ id, token }), {
     onError: () => {},
     onSuccess: () => {},
   });

@@ -1,4 +1,4 @@
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Tooltip } from "antd";
 import { useQueryClient } from "react-query";
 import { AppButton } from "src/components/button/AppButton";
 import {
@@ -15,6 +15,7 @@ import { optionInputValidationRules } from "./ApplicantBriefTemplate";
 export const OthersTemplate = ({
   templateCreated,
   resId,
+  onPrev,
 }: ITemplateCreatedProps) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
@@ -23,7 +24,8 @@ export const OthersTemplate = ({
     questions: [{ question: "", inputType: "" }],
   };
 
-  const { mutate, isLoading } = usePostSectionOneQuestion("section-one");
+  const { mutate, isLoading, isSuccess } =
+    usePostSectionOneQuestion("section-one");
   const [selectedInputTypes, setSelectedInputTypes] = useState<string[]>([]);
 
   const handleSubmit = (val: any) => {
@@ -48,6 +50,20 @@ export const OthersTemplate = ({
             options: optionsArray,
           };
         }
+
+        // if (["select", "check_box"].includes(question.inputType)) {
+        //   const optionsArray = question.options
+        //     ? question.options
+        //         .split(",")
+        //         .map((option: any) => option.trim())
+        //         .filter((option: any) => option !== null && option !== "")
+        //     : [];
+
+        //   return {
+        //     ...baseQuestion,
+        //     options: optionsArray,
+        //   };
+        // }
 
         return baseQuestion;
       }),
@@ -81,6 +97,7 @@ export const OthersTemplate = ({
         form={form}
         requiredMark={false}
         initialValues={initialValues}
+        disabled={isSuccess}
       >
         <Form.List name="questions">
           {(fields, { add, remove }) => (
@@ -179,20 +196,31 @@ export const OthersTemplate = ({
           )}
         </Form.List>
 
+        <div className="flex  my-5 py-2">
+          <Tooltip title="Click to go to the previous section of the form">
+            <i
+              className="ri-arrow-left-s-line cursor-pointer text-2xl font-semibold"
+              onClick={() => {
+                onPrev && onPrev();
+              }}
+            ></i>
+          </Tooltip>
+        </div>
+
         {/* BUTTONS TO SUBMIT FORM */}
         <div className="flex justify-end items-center gap-4 mt-5 ">
           <AppButton
             label="Cancel"
             type="reset"
             variant="transparent"
-            isDisabled={templateCreated}
+            isDisabled={templateCreated || isSuccess}
             containerStyle={templateCreated ? "cursor-not-allowed" : ""}
           />
           <AppButton
             label="Save"
             type="submit"
             isLoading={isLoading}
-            isDisabled={templateCreated}
+            isDisabled={templateCreated || isSuccess}
             containerStyle={templateCreated ? "cursor-not-allowed" : ""}
           />
         </div>

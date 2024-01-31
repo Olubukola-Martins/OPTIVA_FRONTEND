@@ -13,9 +13,10 @@ import { useFetchRoles } from "src/features/settings/features/rolesAndPermission
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 import { useReassignApplicant } from "../hooks/useReassignApplicant";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
-import { useFetchActiveApplications } from "../hooks/useFetchActiveApplications";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
+import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
+import { QUERY_KEY_FOR_APPLICANTS } from "../hooks/useFetchAllApplicants";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -38,7 +39,9 @@ export const capitalizeName = (name: string) => {
 };
 
 export const ActiveApplications = () => {
-  const { data, isLoading } = useFetchActiveApplications();
+  const { data, isLoading } = useFetchActiveandInactiveApplicant({
+    section: "active",
+  });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -109,7 +112,7 @@ export const ActiveApplications = () => {
             title: "Success",
             description: res.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANTS]);
         },
       }
     );
@@ -284,6 +287,16 @@ export const ActiveApplications = () => {
                   Move to Inactive
                 </Menu.Item>
                 <Menu.Item key="8">Mark as Completed</Menu.Item>
+                <Menu.Item key="9">
+                  <Link
+                    to={
+                      appRoute.generate_quotes(val.key as unknown as number)
+                        .path
+                    }
+                  >
+                    Generate quotes
+                  </Link>
+                </Menu.Item>
               </Menu>
             }
           >

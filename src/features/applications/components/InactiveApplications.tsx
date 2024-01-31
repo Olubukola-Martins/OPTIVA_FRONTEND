@@ -7,15 +7,17 @@ import { AppButton } from "src/components/button/AppButton";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
 import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
-import { useFetchInActiveApplications } from "../hooks/useFetchInActiveApplications";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
+import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
+import { QUERY_KEY_FOR_APPLICANTS } from "../hooks/useFetchAllApplicants";
 
 export const InactiveApplications = () => {
-  const { data, isLoading } = useFetchInActiveApplications();
+  const { data, isLoading } = useFetchActiveandInactiveApplicant({
+    section: "inactive",
+  });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -43,7 +45,7 @@ export const InactiveApplications = () => {
       const inActiveApplicant: DataSourceItem[] = data.map((item, index) => {
         const assignedEmployee = employeesData.data.find(
           (employee) =>
-            employee.user.roles.id === item.assigned_role_id && // Check if roles match
+            employee.user.roles.id === item.assigned_role_id && 
             employee.id === item.assigned_user_id
         );
 
@@ -56,7 +58,7 @@ export const InactiveApplications = () => {
           programType: getProgramName(item.programtype_id) || "-",
           numberOfDependents: item.no_of_dependents,
           assignedTo: assignedEmployee ? assignedEmployee.name : "-",
-          comment: 1234,
+          comment: item.applicationcomment?.length,
         };
       });
 
@@ -82,7 +84,7 @@ export const InactiveApplications = () => {
             title: "Success",
             description: res.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANTS]);
           setOpenActiveModal(false);
         },
       }
@@ -234,7 +236,6 @@ export const InactiveApplications = () => {
             );
           },
         }}
-        // rowClassName={titleRowBg}
       />
     </>
   );

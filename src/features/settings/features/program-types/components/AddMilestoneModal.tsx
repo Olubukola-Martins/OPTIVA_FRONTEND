@@ -34,28 +34,8 @@ export const AddMilestoneModal = ({
     queryKey: QUERY_KEY_FOR_MILESTONE,
   });
 
-  // useEffect(() => {
-  //   if (singleMilestone) {
-
-  //     const {
-  //       milestone,
-  //       timeline,
-  //       processes,
-  //     } = singleMilestone;
-
-  //     form.setFieldsValue({
-  //       milestone,
-  //       timeline,
-  //       newProcess: processes.map((process) => ({
-  //         newTitle: process.title,
-  //         newDuration: process.duration,
-  //       })),
-  //     });
-  //   }
-  // }, [singleMilestone,  milestoneId]);
 
   useEffect(() => {
-    console.log("single mules", singleMilestone);
     if (singleMilestone) {
       const { milestone, timeline, processes } = singleMilestone;
       form.setFieldsValue({
@@ -63,12 +43,12 @@ export const AddMilestoneModal = ({
         timeline,
       });
       form.setFieldsValue({
-        title: processes[0].title,
+        title: processes[0].title.charAt(0).toUpperCase() + processes[0].title.slice(1),
         duration: processes[0].duration,
       });
       if (processes.length > 1) {
         const newProcesses = processes.slice(1).map((item, index) => ({
-          newTitle: item.title,
+          newTitle: item.title.charAt(0).toUpperCase() + item.title.slice(1),
           newDuration: item.duration,
           key: index,
         }));

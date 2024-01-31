@@ -1,4 +1,4 @@
-import { Button, Form, Modal, Upload, UploadFile, message } from "antd";
+import { Button, Form, Modal, Upload, UploadFile } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps, RcFile } from "antd/lib/upload/interface";
 import { AppButton } from "src/components/button/AppButton";
@@ -10,6 +10,7 @@ import { useQueryClient } from "react-query";
 import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
 import { QUERY_KEY_FOR_AUTHORIZED_PERSON } from "../hooks/useGetAuthorizedPersons";
 import { useState } from "react";
+
 import { Rule } from "antd/es/form";
 import useUploadFile from "../hooks/useUploadFile";
 
@@ -22,7 +23,7 @@ export type TFileType =
   | "application/pdf"
   | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
   | "text/csv";
- 
+
 export type TCeateFileValidationRuleProps = {
   required?: boolean;
   maxFileSize?: number;
@@ -31,7 +32,7 @@ export type TCeateFileValidationRuleProps = {
 };
 export const DEFAULT_MAX_FILE_UPLOAD_SIZE_IN_MB = 2;
 export const DEFAULT_MAX_FILE_UPLOAD_COUNT = 1;
- 
+
 export const createFileValidationRule = (
   props: TCeateFileValidationRuleProps
 ): Rule => {
@@ -43,7 +44,7 @@ export const createFileValidationRule = (
   } = props;
   return {
     required,
- 
+
     validator: async (_, value) => {
       // non required
       if (
@@ -52,7 +53,7 @@ export const createFileValidationRule = (
       ) {
         return true;
       }
-     
+
       // required
       if (Array.isArray(value) === false || value?.length === 0) {
         throw new Error("Please upload a file");
@@ -65,7 +66,7 @@ export const createFileValidationRule = (
       (value as any[]).forEach((item, i) => {
         const file = item?.originFileObj;
         const isLt2M = file.size / 1024 / 1024 <= maxFileSize;
- 
+
         if (!isLt2M) {
           throw new Error(
             `File ${i + 1} must smaller than or equal to ${maxFileSize}MB!`
@@ -77,11 +78,22 @@ export const createFileValidationRule = (
           );
         }
       });
- 
+
       return true;
     },
   };
 };
+
+const fileRuleOptions = {
+  required: true,
+  allowedFileTypes: [
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "application/pdf",
+  ] as TFileType[],
+};
+
 
 export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
   const [form] = Form.useForm();
@@ -91,16 +103,6 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading, uploadFile } = useUploadFile()
 
-  const fileRuleOptions = {
-    required: true,
-    allowedFileTypes: [
-      "image/jpeg",
-      "image/png",
-      "image/jpg",
-      "application/pdf",
-    ] as TFileType[],
-  };
- 
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -116,62 +118,58 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
     },
     fileList,
   };
+
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
-  
+    // return e
   };
- 
-
-  
 
   
   const handleSubmit = async (values: any) => {
+
     const fileUploadData = new FormData();
     fileList.forEach((file) => {
       fileUploadData.append("files[]", file as RcFile);
     });
     await uploadFile({ file: values.chooseFile[0].originFileObj });
+    
+    console.log("file data no path", fileData);
+    console.log("file data", fileData?.data.path);
+    console.log("form vals", values);
 
-    console.log('file data',fileData?.data.path)
- console.log('form vals', values)
-    if ( fileData?.data) {
-      mutate(
-        {
-          employee_id: values.employee_id,
-          signature: fileData?.data.path,
-          token
+    if (fileData?.data) {
+    mutate(
+      {
+        employee_id: values.employee_id,
+        signature: fileData?.data.path,
+        token,
+      },
+      {
+        onError: (err: any) => {
+          openNotification({
+            title: "Error",
+            state: "error",
+            description: err.response.data.message,
+            duration: 8.0,
+          });
         },
-        {
-          onError: (error: any) => {
-            openNotification({
-              state: "error",
-              title: "Error Occured",
-              description: error.response.data.message,
-              duration: 5,
-            });
-            handleClose();
-            setFileList([]);
-          },
-          onSuccess: (res: any) => {
-            openNotification({
-              state: "success",
-              title: "Success",
-              description: res.data.message,
-            });
-            queryClient.invalidateQueries([QUERY_KEY_FOR_AUTHORIZED_PERSON]);
-            form.resetFields();
-            handleClose();
-            setFileList([]);
-          },
-        }
-      );
+        onSuccess: (res: any) => {
+          openNotification({
+            title: "Success",
+            state: "success",
+            description: res.data.message,
+            duration: 6.0,
+          });
+          form.resetFields();
+          queryClient.invalidateQueries([QUERY_KEY_FOR_AUTHORIZED_PERSON]);
+        },
+      }
+    );
     }
- 
   };
-  
 
   return (
     <Modal open={open} footer={null} onCancel={() => handleClose()}>
@@ -207,17 +205,47 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
           </p>
           <p className="text-center my-2">Maximum upload file size is 5 MB.</p>
         </div> */}
-         <Form.Item
-              name="chooseFile"
-              label="Choose file to upload"
-              rules={[createFileValidationRule(fileRuleOptions)]}
-              // valuePropName="fileList"
-              getValueFromEvent={normFile}
-            >
-              <Upload {...props} maxCount={1}>
-                <Button icon={<UploadOutlined />}>Upload File</Button>
-              </Upload>
-            </Form.Item>
+        {/* <Form.Item
+          name="chooseFile"
+          label="Choose file to upload"
+          rules={[createFileValidationRule(fileRuleOptions)]}
+          // valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload {...props} maxCount={1}>
+            <Button icon={<UploadOutlined />}>Upload File</Button>
+          </Upload>
+        </Form.Item> */}
+
+        <Form.Item
+          name="chooseFile"
+          label="Choose file to upload"
+        rules={[createFileValidationRule(fileRuleOptions)]}
+          // valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <Upload {...props} maxCount={1}>
+            <Button icon={<UploadOutlined />}>Upload File</Button>
+          </Upload>
+        </Form.Item>
+
+        {/* <FormFileInput
+          label="Supporting Documents"
+          name="documents"
+          Form={Form}
+          multiple={true}
+          ruleOptions={{
+            maxFileUploadCount: 1,
+            allowedFileTypes: [
+              "application/pdf",
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "image/jpeg",
+              "image/jpg",
+              "image/png",
+            ],
+          }}
+        /> */}
+
         <div className="flex items-center justify-center gap-5">
           <AppButton
             label="Cancel"
@@ -225,7 +253,7 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
             handleClick={() => handleClose()}
             variant="transparent"
           />
-          <AppButton label="Save" type="submit" isLoading={isLoading} />
+          <AppButton label="Save" type="submit" isLoading={fileUploading || isLoading} />
         </div>
       </Form>
     </Modal>

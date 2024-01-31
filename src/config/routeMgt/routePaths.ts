@@ -80,6 +80,10 @@ export const appRoute = {
     format: `/applications/applicant_documents_comments/:id`,
     path: `/applications/applicant_documents_comments/${id}`,
   }),
+  generate_quotes: (id?: number) => ({
+    format: `/applications/generate_quotes/:id`,
+    path: `/applications/generate_quotes/${id}`,
+  }),
 
   // Reports
   reports: `/reports`,

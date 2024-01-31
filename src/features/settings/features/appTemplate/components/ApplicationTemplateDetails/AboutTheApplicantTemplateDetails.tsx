@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE,
@@ -39,10 +39,12 @@ export const showSubsectionName = (subSection: string) => {
 
 export const AboutTheApplicantTemplateDetails = () => {
   const { id } = useParams();
-  const { data, isLoading } = useGetSingleQuestion({
+  const { data, isLoading,} = useGetSingleQuestion({
     id: id as unknown as number,
     endpointUrl: "section-two",
-  });
+  })
+ 
+  const dataSectionTwo = data;
 
   const { removeData } = useDelete({
     EndPointUrl: "admin/templates/section-two/",
@@ -54,11 +56,11 @@ export const AboutTheApplicantTemplateDetails = () => {
 
   return (
     <>
-      {data?.length === 0 ? (
+      {dataSectionTwo?.length === 0 ? (
         <Empty description="No questions has been created for this section" />
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
-          {data?.map((item) => (
+          {dataSectionTwo?.map((item) => (
             <List.Item key={item.id}>
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">
@@ -68,11 +70,11 @@ export const AboutTheApplicantTemplateDetails = () => {
                       item.form_question.slice(1)}
                   </p>
                   <p className="py-2 text-base">
-                    <span className="font-medium">Input type:</span>
+                    <span className="font-medium">Input type:</span>{" "}
                     {showInputName(item.input_type)}
                   </p>
                   <p className="py-2 text-base">
-                    <span className="font-medium">Sub-section:</span>
+                    <span className="font-medium">Sub-section:</span>{" "}
                     {showSubsectionName(item.subsection_name)}
                   </p>
                 </div>
@@ -97,17 +99,7 @@ export const AboutTheApplicantTemplateDetails = () => {
         </List>
       )}
 
-      {/* <Tabs
-          activeKey={currentTab.toString()}
-          onChange={(key) => setCurrentTab(Number(key))}
-          // className="w-[80%]"
-        >
-          {tabItems.map((tab, index) => (
-            <Tabs.TabPane tab={tab.label} key={index.toString()}>
-              {tab.children}
-            </Tabs.TabPane>
-          ))}
-        </Tabs> */}
+    
     </>
   );
 };

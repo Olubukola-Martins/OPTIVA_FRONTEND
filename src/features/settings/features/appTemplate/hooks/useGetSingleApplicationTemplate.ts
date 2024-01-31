@@ -4,6 +4,7 @@ import { IDataProps, ISingleInvestment } from "../../investment/hooks/useGetSing
 import { ISingleAppTemplate } from "../types";
 import { useQuery } from "react-query";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { QUERY_KEY_FOR_APPLICATION_TEMPLATE } from "./useGetApplicationTemplate";
 
 const getData = async (props: IDataProps) => {
     const url = `${END_POINT.BASE_URL}/admin/templates/${props.id}`;
@@ -23,9 +24,9 @@ const getData = async (props: IDataProps) => {
   };
   
 
-export const useGetSingleApplicationTemplate = ({ id, queryKey }: ISingleInvestment) => {
+export const useGetSingleApplicationTemplate = ({ id }: ISingleInvestment) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
+  const queryData = useQuery([QUERY_KEY_FOR_APPLICATION_TEMPLATE, id], () => getData({ id, token }), {
     onError: () => {},
     onSuccess: () => {},
   });

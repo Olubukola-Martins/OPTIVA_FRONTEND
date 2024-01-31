@@ -15,12 +15,15 @@ import { DownOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { AddAuthorizedPerson } from "../components/AddAuthorizedPerson";
 import { usePostCurrency } from "../hooks/usePostCurrency";
-import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_CURRENCY } from "../hooks/useGetCurrency";
-import { useQueryClient } from "react-query";
+import {
+  useGetCurrency,
+} from "../hooks/useGetCurrency";
 
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
+  const { data } = useGetCurrency();
+  console.log("currency data", data);
+  form.setFieldsValue({ ...data });
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
   const showImportModal = () => {
@@ -48,36 +51,13 @@ const DefineFeesAndAuthorizedPersons = () => {
     setOpenSetFxModal(false);
   };
 
-  const { mutate, isLoading } = usePostCurrency();
-  const queryClient = useQueryClient();
+  const { putData, isLoading } = usePostCurrency();
 
   // Submit Function
   const handleRateSubmit = (val: any) => {
-    mutate(
-      {
-        ...val,
-      },
-      {
-        onError: (err: any) => {
-          openNotification({
-            title: "Error",
-            state: "error",
-            description: err.response.data.message,
-            duration: 8.0,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            title: "Success",
-            state: "success",
-            description: res.data.message,
-            duration: 6.0,
-          });
-          form.resetFields();
-          queryClient.invalidateQueries([QUERY_KEY_FOR_CURRENCY]);
-        },
-      }
-    );
+    putData({
+      ...val,
+    });
   };
 
   // Authorized Person Modal
@@ -142,15 +122,13 @@ const DefineFeesAndAuthorizedPersons = () => {
               handleClick={showSetFxModal}
               label=" Set rates"
             />
-           
+
             <div className="w-1/2">
               <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
                 Add New
               </Dropdown.Button>
             </div>
           </div>
-
-         
         </div>
       </div>
       {/* Import Modal */}
@@ -228,7 +206,7 @@ const DefineFeesAndAuthorizedPersons = () => {
             <AppButton
               label="Cancel"
               variant="transparent"
-              type="reset"
+              // type="reset"
               handleClick={handleFxCancel}
             />
             <AppButton label="Save" type="submit" isLoading={isLoading} />

@@ -26,7 +26,6 @@ const EditProgramType = () => {
   const id = params.id;
   const { data: programData, isLoading: programLoading } = useGetSingleProgram({
     id: id as unknown as number,
-    queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
   });
   const { data: dependentData, isSuccess: dependentDataSucess } =
     useGetEligibleDependent();

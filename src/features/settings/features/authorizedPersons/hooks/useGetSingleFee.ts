@@ -4,6 +4,7 @@ import { END_POINT } from "src/config/environment";
 import { useQuery } from "react-query";
 import { IDataProps, ISingleInvestment } from "../../investment/hooks/useGetSingleInvestmentRoute";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { QUERY_KEY_FOR_FEES } from "./useGetFees";
 
 const getData = async (props: IDataProps) => {
   const url = `${END_POINT.BASE_URL}/admin/fee/${props.id}`;
@@ -20,9 +21,9 @@ const getData = async (props: IDataProps) => {
   return data;
 };
 
-export const useGetSingleFee =  ({ id, queryKey }: ISingleInvestment) => {
+export const useGetSingleFee =  ({ id, }: ISingleInvestment) => {
     const { token } = useGetUserInfo();
-    const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
+    const queryData = useQuery([QUERY_KEY_FOR_FEES, id], () => getData({ id, token }), {
       onError: () => {},
       onSuccess: () => {},
     });

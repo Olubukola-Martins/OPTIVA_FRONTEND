@@ -7,6 +7,7 @@ import { useState } from "react";
 const NewApplicationTemplate = () => {
   const [templateCreated, setTemplateCreated] = useState<boolean>(true);
   const [resId, setResId] = useState<number>();
+  
 
   return (
     <>

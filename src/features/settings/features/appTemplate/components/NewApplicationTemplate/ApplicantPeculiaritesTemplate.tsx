@@ -1,4 +1,4 @@
-import { Form, Input, Select } from "antd";
+import { Form, Input, Select, Tooltip } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import {
   generalValidationRules,
@@ -15,6 +15,8 @@ import { useState } from "react";
 export const ApplicantPeculiaritesTemplate = ({
   templateCreated,
   resId,
+  onNext,
+  onPrev,
 }: ITemplateCreatedProps) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
@@ -24,7 +26,8 @@ export const ApplicantPeculiaritesTemplate = ({
     questions: [{ question: "", inputType: "", subsection_name: "" }],
   };
 
-  const { mutate, isLoading } = usePostSectionOneQuestion("section-three");
+  const { mutate, isLoading, isSuccess } =
+    usePostSectionOneQuestion("section-three");
   const handleSubmit = (val: any) => {
     const formattedValues = {
       template_id: resId as unknown as number,
@@ -34,10 +37,25 @@ export const ApplicantPeculiaritesTemplate = ({
           input_type: question.inputType,
           subsection_name: question.subsection_name,
         };
+
+        // if (["select", "check_box"].includes(question.inputType)) {
+        //   const optionsArray = question.options
+        //     ? question.options.split(",").map((option: string) => option.trim())
+        //     : [];
+        //   return {
+        //     ...baseQuestion,
+        //     options: optionsArray,
+        //   };
+        // }
+
         if (["select", "check_box"].includes(question.inputType)) {
           const optionsArray = question.options
-            ? question.options.split(",").map((option: string) => option.trim())
+            ? question.options
+                .split(",")
+                .map((option: any) => option.trim())
+                .filter((option: any) => option !== null && option !== "")
             : [];
+
           return {
             ...baseQuestion,
             options: optionsArray,
@@ -76,6 +94,7 @@ export const ApplicantPeculiaritesTemplate = ({
         form={form}
         requiredMark={false}
         initialValues={initialValues}
+        disabled={isSuccess}
       >
         <Form.List name="questions">
           {(fields, { add, remove }) => (
@@ -129,8 +148,6 @@ export const ApplicantPeculiaritesTemplate = ({
                       </Form.Item>
                     </div>
 
-                   
-
                     <div className="w-1/4">
                       <Form.Item
                         {...restField}
@@ -138,7 +155,7 @@ export const ApplicantPeculiaritesTemplate = ({
                         label="Subsection Name"
                         rules={generalValidationRules}
                       >
-                       <Select
+                        <Select
                           disabled={templateCreated}
                           placeholder="Select Input Type"
                           options={[
@@ -154,8 +171,8 @@ export const ApplicantPeculiaritesTemplate = ({
                         />
                       </Form.Item>
                     </div>
-                     {/* Render text area for "select" or "check_box" */}
-                     {["select", "check_box"].includes(
+                    {/* Render text area for "select" or "check_box" */}
+                    {["select", "check_box"].includes(
                       form.getFieldValue(["questions", name, "inputType"])
                     ) && (
                       <div className="w-1/4">
@@ -193,6 +210,25 @@ export const ApplicantPeculiaritesTemplate = ({
             </>
           )}
         </Form.List>
+        <div className="flex justify-between  my-5 py-2">
+          <Tooltip title="Click to go to the previous section of the form">
+            <i
+              className="ri-arrow-left-s-line cursor-pointer text-2xl font-semibold"
+              onClick={() => {
+                onPrev && onPrev();
+              }}
+            ></i>
+          </Tooltip>
+
+          <Tooltip title="Click to go to the next section of the form">
+            <i
+              className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"
+              onClick={() => {
+                onNext && onNext();
+              }}
+            ></i>
+          </Tooltip>
+        </div>
 
         {/* BUTTONS TO SUBMIT FORM */}
         <div className="flex justify-end items-center gap-4 mt-5 ">
@@ -200,14 +236,14 @@ export const ApplicantPeculiaritesTemplate = ({
             label="Cancel"
             type="reset"
             variant="transparent"
-            isDisabled={templateCreated}
+            isDisabled={templateCreated || isSuccess}
             containerStyle={templateCreated ? "cursor-not-allowed" : ""}
           />
           <AppButton
             label="Save"
             type="submit"
             isLoading={isLoading}
-            isDisabled={templateCreated}
+            isDisabled={templateCreated || isSuccess}
             containerStyle={templateCreated ? "cursor-not-allowed" : ""}
           />
         </div>

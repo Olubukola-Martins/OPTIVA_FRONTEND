@@ -49,6 +49,7 @@ import WorkflowDetails from "src/features/settings/features/workFlow/pages/Workf
 import ViewInvoice from "src/features/payment/pages/ViewInvoice";
 import { ApplicantDocument } from "src/features/applications/pages/ApplicantDocument";
 import { ApplicantDocumentComments } from "src/features/applications/pages/ApplicantDocumentComments";
+import { GenerateQuote } from "src/features/applications/pages/GenerateQuote";
 
 const routesArray = [
   {
@@ -152,6 +153,7 @@ const routesArray = [
   { path: appRoute.workflow, element: <Workflow /> },
   { path: appRoute.addWorkflow, element: <AddWorkflow /> },
   { path: appRoute.workflow_details().format, element: <WorkflowDetails /> },
+  { path: appRoute.generate_quotes().format, element: <GenerateQuote /> },
 ];
 
 export const AllRoutes = () => {

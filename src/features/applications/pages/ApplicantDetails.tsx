@@ -1,10 +1,10 @@
 import { Steps } from "antd";
 import { PageIntro } from "src/components/PageIntro";
-import { ApplicantBrief } from "../components/ApplicantDetails/ApplicantBrief";
-import { AboutTheApplicant } from "../components/ApplicantDetails/AboutTheApplicant";
+import { ApplicantBrief } from "../features/ApplicantDetails/ApplicantBrief";
+import { AboutTheApplicant } from "../features/ApplicantDetails/AboutTheApplicant";
 import { useState } from "react";
-import { ApplicantPeculiarites } from "../components/ApplicantDetails/ApplicantPeculiarites";
-import { Others } from "../components/ApplicantDetails/Others";
+import { ApplicantPeculiarites } from "../features/ApplicantDetails/ApplicantPeculiarites";
+import { Others } from "../features/ApplicantDetails/Others";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
 

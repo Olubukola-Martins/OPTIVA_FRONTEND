@@ -36,7 +36,7 @@ export const ProgramTypes = () => {
         return {
           key: item.id,
           sn: index + 1,
-          programType: item.program_name,
+          programType: item.program_name.charAt(0).toUpperCase() + item.program_name.slice(1),
           eligibleDependent: item.eligibledependents.map(
             (item) => item.dependant
           ),

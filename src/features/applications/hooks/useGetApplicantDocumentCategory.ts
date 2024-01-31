@@ -26,7 +26,7 @@ const getData = async (props: {
 export const useGetApplicantDocumentCategory = (id:number) => {
   const { token } = useGetUserInfo();
   const queryData = useQuery(
-    [QUERY_KEY_FOR_APPLICANT_DOCUMENT],
+    [QUERY_KEY_FOR_APPLICANT_DOCUMENT,id],
     () => getData({ token, id }),
     {
       onError: () => {},
