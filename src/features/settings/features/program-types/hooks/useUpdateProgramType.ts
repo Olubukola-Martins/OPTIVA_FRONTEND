@@ -5,15 +5,17 @@ import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { IUserToken } from "src/types";
 import { openNotification } from "src/utils/notification";
 
+
+
 interface IPutProgramType extends IUserToken {
   program_name: string;
-  countries: number;
+  countries: number[];
   program_link: string;
-  document_requirements: number[];
   template_id: number;
   workflow_id: number;
   milestones: number[];
   eligible_dependants: number[];
+  document_requirements:number[];
   id: number;
 }
 
@@ -22,7 +24,7 @@ interface IPProps {
 }
 
 const handlePutData = async (props: IPutProgramType) => {
-  const url = `${END_POINT.BASE_URL}/admin/countries/${props.id}`;
+  const url = `${END_POINT.BASE_URL}/admin/programtypes/${props.id}`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -53,13 +55,13 @@ export const useUpdateProgramType = ({ queryKey }: IPProps) => {
   const putData = (
     id: number,
     program_name: string,
-    countries: number,
+    countries: number[],
     program_link: string,
     document_requirements: number[],
     template_id: number,
     workflow_id: number,
     milestones: number[],
-    eligible_dependants: number[]
+    eligible_dependants: number[],
   ) => {
     mutate(
       {

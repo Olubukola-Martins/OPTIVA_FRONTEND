@@ -15,7 +15,8 @@ interface IProps extends ISingleInvestment {
   endpointUrl: string;
 }
 
-export const QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE = "singleApplicationTemplate";
+export const QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE =
+  "singleApplicationTemplate";
 
 const getData = async (props: IFee): Promise<ISingleQuestion[]> => {
   const url = `${END_POINT.BASE_URL}/admin/templates/${props.id}/${props.endpointUrl}/questions`;
@@ -37,14 +38,11 @@ const getData = async (props: IFee): Promise<ISingleQuestion[]> => {
 };
 export const useGetSingleQuestion = ({ id, endpointUrl }: IProps) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery(
-    [ id],
-    () => getData({ id, token, endpointUrl }),
-    {
-      onError: () => {},
-      onSuccess: () => {},
-    }
-  );
+  const queryData = useQuery([id, endpointUrl ], () => getData({ id, token, endpointUrl }), {
+    onError: () => {},
+    onSuccess: () => {},
+    // staleTime: 5,
+  });
 
   return queryData;
 };

@@ -67,6 +67,7 @@ export const AppTemplate: React.FC<IAppTemplateProps> = ({
           </Form.Item>
         </div>
       </div>
+      
 
       {/* BUTTONS TO SUBMIT FORM */}
       <div className="flex justify-end items-center gap-4 mt-5">

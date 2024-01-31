@@ -8,7 +8,7 @@ export interface IModalProps {
   open: boolean;
   onCancel: () => void;
   onDelete?: () => void;
-  onUpload?: () => void;
+  onUpload?: (val?: any) => void;
   onExport?: () => void;
   isLoading?: boolean;
 }

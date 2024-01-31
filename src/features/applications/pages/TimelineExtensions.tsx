@@ -12,7 +12,7 @@ import {
   Table,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   QUERY_KEY_FOR_TIMELINE_EXTENSIONS,
@@ -43,6 +43,7 @@ const TimelineExtensions = () => {
   const { data, isLoading } = useFetchTimelineExtensions({
     id: id as unknown as number,
   });
+  const [timelineId, setTimelineId] = useState<number>()
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -82,8 +83,7 @@ const TimelineExtensions = () => {
     };
 
     const formattedDate = formatDateToString(val.endDate.$d);
-    console.log("Formatted Date:", formattedDate);
-
+   
     mutate(
       {
         application_id: id as unknown as number,
@@ -114,11 +114,11 @@ const TimelineExtensions = () => {
   };
 
   const approveTimeline = () => {
-    patchData(id as unknown as number);
+    patchData(timelineId as unknown as number);
   };
 
   const rejectTimeline = (val: any) => {
-    rejectData(id as unknown as number, val.extensionReject);
+    rejectData(timelineId as unknown as number, val.extensionReject);
     setOpenRejectModal(false);
   };
 
@@ -139,6 +139,7 @@ const TimelineExtensions = () => {
   const handleRejectCancel = () => {
     setOpenRejectModal(false);
   };
+
 
   // Columns
   const columns: ColumnsType<DataSourceItem> = [
@@ -176,27 +177,36 @@ const TimelineExtensions = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, ) => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
-                {/* <Menu.Item key="1" onClick={showExtensionModal}>
+                {/* <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setRole(val.role);
+                    setRequestedBy(val.requestedBy);
+                    setExtensionReason(val.reasonForExtension);
+                    setProposedEndDate(val.proposedEndDate);
+                    setStatus(val.status);
+                    showExtensionModal();
+                  }}
+                >
                   View
                 </Menu.Item> */}
                 <Menu.Item
                   key="1"
                   onClick={() => {
+                    setTimelineId(val.key as unknown as number)
                     approveTimeline();
                   }}
                 >
                   Approve
                 </Menu.Item>
-                <Menu.Item key="2">
-                  <Link to={""} onClick={showRejectModal}>
-                    Reject
-                  </Link>
+                <Menu.Item key="2" onClick={showRejectModal}>
+                  Reject
                 </Menu.Item>
               </Menu>
             }
@@ -210,50 +220,7 @@ const TimelineExtensions = () => {
 
   return (
     <>
-      {/* <Modal
-        open={openExtensionModal}
-        // onOk={handleOk}
-        onCancel={handleExtensionCancel}
-        footer={null}
-      >
-        <div>
-          <h1 className="p-4 font-bold text-center text-lg">
-            Extension Details
-          </h1>
-          <div>
-            <div>
-              <h2 className="my-2">Requested By</h2>
-              <p className="applicantDetailsSinglePTag py-2 px-4">
-                Ruth Godwin
-              </p>
-            </div>
-            <div>
-              <h2 className="my-2">Role</h2>
-              <p className="applicantDetailsSinglePTag py-2 px-4">DPO</p>
-            </div>
-            <div>
-              <h2 className="my-2">Reason For Extension</h2>
-              <p className="applicantDetailsDiv py-2 px-4 h-20">DPO</p>
-            </div>
-            <div>
-              <h2 className="my-2">Proposed End Date</h2>
-              <p className="applicantDetailsSinglePTag py-2 px-4">dd/mm/yy</p>
-            </div>
-            <div>
-              <h2 className="my-2">Status</h2>
-              <p className="applicantDetailsSinglePTag py-2 px-4">Pending</p>
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-4 p-4">
-            <AppButton
-              label="Reject"
-              variant="transparent"
-              containerStyle="border border-blue"
-            />
-            <AppButton label="Approve" />
-          </div>
-        </div>
-      </Modal> */}
+     
 
       <Modal
         open={openRequestModal}

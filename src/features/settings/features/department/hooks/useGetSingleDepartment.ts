@@ -21,7 +21,6 @@ const getSingleData = async (
   };
 
   const res = await axios.get(url, config);
-  console.log(res);
 
   const item = res.data.data;
 

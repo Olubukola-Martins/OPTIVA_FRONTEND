@@ -7,7 +7,7 @@ import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 export const QUERY_KEY_FOR_CURRENCY = "currency";
 
 const getData = async (props: { token: string }):Promise<ICurrency[]> => {
-  const url = `${END_POINT.BASE_URL}/admin/currency-rates`;
+  const url = `${END_POINT.BASE_URL}/admin/show/currency-rates`;
   const config = {
     headers: {
       Accept: "application/json",

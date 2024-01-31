@@ -18,7 +18,6 @@ export const AppTemplateDetails = () => {
   const queryClient = useQueryClient();
   const { data, isLoading } = useGetSingleApplicationTemplate({
     id: id as unknown as number,
-    queryKey: QUERY_KEY_FOR_APPLICATION_TEMPLATE,
   });
 
   const { putData, isLoading:putLoading } = useUpdateTemplateName();

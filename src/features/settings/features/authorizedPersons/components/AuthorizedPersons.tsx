@@ -36,7 +36,7 @@ export const AuthorizedPersons = () => {
 
 const {removeData}=  useDelete({
     queryKey: QUERY_KEY_FOR_AUTHORIZED_PERSON,
-    EndPointUrl: "/admin/authorized-person",
+    EndPointUrl: "admin/authorized-person/",
   });
 
 

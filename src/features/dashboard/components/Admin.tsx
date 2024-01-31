@@ -1,9 +1,9 @@
 import { SimpleCard } from "src/components/cards/SimpleCard";
 import { Banner } from "./Banner";
-import { LatestActivities } from "./LatestActivities";
 import { useGetAdminDashboardCounts } from "../hooks/useGetAdminDashboardCounts";
 import { PercentageWrap } from "./PercentageWrap";
 import { Progress } from "antd";
+import { AdminActivityLog } from "./AdminActivityLog";
 
 export const Admin = () => {
   const { data } = useGetAdminDashboardCounts();
@@ -85,7 +85,7 @@ export const Admin = () => {
             </div>
           </div>
         </PercentageWrap>
-        <LatestActivities />
+        <AdminActivityLog />
       </div>
     </>
   );

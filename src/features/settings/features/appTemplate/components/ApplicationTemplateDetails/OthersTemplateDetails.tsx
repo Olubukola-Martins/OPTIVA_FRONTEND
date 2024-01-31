@@ -11,10 +11,12 @@ import { showInputName } from "./ApplicantBriefTemplateDetails";
 
 export const OthersTemplateDetails = () => {
   const { id } = useParams();
-  const { data, isLoading } = useGetSingleQuestion({
+  const { data, isLoading,  } = useGetSingleQuestion({
     id: id as unknown as number,
     endpointUrl: "section-four",
   });
+
+  const dataSectionFour = data;
 
   const { removeData } = useDelete({
     EndPointUrl: "admin/templates/section-four/",
@@ -27,11 +29,11 @@ export const OthersTemplateDetails = () => {
 
   return (
     <>
-      {data?.length === 0 ? (
-        <Empty description='No questions has been created for this section'/>
+      {dataSectionFour?.length === 0 ? (
+        <Empty description="No questions has been created for this section" />
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
-          {data?.map((item) => (
+          {dataSectionFour?.map((item) => (
             <List.Item key={item.id}>
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">

@@ -5,40 +5,66 @@ import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
 import { useEffect, useState } from "react";
-import { useFetchAllApplicants } from "../hooks/useFetchAllApplicants";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
 import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
+import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
+import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
+import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
+import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
+import { QUERY_KEY_FOR_APPLICANTS } from "../hooks/useFetchAllApplicants";
 
 export const InactiveApplications = () => {
-  const { data, isLoading } = useFetchAllApplicants();
-  const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
+  const { data, isLoading } = useFetchActiveandInactiveApplicant({
+    section: "inactive",
+  });
+  const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
+  const { data: countryData } = useGetCountry();
+  const { data: programData } = useGetProgramType();
+  const { data: employeesData } = useFetchEmployees({
+    currentUrl: "active-employees",
+  });
+
   const [form] = Form.useForm();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
   const queryClient = useQueryClient();
   const [id, setId] = useState<number>();
 
+  const getCountryName = (countryId: number) => {
+    const country = countryData?.find((country) => country.id === countryId);
+    return country && country.country_name;
+  };
+
+  const getProgramName = (programId: number) => {
+    const program = programData?.find((program) => program.id === programId);
+    return program && program.program_name;
+  };
+
   useEffect(() => {
-    if (data) {
-      const inactiveApplicant: DataSourceItem[] = data
-        .filter((item) => item.active === false)
-        .map((item, index) => ({
+    if (data && employeesData) {
+      const inActiveApplicant: DataSourceItem[] = data.map((item, index) => {
+        const assignedEmployee = employeesData.data.find(
+          (employee) =>
+            employee.user.roles.id === item.assigned_role_id && 
+            employee.id === item.assigned_user_id
+        );
+
+        return {
           key: item.id,
           sn: index + 1,
-          applicantId: item.applicant_unique_id,
-          applicantName: capitalizeName(item.applicant_name),
-          country: item.country,
-          programType: item.program_type,
-          numberOfDependents: item.number_of_dependents,
-          assignedTo: item.assigned_to !== null ? item.assigned_to : "-",
-          comment: item.assigned_to !== null ? item.assigned_to : "-",
-          // need to return comment
-        }));
+          applicantId: item.applicant.applicant_unique_id,
+          applicantName: capitalizeName(item.applicant.full_name),
+          country: getCountryName(item.country_id) || "-",
+          programType: getProgramName(item.programtype_id) || "-",
+          numberOfDependents: item.no_of_dependents,
+          assignedTo: assignedEmployee ? assignedEmployee.name : "-",
+          comment: item.applicationcomment?.length,
+        };
+      });
 
-      setDataArray(inactiveApplicant);
+      setDataArray(inActiveApplicant);
     }
-  }, [data]);
+  }, [data, employeesData]);
 
   const changeToInactive = () => {
     mutate(
@@ -58,7 +84,7 @@ export const InactiveApplications = () => {
             title: "Success",
             description: res.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANTS]);
           setOpenActiveModal(false);
         },
       }
@@ -124,7 +150,17 @@ export const InactiveApplications = () => {
                     View Applicant Details
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="2">View Uploaded Documents</Menu.Item>
+                <Menu.Item key="2">
+                  {" "}
+                  <Link
+                    to={
+                      appRoute.applicant_documents(val.key as unknown as number)
+                        .path
+                    }
+                  >
+                    View Uploaded Documents
+                  </Link>
+                </Menu.Item>
                 <Menu.Item key="3">
                   <Link
                     to={appRoute.comments(val.key as unknown as number).path}
@@ -200,7 +236,6 @@ export const InactiveApplications = () => {
             );
           },
         }}
-        // rowClassName={titleRowBg}
       />
     </>
   );
