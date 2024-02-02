@@ -15,7 +15,7 @@ const getData = async (props: { token: string }):Promise<IDependent[]> => {
   };
 
   const res = await axios.get(url, config);
-  const data:IDependent[] = res.data.data
+  const data: IDependent[] = res.data.data
   return data
 };
 

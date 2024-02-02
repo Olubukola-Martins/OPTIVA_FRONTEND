@@ -19,7 +19,6 @@ export const EditCountryModal = ({
   const { data: countryData, isLoading: singleCountryLoading } =
     useGetSingleCountry({
       id: countryId as unknown as number,
-      queryKey: QUERY_KEY_FOR_COUNTRY,
     });
 
   useEffect(() => {
@@ -37,7 +36,7 @@ export const EditCountryModal = ({
   const [form] = Form.useForm();
   const handleEditCountrySubmit = (val: any) => {
     putData(countryId as unknown as number, val.country);
-    form.resetFields()
+    form.resetFields();
     handleClose();
   };
   return (
@@ -53,7 +52,6 @@ export const EditCountryModal = ({
           <Form.Item
             name="country"
             label="Country"
-           
             rules={textInputValidationRules}
           >
             <Input />

@@ -30,8 +30,21 @@ const FxRatesFormInput = ({
   optionalField,
 }: IProps) => {
   const [allRatesData, setAllRatesData] = useState<
-    { value: number; label: string }[] | []
-  >([]);
+    | {
+        value:  number;
+        label: string;
+      }[]
+    | []
+    >([]);
+  // {
+  //   value: {
+  //     id: number;
+  //     exchangeRate: number;
+  //     fxRateString: string;
+  //   }
+  //   label: string;
+  // }
+  // [];
   const {
     data,
     isLoading,
@@ -44,15 +57,17 @@ const FxRatesFormInput = ({
       console.log(data.data);
       const newArr = data.data.map((rate) => {
         const {
-          id,
+          // id,
           source_currency,
           source_currency_amount,
           target_currency,
           target_currency_amount,
         } = rate;
+
+        const fxRateString = `${source_currency} ${source_currency_amount} ~ ${target_currency} ${target_currency_amount}`;
         return {
-          value: id,
-          label: `${source_currency} ${source_currency_amount} ~ ${target_currency} ${target_currency_amount}`,
+          value:  target_currency_amount / source_currency_amount,
+          label: fxRateString,
         };
       });
       setAllRatesData(newArr);
@@ -76,7 +91,8 @@ const FxRatesFormInput = ({
           mode={multiple ? "multiple" : undefined}
           options={allRatesData}
           loading={isLoading}
-        />
+          labelInValue
+        /> 
       </FormItem>
     )
   );

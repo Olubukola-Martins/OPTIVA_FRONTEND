@@ -26,7 +26,6 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
   const { data } = useGetCountry();
 
   const handleSubmit = (val: any) => {
-    console.log("form values", val);
     mutate(
       {
         country_id: val.country,

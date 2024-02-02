@@ -1,12 +1,95 @@
 import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { DataSourceItem } from "./ActiveApplications";
+import { DataSourceItem, capitalizeName } from "./ActiveApplications";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { AppButton } from "src/components/button/AppButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
+import { openNotification } from "src/utils/notification";
+import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
+import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
+import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
+import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
+import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
+import { QUERY_KEY_FOR_APPLICANTS } from "../hooks/useFetchAllApplicants";
 
 export const InactiveApplications = () => {
+  const { data, isLoading } = useFetchActiveandInactiveApplicant({
+    section: "inactive",
+  });
+  const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
+  const { data: countryData } = useGetCountry();
+  const { data: programData } = useGetProgramType();
+  const { data: employeesData } = useFetchEmployees({
+    currentUrl: "active-employees",
+  });
+
+  const [form] = Form.useForm();
+  const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
+  const queryClient = useQueryClient();
+  const [id, setId] = useState<number>();
+
+  const getCountryName = (countryId: number) => {
+    const country = countryData?.find((country) => country.id === countryId);
+    return country && country.country_name;
+  };
+
+  const getProgramName = (programId: number) => {
+    const program = programData?.find((program) => program.id === programId);
+    return program && program.program_name;
+  };
+
+  useEffect(() => {
+    if (data && employeesData) {
+      const inActiveApplicant: DataSourceItem[] = data.map((item, index) => {
+        const assignedEmployee = employeesData.data.find(
+          (employee) =>
+            employee.user.roles.id === item.assigned_role_id && 
+            employee.id === item.assigned_user_id
+        );
+
+        return {
+          key: item.id,
+          sn: index + 1,
+          applicantId: item.applicant.applicant_unique_id,
+          applicantName: capitalizeName(item.applicant.full_name),
+          country: getCountryName(item.country_id) || "-",
+          programType: getProgramName(item.programtype_id) || "-",
+          numberOfDependents: item.no_of_dependents,
+          assignedTo: assignedEmployee ? assignedEmployee.name : "-",
+          comment: item.applicationcomment?.length,
+        };
+      });
+
+      setDataArray(inActiveApplicant);
+    }
+  }, [data, employeesData]);
+
+  const changeToInactive = () => {
+    mutate(
+      { id: id as unknown as number, status: "active" },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANTS]);
+          setOpenActiveModal(false);
+        },
+      }
+    );
+  };
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -51,23 +134,47 @@ export const InactiveApplications = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                  <Link to={appRoute.applicant_details().path}>
+                  <Link
+                    to={
+                      appRoute.applicant_details(val.key as unknown as number)
+                        .path
+                    }
+                  >
                     View Applicant Details
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="2">View Uploaded Documents</Menu.Item>
-                <Menu.Item key="3">
+                <Menu.Item key="2">
                   {" "}
-                  <Link to={appRoute.comments().path}>View Comment</Link>
+                  <Link
+                    to={
+                      appRoute.applicant_documents(val.key as unknown as number)
+                        .path
+                    }
+                  >
+                    View Uploaded Documents
+                  </Link>
                 </Menu.Item>
-                <Menu.Item key="4" onClick={showActiveModal}>
+                <Menu.Item key="3">
+                  <Link
+                    to={appRoute.comments(val.key as unknown as number).path}
+                  >
+                    View Comment
+                  </Link>
+                </Menu.Item>
+                <Menu.Item
+                  key="4"
+                  onClick={() => {
+                    setId(val.key as unknown as number);
+                    showActiveModal();
+                  }}
+                >
                   Move to Active
                 </Menu.Item>
               </Menu>
@@ -80,20 +187,6 @@ export const InactiveApplications = () => {
     },
   ];
 
-  const dataSource: DataSourceItem[] = [];
-  for (let i = 0; i < 8; i++) {
-    dataSource.push({
-      key: i,
-      sn: i + 1,
-      applicantId: "230000-01",
-      applicantName: "John Brown",
-      country: "Grenada",
-      programType: "CBI",
-      numberOfDependents: 4,
-      assignedTo: "Ruth Godwin",
-      comment: "Neque consectetur sit commodo ipsum sed.",
-    });
-  }
   // Inactive Modal
   const [openActiveModal, setOpenActiveModal] = useState(false);
   const showActiveModal = () => {
@@ -108,27 +201,28 @@ export const InactiveApplications = () => {
       <Modal open={openActiveModal} onCancel={handleActiveCancel} footer={null}>
         <div>
           <h1 className="p-4 font-bold text-center text-lg">Make Active</h1>
-          <Form layout="vertical" name="">
+          <Form layout="vertical" form={form} onFinish={changeToInactive}>
             <Form.Item label="Reason for Activity" name="activityReason">
               <Input.TextArea rows={4} />
             </Form.Item>
+            <div className="flex items-center justify-center gap-4 p-4">
+              <AppButton
+                label="Cancel"
+                variant="transparent"
+                containerStyle="border border-blue"
+              />
+              <AppButton label="Submit" type="submit" isLoading={postLoading} />
+            </div>
           </Form>
-          <div className="flex items-center justify-center gap-4 p-4">
-            <AppButton
-              label="Cancel"
-              variant="transparent"
-              containerStyle="border border-blue"
-            />
-            <AppButton label="Submit" />
-          </div>
         </div>
       </Modal>
       {/* TABLE */}
       <Table
         columns={columns}
-        dataSource={dataSource}
+        dataSource={dataArray}
         className="bg-white rounded-md shadow border mt-8"
         scroll={{ x: 600 }}
+        loading={isLoading}
         rowSelection={{
           type: "checkbox",
           onChange: (
@@ -142,7 +236,6 @@ export const InactiveApplications = () => {
             );
           },
         }}
-        // rowClassName={titleRowBg}
       />
     </>
   );

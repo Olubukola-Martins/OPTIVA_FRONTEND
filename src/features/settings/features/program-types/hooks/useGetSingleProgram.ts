@@ -4,6 +4,7 @@ import axios from "axios";
 import { IGetSingleProgramType } from "../types";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { useQuery } from "react-query";
+import { QUERY_KEY_FOR_PROGRAM_TYPE } from "./useGetProgramType";
 
 const getData = async (props: IDataProps) => {
     const url = `${END_POINT.BASE_URL}/admin/programtypes/${props.id}`;
@@ -20,9 +21,9 @@ const getData = async (props: IDataProps) => {
     return data;
   };
   
-export const useGetSingleProgram = ({ id, queryKey }: ISingleInvestment) => {
+export const useGetSingleProgram = ({ id }: ISingleInvestment) => {
     const { token } = useGetUserInfo();
-    const queryData = useQuery([queryKey, id], () => getData({ id, token }), {
+    const queryData = useQuery([QUERY_KEY_FOR_PROGRAM_TYPE, id], () => getData({ id, token }), {
       onError: () => {},
       onSuccess: () => {},
     });

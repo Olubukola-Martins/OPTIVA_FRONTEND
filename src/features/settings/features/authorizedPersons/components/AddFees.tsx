@@ -5,7 +5,6 @@ import {
   QUERY_KEY_FOR_COUNTRY,
 } from "../../program-types/hooks/useGetCountry";
 import {
-  QUERY_KEY_FOR_INVESTMENT_ROUTE,
   useGetInvestmentRoute,
 } from "../../investment/hooks/useGetInvestmentRoute";
 import { useState } from "react";
@@ -33,7 +32,6 @@ export const AddFees = ({ setInvestmentRoute }: IAddFeeProps) => {
     data: investmentByCountryData,
     isLoading: investmentByCountryLoading,
   } = useGetInvestmentByCountry({
-    queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
     id: selectedCountry as unknown as number,
   });
 

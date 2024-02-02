@@ -36,10 +36,9 @@ export const AuthorizedPersons = () => {
 
 const {removeData}=  useDelete({
     queryKey: QUERY_KEY_FOR_AUTHORIZED_PERSON,
-    EndPointUrl: "/admin/authorized-person",
+    EndPointUrl: "admin/authorized-person/",
   });
 
-  console.log("authorized person", data);
 
   const handleDeleteCheckbox = () => {
     console.log("Deleting rows:", selectedRowKeys);

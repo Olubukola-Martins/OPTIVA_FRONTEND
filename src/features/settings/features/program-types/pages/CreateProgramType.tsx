@@ -32,6 +32,7 @@ const CreateProgramType = () => {
   const { data: workflowData } = useGetWorkflow();
   const { data: countryData } = useGetCountry();
 
+
   // DEPENDENT OPTION
   const dependentOptions: SelectProps["options"] =
     dependentData?.map((item) => ({
@@ -81,7 +82,6 @@ const CreateProgramType = () => {
     })) || [];
 
   const handleSubmit = (values: any) => {
-    console.log("values of form", values);
     mutate(
       {
         token,

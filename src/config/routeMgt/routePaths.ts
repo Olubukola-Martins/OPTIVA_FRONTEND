@@ -54,7 +54,7 @@ export const appRoute = {
 
   // Applications
   applications: `/applications`,
-  applicantDetails: `/applicant-details`,
+  // applicantDetails: `/applicant-details`,
   applicant_details: (id?: number) => ({
     format: `/applicant-details/:id`,
     path: `/applicant-details/${id}`,
@@ -76,6 +76,15 @@ export const appRoute = {
     format: `/applications/applicant_documents/:id`,
     path: `/applications/applicant_documents/${id}`,
   }),
+  applicant_documents_comments: (id?: number) => ({
+    format: `/applications/applicant_documents_comments/:id`,
+    path: `/applications/applicant_documents_comments/${id}`,
+  }),
+  generate_quotes: (id?: number) => ({
+    format: `/applications/generate_quotes/:id`,
+    path: `/applications/generate_quotes/${id}`,
+  }),
+
   // Reports
   reports: `/reports`,
 
@@ -85,6 +94,11 @@ export const appRoute = {
     format: `/payments/:id/generateInvoice`,
     path: `/payments/${id}/generateInvoice`,
   }),
+  viewQuote: (id?: number) => ({
+    format: `/payments/:id/viewQuoteBreakdown`,
+    path: `/payments/${id}/viewQuoteBreakdown`,
+  }),
+
   paymentDetails: (id?: number) => ({
     format: `/payments/:id/paymentDetails`,
     path: `/payments/${id}/paymentDetails`,

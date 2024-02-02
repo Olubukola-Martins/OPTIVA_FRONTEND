@@ -5,7 +5,6 @@ import { AppButton } from "src/components/button/AppButton";
 import type { TabsProps } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { QUERY_KEY_FOR_FEES } from "../hooks/useGetFees";
 import { useGetSingleFee } from "../hooks/useGetSingleFee";
 import { useGetInvestmentRoute } from "../../investment/hooks/useGetInvestmentRoute";
 import { useUpdateAntiguaDonation } from "../hooks/useUpdateAntiguaDonation";
@@ -26,7 +25,6 @@ export const EditFeesTab = () => {
   // SINGLE GET REQUESTS
   const { data: singleFeeData, isLoading } = useGetSingleFee({
     id: id as unknown as number,
-    queryKey: QUERY_KEY_FOR_FEES,
   });
   const [countryId, setCountryId] = useState<number | undefined>();
   const [investId, setInvestId] = useState<number | undefined>();
