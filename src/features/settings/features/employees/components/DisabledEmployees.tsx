@@ -75,8 +75,8 @@ export const DisabledEmployees = ({ searchValue }: searchValueProps) => {
               <Menu>
                 <Menu.Item key="1">
                   <Popconfirm
-                    title="Deactivate employee"
-                    description={`Are you sure to deactivate ${val.name}`}
+                    title="Activate employee"
+                    description={`Are you sure to activate ${val.name}`}
                     onConfirm={() => removeData(val.id)}
                   >
                     Enable employee
