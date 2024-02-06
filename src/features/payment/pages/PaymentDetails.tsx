@@ -44,7 +44,6 @@ import {
   paymentsUrl,
 } from "./Payments";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import { FormEmployeeInput } from "src/features/settings/features/employees/components/FormEmployeeInput";
 import {
   generateFinancialStatement,
   viewProofOfPayment,
@@ -784,10 +783,6 @@ const PaymentDetails = () => {
     },
   ];
 
-  // const fileUrl =
-  //   "https://optivateststorage.blob.core.windows.net/optiva/uploads/1706193541_Daniel Ayeni - FD.pdf";
-  // const fileNameMatch = fileUrl.match(/\/([^\/]+)$/);
-  // const fileName = fileNameMatch ? fileNameMatch[1] : null;
 
   return (
     <>
@@ -1058,11 +1053,13 @@ const PaymentDetails = () => {
             )}
             <FxRatesFormInput extraStyles="pt-6" />
           </div>
-          <FormEmployeeInput
-            control={{ name: "paidBy", label: "Paid By" }}
-            showLabel={true}
-            Form={Form}
-          />
+          <Form.Item
+            name="paidBy"
+            label={"Paid By"}
+            rules={textInputValidationRules}
+          >
+            <Input/>
+          </Form.Item>
           <Form.Item
             name="narration"
             label={"Narration"}

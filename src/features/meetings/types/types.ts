@@ -585,6 +585,70 @@ export interface IViewQuote {
 }
 
 interface ViewQuoteData {
+  Applicant_info: ApplicantDonationInfo | ApplicantRealEstateinfo;
+  Applicant_quote_breakdown:
+    | Antiguadonationquote
+    | Antiguasinglequote
+    | Antiguajointquote
+    | Grenadadonationquote
+    | Dominicadonationquote
+    | Grenadaestatequote
+    | Stkittsandnevisestatequote
+    | Stluciaestatequote;
+}
+export interface ApplicantDonationInfo {
+  id: number;
+  application_id: number;
+  branch_id: number;
+  full_name: string;
+  applicant_unique_id: string;
+  email_address: string;
+  amount_paid: string;
+  user_id?: any;
+  created_at: string;
+  updated_at: string;
+  quote: Quote;
+  antigua_donation_quote?: Antiguadonationquote;
+  dominica_donation_quote?: Dominicadonationquote;
+  grenada_donation_quote?: Grenadadonationquote;
+}
+export interface ApplicantRealEstateinfo {
+  id: number;
+  application_id: number;
+  branch_id: number;
+  full_name: string;
+  applicant_unique_id: string;
+  email_address: string;
+  amount_paid: string;
+  user_id?: any;
+  created_at: string;
+  updated_at: string;
+  quote: Quote;
+  antigua_single_quote?: Antiguasinglequote;
+  grenada_estate_quote?: Grenadaestatequote;
+  antigua_joint_quote?: Antiguajointquote;
+  st_kitts_and_nevis_estate_quote?: Stkittsandnevisestatequote;
+  st_lucia_estate_quote?: Stluciaestatequote;
+}
+interface Quote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  applicant_full_name: string;
+  country: string;
+  investment_route: string;
+  number_of_dependents: string;
+  quotation_total: number;
+  country_investment_total: number;
+  local_prc_fee: number;
+  quotation_status: number;
+  generated_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Quote breakdown for  "investment_route": "Antigua & Barbuda donation"
+export interface Antiguadonationquote {
   id: number;
   applicant_id: number;
   applicant_unique_id: string;
@@ -603,6 +667,162 @@ interface ViewQuoteData {
   created_at: string;
   updated_at: string;
 }
+
+
+// Quote breakdown for "investment_route": "Antigua & Barbuda Single Real Estate"
+
+export interface Antiguasinglequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  real_estate_investment_fee: number;
+  govt_processing_fee: number;
+  due_diligence_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  legal_and_advisory_fee: number;
+  antigua_barbuda_single_estate_total: number;
+  local_processing_fee: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_due_on_approval: number;
+  program_grand_total: number;
+  program_grand_total_due_now: number;
+  program_grand_total_due_on_approval: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Quote breakdown for "investment_route": "Antigua & Barbuda Joint Real Estate",
+export interface Antiguajointquote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  real_estate_investment_fee: number;
+  govt_processing_fee: number;
+  due_diligence_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  legal_and_advisory_fee: number;
+  antigua_barbuda_joint_estate_total: number;
+  local_processing_fee: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_due_on_approval: number;
+  program_grand_total: number;
+  program_grand_total_due_now: number;
+  program_grand_total_due_on_approval: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Quote breakdown for  "investment_route": "Dominica donation"
+
+export interface Dominicadonationquote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_contribution_fee: number;
+  govt_processing_fee: number;
+  govt_due_diligence_fee: number;
+  govt_cert_neutralization_fee: number;
+  local_processing_fee: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_after_approval: number;
+  dominica_total: number;
+  program_total: number;
+  program_total_due_now: number;
+  program_total_due_after_approval: number;
+  created_at: string;
+  updated_at: string;
+}
+// Quote breakdown for  "investment_route": "Grenada donation"
+export interface Grenadadonationquote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_contribution_fee: number;
+  govt_ntf_application_fee: number;
+  govt_due_diligence_fee: number;
+  govt_processing_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  grenada_bank_fee: number;
+  grenada_local_agent_fee: number;
+  grenada_legal_and_advisory_fee: number;
+  program_grand_total: number;
+  totalDueNow: number;
+  totalDueAfterApproval: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Quote breakdown for  "investment_route": "Grenada Real Estate"
+
+export interface Grenadaestatequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_fee: number;
+  real_estate_investment_fee: number;
+  govt_application_fee: number;
+  govt_due_diligence_fee: number;
+  govt_processing_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  grenada_bank_fee: number;
+  grenada_local_agent_fee: number;
+  grenada_legal_and_advisory_fee: number;
+  grenadaRealEstateTotal: number;
+  localProcessingFee: number;
+  localProcessingFeeDueNow: number;
+  localProcessingFeeDueAfterApproval: number;
+  program_grand_total: number;
+  programTotalDueNow: number;
+  programTotalDueAfterApproval: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Quote breakdown for  "investment_route": "ST Kitts & Nevis Real Estate"
+
+export interface Stkittsandnevisestatequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_contribution: number;
+  application_fee: number;
+  due_dil_and_prc_fee: number;
+  passport_and_oath_of_allegiance_fee: number;
+  courier_and_bank_fee: number;
+  bank_due_dil_fee: number;
+  local_agent_fee_vat: number;
+  legal_advisory_fee: number;
+  local_prc_fee: number;
+  local_prc_fee_due_now: number;
+  local_prc_due_after_approval: number;
+  program_total: number;
+  program_total_due_now: number;
+  program_total_due_after_approval: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Quote breakdown for  "investment_route": "ST Lucia NEFI Real Estate"
+
+export interface Stluciaestatequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  contribution_for_main_applicant: number;
+  contribution_for_dependents: number;
+  govt_prc_fee: number;
+  govt_due_dil: number;
+  govt_passport_fee: number;
+  localProcessingFee: number;
+  localProcessingFeeDueNow: number;
+  localProcessingFeeDueAfterApproval: number;
+  program_grand_total: number;
+  programTotalDueNow: number;
+  programTotalDueAfterApproval: number;
+  created_at: string;
+  updated_at: string;
+}
+
 
 
 /// FX Rates

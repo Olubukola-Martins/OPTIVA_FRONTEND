@@ -1,12 +1,5 @@
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import {
-  Form,
-  Input,
-  InputNumber,
-  Popover,
-  Select,
-  Table,
-} from "antd";
+import { Form, Input, InputNumber, Popover, Select, Table } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
@@ -20,8 +13,8 @@ import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import useAddEscalation from "../hooks/useAddEscalation";
 import EscalationDateErrorModal from "../components/EscalationDateErrorModal";
 import { IEscalationBody } from "src/features/settings/types/settingsType";
-import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
-              
+import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
+
 interface DataRow {
   key: number;
   escalateTo: JSX.Element;
@@ -31,6 +24,9 @@ interface DataRow {
 const NewEscalation = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showDateErrorModal, setShowDateErrorModal] = useState(false);
+  const [currentEscalateTo, setCurrentEscalateTo] = useState<number>();
+  const [employeeOptions, setEmployeeOptions] =
+    useState<{ label: string; value: number }[]>();
   const [openTimePop, setopenTimePop] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -39,13 +35,6 @@ const NewEscalation = () => {
     queryKey: "roles",
     urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
   });
-  //  const { data: employeeData, isLoading: loadEmployee } =
-  //    useFetchEmployees("active-employees");
-  // const { data: allEmployees, isLoading: allEmployeesLoading } =
-  //   useFetchAllItems({
-  //     queryKey: "employees",
-  //     urlEndPoint: `${END_POINT.BASE_URL}/admin/employees`,
-  //   });
   const TimePopover: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) => {
@@ -75,6 +64,9 @@ const NewEscalation = () => {
       </Popover>
     );
   };
+  const { data: employeeData, isLoading: employeeLoading } = useFetchEmployees({
+    currentUrl: "active-employees",
+  });
 
   const escalateToItem = (key: number) => {
     return (
@@ -85,7 +77,10 @@ const NewEscalation = () => {
         <Select
           popupMatchSelectWidth={false}
           placeholder="Select Role"
-          // loading={allRolesLoading}
+          loading={allRolesLoading}
+          onSelect={(val: number) => {
+            setCurrentEscalateTo(val);
+          }}
           options={
             allRoles?.data.map((role: { name: string; id: number }) => {
               return { label: role.name, value: role.id };
@@ -98,13 +93,22 @@ const NewEscalation = () => {
   };
   const employeeNameItem = (key: number) => {
     return (
-      <div className="min-w-[120px] mt-5">
-        <FormEmployeeInput
-          control={{ name: `${key}-employeeName`, label: " " }}
-          showLabel={false}
-          Form={Form}
+      <Form.Item
+        name={`${key}-employeeName`}
+        style={{ paddingBottom: 0, marginBottom: 0 }}
+      >
+        <Select
+          popupMatchSelectWidth={false}
+          placeholder="Select Employee"
+          loading={employeeLoading}
+          onSelect={() => {
+            setCurrentEscalateTo(undefined);
+          }}
+          options={
+            employeeOptions
+          }
         />
-      </div>
+      </Form.Item>
     );
   };
   const escalateAfterItem = (key: number) => {
@@ -120,6 +124,15 @@ const NewEscalation = () => {
       </TimePopover>
     );
   };
+  {
+    // <div className="min-w-[120px] mt-5">
+    /* <FormEmployeeInput
+          control={{ name: `${key}-employeeName`, label: " " }}
+          showLabel={false}
+          Form={Form}
+        /> */
+  }
+
   const tableInitialData = [
     {
       key: 1,
@@ -137,7 +150,32 @@ const NewEscalation = () => {
 
   useEffect(() => {
     if (!allRolesLoading && allRoles) setData(tableInitialData);
-  }, [allRolesLoading, allRoles]);
+  }, [
+    allRolesLoading,
+    allRoles,
+    employeeData,
+    employeeLoading,
+    currentEscalateTo,
+    employeeOptions,
+  ]);
+  useEffect(() => {
+    if (employeeData && !currentEscalateTo) {
+      const allEmployees = employeeData.data.map(
+        (employee: { name: string; id: number }) => {
+          return { label: employee.name, value: employee.id };
+        }
+      );
+      setEmployeeOptions(allEmployees);
+    }
+    if (employeeData && currentEscalateTo) {
+      const filteredEmployees = employeeData?.data
+        .filter((employee) => employee.user.role_id === currentEscalateTo)
+        .map((employee: { name: string; id: number }) => {
+          return { label: employee.name, value: employee.id };
+        });
+      setEmployeeOptions(filteredEmployees);
+    }
+  }, [currentEscalateTo]);
 
   const [data, setData] = useState<DataRow[]>(tableInitialData);
   const deleteEscalationLevel = (item: DataRow) => {
@@ -145,6 +183,17 @@ const NewEscalation = () => {
       return pre.filter((row) => row.key !== item.key);
     });
   };
+  useEffect(() => {
+    // console.log("currentRole",  currentEscalateTo);
+    // console.log(
+    //   "filteredEmployees",
+    //   employeeData?.data
+    //     .filter((employee) => employee.user.role_id === currentEscalateTo)
+    //     .map((employee: { name: string; id: number }) => {
+    //       return { label: employee.name, value: employee.id };
+    //     })
+    // );
+  }, [employeeOptions, data, tableInitialData]);
 
   const columns: ColumnsType<DataRow> = [
     {
@@ -186,7 +235,7 @@ const NewEscalation = () => {
     const newValue = {
       key: newKey,
       escalateTo: escalateToItem(newKey),
-      employeeName: employeeNameItem(newKey), 
+      employeeName: employeeNameItem(newKey),
       escalateAfter: escalateAfterItem(newKey),
     };
     setData((pre) => {
@@ -304,10 +353,7 @@ const NewEscalation = () => {
                 <Input placeholder="Input Task" />
               </FormItem>
               <TimePopover>
-                <FormItem
-                  label="Task Deadline"
-                  name="deadline"
-                >
+                <FormItem label="Task Deadline" name="deadline">
                   <InputNumber min={0} addonAfter={"Hour(s)"} />
                 </FormItem>
               </TimePopover>

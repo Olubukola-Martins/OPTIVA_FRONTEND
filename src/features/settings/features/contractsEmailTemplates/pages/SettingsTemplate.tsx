@@ -217,12 +217,12 @@ const SettingsTemplate = () => {
             />
 
             <div className="flex flex-row gap-4">
-              <div
+              {/* <div
                 // onClick={handlePreview}
                 className="text-[#012168] hover:text-[#801D23] underline decoration-2 decoration-[#012168] hover:decoration-[#801D23] pt-2 font-semibold cursor-pointer "
               >
                 Preview
-              </div>
+              </div> */}
               <FormItem>
                 <AppButton
                   label="Save"

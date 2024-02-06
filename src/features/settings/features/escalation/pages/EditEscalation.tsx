@@ -21,7 +21,7 @@ import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
 import { QUERY_KEY_ESCALATION, escalationURL } from "../hooks/useAddEscalation";
 import useUpdateEscalation from "../hooks/useUpdateEscalation";
-import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
+import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
 
 interface DataRow {
   key: number;
@@ -35,6 +35,9 @@ const EditEscalation = () => {
   const itemId = parseInt(id as string);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [tableInitialData, setTableInitialData] = useState<DataRow[]>([]);
+  const [currentEscalateTo, setCurrentEscalateTo] = useState<number>();
+  const [employeeOptions, setEmployeeOptions] =
+    useState<{ label: string; value: number }[]>();
   const { editEscalation } = useUpdateEscalation();
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -42,14 +45,19 @@ const EditEscalation = () => {
     queryKey: "roles",
     urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
   });
+  const { data: employeeData, isLoading: employeeLoading } = useFetchEmployees({
+    currentUrl: "active-employees",
+  });
 
-  const { data: singleEscData, isLoading: singleEscisLoading,isFetching } =
-    useFetchSingleItem({
-      queryKey: QUERY_KEY_ESCALATION,
-      urlEndPoint: escalationURL,
-      itemId,
-    });
-
+  const {
+    data: singleEscData,
+    isLoading: singleEscisLoading,
+    isFetching,
+  } = useFetchSingleItem({
+    queryKey: QUERY_KEY_ESCALATION,
+    urlEndPoint: escalationURL,
+    itemId,
+  });
 
   const escalateToItem = (key: number) => {
     return (
@@ -61,40 +69,53 @@ const EditEscalation = () => {
           popupMatchSelectWidth={false}
           placeholder="Select Role"
           loading={allRolesLoading}
-          options={
-            allRoles?.data.map((role: { name: string; id: number }) => {
-              return { label: role.name, value: role.id };
-            })
-          }
+          options={allRoles?.data.map((role: { name: string; id: number }) => {
+            return { label: role.name, value: role.id };
+          })}
         />
       </Form.Item>
     );
   };
   const employeeNameItem = (key: number) => {
     return (
-      <div className="min-w-[120px] mt-5">
-        <FormEmployeeInput
-          control={{ name: `${key}-employeeName`, label: "" }}
-          showLabel={false}
-          Form={Form}
+      <Form.Item
+        name={`${key}-employeeName`}
+        style={{ paddingBottom: 0, marginBottom: 0 }}
+      >
+        <Select
+          popupMatchSelectWidth={false}
+          placeholder="Select Employee"
+          loading={employeeLoading}
+          onSelect={() => {
+            setCurrentEscalateTo(undefined);
+          }}
+          options={employeeOptions}
         />
-      </div>
+      </Form.Item>
     );
   };
   const escalateAfterItem = (key: number) => {
     return (
-        <Form.Item
-          name={`${key}-escalateAfter`}
-          style={{ paddingBottom: 0, marginBottom: 0 }}
-          className=" min-w-[150px]"
-        >
-          <InputNumber min={0} addonAfter={"Day(s)"} />
-        </Form.Item>
+      <Form.Item
+        name={`${key}-escalateAfter`}
+        style={{ paddingBottom: 0, marginBottom: 0 }}
+        className=" min-w-[150px]"
+      >
+        <InputNumber min={0} addonAfter={"Day(s)"} />
+      </Form.Item>
     );
   };
   useEffect(() => {
     if (!allRolesLoading && allRoles) setTableInitialData(tableInitialData);
-  }, [allRolesLoading, allRoles, tableInitialData]);
+  }, [
+    allRolesLoading,
+    allRoles,
+    tableInitialData,
+    employeeData,
+    employeeLoading,
+    currentEscalateTo,
+    employeeOptions,
+  ]);
 
   useEffect(() => {
     if (singleEscData && !Array.isArray(singleEscData)) {
@@ -104,13 +125,20 @@ const EditEscalation = () => {
             key: level.id,
             escalateTo: escalateToItem(level.id),
             employeeName: (
-              <div className="min-w-[120px] mt-5">
-                <FormEmployeeInput
-                  control={{ name: `${level.id}-employeeName`, label: "" }}
-                  showLabel={true}
-                  Form={Form}
+              <Form.Item
+                name={`${level.id}-employeeName`}
+                style={{ paddingBottom: 0, marginBottom: 0 }}
+              >
+                <Select
+                  popupMatchSelectWidth={false}
+                  placeholder="Select Employee"
+                  loading={employeeLoading}
+                  onSelect={() => {
+                    setCurrentEscalateTo(undefined);
+                  }}
+                  options={employeeOptions}
                 />
-              </div>
+              </Form.Item>
             ),
             escalateAfter: escalateAfterItem(level.id),
           };
@@ -124,7 +152,7 @@ const EditEscalation = () => {
       const levelsData: { [key: string]: number } = {};
       levels?.forEach(
         (level: { role: any; employee: any; id: number; duration: number }) => {
-          const levelId = level.id.toString(); // Convert the level ID to a string
+          const levelId = level.id.toString(); 
           levelsData[`${levelId}-employeeName`] = level.employee[0].id;
           levelsData[`${levelId}-escalateAfter`] = level.duration;
           levelsData[`${levelId}-escalateTo`] = level.role[0].id;
@@ -141,6 +169,24 @@ const EditEscalation = () => {
       });
     }
   }, [singleEscData, singleEscisLoading]);
+  useEffect(() => {
+    if (employeeData && !currentEscalateTo) {
+      const allEmployees = employeeData.data.map(
+        (employee: { name: string; id: number }) => {
+          return { label: employee.name, value: employee.id };
+        }
+      );
+      setEmployeeOptions(allEmployees);
+    }
+    if (employeeData && currentEscalateTo) {
+      const filteredEmployees = employeeData?.data
+        .filter((employee) => employee.user.role_id === currentEscalateTo)
+        .map((employee: { name: string; id: number }) => {
+          return { label: employee.name, value: employee.id };
+        });
+      setEmployeeOptions(filteredEmployees);
+    }
+  }, [currentEscalateTo]);
 
   // handle table delete icons
   const deleteEscalationLevel = (item: DataRow) => {

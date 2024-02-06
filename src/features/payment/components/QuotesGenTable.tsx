@@ -172,7 +172,7 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
           overlay={
             <Menu>
               <Menu.Item key="1">
-                <Link to={appRoute.viewQuote(record.key as number).path}>
+                <Link to={appRoute.viewQuote(record.applicantID as number).path}>
                   View
                 </Link>
               </Menu.Item>
