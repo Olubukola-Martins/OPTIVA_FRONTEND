@@ -24,6 +24,7 @@ const ViewQuote = () => {
   }: { data: IViewQuote | undefined; isLoading: boolean } = viewQuoteBreakdown({
     itemId: itemId as number,
   });
+
   // default dataTable length is 15
   const columns: ColumnsType<any> = [
     {
@@ -40,18 +41,32 @@ const ViewQuote = () => {
       dataIndex: "description",
       colSpan: 2,
       key: "description",
+      render: (text, record, index) => (
+        <span
+          className={
+            record.key === "total" ||
+            index === dataTable.length - 1 ||
+            index === dataTable.length - 2
+              ? "float-right"
+              : ""
+          }
+        >
+          {text}
+        </span>
+      ),
       onCell: (record, rowIndex) => {
         let cols;
 
         if (
           record.key === "1" ||
           record.key === "spacer" ||
+          record.key === "spacer-blank" ||
           record.key === "paymentPlan"
         ) {
           cols = 3;
         } else if (
-          (rowIndex === dataTable.length - 4 && record.key === "9") ||
-          (rowIndex === dataTable.length - 3 && record.key === "10")
+          (rowIndex === dataTable.length - 4 && record.key === "10") ||
+          (rowIndex === dataTable.length - 3 && record.key === "11")
         ) {
           cols = 1;
         } else {
@@ -68,10 +83,11 @@ const ViewQuote = () => {
       dataIndex: "percentage",
       key: "percentage",
       colSpan: 0,
+      render: (value) => `${value} %`,
       onCell: (record, rowIndex) => ({
         colSpan:
-          (rowIndex === dataTable.length - 4 && record.key === "9") ||
-          (rowIndex === dataTable.length - 3 && record.key === "10")
+          (rowIndex === dataTable.length - 4 && record.key === "10") ||
+          (rowIndex === dataTable.length - 3 && record.key === "11")
             ? 1
             : 0,
       }),
@@ -89,14 +105,22 @@ const ViewQuote = () => {
             ? 0
             : 1,
       }),
-      render: (value) =>
-        value
-          ? value.toLocaleString("en-US", {
+      render: (value, record) =>
+        value || value == 0 ? (
+          <span
+            className={
+              record.description === "Local Processing Fee" ? "font-bold" : ""
+            }
+          >
+            {value.toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
               maximumFractionDigits: 2,
-            })
-          : value,
+            })}
+          </span>
+        ) : (
+          value
+        ),
     },
   ];
 
@@ -197,7 +221,6 @@ const ViewQuote = () => {
   //   },
   // ];
 
-
   useEffect(() => {
     if (
       quoteData?.data.Applicant_info.quote.investment_route.includes(
@@ -219,14 +242,17 @@ const ViewQuote = () => {
         const {
           real_estate_investment_fee,
           legal_and_advisory_fee,
-          // program_grand_total,
           antigua_barbuda_joint_estate_total,
           local_processing_fee_due_now,
-          program_grand_total_due_now,
-          program_grand_total_due_on_approval,
           due_diligence_fee,
           govt_passport_oath_and_allegiance_fee,
           govt_processing_fee,
+          country_fee_due_now,
+          country_fee_due_now_percentage,
+          total_due_now,
+          total_due_on_citizenship_approval,
+          local_processing_fee,
+          local_processing_fee_due_now_percentage,
         } = viewQuoteBreakdownAntigJoint;
         const { country, investment_route } = quote;
         const data = [
@@ -284,28 +310,39 @@ const ViewQuote = () => {
             description: <div className="py-2"></div>,
           },
           {
+            key: "9",
+            description: `Local Processing Fee`,
+            amount: local_processing_fee,
+          },
+          {
+            key: "spacer-blank",
+            description: <div className="py-2"></div>,
+          },
+          {
             key: "paymentPlan",
             description: "Payment Plan",
           },
           {
-            key: "9",
-            description: `${country} Total Due Now`,
-            amount: "$4,000 awaiting this",
-          },
-          {
             key: "10",
-            description: "Local Processing Fee Due Now",
-            amount: local_processing_fee_due_now,
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
           },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: program_grand_total_due_now,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: local_processing_fee_due_now,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: program_grand_total_due_on_approval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -315,14 +352,17 @@ const ViewQuote = () => {
         const {
           real_estate_investment_fee,
           legal_and_advisory_fee,
-          // program_grand_total,
           antigua_barbuda_single_estate_total,
           local_processing_fee_due_now,
-          program_grand_total_due_now,
-          program_grand_total_due_on_approval,
           due_diligence_fee,
           govt_passport_oath_and_allegiance_fee,
           govt_processing_fee,
+          country_fee_due_now,
+          country_fee_due_now_percentage,
+          local_processing_fee,
+          local_processing_fee_due_now_percentage,
+          total_due_now,
+          total_due_on_citizenship_approval,
         } = viewQuoteBreakdownAntigSing;
         const { country, investment_route } = quote;
         const data = [
@@ -380,28 +420,39 @@ const ViewQuote = () => {
             description: <div className="py-2"></div>,
           },
           {
+            key: "9",
+            description: `Local Processing Fee`,
+            amount: local_processing_fee,
+          },
+          {
+            key: "spacer-blank",
+            description: <div className="py-2"></div>,
+          },
+          {
             key: "paymentPlan",
             description: "Payment Plan",
           },
           {
-            key: "9",
-            description: `${country} Total Due Now`,
-            amount: "$4,000 awaiting this",
-          },
-          {
             key: "10",
-            description: "Local Processing Fee Due Now",
-            amount: local_processing_fee_due_now,
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
           },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: program_grand_total_due_now,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: local_processing_fee_due_now,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: program_grand_total_due_on_approval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -413,14 +464,17 @@ const ViewQuote = () => {
           real_estate_investment_fee,
           grenada_legal_and_advisory_fee,
           grenadaRealEstateTotal,
-          localProcessingFeeDueNow,
-          programTotalDueNow,
-          programTotalDueAfterApproval,
           govt_application_fee,
           govt_due_diligence_fee,
           govt_fee,
           govt_passport_oath_and_allegiance_fee,
           govt_processing_fee,
+          local_processing_fee_due_now_percentage,
+          grenada_local_agent_fee,
+          total_due_now,
+          total_due_on_citizenship_approval,
+          country_fee_due_now,
+          country_fee_due_now_percentage,
         } = viewQuoteBreakdownGrenadaEstate;
         const { country, investment_route } = quote;
         const data = [
@@ -481,7 +535,12 @@ const ViewQuote = () => {
             amount: grenadaRealEstateTotal,
           },
           {
-            key: "spacer",
+            key: "9",
+            description: `Grenada Local Agent Fee`,
+            amount: grenada_local_agent_fee,
+          },
+          {
+            key: "spacer-blank",
             description: <div className="py-2"></div>,
           },
           {
@@ -489,24 +548,26 @@ const ViewQuote = () => {
             description: "Payment Plan",
           },
           {
-            key: "9",
-            description: `${country} Total Due Now`,
-            amount: "$4,000 awaiting this",
-          },
-          {
             key: "10",
-            description: "Local Processing Fee Due Now",
-            amount: localProcessingFeeDueNow,
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
           },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: programTotalDueNow,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: 0,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: programTotalDueAfterApproval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -514,13 +575,18 @@ const ViewQuote = () => {
       if (st_kitts_and_nevis_estate_quote) {
         const viewQuoteBreakdownStKittsEstate = st_kitts_and_nevis_estate_quote;
         const {
-          program_total_due_after_approval,
           local_prc_fee_due_now,
-          program_total_due_now,
           passport_and_oath_of_allegiance_fee,
           legal_advisory_fee,
           due_dil_and_prc_fee,
           govt_contribution,
+          country_fee_due_now,
+          country_fee_due_now_percentage,
+          local_prc_fee,
+          local_processing_fee_due_now_percentage,
+          st_kitts_total,
+          total_due_on_citizenship_approval,
+          total_due_now,
         } = viewQuoteBreakdownStKittsEstate;
         const { country, investment_route } = quote;
         const data = [
@@ -566,10 +632,19 @@ const ViewQuote = () => {
           {
             key: "total",
             description: `${country} Total`,
-            amount: 0,
+            amount: st_kitts_total,
           },
           {
             key: "spacer",
+            description: <div className="py-2"></div>,
+          },
+          {
+            key: "9",
+            description: `Local Processing Fee`,
+            amount: local_prc_fee,
+          },
+          {
+            key: "spacer-blank",
             description: <div className="py-2"></div>,
           },
           {
@@ -577,24 +652,26 @@ const ViewQuote = () => {
             description: "Payment Plan",
           },
           {
-            key: "9",
-            description: `${country} Total Due Now`,
-            amount: "$4,000 awaiting this",
-          },
-          {
             key: "10",
-            description: "Local Processing Fee Due Now",
-            amount: local_prc_fee_due_now,
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
           },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: program_total_due_now,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: local_prc_fee_due_now,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: program_total_due_after_approval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -603,14 +680,19 @@ const ViewQuote = () => {
         const viewQuoteBreakdownStLuciaEstate = st_lucia_estate_quote;
 
         const {
-          localProcessingFeeDueNow,
-          programTotalDueNow,
-          programTotalDueAfterApproval,
           govt_due_dil,
           govt_prc_fee,
           contribution_for_dependents,
           contribution_for_main_applicant,
           govt_passport_fee,
+          local_processing_fee_due_now_percentage,
+          country_fee_due_now,
+          country_fee_due_now_percentage,
+          total_due_now,
+          total_due_on_citizenship_approval,
+          st_lucia_total,
+          localProcessingFee,
+          localProcessingFeeDueNow,
         } = viewQuoteBreakdownStLuciaEstate;
         const { country, investment_route } = quote;
         const data = [
@@ -666,10 +748,19 @@ const ViewQuote = () => {
           {
             key: "total",
             description: `${country} Total`,
-            amount: 0,
+            amount: st_lucia_total,
           },
           {
             key: "spacer",
+            description: <div className="py-2"></div>,
+          },
+          {
+            key: "9",
+            description: `Local Processing Fee`,
+            amount: localProcessingFee,
+          },
+          {
+            key: "spacer-blank",
             description: <div className="py-2"></div>,
           },
           {
@@ -677,24 +768,26 @@ const ViewQuote = () => {
             description: "Payment Plan",
           },
           {
-            key: "9",
-            description: `${country} Total Due Now`,
-            amount: "$4,000 awaiting this",
-          },
-          {
             key: "10",
-            description: "Local Processing Fee Due Now",
-            amount: localProcessingFeeDueNow,
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
           },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: programTotalDueNow,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: localProcessingFeeDueNow,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: programTotalDueAfterApproval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -720,10 +813,13 @@ const ViewQuote = () => {
           govt_passport_oath_and_allegiance_fee,
           govt_processing_fee,
           legal_and_advisory_fee,
+          country_fee_due_now,
           local_processing_fee,
           local_processing_fee_due_now,
-          program_grand_total_due_now,
-          program_grand_total_due_on_approval,
+          total_due_now,
+          total_due_on_citizenship_approval,
+          country_fee_due_now_percentage,
+          local_processing_fee_due_now_percentage,
         } = viewQuoteBreakDown;
         const { country, investment_route } = quote;
         const data = [
@@ -787,28 +883,39 @@ const ViewQuote = () => {
             description: <div className="py-2"></div>,
           },
           {
+            key: "9",
+            description: `Local Processing Fee`,
+            amount: local_processing_fee,
+          },
+          {
+            key: "spacer-blank",
+            description: <div className="py-2"></div>,
+          },
+          {
             key: "paymentPlan",
             description: "Payment Plan",
           },
           {
-            key: "9",
-            description: `${country} Total Due Now`,
-            amount: "$4,000 awaiting this",
-          },
-          {
             key: "10",
-            description: "Local Processing Fee Due Now",
-            amount: local_processing_fee_due_now,
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
           },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: program_grand_total_due_now,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: local_processing_fee_due_now,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: program_grand_total_due_on_approval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -819,12 +926,15 @@ const ViewQuote = () => {
           dominica_total,
           govt_due_diligence_fee,
           govt_cert_neutralization_fee,
-          program_total_due_after_approval,
-          program_total_due_now,
           govt_contribution_fee,
           govt_processing_fee,
           local_processing_fee,
           local_processing_fee_due_now,
+          country_fee_due_now,
+          country_fee_due_now_percentage,
+          total_due_now,
+          total_due_on_citizenship_approval,
+          local_processing_fee_due_now_percentage,
         } = viewQuoteBreakDown;
         const { country, investment_route } = quote;
         const data = [
@@ -878,28 +988,39 @@ const ViewQuote = () => {
             description: <div className="py-2"></div>,
           },
           {
+            key: "9",
+            description: `Local Processing Fee`,
+            amount: local_processing_fee,
+          },
+          {
+            key: "spacer-blank",
+            description: <div className="py-2"></div>,
+          },
+          {
             key: "paymentPlan",
             description: "Payment Plan",
           },
           {
-            key: "9",
-            description: `${country} Total Due Now`,
-            amount: "$4,000 awaiting this",
-          },
-          {
             key: "10",
-            description: "Local Processing Fee Due Now",
-            amount: local_processing_fee_due_now,
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
           },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: program_total_due_now,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: local_processing_fee_due_now,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: program_total_due_after_approval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -907,14 +1028,18 @@ const ViewQuote = () => {
       if (grenada_donation_quote) {
         const viewQuoteBreakDown = grenada_donation_quote;
         const {
-          totalDueAfterApproval,
           govt_due_diligence_fee,
           govt_ntf_application_fee,
           grenada_legal_and_advisory_fee,
-          totalDueNow,
           govt_contribution_fee,
           govt_passport_oath_and_allegiance_fee,
           govt_processing_fee,
+          country_fee_due_now,
+          country_fee_due_now_percentage,
+          total_due_now,
+          total_due_on_citizenship_approval,
+          local_processing_fee_due_now_percentage,
+          grenada_local_agent_fee,
         } = viewQuoteBreakDown;
         const { country, investment_route } = quote;
         const data = [
@@ -978,28 +1103,39 @@ const ViewQuote = () => {
             description: <div className="py-2"></div>,
           },
           {
+            key: "9",
+            description: `Grenada Local Agent Fee`,
+            amount: grenada_local_agent_fee,
+          },
+          {
+            key: "spacer-blank",
+            description: <div className="py-2"></div>,
+          },
+          {
             key: "paymentPlan",
             description: "Payment Plan",
           },
-          // {
-          //   key: "9",
-          //   description: `${country} Total Due Now`,
-          //   amount: "$4,000 awaiting this",
-          // },
-          // {
-          //   key: "10",
-          //   description: "Local Processing Fee Due Now",
-          //   amount: 0,
-          // },
+          {
+            key: "10",
+            description: `${country} Total Due Now`,
+            percentage: `${country_fee_due_now_percentage}`,
+            amount: country_fee_due_now,
+          },
           {
             key: "11",
-            description: "Total Due Now",
-            amount: totalDueNow,
+            description: "Local Processing Fee Due Now",
+            percentage: `${local_processing_fee_due_now_percentage}`,
+            amount: 0,
           },
           {
             key: "12",
+            description: "Total Due Now",
+            amount: total_due_now,
+          },
+          {
+            key: "13",
             description: "Balance Due on Citizenship Approval",
-            amount: totalDueAfterApproval,
+            amount: total_due_on_citizenship_approval,
           },
         ];
         setDataTable(data);
@@ -1034,7 +1170,13 @@ const ViewQuote = () => {
               bordered
               pagination={false}
               rowClassName={(row) =>
-                row.key === "spacer" ? "bg-[#012168]" : ""
+                (row.key === "spacer" ? "bg-[#012168]" : "") +
+                (row.description === "Total Due Now" ||
+                row.description === "Payment Plan" ||
+                row.key === "total"
+                  ? "font-bold"
+                  : "") +
+                (row.description === "Total Due Now" ? " text-red-500" : "")
               }
               className="redHead max-sm:text-sm"
             />

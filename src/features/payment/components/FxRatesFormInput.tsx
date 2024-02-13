@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import {  Select } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { useEffect, useState } from "react";
 import { END_POINT } from "src/config/environment";
@@ -10,7 +10,7 @@ import {
 } from "src/utils/formHelpers/validations";
 
 export const QUERY_KEY_FOR_FXRATES = "FxRates";
-export const fxRatesUrl = `${END_POINT.BASE_URL}/admin/currency-rates`;
+export const fxRatesUrl = `${END_POINT.BASE_URL}/admin/show/currency-rates`;
 
 interface IProps {
   multiple?: true;
@@ -29,13 +29,10 @@ const FxRatesFormInput = ({
   hideLabel,
   optionalField,
 }: IProps) => {
-  const [allRatesData, setAllRatesData] = useState<
-    | {
-        value:  number;
-        label: string;
-      }[]
-    | []
-    >([]);
+  const [allRatesData, setAllRatesData] = useState<{
+    value: number;
+    label: string;
+  }>();
   // {
   //   value: {
   //     id: number;
@@ -55,22 +52,21 @@ const FxRatesFormInput = ({
   useEffect(() => {
     if (data?.data) {
       console.log(data.data);
-      const newArr = data.data.map((rate) => {
-        const {
-          // id,
-          source_currency,
-          source_currency_amount,
-          target_currency,
-          target_currency_amount,
-        } = rate;
+      const rate = data.data;
+      const {
+        // id,
+        source_currency,
+        source_currency_amount,
+        target_currency,
+        target_currency_amount,
+      } = rate;
 
-        const fxRateString = `${source_currency} ${source_currency_amount} ~ ${target_currency} ${target_currency_amount}`;
-        return {
-          value:  target_currency_amount / source_currency_amount,
-          label: fxRateString,
-        };
-      });
-      setAllRatesData(newArr);
+      const fxRateString = `${source_currency} ${source_currency_amount} ~ ${target_currency} ${target_currency_amount}`;
+      const rateValue = {
+        value: target_currency_amount / source_currency_amount,
+        label: fxRateString,
+      };
+      setAllRatesData(rateValue);
     }
   }, [data, isLoading]);
 
@@ -80,6 +76,7 @@ const FxRatesFormInput = ({
     allRatesData && (
       <FormItem
         className={`${extraStyles}`}
+        initialValue={allRatesData}
         name={name ? name : "fxRate"}
         label={label ? label : "Fx Rate"}
         noStyle={hideLabel}
@@ -88,11 +85,14 @@ const FxRatesFormInput = ({
         }
       >
         <Select
+          disabled
           mode={multiple ? "multiple" : undefined}
-          options={allRatesData}
+          options={[allRatesData]}
+          defaultValue={allRatesData}
           loading={isLoading}
           labelInValue
-        /> 
+        />
+        {/* <Input readOnly value={}/> */}
       </FormItem>
     )
   );

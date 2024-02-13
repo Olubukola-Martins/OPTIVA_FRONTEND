@@ -23,7 +23,9 @@ const editTemplatemData = async(newData: IPropData) => {
   };
 
   const response = await axios.post(
-    editEmailContractTemplatesURL,
+    newData.type === "contract"
+      ? `${END_POINT.BASE_URL}/admin/update-contract`
+      : editEmailContractTemplatesURL,
     newData,
     config
   );

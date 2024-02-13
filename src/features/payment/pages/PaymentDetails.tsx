@@ -87,7 +87,7 @@ interface IUpdatePaymentDetailBody {
   narration: string;
   date_paid: string;
   fx_rate: string;
-  paid_by: number;
+  paid_by: string;
   naira_payment: number;
   dollar_payment: number;
   proof_of_payment_file: string;
@@ -1044,7 +1044,7 @@ const PaymentDetails = () => {
             />
             {preSelectedFile && (
               <Text
-                className={`p-1 bg-gray-200 border-2 rounded ${
+                className={`p-1 bg-gray-200 border-2 rounded w-fit max-w-[80vw] break-words ${
                   fileList.length !== 0 && "hidden"
                 }`}
               >
@@ -1058,7 +1058,7 @@ const PaymentDetails = () => {
             label={"Paid By"}
             rules={textInputValidationRules}
           >
-            <Input/>
+            <Input />
           </Form.Item>
           <Form.Item
             name="narration"

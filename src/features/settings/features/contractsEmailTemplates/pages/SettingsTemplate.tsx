@@ -1,11 +1,10 @@
-import { Drawer, Form, Skeleton, UploadProps } from "antd";
+import { Button, Form, Pagination, Skeleton, Tooltip, UploadProps } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { JoditEditorComponent } from "src/features/settings/components/JoditEditor";
-import { UseWindowWidth } from "src/features/settings/hooks/UseWindowWidth";
 import useUpdateTemplate, {
   IPropData,
   QUERY_KEY_EMAIL_TEMPLATES,
@@ -22,12 +21,7 @@ import {
 } from "src/utils/formHelpers/validations";
 import useUploadFile from "src/features/payment/hooks/useUploadFile";
 import { END_POINT } from "src/config/environment";
-
-// interface IProps {
-//   title: string;
-//   id: number;
-//   name: string;
-// }
+import { ContractEmailTemplateDatum } from "src/features/meetings/types/types";
 const SettingsTemplate = () => {
   const { type } = useParams();
   const navigate = useNavigate();
@@ -35,13 +29,22 @@ const SettingsTemplate = () => {
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [showVariablesList, setShowVariablesList] = useState<boolean>(true);
   const { data, isLoading } = useGetSingleTemplate(typeStr);
-  const [template, setTemplate] = useState(data?.data[0]);
-  const [open, setOpen] = useState(false);
+  const [template, setTemplate] = useState<ContractEmailTemplateDatum>();
   const [preSelectedFile, setPreSelectedFile] = useState<string>();
-  const {  fileUploading, fileMutate } = useUploadFile();
+  const { fileUploading, fileMutate } = useUploadFile();
   const { mutate, isLoading: updateLoading } = useUpdateTemplate();
-  const { drawerSize } = UseWindowWidth();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allPages, setAllPages] = useState<React.ReactElement[]>([
+    <JoditEditorComponent
+      control={{
+        label: `1-templateDescription`,
+        name: `1-templateDescription`,
+      }}
+    />,
+  ]);
+
   const editEmailTemplate = ({ content, name, type, file }: IPropData) => {
     mutate(
       { content, name, type, file },
@@ -74,9 +77,28 @@ const SettingsTemplate = () => {
     if (data?.data) {
       const itemData = data.data[0];
       setPreSelectedFile(itemData.file);
-      form.setFieldValue("templateDescription", `${itemData.content}`);
+      if (itemData.type === "contract") {
+        let pages: React.ReactElement[] = [];
+        itemData.pages.map((page, i: number) => {
+          pages.push(
+            <JoditEditorComponent
+              control={{
+                label: `${i + 1}-templateDescription`,
+                name: `${i + 1}-templateDescription`,
+              }}
+            />
+          );
+          form.setFieldValue(`${i + 1}-templateDescription`, `${page.content}`);
+        });
+        setAllPages(pages);
+      } else {
+        form.setFieldValue("templateDescription", `${itemData.content}`);
+      }
     }
-  }, [form, type, data, data?.data, isLoading]);
+  }, [type, data, data?.data, isLoading]);
+
+  useEffect(() => {}, [allPages, form, currentPage]);
+
   const props: UploadProps = {
     onRemove: (file) => {
       const index = fileList.indexOf(file);
@@ -105,25 +127,28 @@ const SettingsTemplate = () => {
       "text/csv",
     ] as TFileType[],
   };
-
-  const onClose = () => {
-    setOpen(false);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const handleCancel = () => {
     form.resetFields();
   };
-  // const handlePreview = () => {
-  //   const values = form.getFieldsValue();
-  //   console.log(values)
-  //   setOpen(true);
-  // };
-  const handleSave = (values: {
-    attachedFileTemplate: any;
-    templateDescription: JSX.Element;
-  }) => {
+  const handleSave = (values: any) => {
     console.log(values);
-    const selectedFile = values.attachedFileTemplate[0].originFileObj;
+    const selectedFile = Array.isArray(values.attachedFileTemplate)
+      ? values.attachedFileTemplate[0].originFileObj
+      : null;
+    let content = "";
+    if (typeStr === "contract") {
+      for (let i = 1; i <= allPages.length; i++) {
+        let currentTemplate = `${i}-templateDescription`;
+        content += `{{page${i}}}${values[currentTemplate]}{{endofPage${i}}}`;
+      }
+    } else {
+      content = `${values.templateDescription}`;
+    }
+    console.log("content", content);
     if (fileList.length > 0) {
       fileMutate(
         {
@@ -140,13 +165,9 @@ const SettingsTemplate = () => {
             });
           },
           onSuccess: (res: any) => {
-            // queryClient.invalidateQueries([
-            //   QUERY_KEY_ALLPAYMENT_DETAILS,
-            //    selectedFile,
-            // ]);
             editEmailTemplate({
-              content: `${values.templateDescription}`,
-              name: template?.name,
+              content,
+              name: template?.name as string,
               type: typeStr,
               file: res.data.path,
             });
@@ -155,10 +176,10 @@ const SettingsTemplate = () => {
       );
     } else {
       editEmailTemplate({
-        content: `${values.templateDescription}`,
-        name: template?.name,
+        content,
+        name: template?.name as string,
         type: typeStr,
-        file: undefined,
+        file: template?.file,
       });
     }
   };
@@ -170,19 +191,90 @@ const SettingsTemplate = () => {
 
     return trimmedString;
   };
+const variableInformation = () => {
+  const data =
+    typeStr === "contract"
+      ? [
+          { label: "{{applicant_name}} ", information: "Applicant's name" },
+          {
+            label: "{{applicant_address}}",
+            information: "Applicant's address",
+          },
+          { label: "{{country}}", information: "Investment country" },
+          { label: "{{amount_paid}}", information: "Amount paid" },
+          {
+            label: "{{ day }},  {{ month}},   {{ year}} ",
+            information:
+              "To be utilized for dates e.g “payment made on  {{day}}, {{month}} {{year}} “.",
+          },
+          { label: "{{investment_route}}", information: "Investment route" },
+          { label: "{{program_type}}", information: "Program type" },
+        ]
+      : [
+          { label: "{{email}} ", information: "Recipient's email Address" },
+          { label: "{{password}}", information: "Recipient's password" },
+        ];
+
+  return (
+    <div>
+      <table
+        border={2}
+        style={{
+          border: "1px solid #ddd",
+          borderCollapse: "collapse",
+          margin: "4px",
+          borderRadius: "8px",
+        }}
+      >
+        <thead>
+          <tr>
+            <th
+              style={{
+                border: "1px solid #ddd",
+                padding: "2px",
+                color: "#F4F6F8",
+              }}
+            >
+              Variable to Insert
+            </th>
+            <th style={{ border: "1px solid #ddd", padding: "2px" }}>
+              Representation
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={item.label}>
+              <td style={{ border: "1px solid #ddd", padding: "2px" }}>
+                {item.label}
+              </td>
+              <td style={{ border: "1px solid #ddd", padding: "2px" }}>
+                {item.information}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
   return (
     <>
-      <PageIntro
-        title={`${trimOutTitle()}`}
-        linkBack={appRoute.contractsEmailTemplates}
-      />
-      {/* <Pagination
-        current={currentPage}
-        defaultCurrent={1}
-        total={allPages.length}
-        pageSize={1}
-        onChange={handlePageChange}
-      /> */}
+      <div className="flex justify-between items-center py-4 ">
+        <PageIntro
+          title={`${trimOutTitle()}`}
+          linkBack={appRoute.contractsEmailTemplates}
+        />
+        <Tooltip
+          title={variableInformation}
+          open={showVariablesList}
+          color="#012168"
+          placement="left"
+          overlayClassName="min-w-[290px]"
+        >
+          <Button onClick={()=>{setShowVariablesList((prev)=>!prev)}}>{`${showVariablesList ? "Hide" : "View"} variables`} </Button>
+        </Tooltip>
+      </div>
 
       <Skeleton active loading={isLoading} paragraph={{ rows: 6 }} title={true}>
         <Form
@@ -199,14 +291,36 @@ const SettingsTemplate = () => {
           />
           {preSelectedFile && (
             <p
-              className={`p-1 bg-gray-200 border-2 rounded w-fit mb-10 ${
+              className={`p-1 bg-gray-200 border-2 rounded w-fit max-w-[80vw] break-words mb-10 ${
                 fileList.length !== 0 && "hidden"
               }`}
             >
               {preSelectedFile}
             </p>
           )}
-          <JoditEditorComponent />
+          {typeStr === "contract" ? (
+            <>
+              {/* {pageToDisplay} */}
+              {allPages.map((page) => {
+                return !page.props.control.name.includes(currentPage) ? (
+                  <div className="hidden">{page}</div>
+                ) : (
+                  <div>{page}</div>
+                );
+              })}
+              <Pagination
+                className="mb-4"
+                current={currentPage}
+                defaultCurrent={1}
+                total={allPages.length}
+                pageSize={1}
+                onChange={handlePageChange}
+              />
+            </>
+          ) : (
+            <JoditEditorComponent />
+          )}
+
           <div className="flex justify-between">
             <AppButton
               label="Cancel"
@@ -234,13 +348,6 @@ const SettingsTemplate = () => {
           </div>
         </Form>
       </Skeleton>
-      <Drawer
-        title={`${template?.name} Preview`}
-        placement="right"
-        onClose={onClose}
-        open={open}
-        size={drawerSize}
-      ></Drawer>
     </>
   );
 };
