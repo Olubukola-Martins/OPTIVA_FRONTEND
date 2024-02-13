@@ -21,6 +21,8 @@ export interface simpleCardProps {
   count: number;
   cardColor: "blue" | "green" | "yellow" | "oxblood";
   icon: string;
+  link?: boolean;
+  linkPath?: string;
 }
 
 export interface SidebarLink {
