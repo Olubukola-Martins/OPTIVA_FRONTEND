@@ -25,7 +25,9 @@ export const SimpleCard = ({
     <Link
       to={link ? linkPath : "#"}
       className={` ${
-        link ? "cursor-pointer" : "cursor-text"
+        link
+          ? "cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out"
+          : "cursor-text"
       } border border-${cardColor}-600 rounded-lg py-3 px-3 relative`}
       style={{ borderColor: selectedColor }}
     >

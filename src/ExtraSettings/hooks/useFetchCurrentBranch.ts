@@ -4,7 +4,7 @@ import { END_POINT } from "src/config/environment";
 import { userProfileProps } from "../types";
 import { useGetToken } from "src/hooks/useGetToken";
 
-export const QUERY_KEY_FOR_USER_BRANCH = "userProfile";
+export const QUERY_KEY_FOR_USER_BRANCH = "branchKey";
 
 const getData = async (): Promise<userProfileProps> => {
  const token = useGetToken()
