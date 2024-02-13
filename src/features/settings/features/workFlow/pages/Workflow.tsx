@@ -30,8 +30,6 @@ const Workflow = () => {
     setWorkflowId(id);
   };
 
-  
-
   return (
     <>
       <EditWorkflow
@@ -91,7 +89,13 @@ const Workflow = () => {
           )}
         </Skeleton>
       </div>
-      <div className={data?.data?.length === 0 && isLoading ? "hidden" : "flex justify-end mt-5"}>
+      <div
+        className={
+          data?.data?.length === 0 && isLoading
+            ? "hidden"
+            : "flex justify-end mt-5"
+        }
+      >
         <Pagination
           total={data?.total}
           onChange={onChange}

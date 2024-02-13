@@ -18,9 +18,6 @@ const getData = async (): Promise<IActivityLogs[]> => {
   };
   const res = await axios.get(url, config);
 
-  console.log(res);
-  
-
   const data: IActivityLogs[] = res.data.data.map((item: IActivityLogs) => ({
     ...item,
   }));

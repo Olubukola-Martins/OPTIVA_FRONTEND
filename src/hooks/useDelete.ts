@@ -6,14 +6,11 @@ import { IGeneralProps } from "src/types";
 import { useGetToken } from "./useGetToken";
 
 interface IDProps {
-    EndPointUrl: string;
-    queryKey: string;
-  }
+  EndPointUrl: string;
+  queryKey: string;
+}
 
- const handleDelete = async ({
-  id,
-  EndPointUrl,
-}: IGeneralProps) => {
+const handleDelete = async ({ id, EndPointUrl }: IGeneralProps) => {
   const url = `${END_POINT.BASE_URL}/${EndPointUrl}${id}`;
   const token = useGetToken();
   const config = {

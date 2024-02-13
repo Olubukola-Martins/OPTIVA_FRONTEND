@@ -66,7 +66,7 @@ export const NewEmployee = ({ handleClose, open, id }: IdentifierProps) => {
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title="New Employee"
+      title={`${id ? "Edit" : "New"} Employee`}
       style={{ top: 15 }}
     >
       <Form
