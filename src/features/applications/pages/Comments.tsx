@@ -267,7 +267,7 @@ const Comments = () => {
 
       <div className=" flex flex-col md:flex-row items-center justify-between p-1">
         <PageIntro
-          title="Comments"
+          title="Reasons"
           description="View and make comments on applicants"
           linkBack={appRoute.applications}
         />

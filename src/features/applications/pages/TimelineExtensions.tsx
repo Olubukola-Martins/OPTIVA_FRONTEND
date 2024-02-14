@@ -43,7 +43,7 @@ const TimelineExtensions = () => {
   const { data, isLoading } = useFetchTimelineExtensions({
     id: id as unknown as number,
   });
-  const [timelineId, setTimelineId] = useState<number>()
+  const [timelineId, setTimelineId] = useState<number>();
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -83,7 +83,7 @@ const TimelineExtensions = () => {
     };
 
     const formattedDate = formatDateToString(val.endDate.$d);
-   
+
     mutate(
       {
         application_id: id as unknown as number,
@@ -114,11 +114,13 @@ const TimelineExtensions = () => {
   };
 
   const approveTimeline = () => {
-    patchData(timelineId as unknown as number);
+    patchData(id as unknown as number);
   };
 
   const rejectTimeline = (val: any) => {
-    rejectData(timelineId as unknown as number, val.extensionReject);
+    console.log("reject", val);
+    console.log("timeliine", timelineId);
+    rejectData(id as unknown as number, val.extensionReject);
     setOpenRejectModal(false);
   };
 
@@ -139,7 +141,6 @@ const TimelineExtensions = () => {
   const handleRejectCancel = () => {
     setOpenRejectModal(false);
   };
-
 
   // Columns
   const columns: ColumnsType<DataSourceItem> = [
@@ -196,16 +197,15 @@ const TimelineExtensions = () => {
                 >
                   View
                 </Menu.Item> */}
-                <Menu.Item
-                  key="1"
-                  onClick={() => {
-                    setTimelineId(val.key as unknown as number)
-                    approveTimeline();
-                  }}
-                >
+                <Menu.Item key="1" onClick={approveTimeline}>
                   Approve
                 </Menu.Item>
-                <Menu.Item key="2" onClick={showRejectModal}>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    showRejectModal();
+                  }}
+                >
                   Reject
                 </Menu.Item>
               </Menu>
@@ -220,8 +220,6 @@ const TimelineExtensions = () => {
 
   return (
     <>
-     
-
       <Modal
         open={openRequestModal}
         onCancel={handleRequestCancel}
@@ -277,7 +275,7 @@ const TimelineExtensions = () => {
           <Form
             layout="vertical"
             form={form}
-            onFinish={rejectTimeline}
+            onFinish={(val: any) => rejectTimeline(val)}
             requiredMark={false}
           >
             <Form.Item

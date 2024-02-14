@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { ImportModal } from "src/components/modals/ImportModal";
+// import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import {
@@ -15,6 +15,7 @@ import {
 } from "../hooks/useGetApplicationTemplate";
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
 import { useDelete } from "src/hooks/useDelete";
+import { UploadModal } from "src/components/modals/UploadModal";
 
 interface DataSourceItem {
   key: React.Key;
@@ -32,7 +33,6 @@ const ApplicationTemplate = () => {
     queryKey: QUERY_KEY_FOR_APPLICATION_TEMPLATE,
     EndPointUrl: "admin/templates/",
   });
-
 
   useEffect(() => {
     if (data) {
@@ -160,7 +160,7 @@ const ApplicationTemplate = () => {
         </div>
       </div>
       {/* Import Modal */}
-      <ImportModal
+      <UploadModal
         open={openImportModal}
         onCancel={handleImportCancel}
         header=" Application Template(s)"

@@ -17,7 +17,8 @@ import { usePostStLucia } from "../hooks/usePostStLucia";
 
 const AddFeesTab = () => {
   const [investmentId, setInvestmentId] = useState<number>();
-  
+  const [currentTab, setCurrentTab] = useState<number>(0);
+
   const {
     mutate: mutateGrenadaRealEstate,
     isLoading: grenadaRealEstateLoading,
@@ -45,12 +46,17 @@ const AddFeesTab = () => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
-
   const tabItems: TabsProps["items"] = [
     {
       label: "Fees",
       key: "Fees",
-      children: <AddFees setInvestmentRoute={setInvestmentId} />,
+      children: (
+        <AddFees
+          setInvestmentRoute={setInvestmentId}
+          onNext={() => setCurrentTab(currentTab + 1)}
+          selectedInvestment={investmentId}
+        />
+      ),
     },
     {
       label: "Program Fees Breakdown",
@@ -61,6 +67,7 @@ const AddFeesTab = () => {
   ];
 
   const handleSubmit = (val: any) => {
+    console.log("form values", val);
     switch (investmentId) {
       case 1:
         mutateGrenadaDonation(
@@ -286,39 +293,82 @@ const AddFeesTab = () => {
         );
         break;
       default:
+        null;
         break;
     }
   };
 
   return (
-    <Form
-      layout="vertical"
-      onFinish={handleSubmit}
-      requiredMark={false}
-      form={form}
-    >
-      <Tabs items={tabItems} />
+    <>
+      <Form
+        onFinish={handleSubmit}
+        form={form}
+        layout="vertical"
+        requiredMark={false}
+      >
+        <Tabs
+          activeKey={currentTab.toString()}
+          onChange={(key) => setCurrentTab(Number(key))}
+        >
+          {tabItems.map((tab, index) => (
+            <Tabs.TabPane tab={tab.label} key={index.toString()}>
+              {tab.children}
+              {index === tabItems.length - 1 && (
+                <div className="flex items-center justify-end gap-4 mt-5">
+                  <AppButton
+                    label="Cancel"
+                    type="reset"
+                    variant="transparent"
+                  />
+                  <AppButton
+                    label="Save"
+                    type="submit"
+                    isLoading={
+                      grenadaRealEstateLoading ||
+                      grenadaDonationLoading ||
+                      dominicaDonationLoading ||
+                      antiguaBarbacudaLoading ||
+                      antiguaSingleReaLEstateLoading ||
+                      antiguaJointEstateLoading ||
+                      stKittsNevisLoading ||
+                      stLuciaLoading
+                    }
+                  />
+                </div>
+              )}
+            </Tabs.TabPane>
+          ))}
+        </Tabs>
+      </Form>
+    </>
 
-      <div className="flex items-center justify-end gap-4 mt-5">
-        <AppButton label="Cancel" type="reset" variant="transparent" />
-        <AppButton
-          label="Save"
-          type="submit"
-          isLoading={
-            grenadaRealEstateLoading ||
-            grenadaDonationLoading ||
-            dominicaDonationLoading ||
-            antiguaBarbacudaLoading ||
-            antiguaSingleReaLEstateLoading ||
-            antiguaJointEstateLoading ||
-            stKittsNevisLoading ||
-            stLuciaLoading
-          }
-        />
-      </div>
-    </Form>
+    // <Form
+    //   layout="vertical"
+    //   onFinish={handleSubmit}
+    //   requiredMark={false}
+    //   form={form}
+    // >
+    //   <Tabs items={tabItems} />
+
+    // <div className="flex items-center justify-end gap-4 mt-5">
+    //   <AppButton label="Cancel" type="reset" variant="transparent" />
+    //   <AppButton
+    //     label="Save"
+    //     type="submit"
+    //     isLoading={
+    //       grenadaRealEstateLoading ||
+    //       grenadaDonationLoading ||
+    //       dominicaDonationLoading ||
+    //       antiguaBarbacudaLoading ||
+    //       antiguaSingleReaLEstateLoading ||
+    //       antiguaJointEstateLoading ||
+    //       stKittsNevisLoading ||
+    //       stLuciaLoading
+    //     }
+    //   />
+    // </div>
+    // </Form>
   );
 };
 
 export default AddFeesTab;
-

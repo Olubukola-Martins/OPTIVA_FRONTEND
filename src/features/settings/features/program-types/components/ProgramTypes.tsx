@@ -9,6 +9,7 @@ import { DeleteModal } from "src/components/modals/DeleteModal";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { useDelete } from "src/hooks/useDelete";
+import { useGetApplicationTemplate } from "../../appTemplate/hooks/useGetApplicationTemplate";
 
 type DataSourceItem = {
   key: React.Key;
@@ -25,10 +26,14 @@ export const ProgramTypes = () => {
   const { data, isLoading } = useGetProgramType();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
   const [programId, setProgramId] = useState<number>();
+  const { data: templateData } = useGetApplicationTemplate();
   const { removeData } = useDelete({
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
     EndPointUrl: "admin/programtypes/",
   });
+
+  console.log("program data", data);
+  console.log("template data", templateData);
 
   useEffect(() => {
     if (data) {
@@ -36,13 +41,16 @@ export const ProgramTypes = () => {
         return {
           key: item.id,
           sn: index + 1,
-          programType: item.program_name.charAt(0).toUpperCase() + item.program_name.slice(1),
+          programType:
+            item.program_name.charAt(0).toUpperCase() +
+            item.program_name.slice(1),
           eligibleDependent: item.eligibledependents.map(
             (item) => item.dependant
           ),
-          applicationTemplate: item.program_link,
-          documentRequirements: item.documentrequirements
-            .map((item) => item.name),
+          applicationTemplate: item.applicationtemplate.template_name,
+          documentRequirements: item.documentrequirements.map(
+            (item) => item.name
+          ),
           milestones: item.milestones.map((item) => item.milestone),
         };
       });
@@ -67,7 +75,9 @@ export const ProgramTypes = () => {
       key: "3",
       render(_, record) {
         return record.eligibleDependent.map((item) => (
-          <Tag key={item} className="m-1">{item}</Tag>
+          <Tag key={item} className="m-1">
+            {item}
+          </Tag>
         ));
       },
     },
@@ -81,7 +91,11 @@ export const ProgramTypes = () => {
       dataIndex: "documentRequirements",
       key: "5",
       render(_, record) {
-        return record.documentRequirements.map((item) => <Tag key={item} className="m-1">{item}</Tag>);
+        return record.documentRequirements.map((item) => (
+          <Tag key={item} className="m-1">
+            {item}
+          </Tag>
+        ));
       },
     },
     {
@@ -89,7 +103,11 @@ export const ProgramTypes = () => {
       dataIndex: "milestones",
       key: "6",
       render(_, record) {
-        return record.milestones.map((item) =>   <Tag key={item} className="m-1">{item}</Tag>);
+        return record.milestones.map((item) => (
+          <Tag key={item} className="m-1">
+            {item}
+          </Tag>
+        ));
       },
     },
     {

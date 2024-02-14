@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { IActiveAndInactiveApplications} from "../types/types";
-import { QUERY_KEY_FOR_APPLICANTS } from "./useFetchAllApplicants";
+import { QUERY_KEY_FOR_APPLICATIONS } from "./useGetApplication";
 
 interface IProps {
   section?: string;
@@ -32,7 +32,7 @@ const getData = async (props: IProps) => {
 export const useFetchActiveandInactiveApplicant = ({ section}: IData) => {
   const { token } = useGetUserInfo();
   const queryData = useQuery(
-    [QUERY_KEY_FOR_APPLICANTS, section],
+    [QUERY_KEY_FOR_APPLICATIONS, section],
     () => getData({ token, section }),
     {
       onError: () => {},

@@ -31,15 +31,19 @@ export const ApplicantBrief = () => {
   return (
     <>
       <Skeleton active loading={isLoading}>
-        {data?.length !==0 ? data?.map((item) => (
-          <div className="mt-2 py-2" key={item.id}>
-            <h2 className="py-3">
-              {item.question.form_question.charAt(0).toUpperCase() +
-                item.question.form_question.slice(1)}
-            </h2>
-            {renderPTag(item.question.input_type, item.response)}
-          </div>
-        )): <Empty/>}
+        {data?.length !== 0 ? (
+          data?.map((item) => (
+            <div className="mt-2 py-2" key={item.id}>
+              <h2 className="py-3">
+                {item.question.form_question.charAt(0).toUpperCase() +
+                  item.question.form_question.slice(1)}
+              </h2>
+              {renderPTag(item.question.input_type, item.response)}
+            </div>
+          ))
+        ) : (
+          <Empty />
+        )}
       </Skeleton>
     </>
   );

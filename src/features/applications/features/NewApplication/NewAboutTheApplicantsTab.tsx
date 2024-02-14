@@ -18,7 +18,7 @@ import { ICreateApplicationResponse } from "../../types/types";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
 import { IProps } from "./NewApplicantBrief";
 
-export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
+export const NewAboutTheApplicantsTab: React.FC<IProps> = ({ onNext }) => {
   const queryClient = useQueryClient();
   const { mutate, isLoading, isSuccess } =
     useCreateApplicationResponse("sectiontworesponse");
@@ -27,6 +27,7 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
   const { sharedData } = useGlobalContext();
 
   const handleTabSubmit = (responses: any) => {
+    console.log("form responses", responses);
     const applicationId = sharedData.applicantId as unknown as number;
     const applicationData: ICreateApplicationResponse = {
       application_id: applicationId,
@@ -64,7 +65,7 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
         // if (currentTab < tabItems.length - 1) {
         //   setCurrentTab(currentTab + 1);
         // }
-        onNext()
+        onNext();
       },
     });
   };
@@ -104,8 +105,8 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
       subsectionName: "marriageDetails",
       children: (
         <NewMarriageDetails
-        onNextTabItem={() => setCurrentTab(currentTab + 1)}
-        onPrevTabItem={() => setCurrentTab(currentTab - 1)}
+          onNextTabItem={() => setCurrentTab(currentTab + 1)}
+          onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="marriageDetails"
         />
       ),
@@ -116,8 +117,8 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
       subsectionName: "childrenDetails",
       children: (
         <NewChildrenDetails
-        onNextTabItem={() => setCurrentTab(currentTab + 1)}
-        onPrevTabItem={() => setCurrentTab(currentTab - 1)}
+          onNextTabItem={() => setCurrentTab(currentTab + 1)}
+          onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="childrenDetails"
         />
       ),
@@ -128,7 +129,7 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
       subsectionName: "otherDependentsDetails",
       children: (
         <NewOtherDependentDetails
-        onNextTabItem={() => setCurrentTab(currentTab + 1)}
+          onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="otherDependentsDetails"
         />
@@ -140,8 +141,8 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
       subsectionName: "PEP",
       children: (
         <NewPEP
-        onNextTabItem={() => setCurrentTab(currentTab + 1)}
-        onPrevTabItem={() => setCurrentTab(currentTab - 1)}
+          onNextTabItem={() => setCurrentTab(currentTab + 1)}
+          onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="PEP"
         />
       ),
@@ -152,8 +153,8 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
       subsectionName: "employmentDetails",
       children: (
         <NewEmploymentDetails
-        onNextTabItem={() => setCurrentTab(currentTab + 1)}
-        onPrevTabItem={() => setCurrentTab(currentTab - 1)}
+          onNextTabItem={() => setCurrentTab(currentTab + 1)}
+          onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="employmentDetails"
         />
       ),
@@ -164,8 +165,8 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
       subsectionName: "businessIncomeNetworth",
       children: (
         <NewBusinessIncomeAndNetwork
-        onNextTabItem={() => setCurrentTab(currentTab + 1)}
-        onPrevTabItem={() => setCurrentTab(currentTab - 1)}
+          onNextTabItem={() => setCurrentTab(currentTab + 1)}
+          onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="businessIncomeNetworth"
         />
       ),
@@ -176,8 +177,8 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
       subsectionName: "academicHistory",
       children: (
         <NewAcademicHistory
-        onNextTabItem={() => setCurrentTab(currentTab + 1)}
-        onPrevTabItem={() => setCurrentTab(currentTab - 1)}
+          onNextTabItem={() => setCurrentTab(currentTab + 1)}
+          onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="academicHistory"
         />
       ),
@@ -200,7 +201,12 @@ export const NewAboutTheApplicantsTab:React.FC<IProps> = ({ onNext }) => {
 
   return (
     <>
-      <Form onFinish={() => handleTabSubmit} form={form} layout="vertical" requiredMark={false}>
+      <Form
+        onFinish={() => handleTabSubmit}
+        form={form}
+        layout="vertical"
+        requiredMark={false}
+      >
         <Tabs
           tabPosition="top"
           // defaultActiveKey="1"

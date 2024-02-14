@@ -1,13 +1,21 @@
-import { ApplicationsTab } from "../features/ApplicantDetails/ApplicationsTab";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
-import { ImportModal } from "src/components/modals/ImportModal";
+// import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { NewApplicationModal } from "../features/NewApplication/NewApplicationModal";
+import { ApplicationsTab } from "../features/ApplicantDetails/ApplicationsTab";
+import { CEApplicantTab } from "../features/ApplicationRoles/CustomerEngagerRole/CEApplicantTab";
+import { UploadModal } from "src/components/modals/UploadModal";
+import { ServiceManagerTab } from "../features/ApplicationRoles/ServiceManager.tsx/ServiceManagerTab";
+import { DMSTab } from "../features/ApplicationRoles/DMSRole/DMSTab";
+import { DPOTab } from "../features/ApplicationRoles/DPOSRole/DPOTab";
+import { DRTab } from "../features/ApplicationRoles/DRRole/DRTab";
+import { AuditTab } from "../features/ApplicationRoles/AuditRole/AuditTab";
+import { PaymentTab } from "../features/ApplicationRoles/PaymentRole/PaymentTab";
 
-export let applicantId: number | undefined;
+// export let applicantId: number | undefined;
 
 const Applications = () => {
   // New Applications Modal
@@ -37,6 +45,14 @@ const Applications = () => {
   const handleExportCancel = () => {
     setExportModal(false);
   };
+
+  // change roles
+  const [selectedRole, setSelectedRole] = useState<string>("Operations List");
+
+  const handleRoleChange = (role: string) => {
+    setSelectedRole(role);
+  };
+
   return (
     <>
       {/* New Applications Modal */}
@@ -45,7 +61,7 @@ const Applications = () => {
         handleClose={handleNewApplicationsCancel}
       />
       {/* Import Modal */}
-      <ImportModal
+      <UploadModal
         open={openImportModal}
         onCancel={handleImportCancel}
         header="Application(s)"
@@ -58,7 +74,24 @@ const Applications = () => {
       />
       <div className=" flex flex-col md:flex-row justify-between p-3">
         <PageIntro
-          title="Applicants (Operations) List"
+          title={
+            selectedRole === "Operations List"
+              ? "Applicants (Operations) List"
+              : selectedRole === "Audit's List"
+              ? "Audit's List"
+              : selectedRole === "DR's List"
+              ? "DR's List"
+              : selectedRole === "DPO's List"
+              ? "DPO's List"
+              : selectedRole === "DMS's List"
+              ? "DMS's List"
+              : selectedRole === "Service Manager's List"
+              ? "Service Manager's List"
+              : selectedRole === "Customer Engager's List"
+              ? "Customer Engager's List"
+              : "" // Handle default case here if necessary
+          }
+          // title="Applicants (Operations) List"
           description="View & Edit Applicant Details"
           arrowBack={false}
         />
@@ -79,7 +112,32 @@ const Applications = () => {
         </div>
       </div>
 
-      <ApplicationsTab />
+      {selectedRole === "Audit's List" && (
+        <AuditTab onRoleSelect={handleRoleChange} />
+      )}
+      {selectedRole === "DR's List" && (
+        <DRTab onRoleSelect={handleRoleChange} />
+      )}
+      {selectedRole === "DPO's List" && (
+        <DPOTab onRoleSelect={handleRoleChange} />
+      )}
+      {selectedRole === "DMS's List" && (
+        <DMSTab onRoleSelect={handleRoleChange} />
+      )}
+      {/* {selectedRole === "Audit's List" && (
+        <AuditTab onRoleSelect={handleRoleChange} />
+      )} */}
+      {selectedRole === "Operations List" && (
+        <ApplicationsTab onRoleSelect={handleRoleChange} />
+      )}
+      {selectedRole === "Service Manager's List" && (
+        <ServiceManagerTab onRoleSelect={handleRoleChange} />
+      )}
+      {selectedRole === "Customer Engager's List" && (
+        <CEApplicantTab onRoleSelect={handleRoleChange} />
+      )}
+
+      {/* <PaymentTab /> */}
     </>
   );
 };

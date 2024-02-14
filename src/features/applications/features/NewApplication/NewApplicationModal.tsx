@@ -35,7 +35,6 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
   const queryClient = useQueryClient();
   const { setSharedData } = useGlobalContext();
 
-
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleSubmit = (val: any) => {
@@ -59,7 +58,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
           setFormSubmitted(true);
-          navigate(appRoute.new_application);
+          navigate(appRoute.new_application().path);
           setSharedData((prevData: any) => ({
             ...prevData,
             applicantId: res.data.data.applicant.application_id,
@@ -71,11 +70,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
   };
   return (
     <>
-      <Modal
-        open={open}
-        onCancel={handleClose}
-        footer={null}
-      >
+      <Modal open={open} onCancel={handleClose} footer={null}>
         <Form layout="vertical" onFinish={handleSubmit} form={form}>
           <div>
             <h1 className="p-4 font-bold text-center text-lg">
@@ -156,7 +151,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
                 containerStyle="border border-secondary text-secondary"
               />
               {formSubmitted ? (
-                <Link to={appRoute.new_application}>Next</Link>
+                <Link to={appRoute.new_application().path}>Next</Link>
               ) : (
                 <AppButton label="Next" type="submit" isLoading={isLoading} />
               )}

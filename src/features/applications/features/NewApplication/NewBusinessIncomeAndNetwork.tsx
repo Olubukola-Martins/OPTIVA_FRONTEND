@@ -26,7 +26,7 @@ export const NewBusinessIncomeAndNetwork: React.FC<
               item.subsection_name === subsectionName && (
                 <div className="w-full" key={item.id}>
                   <Form.Item
-                    rules={generalValidationRules}
+                    // rules={generalValidationRules}
                     name={item.schema_name}
                     label={
                       item.form_question.charAt(0).toUpperCase() +

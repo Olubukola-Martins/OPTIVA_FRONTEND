@@ -12,7 +12,8 @@ import { useGetCountry } from "src/features/settings/features/program-types/hook
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
-import { QUERY_KEY_FOR_APPLICANTS } from "../hooks/useFetchAllApplicants";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
+import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
 
 export const InactiveApplications = () => {
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
@@ -24,6 +25,7 @@ export const InactiveApplications = () => {
   const { data: employeesData } = useFetchEmployees({
     currentUrl: "active-employees",
   });
+  const { data: investmentData } = useGetInvestmentRoute();
 
   const [form] = Form.useForm();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
@@ -39,16 +41,24 @@ export const InactiveApplications = () => {
     const program = programData?.find((program) => program.id === programId);
     return program && program.program_name;
   };
-
+  const getInvestmentName = (investmentId: number) => {
+    const investment = investmentData?.find(
+      (investment) => investment.id === investmentId
+    );
+    return investment && investment.investment_name;
+  };
   useEffect(() => {
     if (data && employeesData) {
       const inActiveApplicant: DataSourceItem[] = data.map((item, index) => {
         const assignedEmployee = employeesData.data.find(
           (employee) =>
-            employee.user.roles.id === item.assigned_role_id && 
+            employee.user.roles.id === item.assigned_role_id &&
             employee.id === item.assigned_user_id
         );
-
+        const reasons =
+          item.applicationcomment
+            ?.map((comment) => comment.comment[0])
+            .join(", ") || "-";
         return {
           key: item.id,
           sn: index + 1,
@@ -58,7 +68,8 @@ export const InactiveApplications = () => {
           programType: getProgramName(item.programtype_id) || "-",
           numberOfDependents: item.no_of_dependents,
           assignedTo: assignedEmployee ? assignedEmployee.name : "-",
-          comment: item.applicationcomment?.length,
+          reasons: reasons,
+          investmentRoute: getInvestmentName(item.investmentroute_id) || "-",
         };
       });
 
@@ -84,7 +95,7 @@ export const InactiveApplications = () => {
             title: "Success",
             description: res.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANTS]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           setOpenActiveModal(false);
         },
       }
@@ -117,19 +128,24 @@ export const InactiveApplications = () => {
       key: "5",
     },
     {
+      title: "Investment Route",
+      dataIndex: "investmentRoute",
+      key: "6",
+    },
+    {
       title: "Number Of Dependents",
       dataIndex: "numberOfDependents",
-      key: "6",
+      key: "7",
     },
     {
       title: " Assigned To",
       dataIndex: "assignedTo",
-      key: "7",
+      key: "8",
     },
     {
-      title: " Comment",
-      dataIndex: "comment",
-      key: "8",
+      title: "Reason",
+      dataIndex: "reasons",
+      key: "9",
     },
     {
       title: "Action",
@@ -151,7 +167,6 @@ export const InactiveApplications = () => {
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="2">
-                  {" "}
                   <Link
                     to={
                       appRoute.applicant_documents(val.key as unknown as number)
@@ -161,12 +176,14 @@ export const InactiveApplications = () => {
                     View Uploaded Documents
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="3">
-                  <Link
-                    to={appRoute.comments(val.key as unknown as number).path}
-                  >
-                    View Comment
-                  </Link>
+                <Menu.Item
+                  key="3"
+                  onClick={() => {
+                    setComment(val.reasons);
+                    showCommentModal();
+                  }}
+                >
+                  View Reason
                 </Menu.Item>
                 <Menu.Item
                   key="4"
@@ -195,6 +212,17 @@ export const InactiveApplications = () => {
   const handleActiveCancel = () => {
     setOpenActiveModal(false);
   };
+
+  // Comment Modal
+  const [openCommentModal, setOpenCommentModal] = useState<boolean>(false);
+  const showCommentModal = () => {
+    setOpenCommentModal(true);
+  };
+  const handleCommentCancel = () => {
+    setOpenCommentModal(false);
+  };
+
+  const [comment, setComment] = useState<string>();
   return (
     <>
       {/* INACTIVE MODAL */}
@@ -214,6 +242,25 @@ export const InactiveApplications = () => {
               <AppButton label="Submit" type="submit" isLoading={postLoading} />
             </div>
           </Form>
+        </div>
+      </Modal>
+
+      {/* COMMENT MODAL */}
+      <Modal
+        open={openCommentModal}
+        onCancel={handleCommentCancel}
+        footer={null}
+      >
+        <div className="p-3 my-3 mx-auto">
+          <h2 className="font-bold text-lg text-center">Reason</h2>
+          <div className="border rounded p-2 my-4">{comment}</div>
+          <div className="flex justify-end">
+            <AppButton
+              type="button"
+              label="Back"
+              handleClick={handleCommentCancel}
+            />
+          </div>
         </div>
       </Modal>
       {/* TABLE */}

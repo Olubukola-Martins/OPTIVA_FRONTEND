@@ -50,13 +50,17 @@ export interface  ISingleQuestion {
   schema_name:string
 }
 
-// interface RootObject {
-//   template_id: number;
-//   questions: Question[];
-// }
 
-// interface Question {
-//   form_question: string;
-//   input_type: string;
-//   subsection_name: string;
-// }
+interface Datum {
+  id: number;
+  template_id?: any;
+  form_question: string;
+  input_type: string;
+  options?: string[];
+  is_required: number;
+  section_name: string;
+  subsection_name?: any;
+  schema_name: string;
+  created_at: string;
+  updated_at: string;
+}

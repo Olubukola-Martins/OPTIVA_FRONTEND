@@ -11,12 +11,10 @@ import { showInputName } from "./ApplicantBriefTemplateDetails";
 
 export const OthersTemplateDetails = () => {
   const { id } = useParams();
-  const { data, isLoading,  } = useGetSingleQuestion({
+  const { data, isLoading } = useGetSingleQuestion({
     id: id as unknown as number,
     endpointUrl: "section-four",
   });
-
-  const dataSectionFour = data;
 
   const { removeData } = useDelete({
     EndPointUrl: "admin/templates/section-four/",
@@ -29,11 +27,11 @@ export const OthersTemplateDetails = () => {
 
   return (
     <>
-      {dataSectionFour?.length === 0 ? (
+      {data?.length === 0 ? (
         <Empty description="No questions has been created for this section" />
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
-          {dataSectionFour?.map((item) => (
+          {data?.map((item) => (
             <List.Item key={item.id}>
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">
@@ -47,12 +45,17 @@ export const OthersTemplateDetails = () => {
                     {showInputName(item.input_type)}
                   </p>
                 </div>
-                <div className="flex justify-end  w-[5%]">
-                  <i
-                    className="ri-delete-bin-line text-xl cursor-pointer mt-10"
-                    onClick={() => setShowDeleteModalForItem(item.id)}
-                  ></i>
-                </div>
+                {data?.map(
+                  (item) =>
+                    item.template_id !== null && (
+                      <div className="flex justify-end  w-[5%]">
+                        <i
+                          className="ri-delete-bin-line text-xl cursor-pointer mt-10"
+                          onClick={() => setShowDeleteModalForItem(item.id)}
+                        ></i>
+                      </div>
+                    )
+                )}
               </div>
               {showDeleteModalForItem === item.id && (
                 <DeleteModal

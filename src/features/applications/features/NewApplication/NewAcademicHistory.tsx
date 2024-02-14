@@ -28,7 +28,7 @@ export const NewAcademicHistory: React.FC<IApplicationFormResponseProps> = ({
                 <div className="w-full" key={item.id}>
                   <Form.Item
                     name={item.schema_name}
-                    rules={generalValidationRules}
+                    // rules={generalValidationRules}
                     label={
                       item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)

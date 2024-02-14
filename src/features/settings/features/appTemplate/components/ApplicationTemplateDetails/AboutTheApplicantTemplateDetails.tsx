@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE,
@@ -39,12 +39,10 @@ export const showSubsectionName = (subSection: string) => {
 
 export const AboutTheApplicantTemplateDetails = () => {
   const { id } = useParams();
-  const { data, isLoading,} = useGetSingleQuestion({
+  const { data, isLoading } = useGetSingleQuestion({
     id: id as unknown as number,
     endpointUrl: "section-two",
-  })
- 
-  const dataSectionTwo = data;
+  });
 
   const { removeData } = useDelete({
     EndPointUrl: "admin/templates/section-two/",
@@ -56,16 +54,16 @@ export const AboutTheApplicantTemplateDetails = () => {
 
   return (
     <>
-      {dataSectionTwo?.length === 0 ? (
+      {data?.length === 0 ? (
         <Empty description="No questions has been created for this section" />
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
-          {dataSectionTwo?.map((item) => (
+          {data?.map((item) => (
             <List.Item key={item.id}>
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">
                   <p className="py-2 text-base">
-                  <span className="font-medium">Question:</span>{" "}
+                    <span className="font-medium">Question:</span>{" "}
                     {item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)}
                   </p>
@@ -78,12 +76,17 @@ export const AboutTheApplicantTemplateDetails = () => {
                     {showSubsectionName(item.subsection_name)}
                   </p>
                 </div>
-                <div className="flex justify-end  w-[5%]">
-                  <i
-                    className="ri-delete-bin-line text-xl cursor-pointer mt-10"
-                    onClick={() => setShowDeleteModalForItem(item.id)}
-                  ></i>
-                </div>
+                {data?.map(
+                  (item) =>
+                    item.template_id !== null && (
+                      <div className="flex justify-end  w-[5%]">
+                        <i
+                          className="ri-delete-bin-line text-xl cursor-pointer mt-10"
+                          onClick={() => setShowDeleteModalForItem(item.id)}
+                        ></i>
+                      </div>
+                    )
+                )}
               </div>
               {showDeleteModalForItem === item.id && (
                 <DeleteModal
@@ -98,8 +101,6 @@ export const AboutTheApplicantTemplateDetails = () => {
           ))}
         </List>
       )}
-
-    
     </>
   );
 };
