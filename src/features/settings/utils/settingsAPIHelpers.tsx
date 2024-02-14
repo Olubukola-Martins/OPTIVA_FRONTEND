@@ -2,10 +2,10 @@ import axios from "axios";
 import { useGetToken } from "src/hooks/useGetToken";
 
 
-interface IPostProps  {
+export interface IPostProps  {
   newData: any;
   url: string;
-}
+};
 export interface IEditProps {
   newData: any;
   url: string;

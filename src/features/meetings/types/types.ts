@@ -228,10 +228,10 @@ export interface IGeneratedQuoteDatum {
   generated_by: string;
   created_at: string;
   updated_at: string;
-  applicant: Applicant;
+  applicant: IAllGenQuoteApplicant;
 }
 
-interface Applicant {
+interface IAllGenQuoteApplicant {
   id: number;
   application_id: number;
   branch_id: number;
@@ -242,6 +242,7 @@ interface Applicant {
   user_id?: any;
   created_at: string;
   updated_at: string;
+  application: Application;
 }
 
 
@@ -513,6 +514,10 @@ export interface GenInvoiceData {
   updated_by: Updatedby;
   created_at: string;
   updated_at: string;
+  fx_rate: string;
+  amount_in_naira: string;
+  totalAmountUSD: number;
+  totalAmountNaira: number;
   application: Application;
 }
 
@@ -544,6 +549,7 @@ interface Application {
   programtype: Programtype;
 }
 
+
 // Generate Receipt
 export interface IGenReceipt {
   success: boolean;
@@ -567,6 +573,35 @@ export interface GenReceiptData {
   created_at: string;
   updated_at: string;
   payment: Payment;
+}
+
+
+// View Quote Breakdown
+export interface IViewQuote {
+  success: boolean;
+  data: ViewQuoteData;
+  message: string;
+  meta: any[];
+}
+
+interface ViewQuoteData {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_contribution_fee: number;
+  govt_processing_fee: number;
+  due_diligence_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  legal_and_advisory_fee: number;
+  antigua_barbuda_donation_total: number;
+  local_processing_fee: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_due_on_approval: number;
+  program_grand_total: number;
+  program_grand_total_due_now: number;
+  program_grand_total_due_on_approval: number;
+  created_at: string;
+  updated_at: string;
 }
 
 

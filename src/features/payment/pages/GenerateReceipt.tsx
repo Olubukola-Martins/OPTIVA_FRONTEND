@@ -4,10 +4,10 @@ import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { generateReceipt } from "../hooks/useGenerate";
 import { Spin } from "antd";
 import { IGenReceipt } from "src/features/meetings/types/types";
 import { formatDate } from "./GenerateFinancialStatement";
+import { generateReceipt } from "../hooks/useGenerate";
 
 interface DataType {
   key: number;
@@ -24,6 +24,7 @@ const GenerateReceipt = () => {
   // const [paymentsList, setPaymentsList] = useState<[{ payment: number }]>([
   //   { payment: 450 },
   // ]);
+
 
   const {
     data: receiptData,
@@ -70,21 +71,25 @@ const GenerateReceipt = () => {
           key: id,
           narration,
           // payments: `N ${paymentsList[0].payment}`,
-          payments: `₦ ${naira_payment}`,
-          datePaid: date_paid,
+          payments: (+naira_payment).toLocaleString("en-US", {
+            style: "currency",
+            currency: "NGN",
+            maximumFractionDigits: 2,
+          }),
+          datePaid: new Date(date_paid).toLocaleDateString("en-GB"),
         },
       ]);
       setProgramType(payment.application.programtype.program_name);
     }
   }, [receiptData, receiptLoading]);
   useEffect(() => {
-  }, [data,programType]);
+  }, [data,programType,itemId]);
 
   return (
     <>
       <PageIntro title="Generate Reciept" linkBack={appRoute.payments} />
 
-      <Spin spinning={receiptLoading}>
+      <Spin spinning={receiptLoading }>
         {receiptData?.data && (
           <GenerateTemplate
             title="PAYMENT RECIEPT"
@@ -97,6 +102,11 @@ const GenerateReceipt = () => {
               receiptData.data.payment.application.applicant.email_address
             }
             reciepientPhone="090123456789"
+            handleDownload={() => {
+              // setReceiptId(itemId);
+const link = `https://optiva-backend.techmur.com/api/admin/receipt/${itemId}/download-pdf`;
+window.open(link, "_blank");
+            }}
           >
             <Table
               id="TemplateTable"
@@ -125,7 +135,14 @@ const GenerateReceipt = () => {
                         className="whitespace-nowrap"
                       >
                         {/* N {totalPayments} */}
-                        ₦ {receiptData.data.payment.amount_paid}
+                        {(+receiptData.data.payment.amount_paid).toLocaleString(
+                          "en-US",
+                          {
+                            style: "currency",
+                            currency: "NGN",
+                            maximumFractionDigits: 2,
+                          }
+                        )}
                       </Table.Summary.Cell>
                     </Table.Summary.Row>
                   </>

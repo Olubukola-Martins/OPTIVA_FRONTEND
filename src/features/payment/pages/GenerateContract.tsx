@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import ContractFirstPage from "../components/ContractFirstPage";
 import { Pagination } from "antd";
 import ContractOtherPages from "../components/ContractOtherPages";
 import { AppButton } from "src/components/button/AppButton";
+import { generateContract } from "../hooks/useGenerate";
+import { useParams } from "react-router-dom";
 
 const GenerateContract = () => {
+    const { id } = useParams();
+  const [applicantId, setApplicantId] = useState<number>(0);
+  const { data } = generateContract({ applicantId });
+  console.log("data",data)
   const [currentPage, setCurrentPage] = useState(1);
   const allPages: React.ReactElement[] = [<ContractFirstPage />];
+
+
+  useEffect(() => {
+    if (id) {
+      setApplicantId(+id);
+    }
+  }, [id]);
+
+
+
   for (let index = 1; index <= 3; index++) {
     allPages.push(
       <ContractOtherPages>
@@ -48,7 +64,7 @@ const GenerateContract = () => {
               financial analysis, and General Immigration Services in
               association with{" "}
               <span className="font-semibold">Client Referrals</span>, a company
-              incorporated in Antigua & Barbuda whose registered office is at{" "}
+              incorporated in Antigua & Barbuda whose registered office is at
               <span className="font-semibold">
                 1100-1200, McGill College Avenue, Montreal, Quebec, H3B 4G7,
                 Canada
@@ -57,7 +73,7 @@ const GenerateContract = () => {
               agrees to offer immigration consultancy services and real estate
               investment services to interested applicants (within and outside
               Nigeria) who aspire to attain Antigua & Barbuda citizenship under
-              the current{" "}
+              the current
               <span className="font-semibold">
                 Antigua & Barbuda Citizenship by Investment Program
               </span>

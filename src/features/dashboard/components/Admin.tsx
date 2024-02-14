@@ -4,6 +4,7 @@ import { useGetAdminDashboardCounts } from "../hooks/useGetAdminDashboardCounts"
 import { PercentageWrap } from "./PercentageWrap";
 import { Progress } from "antd";
 import { AdminActivityLog } from "./AdminActivityLog";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const Admin = () => {
   const { data } = useGetAdminDashboardCounts();
@@ -17,6 +18,8 @@ export const Admin = () => {
           cardColor="blue"
           title="Master List"
           count={count?.master_list || 0}
+          link={true}
+          linkPath={appRoute.master_list}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
@@ -24,6 +27,8 @@ export const Admin = () => {
           title="Authorized  
             Applicants"
           count={count?.authorized_applications || 0}
+          link={true}
+          linkPath={appRoute.authorized_applicants}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
@@ -31,12 +36,16 @@ export const Admin = () => {
           title="Paid
           Applicants"
           count={count?.paid_applications || 0}
+          link={true}
+          linkPath={appRoute.paid_applicants}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
           cardColor="yellow"
           title="Prospects"
           count={count?.prospects || 0}
+          link={true}
+          linkPath={appRoute.prospects}
         />
       </div>
 

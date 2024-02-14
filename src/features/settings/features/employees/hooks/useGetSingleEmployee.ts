@@ -7,9 +7,7 @@ import { useGetToken } from "src/hooks/useGetToken";
 
 export const QUERY_KEY_FOR_SINGLE_EMPLOYEE = "single-employee";
 
-const getSingleData = async (
-  props: IGeneralProps
-): Promise<employeesProps> => {
+const getSingleData = async (props: IGeneralProps): Promise<employeesProps> => {
   const token = useGetToken();
   const id = props.id;
   const url = `${END_POINT.BASE_URL}/admin/employees/${id}`;

@@ -77,7 +77,7 @@ const columnsSecondTable: ColumnsType<DataTypeSecondTable> = [
         return {
           rowSpan: 5,
         };
-      } else if (10 > 5) {
+      } else if ((index as number) > 5) {
         return {
           rowSpan: 0,
         };
@@ -146,13 +146,17 @@ const ViewInvoice = () => {
   }, [id]);
   useEffect(() => {
     if (invoiceData?.data) {
-      const { id, description, quantity, application } = invoiceData.data;
+      const { id, description, quantity, application,amount_in_naira } = invoiceData.data;
       setDataFirstTable([
         {
           key: id,
           description,
           qty: quantity,
-          amount: `₦ ${amountsList[0].amount}`,
+          amount: Number(amount_in_naira).toLocaleString("en-US", {
+            style: "currency",
+            currency: "NGN",
+            maximumFractionDigits: 2,
+          }),
         },
       ]);
       setProgramType(application.programtype.program_name);
@@ -167,7 +171,7 @@ const ViewInvoice = () => {
         {invoiceData?.data && (
           <GenerateTemplate
             title={`INVOICE FOR ${invoiceData.data.application.investmentroute.investment_name.toUpperCase()}`}
-            templateNumber="00892"
+            templateNumber={`${invoiceData.data.application.id}`}
             date_created={formatDate(invoiceData.data.created_at)}
             receipientName={invoiceData.data.application.applicant.full_name}
             reciepientEmail={
@@ -185,11 +189,11 @@ const ViewInvoice = () => {
                 bordered
                 scroll={{ x: 450 }}
                 summary={() => {
-                  let totalAmount = 0;
+                  // let totalAmount = 0;
 
-                  amountsList.forEach((item) => {
-                    totalAmount += item.amount;
-                  });
+                  // amountsList.forEach((item) => {
+                  //   totalAmount += item.amount;
+                  // });
 
                   return (
                     <>
@@ -206,7 +210,11 @@ const ViewInvoice = () => {
                           index={3}
                           className="whitespace-nowrap "
                         >
-                          $ {totalAmount}
+                          {invoiceData.data.totalAmountUSD.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 2,
+                          })}
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                       <Table.Summary.Row className="font-bold sm:text-lg">
@@ -220,7 +228,11 @@ const ViewInvoice = () => {
                           index={3}
                           className="whitespace-nowrap "
                         >
-                          ₦ {totalAmount}
+                          {invoiceData.data.totalAmountNaira.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "NGN",
+                            maximumFractionDigits: 2,
+                          })}
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                     </>
@@ -228,7 +240,7 @@ const ViewInvoice = () => {
                 }}
               />
               <p className="text-red-500 max-sm:text-sm">
-                Inflow $1 = ₦865 <br /> Kindly send us evidence of payment so
+                Inflow {invoiceData.data.fx_rate} <br /> Kindly send us evidence of payment so
                 that a receipt can be issued accordingly.
                 <br /> Naira payment is subject to the exchange rate, which
                 expires at the close of each business day.

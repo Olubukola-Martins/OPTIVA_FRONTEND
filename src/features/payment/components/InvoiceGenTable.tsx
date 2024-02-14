@@ -14,7 +14,7 @@ interface IProps {
 const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
 
   type DataSourceItem = {
-    key: React.Key;
+    id: React.Key;
     SN: number;
     applicantID: string;
     applicantName: string;
@@ -25,6 +25,7 @@ const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
     createdBy: string;
   };
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
+
 
 
   const rowSelection = {
@@ -92,12 +93,26 @@ const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
           overlay={
             <Menu>
               <Menu.Item key="1">
-                <Link to={appRoute.viewInvoice(record.key as number).path}>
+                <Link to={appRoute.viewInvoice(record.id as number).path}>
                   View
                 </Link>
               </Menu.Item>
+              {/* <Menu.Item key="2" onClick={() => {
+                // downloadInvoice({ invoiceId: record.key as number })
+                setInvoiceId(record.key as number)
 
-              <Menu.Item key="2">Download</Menu.Item>
+              }}>Download
+              
+              </Menu.Item> */}
+              <Menu.Item>
+                <a
+                  href={`https://optiva-backend.techmur.com/api/admin/invoice/${record.id}/download-pdf`}
+                  target="_blank"
+                  // rel="noopener noreferrer" // For security reasons, add rel attribute
+                >
+                  Download
+                </a>
+              </Menu.Item>
             </Menu>
           }
         >
@@ -123,7 +138,7 @@ const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
       const mainData = allData.data;
       const data = mainData.map((invoice: InvoiceDatum, i) => {
         return {
-          key: invoice.id,
+          id: invoice.id,
           SN: i + 1,
           applicantID: invoice.application.applicant.applicant_unique_id,
           applicantName: invoice.application.applicant.full_name,
@@ -138,7 +153,6 @@ const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
     }
   }, [allData,dataLoading])
   
-
   return (
     <>
       <Table
@@ -148,7 +162,7 @@ const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
         }}
         columns={columns}
         dataSource={dataSource}
-        loading={dataLoading}
+        loading={dataLoading }
         scroll={{ x: 900 }}
         className="border-gray-100 border-t-0 border-2 rounded-b-md"
       />

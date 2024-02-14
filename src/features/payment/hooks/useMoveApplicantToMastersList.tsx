@@ -15,7 +15,7 @@ const postMasterListData = async ({ url }: { url: string }) => {
     },
   };
 
-  const response = await axios.post(url, config);
+  const response = await axios.post(url, {},config);
   return response;
 };
 

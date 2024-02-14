@@ -1,8 +1,16 @@
 export const appRoute = {
-  home: `/`,
+
+  // Authentication
   login_in: `/login`,
   forgot_password: `/forgot-password`,
   reset_password: `/reset-password`,
+
+  // Dashboard
+  home: `/`,
+  master_list: `/master-list`,
+  authorized_applicants: `/authorized-applicants`,
+  paid_applicants: `/paid-applicants`,
+  prospects: `/prospects`,
 
   // Settings
   settings: `/settings`,
@@ -97,6 +105,11 @@ export const appRoute = {
     format: `/payments/:id/generateInvoice`,
     path: `/payments/${id}/generateInvoice`,
   }),
+  viewQuote: (id?: number) => ({
+    format: `/payments/:id/viewQuoteBreakdown`,
+    path: `/payments/${id}/viewQuoteBreakdown`,
+  }),
+
   paymentDetails: (id?: number) => ({
     format: `/payments/:id/paymentDetails`,
     path: `/payments/${id}/paymentDetails`,

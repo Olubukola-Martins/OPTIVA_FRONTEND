@@ -47,15 +47,25 @@ import Workflow from "src/features/settings/features/workFlow/pages/Workflow";
 import AddWorkflow from "src/features/settings/features/workFlow/pages/AddWorkflow";
 import WorkflowDetails from "src/features/settings/features/workFlow/pages/WorkflowDetails";
 import ViewInvoice from "src/features/payment/pages/ViewInvoice";
+import ViewQuote from "src/features/payment/pages/ViewQuote";
 import { ApplicantDocument } from "src/features/applications/pages/ApplicantDocument";
 import { ApplicantDocumentComments } from "src/features/applications/pages/ApplicantDocumentComments";
 import { GenerateQuote } from "src/features/applications/pages/GenerateQuote";
+import MasterList from "src/features/dashboard/pages/MasterList";
+import Prospects from "src/features/dashboard/pages/Prospects";
+import AuthorizedApplicants from "src/features/dashboard/pages/AuthorizedApplicants";
+import PaidApplicants from "src/features/dashboard/pages/PaidApplicants";
 
 const routesArray = [
   {
     path: appRoute.home,
     element: <Dashboard />,
   },
+  { path: appRoute.master_list, element: <MasterList /> },
+  { path: appRoute.prospects, element: <Prospects /> },
+  { path: appRoute.authorized_applicants, element: <AuthorizedApplicants /> },
+  { path: appRoute.paid_applicants, element: <PaidApplicants /> },
+
   { path: appRoute.dependents, element: <Dependents /> },
   { path: appRoute.settings, element: <Settings /> },
   { path: appRoute.escalation, element: <Escalation /> },
@@ -75,6 +85,7 @@ const routesArray = [
   { path: appRoute.paymentDetails().format, element: <PaymentDetails /> },
   { path: appRoute.generateReciept().format, element: <GenerateReceipt /> },
   { path: appRoute.viewInvoice().format, element: <ViewInvoice /> },
+  { path: appRoute.viewQuote().format, element: <ViewQuote /> },
   {
     path: appRoute.financialStatement().format,
     element: <GenerateFinancialStatement />,

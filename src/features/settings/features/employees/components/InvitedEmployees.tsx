@@ -1,7 +1,10 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { employeesProps } from "../types";
-import { QUERY_KEY_FOR_EMPLOYEES, useFetchEmployees } from "../hooks/useFetchEmployees";
+import {
+  QUERY_KEY_FOR_EMPLOYEES,
+  useFetchEmployees,
+} from "../hooks/useFetchEmployees";
 import dayjs from "dayjs";
 import { usePagination } from "src/hooks/usePagination";
 import { searchValueProps } from "src/types";
@@ -10,16 +13,16 @@ import { useDelete } from "src/hooks/useDelete";
 
 export const InvitedEmployees = ({ searchValue }: searchValueProps) => {
   const { onChange, pagination } = usePagination();
-  const {remindUser} = useSendReminder()
+  const { remindUser } = useSendReminder();
   const { data, isLoading } = useFetchEmployees({
     currentUrl: "inactive-employees",
     pagination,
     search: searchValue,
   });
-  const {removeData} = useDelete({
+  const { removeData } = useDelete({
     EndPointUrl: "admin/employees/",
     queryKey: QUERY_KEY_FOR_EMPLOYEES,
-  })
+  });
   const columns: ColumnsType<employeesProps> = [
     {
       title: "Full Name",
@@ -77,9 +80,18 @@ export const InvitedEmployees = ({ searchValue }: searchValueProps) => {
             trigger={["click"]}
             overlay={
               <Menu>
-                 
-                <Menu.Item key="2" onClick={() => remindUser(val.id)}>Send reminder</Menu.Item>
-                <Menu.Item key="1" onClick={() => removeData(val.id)}>Remove employee</Menu.Item>
+                <Menu.Item key="2" onClick={() => remindUser(val.id)}>
+                  Send reminder
+                </Menu.Item>
+                <Menu.Item key="1">
+                  <Popconfirm
+                    title="Remove employee"
+                    description={`Are you sure to remove ${val.name}`}
+                    onConfirm={() => removeData(val.id)}
+                  >
+                    Remove employee
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >

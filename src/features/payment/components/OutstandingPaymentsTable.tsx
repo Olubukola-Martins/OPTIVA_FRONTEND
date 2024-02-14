@@ -1,29 +1,30 @@
-
 import { Dropdown, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { IAllOutstandingPayments, OutstandingPaymentDatum } from "src/features/meetings/types/types";
-  type DataSourceItem = {
-    key: React.Key;
-    SN: number;
-    applicantID: string;
-    applicantName: string;
-    country: string;
-    investmentRoute: string;
-    outstandingPayment: string;
-    lastUpdated: string;
-  };
+import {
+  IAllOutstandingPayments,
+  OutstandingPaymentDatum,
+} from "src/features/meetings/types/types";
+type DataSourceItem = {
+  key: React.Key;
+  SN: number;
+  applicantID: string;
+  applicantName: string;
+  country: string;
+  investmentRoute: string;
+  outstandingPayment: string;
+  lastUpdated: string;
+};
 
-  interface IProps {
-    allData: IAllOutstandingPayments | undefined;
-    dataLoading: boolean;
-  }
-
+interface IProps {
+  allData: IAllOutstandingPayments | undefined;
+  dataLoading: boolean;
+}
 
 const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
-    const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
+  const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
 
   const rowSelection = {
     onChange: (
@@ -89,8 +90,8 @@ const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
           trigger={["click"]}
           overlay={
             <Menu>
-              <Menu.Item key="1">View Proof of Payment</Menu.Item>
-              <Menu.Item key="2">
+              {/* <Menu.Item key="1">View Proof of Payment</Menu.Item> */}
+              <Menu.Item key="1">
                 <Link
                   to={
                     appRoute.paymentDetails(record.key as unknown as number)
@@ -109,24 +110,23 @@ const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
     },
   ];
 
-
-
   // DATASOURCE FOR TABLE
-    const formattedDate = (inputTimestamp: string) => {
-      const date = new Date(inputTimestamp);
-      const day = date.getDate().toString().padStart(2, "0");
-      const month = (date.getMonth() + 1).toString().padStart(2, "0");
-      const year = date.getFullYear().toString().slice(-2);
-      return `${day}/${month}/${year}`;
-    };
+  const formattedDate = (inputTimestamp: string) => {
+    const date = new Date(inputTimestamp);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}/${month}/${year}`;
+  };
 
-
-    useEffect(() => {
-      if (allData) {
-        const mainData = allData.data;
-        const data = mainData.map((outstandingPayment: OutstandingPaymentDatum, i) => {
-          const { application, id,outstanding_payment,updated_at } = outstandingPayment;
-          const {country,investmentroute,applicant} = application
+  useEffect(() => {
+    if (allData) {
+      const mainData = allData.data;
+      const data = mainData.map(
+        (outstandingPayment: OutstandingPaymentDatum, i) => {
+          const { application, id, outstanding_payment, updated_at } =
+            outstandingPayment;
+          const { country, investmentroute, applicant } = application;
           return {
             key: id,
             SN: i + 1,
@@ -134,15 +134,19 @@ const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
             applicantName: applicant.full_name,
             country: country.country_name,
             investmentRoute: investmentroute.investment_name,
-            outstandingPayment: `$ ${outstanding_payment}`,
+            outstandingPayment: (+outstanding_payment).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 2,
+            }),
             lastUpdated: formattedDate(updated_at),
             //     updatedBy: "John Brown",
           };
-        });
-        setDataSource(data);
-      }
-    }, [allData, dataLoading]);
-
+        }
+      );
+      setDataSource(data);
+    }
+  }, [allData, dataLoading]);
 
   return (
     <Table
