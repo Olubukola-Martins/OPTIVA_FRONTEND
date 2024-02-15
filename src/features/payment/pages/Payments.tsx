@@ -246,9 +246,9 @@ const Payments = () => {
           description="View & Update Clients Payments"
           arrowBack={false}
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-full">
+        <div className=" max-w-full  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-8">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div
+            <span
               className="cursor-pointer"
               key={i}
               onClick={() => {
@@ -271,12 +271,13 @@ const Payments = () => {
               }}
             >
               <SimpleCard
+                key={i}
                 icon="iconoir:page"
                 cardColor={cardColors[i]}
                 title={cardTitles[i]}
                 count={cardCounts[i]}
               />
-            </div>
+            </span>
           ))}
         </div>
         <div className="border-gray-100 border-t-2 border-r-2 border-l-2 border-b-0 rounded-t-md w-full mt-[52px] px-4 flex sm:flex-row flex-col items-center justify-around">
