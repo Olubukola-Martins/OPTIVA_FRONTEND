@@ -16,7 +16,8 @@ import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
-import { QUERY_KEY_FOR_APPLICANTS } from "../hooks/useFetchAllApplicants";
+import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
+import { useMarkApplicantAsComplete } from "../hooks/useMarkApplicantAsComplete";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -25,9 +26,22 @@ export type DataSourceItem = {
   applicantName: string;
   country: string;
   programType: string;
+  investmentRoute: string;
   numberOfDependents: number;
-  assignedTo: string;
-  comment?: number;
+  assignedTo?: string;
+  milestone?: string;
+  reasons?: string;
+  addedBy?: string;
+  applicationStage?: string;
+  documentsUploaded?: string;
+  verifiedDocuments?: string;
+  documentsSubmitted?: string;
+  validatedDocuments?: string;
+  reviewStatus?: string;
+  submittedPartner?: string;
+  status?: string;
+  countryId?: number
+  investmentId?:number
 };
 
 export const capitalizeName = (name: string) => {
@@ -45,6 +59,8 @@ export const ActiveApplications = () => {
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
+  const { data: investmentData } = useGetInvestmentRoute();
+  const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
 
   const getCountryName = (countryId: number) => {
     const country = countryData?.find((country) => country.id === countryId);
@@ -54,6 +70,13 @@ export const ActiveApplications = () => {
   const getProgramName = (programId: number) => {
     const program = programData?.find((program) => program.id === programId);
     return program && program.program_name;
+  };
+
+  const getInvestmentName = (investmentId: number) => {
+    const investment = investmentData?.find(
+      (investment) => investment.id === investmentId
+    );
+    return investment && investment.investment_name;
   };
 
   const [id, setId] = useState<number>();
@@ -78,6 +101,7 @@ export const ActiveApplications = () => {
             employee.user.roles.id === item.assigned_role_id &&
             employee.id === item.assigned_user_id
         );
+
         return {
           key: item.id,
           sn: index + 1,
@@ -87,6 +111,7 @@ export const ActiveApplications = () => {
           programType: getProgramName(item.programtype_id) || "-",
           numberOfDependents: item.no_of_dependents,
           assignedTo: assignedEmployee ? assignedEmployee.name : "-",
+          investmentRoute: getInvestmentName(item.investmentroute_id) || "-",
         };
       });
 
@@ -112,7 +137,7 @@ export const ActiveApplications = () => {
             title: "Success",
             description: res.data.message,
           });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANTS]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
         },
       }
     );
@@ -140,6 +165,7 @@ export const ActiveApplications = () => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           setOpenInactiveModal(false);
+          console.log('acceoted')
         },
       }
     );
@@ -173,6 +199,31 @@ export const ActiveApplications = () => {
       }
     );
   };
+
+  const markApplicationComplete = () => {
+    completeApplicationMutate(
+      { application_id: id as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+        
+        },
+      }
+    );
+  };
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -200,14 +251,19 @@ export const ActiveApplications = () => {
       key: "5",
     },
     {
+      title: "Investment Route",
+      dataIndex: "investmentRoute",
+      key: "6",
+    },
+    {
       title: "Number Of Dependents",
       dataIndex: "numberOfDependents",
-      key: "6",
+      key: "7",
     },
     {
       title: " Assigned To",
       dataIndex: "assignedTo",
-      key: "7",
+      key: "8",
     },
     {
       title: "Action",
@@ -286,16 +342,14 @@ export const ActiveApplications = () => {
                 >
                   Move to Inactive
                 </Menu.Item>
-                <Menu.Item key="8">Mark as Completed</Menu.Item>
-                <Menu.Item key="9">
-                  <Link
-                    to={
-                      appRoute.generate_quotes(val.key as unknown as number)
-                        .path
-                    }
-                  >
-                    Generate quotes
-                  </Link>
+                <Menu.Item
+                  key="8"
+                  onClick={() => {
+                    setId(val.key as unknown as number);
+                    markApplicationComplete();
+                  }}
+                >
+                  Mark as Completed
                 </Menu.Item>
               </Menu>
             }

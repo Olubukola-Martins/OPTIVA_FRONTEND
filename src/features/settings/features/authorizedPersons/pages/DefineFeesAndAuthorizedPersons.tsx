@@ -9,7 +9,7 @@ import SetFx from "../assets/img/Fx.png";
 import Switch from "../assets/img/switch.png";
 import { Link } from "react-router-dom";
 import Success from "../assets/img/success.png";
-import { ImportModal } from "src/components/modals/ImportModal";
+// import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { DownOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
@@ -18,6 +18,7 @@ import { usePostCurrency } from "../hooks/usePostCurrency";
 import {
   useGetCurrency,
 } from "../hooks/useGetCurrency";
+import { UploadModal } from "src/components/modals/UploadModal";
 
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
@@ -132,7 +133,7 @@ const DefineFeesAndAuthorizedPersons = () => {
         </div>
       </div>
       {/* Import Modal */}
-      <ImportModal
+      <UploadModal
         open={openImportModal}
         onCancel={handleImportCancel}
         header="Fee(s)"

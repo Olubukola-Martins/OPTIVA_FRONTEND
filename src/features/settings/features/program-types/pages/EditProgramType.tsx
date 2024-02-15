@@ -34,7 +34,7 @@ const EditProgramType = () => {
   const { data: applicationData } = useGetApplicationTemplate();
   const { data: milestoneData, isSuccess: milestoneDataSucess } =
     useGetMilestone();
-  const { data: workflowData, isSuccess: workflowDataSuccess } =
+  const { data: workflowData,  } =
     useGetWorkflow();
   const { data: countryData, isSuccess: countryDataSuccess } = useGetCountry();
 
@@ -42,9 +42,6 @@ const EditProgramType = () => {
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
   });
 
-  console.log("document data", documentData);
-
- 
 
   // APPLICANT OPTION
   const applicantOptions: SelectProps["options"] =
@@ -54,7 +51,6 @@ const EditProgramType = () => {
       key: item.id,
     })) || [];
 
- 
   useEffect(() => {
     if (programData) {
       form.setFieldsValue({
@@ -64,10 +60,12 @@ const EditProgramType = () => {
           (item) => item.id
         ),
         applicationTemplate: programData.template_id,
-        documentRequirement: programData.documentrequirements.map((item)=>item.id),
+        documentRequirement: programData.documentrequirements.map(
+          (item) => item.id
+        ),
         milestones: programData.milestones.map((item) => item.id),
-        selectWorkflow: programData.workflow_id,
-        selectCountry:programData.countries.map((item)=>item.id)
+        selectWorkflow: programData.workflow.name,
+        selectCountry: programData.countries.map((item) => item.id),
       });
     }
   }, [programData]);
@@ -83,7 +81,6 @@ const EditProgramType = () => {
       values.selectWorkflow,
       values.milestones,
       values.eligibleDependents
-
     );
   };
 
@@ -154,7 +151,7 @@ const EditProgramType = () => {
                   name="documentRequirement"
                   rules={generalValidationRules}
                 >
-                   <Select mode="multiple" placeholder="Select" allowClear>
+                  <Select mode="multiple" placeholder="Select" allowClear>
                     {documentDataSuccess ? (
                       documentData.map((item) => (
                         <Select.Option key={item.id} value={item.id}>
@@ -193,8 +190,14 @@ const EditProgramType = () => {
                   label="Select Workflow"
                   rules={generalValidationRules}
                 >
-                  <Select mode="multiple" placeholder="Select" allowClear>
-                    {workflowDataSuccess ? (
+                  <Select placeholder="Select" allowClear>
+                    {workflowData?.map((item) => (
+                      <Select.Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+
+                    {/* {workflowDataSuccess ? (
                       workflowData.map((item) => (
                         <Select.Option key={item.id} value={item.id}>
                           {item.name}
@@ -204,7 +207,7 @@ const EditProgramType = () => {
                       <div className="flex justify-center items-center w-full">
                         <Spin size="small" />
                       </div>
-                    )}
+                    )} */}
                   </Select>
                 </Form.Item>
                 <Form.Item

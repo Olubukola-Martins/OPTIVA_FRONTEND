@@ -10,6 +10,8 @@ type GlobalContext = {
   sharedData: {
     applicantId: number | undefined;
     templateId: number | undefined;
+    investmentId: number | undefined;
+    countryId: number | undefined;
   };
   setSharedData: (data: any) => void;
 };
@@ -26,6 +28,8 @@ export function GlobalContextProvider({ children }: GlobalProviderProps) {
   const [sharedData, setSharedData] = useState({
     applicantId: undefined,
     templateId: undefined,
+    countryId: undefined,
+    investmentId: undefined,
   });
 
   return (

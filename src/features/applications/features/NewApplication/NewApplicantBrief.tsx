@@ -1,6 +1,6 @@
 import {
   Checkbox,
-  DatePicker,
+  // DatePicker,
   Empty,
   Form,
   Input,
@@ -15,7 +15,7 @@ import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
 import { useQueryClient } from "react-query";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+// import { generalValidationRules } from "src/utils/formHelpers/validations";
 import React from "react";
 
 export interface IProps {
@@ -52,7 +52,8 @@ export const renderInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "number_input") {
     return <InputNumber className="w-1/2" />;
   } else if (inputType === "date_input") {
-    return <DatePicker className="w-1/2" />;
+   
+    // return <DatePicker className="w-1/2" format="YYYY-MM-DD"/>;
   }
 };
 
@@ -117,13 +118,14 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
               <div className="w-full">
                 <Form.Item
                   name={item.schema_name}
-                  rules={generalValidationRules}
+                  // rules={generalValidationRules}
                   label={
                     item.form_question.charAt(0).toUpperCase() +
                     item.form_question.slice(1)
                   }
                   key={item.id}
                   className="w-full"
+                  
                 >
                   {renderInput(item.input_type, item.options)}
                 </Form.Item>

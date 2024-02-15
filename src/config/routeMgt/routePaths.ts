@@ -1,5 +1,4 @@
 export const appRoute = {
-
   // Authentication
   login_in: `/login`,
   forgot_password: `/forgot-password`,

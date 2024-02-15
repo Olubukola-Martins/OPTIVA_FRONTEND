@@ -320,7 +320,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                     Download
                   </a>
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="6"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
@@ -328,7 +328,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   }}
                 >
                   Replace
-                </Menu.Item> */}
+                </Menu.Item>
               </Menu>
             }
           >

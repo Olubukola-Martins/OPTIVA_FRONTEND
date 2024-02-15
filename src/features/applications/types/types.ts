@@ -7,6 +7,7 @@ export interface ICreateApplication {
   full_name: string;
   branch_id: number;
   no_of_dependents: number;
+  phone_number:string
 }
 
 // FETCH ALL APPLICANTS
@@ -325,46 +326,7 @@ interface Applicationcomment {
   updated_at: string;
 }
 
-// INACTIVE APPLICANT
-// export interface IIanctiveApplications {
-//   id: number;
-//   country_id: number;
-//   investmentroute_id: number;
-//   programtype_id: number;
-//   template_id: number;
-//   milestone_id: number;
-//   process_id: number;
-//   branch_id: number;
-//   assigned_user_id: number;
-//   assigned_role_id: number;
-//   process_deadline?: any;
-//   status: string;
-//   active: boolean;
-//   is_quote_generated: number;
-//   is_payment_proof_uploaded: boolean;
-//   is_questions_submitted: boolean;
-//   is_threshold_payment: boolean;
-//   is_approved: boolean;
-//   no_of_dependents: number;
-//   created_at: string;
-//   updated_at: string;
-//   applicant: Applicant;
-// }
 
-// interface Applicant {
-//   id: number;
-//   application_id: number;
-//   branch_id: number;
-//   full_name: string;
-//   applicant_unique_id: string;
-//   email_address: string;
-//   amount_paid: string;
-//   user_id?: any;
-//   created_at: string;
-//   updated_at: string;
-// }
-
-// DOCUMENT COMMENT
 export interface IDocumentComment {
   id: number;
   applicant_document_id: number;
@@ -557,4 +519,50 @@ export interface IGenerateAntiguaDonationQuotes {
   number_of_dependent_twelve_to_seventeen: number;
   number_of_dependent_greater_than_eighteen: number;
   number_of_dependent_greater_than_fifty_eight: number;
+}
+
+
+// MARK APPLICANT AS COMPLETE
+export interface IMarkApplicationComplete {
+  application_id: number;
+}
+
+// APPLICANTS BY ROLE
+export interface IApplicantsByRole {
+  id: number;
+  applicant_name: string;
+  applicant_id: string;
+  country: string;
+  program_type: string;
+  milestone?: any;
+  process?: any;
+  investmentroute: string;
+  branch: string;
+  comments: Comment[];
+  user_assigned: any[];
+  country_id: number;
+  investmentroute_id: number;
+  programtype_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Comment {
+  id: number;
+  comment: string;
+  application_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IAssignApplicant{
+  application_id: number;
+  role_id: number;
+  assigned_user_id: number;
+}
+
+// MOVE TO NEXT STAGE
+export interface IMoveToNextStage {
+  milestone_id: number;
 }

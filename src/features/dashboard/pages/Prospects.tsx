@@ -69,7 +69,7 @@ const Prospects = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, record) => (
+      render: () => (
         <Dropdown
           trigger={["click"]}
           overlay={

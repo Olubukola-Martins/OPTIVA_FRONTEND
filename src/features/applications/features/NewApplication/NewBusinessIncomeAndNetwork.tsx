@@ -3,7 +3,6 @@ import { useGetSingleQuestion } from "src/features/settings/features/appTemplate
 import { renderInput } from "./NewApplicantBrief";
 import { IApplicationFormResponseProps } from "./NewImmigrationAndCourtProceedings";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const NewBusinessIncomeAndNetwork: React.FC<
   IApplicationFormResponseProps
@@ -26,7 +25,7 @@ export const NewBusinessIncomeAndNetwork: React.FC<
               item.subsection_name === subsectionName && (
                 <div className="w-full" key={item.id}>
                   <Form.Item
-                    rules={generalValidationRules}
+                    // rules={generalValidationRules}
                     name={item.schema_name}
                     label={
                       item.form_question.charAt(0).toUpperCase() +

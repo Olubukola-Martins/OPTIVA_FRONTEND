@@ -35,7 +35,6 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
   const queryClient = useQueryClient();
   const { setSharedData } = useGlobalContext();
 
-
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleSubmit = (val: any) => {
@@ -71,11 +70,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
   };
   return (
     <>
-      <Modal
-        open={open}
-        onCancel={handleClose}
-        footer={null}
-      >
+      <Modal open={open} onCancel={handleClose} footer={null}>
         <Form layout="vertical" onFinish={handleSubmit} form={form}>
           <div>
             <h1 className="p-4 font-bold text-center text-lg">
@@ -146,6 +141,12 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
               <h2>What is the applicant email?</h2>
               <Form.Item name="email_address" rules={textInputValidationRules}>
                 <Input />
+              </Form.Item>
+            </div>
+            <div>
+              <h2>What is the applicant phone number?</h2>
+              <Form.Item name="phone_number" rules={generalValidationRules}>
+                <InputNumber />
               </Form.Item>
             </div>
             <div className="flex items-center justify-center gap-4 p-4">
