@@ -9,6 +9,7 @@ export const SimpleCard = ({
   icon,
   link = false,
   linkPath = "",
+  handleClick,
 }: simpleCardProps) => {
   // Define a color mapping
   const colorMap: Record<string, string> = {
@@ -20,31 +21,60 @@ export const SimpleCard = ({
 
   // Get the selected color from the mapping
   const selectedColor = colorMap[cardColor];
-
   return (
-    <Link
-      to={link ? linkPath : "#"}
-      className={` ${
-        link
-          ? "cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out"
-          : "cursor-text"
-      } border border-${cardColor}-600 rounded-lg py-3 px-3 relative`}
-      style={{ borderColor: selectedColor }}
-    >
-      <div className="flex gap-x-4">
-        <div
-          className={`bg-${cardColor}-600 rounded-full h-8 w-8 flex justify-center items-center`}
-          style={{ backgroundColor: selectedColor }}
+    <>
+      {link ? (
+        <Link
+          to={link ? linkPath : "#"}
+          className={` ${
+            link
+              ? "cursor-pointer hover:shadow-lg transition-all duration-200 ease-in-out"
+              : "cursor-text"
+          } border border-${cardColor}-600 rounded-lg py-3 px-3 relative`}
+          style={{ borderColor: selectedColor }}
         >
-          <Icon icon={icon} className="text-xl text-white" />
+          <div className="flex gap-x-4">
+            <div
+              className={`bg-${cardColor}-600 rounded-full h-8 w-8 flex justify-center items-center`}
+              style={{ backgroundColor: selectedColor }}
+            >
+              <Icon icon={icon} className="text-xl text-white" />
+            </div>
+            <div className="flex flex-col">
+              <h3 className="font-semibold text-accent text-sm pb-12">
+                {title}
+              </h3>
+              <h2 className="font-bold text-2xl flex-end absolute bottom-0">
+                {count}
+              </h2>
+            </div>
+          </div>
+        </Link>
+      ) : (
+        <div
+          onClick={handleClick}
+          className={`
+            border border-${cardColor}-600 rounded-lg py-3 px-3 relative`}
+          style={{ borderColor: selectedColor }}
+        >
+          <div className="flex gap-x-4">
+            <div
+              className={`bg-${cardColor}-600 rounded-full h-8 w-8 flex justify-center items-center`}
+              style={{ backgroundColor: selectedColor }}
+            >
+              <Icon icon={icon} className="text-xl text-white" />
+            </div>
+            <div className="flex flex-col">
+              <h3 className="font-semibold text-accent text-sm pb-12">
+                {title}
+              </h3>
+              <h2 className="font-bold text-2xl flex-end absolute bottom-0">
+                {count}
+              </h2>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col">
-          <h3 className="font-semibold text-accent text-sm pb-12">{title}</h3>
-          <h2 className="font-bold text-2xl flex-end absolute bottom-0">
-            {count}
-          </h2>
-        </div>
-      </div>
-    </Link>
+      )}
+    </>
   );
 };
