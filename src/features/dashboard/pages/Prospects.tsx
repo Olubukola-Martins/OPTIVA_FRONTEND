@@ -1,10 +1,25 @@
 import { Dropdown, Input, Menu, Select } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
+import { END_POINT } from "src/config/environment";
+import { IAllProspectsData, IProspectDatum } from "src/features/meetings/types/types";
+import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
+
+export const QUERY_KEY_FOR_PROSPECTS = "AllProspects";
+export const prospectsURL = `${END_POINT.BASE_URL}/admin/prospect-list/applicants`;
+
 
 const Prospects = () => {
-  const [dataSource, setDataSource] = useState();
+  const [dataSource, setDataSource] = useState<IProspectDatum[]>();
+  const {
+    data,
+    isLoading,
+  }: { data: IAllProspectsData | undefined; isLoading: boolean } =
+    useFetchAllItems({
+      queryKey: QUERY_KEY_FOR_PROSPECTS,
+      urlEndPoint: prospectsURL,
+    });
 
   // TABLE DATA FOR STAGE 3
   interface DataType {
@@ -17,22 +32,25 @@ const Prospects = () => {
     numberDependents: number;
     onboardedBy: string;
   }
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<IProspectDatum> = [
     {
       title: "SN",
       dataIndex: "sn",
       key: "sn",
       width: 20,
+      render: (_, __, index) => {
+        return index + 1;
+      },
     },
     {
       title: "Applicant ID",
-      dataIndex: "applicantID",
-      key: "applicantID",
+      dataIndex: "applicant_id",
+      key: "applicant_id",
     },
     {
       title: "Applicant Name",
-      dataIndex: "applicantName",
-      key: "applicantName",
+      dataIndex: "applicant_name",
+      key: "applicant_name",
     },
     {
       title: "Country",
@@ -41,8 +59,8 @@ const Prospects = () => {
     },
     {
       title: "Program Type",
-      dataIndex: "programType",
-      key: "programType",
+      dataIndex: "program_type",
+      key: "program_type",
     },
     {
       title: "Number of Dependents",
@@ -63,11 +81,7 @@ const Prospects = () => {
           trigger={["click"]}
           overlay={
             <Menu>
-              <Menu.Item
-                key="1"
-                onClick={() => {
-                }}
-              >
+              <Menu.Item key="1" onClick={() => {}}>
                 Update Proof of Payment
               </Menu.Item>
             </Menu>
@@ -78,6 +92,13 @@ const Prospects = () => {
       ),
     },
   ];
+
+  useEffect(() => {
+    if (data?.data) {
+  setDataSource(data.data)
+}
+  }, [isLoading,data])
+  
 
   return (
     <>
@@ -95,6 +116,7 @@ const Prospects = () => {
         <Table
           dataSource={dataSource}
           columns={columns}
+          loading={isLoading}
           bordered={true}
           scroll={{ x: 900 }}
         />

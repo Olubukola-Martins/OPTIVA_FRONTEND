@@ -895,5 +895,27 @@ export interface IAllFxRates {
   updated_at: string;
 }}
 
-// export interface fxRateDatum
+// export interface all prospects
+export interface IAllProspectsData {
+  data: IProspectDatum[];
+}
+
+export interface IProspectDatum {
+  id: number;
+  applicant_name: string;
+  applicant_id: string;
+  country: string;
+  program_type: string;
+  milestone?: string;
+  process?: string;
+  investmentroute: string;
+  branch: string;
+  comments: any[];
+  user_assigned: any[];
+  country_id: number;
+  investmentroute_id: number;
+  programtype_id: number;
+  created_at: string;
+  updated_at: string;
+}
 
