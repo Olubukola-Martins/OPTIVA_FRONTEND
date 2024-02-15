@@ -25,9 +25,6 @@ interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
   isLoading: boolean;
   isFetching: boolean;
-  // refetch: (
-  //   options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
-  // ) => Promise<QueryObserverResult<any, any>>;
 }
 
 const deleteEndpointUrl = "admin/escalation/";
@@ -112,17 +109,6 @@ const Escalation = () => {
                   onClick={() => {
                     setCurrentId(record.key as number);
                     setShowDeleteModal(true);
-                    // DeleteModal({
-                    //   open: showDeleteModal,
-                    //   header: "Escalation",
-                    //   text: "escalation",
-                    //   onCancel() {
-                    //     setShowDeleteModal(false);
-                    //   },
-                    //   onDelete() {
-                    //     removeData(currentId as number);
-                    //   }
-                    // });
                   }}
                 >
                   Delete
@@ -192,17 +178,6 @@ const Escalation = () => {
           }}
         />
 
-        {/* <DeleteModal
-          open={showDeleteModal}
-          heading="Delete Escalation"
-          description="Are you sure you would like to delete escalation?"
-          handleClose={() => {
-            setShowDeleteModal(false);
-          }}
-          handleDelete={() => {
-            deleteData(currentId as number);
-          }}
-        /> */}
         <PageIntro
           title="Escalation "
           description="Define, Edit and delete escalation rules on the system"

@@ -1,12 +1,9 @@
 import { QUERY_KEY_ESCALATION, escalationURL } from "./useAddEscalation";
 import { editItemData } from "src/features/settings/utils/settingsAPIHelpers";
-import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { appRoute } from "src/config/routeMgt/routePaths";
 
 const useUpdateEscalation = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { mutate, isLoading, isSuccess } = useMutation(editItemData);
   const editEscalation = (
@@ -25,7 +22,7 @@ const useUpdateEscalation = () => {
           });
         },
         onSuccess: (response: { data: { message: string } }) => {
-            navigate(appRoute.escalation);
+            // navigate(appRoute.escalation);
           openNotification({
             state: "success",
             title: "Success",

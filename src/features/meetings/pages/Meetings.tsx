@@ -225,10 +225,6 @@ const Meetings = () => {
             newForm={newForm}
             newMeetingsLoading={newMeetingLoading}
           />
-          {/* <EditMeetingModal
-            open={iEditsModalVisible}
-            onCancel={handleCancelEdit}
-          /> */}
         </Spin>
       </MeetingContext.Provider>
     </>

@@ -151,6 +151,7 @@ export const NewMeetingModal: React.FC<{
               <TimePicker
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
+                
               />
             </Form.Item>
             <Form.Item

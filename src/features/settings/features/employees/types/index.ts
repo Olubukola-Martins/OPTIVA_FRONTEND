@@ -12,6 +12,7 @@ export interface employeesProps {
     name: string;
   };
   user: {
+    role_id: number | undefined;
     branches: branchProps[];
     roles: {
       id: number;
