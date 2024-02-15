@@ -1,9 +1,15 @@
-import React from 'react'
+import { useState } from "react";
 
-const useDashboardFilterValues = () => {
-  return (
-    <div>useDashboardFilterValues</div>
-  )
+export interface IFilterProps {
+  countryFilter?: number[];
+  filterProgram?: number[];
+  status?: "Under Review" | "Approved" | "Rejected";
 }
-
-export default useDashboardFilterValues
+export const useDashboardFilterValues = () => {
+  const [filterValues, setFilterValues] = useState<IFilterProps>({
+    countryFilter: [],
+    filterProgram: [],
+    status: undefined,
+  });
+  return {filterValues, setFilterValues};
+};

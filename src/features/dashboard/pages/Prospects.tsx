@@ -1,30 +1,19 @@
-import { Button, Drawer, Dropdown, Form, Input, Menu, Select } from "antd";
-import { useForm } from "antd/es/form/Form";
+import { Button,  Dropdown,  Input, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
-import { AppButton } from "src/components/button/AppButton";
 import { END_POINT } from "src/config/environment";
 import {
   IAllProspectsData,
   IProspectDatum,
 } from "src/features/meetings/types/types";
-import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
-import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import { useWindowWidth } from "src/hooks/useWindowWidth";
+import FilterDrawer from "../components/filterDrawer";
 
 export const QUERY_KEY_FOR_PROSPECTS = "AllProspects";
 export const prospectsURL = `${END_POINT.BASE_URL}/admin/prospect-list/applicants`;
 
 const Prospects = () => {
-  const { data: allProgramTypes, isLoading: loadingProgramTypes } =
-    useGetProgramType();
-  const { data: countries, isLoading: loadingCountries } = useGetCountry();
-  const [dataSource, setDataSource] = useState<IProspectDatum[]>();
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const {drawerSize } = useWindowWidth();
-  const [filterForm] = useForm();
   const {
     data,
     isLoading,
@@ -33,6 +22,8 @@ const Prospects = () => {
       queryKey: QUERY_KEY_FOR_PROSPECTS,
       urlEndPoint: prospectsURL,
     });
+  const [dataSource, setDataSource] = useState<IProspectDatum[]>();
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const columns: ColumnsType<IProspectDatum> = [
     {
@@ -95,9 +86,6 @@ const Prospects = () => {
     },
   ];
 
-  const handleFilter = (values) => {
-    
-  };
 
   useEffect(() => {
     if (data?.data) {
@@ -105,7 +93,6 @@ const Prospects = () => {
     }
   }, [isLoading, data]);
 
-  useEffect(() => {}, [loadingCountries, loadingProgramTypes]);
 
   return (
     <>
@@ -134,56 +121,7 @@ const Prospects = () => {
           scroll={{ x: 900 }}
           className="mt-4"
         />
-        <Drawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          size={"default"}
-          title="Filter Prospects"
-        >
-          <Form
-            name="modalFilter"
-            form={filterForm}
-            layout="vertical"
-            className="pt-8 px-4"
-            // onValuesChange={handleFilterValuesChange}
-            onFinish={handleFilter}
-          >
-              <Form.Item
-                label="Filter by Country"
-                name="countryFilter"
-                className="w-56"
-              >
-                <Select
-                  mode="multiple"
-                  loading={loadingCountries}
-                  options={
-                    countries?.map((country) => {
-                      return { value: country.id, label: country.country_name };
-                    }) || []
-                  }
-                />
-              </Form.Item>
-              <Form.Item
-                label="Filter by Program Type"
-                name="filterProgram"
-                className="w-56"
-              >
-                <Select
-                  mode="multiple"
-                  loading={loadingProgramTypes}
-                  options={
-                    allProgramTypes?.map((programType) => {
-                      return {
-                        value: programType.id,
-                        label: programType.program_name,
-                      };
-                    }) || []
-                  }
-                />
-              </Form.Item>
-            <AppButton label="Apply Filter" />
-          </Form>
-        </Drawer>
+        <FilterDrawer isDrawerOpen={drawerOpen} handleClose={()=>{setDrawerOpen(false)}}  />
       </div>
     </>
   );
