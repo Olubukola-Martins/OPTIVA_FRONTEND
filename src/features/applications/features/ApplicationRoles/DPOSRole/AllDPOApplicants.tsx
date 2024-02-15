@@ -7,12 +7,13 @@ import {
   DataSourceItem,
   capitalizeName,
 } from "src/features/applications/components/ActiveApplications";
+// import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
 
 export const AllDPOApplicants = () => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
-
+  
   console.log("data", data);
   useEffect(() => {
     if (data) {

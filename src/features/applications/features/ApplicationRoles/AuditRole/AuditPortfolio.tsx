@@ -15,8 +15,8 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useG
 import { openNotification } from "src/utils/notification";
 
 export const AuditPortfolio = () => {
-  const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
+  // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
+  // const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
 
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -200,9 +200,9 @@ export const AuditPortfolio = () => {
     },
   ];
 
-  const handleClose = () => {
-    setOpenSubmitModal(false);
-  };
+  // const handleClose = () => {
+  //   setOpenSubmitModal(false);
+  // };
 
   return (
     <>

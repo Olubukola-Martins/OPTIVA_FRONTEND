@@ -1,5 +1,4 @@
 import React from "react";
-import { AllApplicants } from "./AllApplicants";
 import { MyPortfolio } from "./MyPortfolio";
 import { Tabs, Input, Select } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
@@ -10,11 +9,11 @@ export const CEApplicantTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
     children: React.ReactNode;
     key: string;
   }[] = [
-    {
-      label: "All Applicants",
-      children: <AllApplicants />,
-      key: "AllApplicants",
-    },
+    // {
+    //   label: "All Applicants",
+    //   children: <AllApplicants />,
+    //   key: "AllApplicants",
+    // },
     {
       label: "My Portfolio",
       children: <MyPortfolio />,

@@ -1,6 +1,5 @@
 import React from "react";
 import { AuditPortfolio } from "./AuditPortfolio";
-import { AuditApplicant } from "./AuditApplicant";
 import { Input, Select, Tabs } from "antd";
 
 export interface IRoleTabProps {
@@ -13,11 +12,11 @@ export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
     children: React.ReactNode;
     key: string;
   }[] = [
-    {
-      label: "All Applicants",
-      children: <AuditApplicant />,
-      key: "AllApplicants",
-    },
+    // {
+    //   label: "All Applicants",
+    //   children: <AuditApplicant />,
+    //   key: "AllApplicants",
+    // },
     {
       label: "My Portfolio",
       children: <AuditPortfolio />,

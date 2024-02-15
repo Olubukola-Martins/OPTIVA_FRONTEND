@@ -13,7 +13,6 @@ import { DMSTab } from "../features/ApplicationRoles/DMSRole/DMSTab";
 import { DPOTab } from "../features/ApplicationRoles/DPOSRole/DPOTab";
 import { DRTab } from "../features/ApplicationRoles/DRRole/DRTab";
 import { AuditTab } from "../features/ApplicationRoles/AuditRole/AuditTab";
-import { PaymentTab } from "../features/ApplicationRoles/PaymentRole/PaymentTab";
 
 // export let applicantId: number | undefined;
 

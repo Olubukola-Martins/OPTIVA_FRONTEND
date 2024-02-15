@@ -3,7 +3,7 @@ import { AppButton } from "src/components/button/AppButton";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "./NewApplicantBrief";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+// import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export interface ISubmitApplicationResponseProps {
   onCollectResponses: (data: any[], subsectionName: string) => void;

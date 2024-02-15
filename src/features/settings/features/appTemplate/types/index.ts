@@ -25,7 +25,6 @@ export interface IAppTemplateQuestions {
   template_id: number;
   questions: Question[];
   subsection_name?: string;
-
 }
 
 interface Question {
@@ -36,22 +35,8 @@ interface Question {
 }
 
 // GET TEMPLATE QUESTIONS
-export interface  ISingleQuestion {
-  id: number;
-  template_id: number;
-  form_question: string;
-  input_type: string;
-  options?: any;
-  is_required: number;
-  section_name: string;
-  subsection_name?: any;
-  created_at: string;
-  updated_at: string;
-  schema_name:string
-}
 
-
-interface Datum {
+export interface ISingleQuestion {
   id: number;
   template_id?: any;
   form_question: string;
@@ -59,7 +44,7 @@ interface Datum {
   options?: string[];
   is_required: number;
   section_name: string;
-  subsection_name?: any;
+  subsection_name: string;
   schema_name: string;
   created_at: string;
   updated_at: string;

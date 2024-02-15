@@ -19,7 +19,6 @@ import {
   textInputValidationRules,
   textInputValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
-import { isTwoCNChar } from "antd/es/button";
 
 const EditProgramType = () => {
   const [form] = Form.useForm();

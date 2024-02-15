@@ -58,7 +58,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
           setFormSubmitted(true);
-          navigate(appRoute.new_application().path);
+          navigate(appRoute.new_application);
           setSharedData((prevData: any) => ({
             ...prevData,
             applicantId: res.data.data.applicant.application_id,
@@ -143,6 +143,12 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
                 <Input />
               </Form.Item>
             </div>
+            <div>
+              <h2>What is the applicant phone number?</h2>
+              <Form.Item name="phone_number" rules={generalValidationRules}>
+                <InputNumber />
+              </Form.Item>
+            </div>
             <div className="flex items-center justify-center gap-4 p-4">
               <AppButton
                 type="reset"
@@ -151,7 +157,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
                 containerStyle="border border-secondary text-secondary"
               />
               {formSubmitted ? (
-                <Link to={appRoute.new_application().path}>Next</Link>
+                <Link to={appRoute.new_application}>Next</Link>
               ) : (
                 <AppButton label="Next" type="submit" isLoading={isLoading} />
               )}

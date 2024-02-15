@@ -13,6 +13,7 @@ import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApp
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
+import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
 
 export const DPOPortfolio = () => {
   const [openSupportingDocModal, setOpenSupportingDocModal] =
@@ -23,6 +24,8 @@ export const DPOPortfolio = () => {
   const { mutate } = useAcceptApplicant();
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
+  const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
+ 
 
   useEffect(() => {
     if (data) {
@@ -68,6 +71,31 @@ export const DPOPortfolio = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+        },
+      }
+    );
+  };
+
+  const markApplicationComplete = () => {
+    completeApplicationMutate(
+      { application_id: applicantId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+        
         },
       }
     );
@@ -179,7 +207,7 @@ export const DPOPortfolio = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="7">Mark as completed</Menu.Item>
+                <Menu.Item key="7" onClick={markApplicationComplete}>Mark as completed</Menu.Item>
               </Menu>
             }
           >

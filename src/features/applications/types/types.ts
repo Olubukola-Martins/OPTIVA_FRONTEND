@@ -7,6 +7,7 @@ export interface ICreateApplication {
   full_name: string;
   branch_id: number;
   no_of_dependents: number;
+  phone_number:string
 }
 
 // FETCH ALL APPLICANTS
@@ -553,4 +554,15 @@ interface Comment {
   user_id: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface IAssignApplicant{
+  application_id: number;
+  role_id: number;
+  assigned_user_id: number;
+}
+
+// MOVE TO NEXT STAGE
+export interface IMoveToNextStage {
+  milestone_id: number;
 }

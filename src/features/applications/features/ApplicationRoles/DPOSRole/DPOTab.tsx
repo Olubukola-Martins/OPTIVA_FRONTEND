@@ -1,5 +1,5 @@
 import React from "react";
-import { AllDPOApplicants } from "./AllDPOApplicants";
+// import { AllDPOApplicants } from "./AllDPOApplicants";
 import { DPOPortfolio } from "./DPOPortfolio";
 import { Tabs, Input, Select } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
@@ -10,11 +10,11 @@ export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
     children: React.ReactNode;
     key: string;
   }[] = [
-    {
-      label: "All Applicants",
-      children: <AllDPOApplicants />,
-      key: "AllApplicants",
-    },
+    // {
+    //   label: "All Applicants",
+    //   children: <AllDPOApplicants />,
+    //   key: "AllApplicants",
+    // },
     {
       label: "My Portfolio",
       children: <DPOPortfolio />,

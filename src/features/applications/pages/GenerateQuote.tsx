@@ -1,100 +1,89 @@
-// import { PageIntro } from "src/components/PageIntro";
-// import { appRoute } from "src/config/routeMgt/routePaths";
-// import { GenerateAntiguaDonationQuote } from "../features/Quotes/GenerateAntiguaDonationQuote";
-// import { useGlobalContext } from "src/stateManagement/GlobalContext";
-// import { GenerateGrenadaDonation } from "../features/Quotes/GenerateGrenadaDonation";
-// import { GenerateGrenadaRealEstateQuote } from "../features/Quotes/GenerateGrenadaRealEstateQuote";
-// import { GenerateStKittsQuote } from "../features/Quotes/GenerateStKittsQuote";
-// import { GenerateDominicaQuote } from "../features/Quotes/GenerateDominicaQuote";
-// import { GenerateStLuciaQuote } from "../features/Quotes/GenerateStLuciaQuote";
-
-// export const GenerateQuote = () => {
-//   const { sharedData } = useGlobalContext();
-//   return (
-//     <>
-//       <PageIntro
-//         title="Generate Quote"
-//         arrowBack={true}
-//         linkBack={appRoute.applications}
-//       />
-//       {sharedData.countryId === 1 && sharedData.investmentId === 1 && (
-//         <GenerateGrenadaDonation />
-//       )}{" "}
-//       ||{" "}
-//       {sharedData.countryId === 1 && sharedData.investmentId === 2 && (
-//         <GenerateGrenadaRealEstateQuote />
-//       )}{" "}
-//       ||{" "}
-//       {sharedData.countryId === 2 && sharedData.investmentId === 5 && (
-//         <GenerateStKittsQuote />
-//       )}{" "}
-//       ||{" "}
-//       {sharedData.countryId === 3 && sharedData.investmentId === 4 && (
-//         <GenerateDominicaQuote />
-//       )}{" "}
-//       ||{" "}
-//       {sharedData.countryId === 4 && sharedData.investmentId === 3 && (
-//         <GenerateStLuciaQuote />
-//       )}{" "}
-//       ||
-//       {sharedData.countryId === 5 && sharedData.investmentId === 6 && (
-//         <GenerateAntiguaDonationQuote />
-//       )}{" "}
-//       ||{" "}
-//       {sharedData.countryId === 5 && sharedData.investmentId === 7 && (
-//         <GenerateGrenadaRealEstateQuote />
-//       )}{" "}
-//       ||{" "}
-//       {sharedData.countryId === 5 && sharedData.investmentId === 8 && (
-//         <GenerateGrenadaRealEstateQuote />
-//       )}
-//     </>
-//   );
-// };
-
-
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { GenerateAntiguaDonationQuote } from "../features/Quotes/GenerateAntiguaDonationQuote";
-import { useGlobalContext } from "src/stateManagement/GlobalContext";
 import { GenerateGrenadaDonation } from "../features/Quotes/GenerateGrenadaDonation";
 import { GenerateGrenadaRealEstateQuote } from "../features/Quotes/GenerateGrenadaRealEstateQuote";
 import { GenerateStKittsQuote } from "../features/Quotes/GenerateStKittsQuote";
 import { GenerateDominicaQuote } from "../features/Quotes/GenerateDominicaQuote";
 import { GenerateStLuciaQuote } from "../features/Quotes/GenerateStLuciaQuote";
+import { useFetchApplicantsByRole } from "../hooks/useFetchApplicantsByRole";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Skeleton } from "antd";
 
 export const GenerateQuote = () => {
-  const { sharedData } = useGlobalContext();
-  let countryId
-  let investmentId
+  const { data, isLoading } = useFetchApplicantsByRole();
+  const { id } = useParams();
+ 
+  
+  const [countryId, setCountryId] = useState<number>();
+  const [investmentId, setInvestmentId] = useState<number>();
 
-  let componentToRender;
+  // const applicantId = data?.find(
+  //   (item) => item.id === (id as unknown as number)
+  // );
+  // return applicantId;
+
+  // const getApplicantDetails = (countryId: number, investId: number) => {
+  //   const applicantId = data?.find(
+  //     (item) => item.id === (id as unknown as number)
+  //   );
+  //   setCountryId(applicantId?.country_id)
+  //   setInvestmentId(applicantId?.investmentroute_id)
+  // };
+  //   const getApplicantDetails = () => {
+  //     ;
+  // //  setCountryId()
+
+
+
+  useEffect(() => {
+    if (id) {
+      const foundItem = data?.find((item) => item.id === +id as unknown as number);
+      console.log('id', foundItem)
+      if (foundItem) {
+        console.log(foundItem.country_id);
+        setCountryId(foundItem.country_id)
+        setInvestmentId(foundItem.investmentroute_id)
+      }
+    
+    }
+  }, [data, id]);
+  
+  
+
+
+  // setCountryId(applicantId?.country_id);
+  // setInvestmentId(applicantId?.investmentroute_id);
+
+  // console.log("country:", countryId, "invest:", investmentId);
+  let renderGenerateQuote;
 
   switch (`${countryId}-${investmentId}`) {
     case "1-1":
-      componentToRender = <GenerateGrenadaDonation />;
+      renderGenerateQuote = <GenerateGrenadaDonation />;
       break;
     case "1-2":
-      componentToRender = <GenerateGrenadaRealEstateQuote />;
+      renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
       break;
     case "2-5":
-      componentToRender = <GenerateStKittsQuote />;
+      renderGenerateQuote = <GenerateStKittsQuote />;
       break;
     case "3-4":
-      componentToRender = <GenerateDominicaQuote />;
+      renderGenerateQuote = <GenerateDominicaQuote />;
       break;
     case "4-3":
-      componentToRender = <GenerateStLuciaQuote />;
+      renderGenerateQuote = <GenerateStLuciaQuote />;
       break;
     case "5-6":
-      componentToRender = <GenerateAntiguaDonationQuote />;
+      renderGenerateQuote = <GenerateAntiguaDonationQuote />;
       break;
     case "5-7":
     case "5-8":
-      componentToRender = <GenerateGrenadaRealEstateQuote />;
+      renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
       break;
     default:
-      componentToRender = null;
+      // renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
       break;
   }
 
@@ -105,7 +94,10 @@ export const GenerateQuote = () => {
         arrowBack={true}
         linkBack={appRoute.applications}
       />
-      {componentToRender}
+      <Skeleton loading={isLoading} active>
+        {" "}
+        {renderGenerateQuote}
+      </Skeleton>
     </>
   );
 };

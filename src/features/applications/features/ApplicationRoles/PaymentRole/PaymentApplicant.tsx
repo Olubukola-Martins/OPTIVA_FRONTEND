@@ -7,12 +7,12 @@ import {
   DataSourceItem,
   capitalizeName,
 } from "src/features/applications/components/ActiveApplications";
-import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
+// import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
 
 export const PaymentApplicant = () => {
-  const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
+  // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
+  // const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
 
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -94,8 +94,8 @@ export const PaymentApplicant = () => {
                 <Menu.Item key="1">
                   <Link
                     to={
-                      appRoute.new_application(val.key as unknown as number)
-                        .path
+                      appRoute.new_application
+                        
                     }
                   >
                     Edit
@@ -113,9 +113,9 @@ export const PaymentApplicant = () => {
                 </Menu.Item>
                 <Menu.Item
                   key="3"
-                  onClick={() => {
-                    setOpenSubmitModal(true);
-                  }}
+                  // onClick={() => {
+                  //   setOpenSubmitModal(true);
+                  // }}
                 >
                   Submit
                 </Menu.Item>
@@ -129,9 +129,9 @@ export const PaymentApplicant = () => {
     },
   ];
 
-  const handleClose = () => {
-    setOpenSubmitModal(false);
-  };
+  // const handleClose = () => {
+  //   setOpenSubmitModal(false);
+  // };
 
   return (
     <>
@@ -143,11 +143,11 @@ export const PaymentApplicant = () => {
         className="bg-white rounded-md shadow border mt-2"
       />
 
-      <SubmitApplicationModal
+      {/* <SubmitApplicationModal
         open={openSubmitModal}
         handleClose={handleClose}
         handleOpenImportModal={() => setOpenUploadModal(true)}
-      />
+      /> */}
     </>
   );
 };

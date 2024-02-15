@@ -1,4 +1,4 @@
-import { Modal, Form, Upload, Button } from "antd";
+import { Modal, Form, Upload, } from "antd";
 import { AppButton } from "../button/AppButton";
 import { IModalProps } from "./DeleteModal";
 import { UploadOutlined } from "@ant-design/icons";

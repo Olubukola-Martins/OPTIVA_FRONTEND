@@ -3,7 +3,6 @@ import { useGetSingleQuestion } from "src/features/settings/features/appTemplate
 import { renderInput } from "./NewApplicantBrief";
 import { IApplicationFormResponseProps } from "./NewImmigrationAndCourtProceedings";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const NewPEP: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,

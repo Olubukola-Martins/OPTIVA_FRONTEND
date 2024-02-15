@@ -3,21 +3,16 @@ import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { DataSourceItem, capitalizeName } from "src/features/applications/components/ActiveApplications";
-import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
+// import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
-import { useGlobalContext } from "src/stateManagement/GlobalContext";
+// import { useGlobalContext } from "src/stateManagement/GlobalContext";
 
 export const MyPortfolio = () => {
   
-  const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
+  // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
+  // const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
 
-  const [applicantId, setApplicantId] = useState<number>();
-  // const [countryId, setCountryId] = useState<number>();
-  // const [investmentId, setInvestmentId] = useState<number>();
-
-  // const { setSharedData } = useGlobalContext()
   // useEffect(() => {
   //   setSharedData((prevData: any) => ({
   //     ...prevData,
@@ -133,9 +128,9 @@ export const MyPortfolio = () => {
                 </Menu.Item>
                 <Menu.Item
                   key="3"
-                  onClick={() => {
-                    setOpenSubmitModal(true);
-                  }}
+                  // onClick={() => {
+                  //   setOpenSubmitModal(true);
+                  // }}
                 >
                   Submit
                 </Menu.Item>
@@ -149,9 +144,9 @@ export const MyPortfolio = () => {
     },
   ];
 
-  const handleClose = () => {
-    setOpenSubmitModal(false);
-  };
+  // const handleClose = () => {
+  //   setOpenSubmitModal(false);
+  // };
 
  
   return (
@@ -164,11 +159,11 @@ export const MyPortfolio = () => {
         className="bg-white rounded-md shadow border mt-2"
       />
 
-      <SubmitApplicationModal
+      {/* <SubmitApplicationModal
         open={openSubmitModal}
         handleClose={handleClose}
-        handleOpenImportModal={() => setOpenUploadModal(true)}
-      />
+        // handleOpenImportModal={() => setOpenUploadModal(true)}
+      /> */}
 
       {/* <UploadModal
         header="Proof of Payment"

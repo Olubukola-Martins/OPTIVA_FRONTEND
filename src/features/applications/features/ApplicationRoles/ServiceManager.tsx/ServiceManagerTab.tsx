@@ -1,5 +1,5 @@
 import React from "react";
-import { AllServiceManagerApplicants } from "./AllServiceManagerApplicants";
+// import { AllServiceManagerApplicants } from "./AllServiceManagerApplicants";
 import { ServiceManagerPortfolio } from "./ServiceManagerPortfolio";
 import { Input, Select, Tabs } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
@@ -12,11 +12,11 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
     children: React.ReactNode;
     key: string;
   }[] = [
-    {
-      label: "All Applicants",
-      children: <AllServiceManagerApplicants />,
-      key: "AllApplicants",
-    },
+    // {
+    //   label: "All Applicants",
+    //   children: <AllServiceManagerApplicants />,
+    //   key: "AllApplicants",
+    // },
     {
       label: "My Portfolio",
       children: <ServiceManagerPortfolio />,

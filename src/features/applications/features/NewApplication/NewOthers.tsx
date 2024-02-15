@@ -7,7 +7,6 @@ import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const NewOthers = () => {
   const { sharedData } = useGlobalContext();

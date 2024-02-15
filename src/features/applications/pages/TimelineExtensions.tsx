@@ -43,7 +43,6 @@ const TimelineExtensions = () => {
   const { data, isLoading } = useFetchTimelineExtensions({
     id: id as unknown as number,
   });
-  const [timelineId, setTimelineId] = useState<number>();
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -119,7 +118,6 @@ const TimelineExtensions = () => {
 
   const rejectTimeline = (val: any) => {
     console.log("reject", val);
-    console.log("timeliine", timelineId);
     rejectData(id as unknown as number, val.extensionReject);
     setOpenRejectModal(false);
   };
@@ -178,7 +176,7 @@ const TimelineExtensions = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}

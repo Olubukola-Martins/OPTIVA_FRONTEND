@@ -11,15 +11,16 @@ import {
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
-import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
-import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
-import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
+// import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
+// import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
+// import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { openNotification } from "src/utils/notification";
 
 export const DRApplicant = () => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
 
+  console.log('data', data)
   const { mutate } = useMarkApplicantAsComplete();
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
@@ -35,7 +36,6 @@ export const DRApplicant = () => {
           country: item.country,
           programType: item.program_type,
           numberOfDependents: 1234567890,
-          assignedTo: 'assigned to',
           applicationStage: item.milestone,
           documentsUploaded: "-",
           documentsSubmitted: "-",
@@ -125,11 +125,11 @@ export const DRApplicant = () => {
       key: "10",
     },
 
-    {
-      title: "Assigned To",
-      dataIndex: "assignedTo",
-      key: "10",
-    },
+    // {
+    //   title: "Assigned To",
+    //   dataIndex: "assignedTo",
+    //   key: "10",
+    // },
 
     {
       title: "Action",

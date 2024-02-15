@@ -1,5 +1,4 @@
 export const appRoute = {
-
   // Authentication
   login_in: `/login`,
   forgot_password: `/forgot-password`,
@@ -79,10 +78,7 @@ export const appRoute = {
     format: `/applications/comments/:id`,
     path: `/applications/comments/${id}`,
   }),
-  new_application: (id?: number) => ({
-    format: `/applications/new_application/:id`,
-    path: `/applications/new_application/${id}`
-  }),
+  new_application: `/applications/new_application`,
   applicant_documents: (id?: number) => ({
     format: `/applications/applicant_documents/:id`,
     path: `/applications/applicant_documents/${id}`,
