@@ -9,7 +9,6 @@ export const appRoute = {
   home: `/`,
   master_list: `/master-list`,
   authorized_applicants: `/authorized-applicants`,
-  paid_applicants: `/paid-applicants`,
   prospects: `/prospects`,
 
   // Settings

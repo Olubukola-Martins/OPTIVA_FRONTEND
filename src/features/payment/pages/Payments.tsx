@@ -123,8 +123,6 @@ const Payments = () => {
   ];
 
   useEffect(() => {
-    console.log("length", allPaymentsData?.data.length);
-    console.log("data", allPaymentsData);
     setPaymentsData(allPaymentsData);
   }, [
     paymentsData,

@@ -54,7 +54,6 @@ import { GenerateQuote } from "src/features/applications/pages/GenerateQuote";
 import MasterList from "src/features/dashboard/pages/MasterList";
 import Prospects from "src/features/dashboard/pages/Prospects";
 import AuthorizedApplicants from "src/features/dashboard/pages/AuthorizedApplicants";
-import PaidApplicants from "src/features/dashboard/pages/PaidApplicants";
 
 const routesArray = [
   {
@@ -64,7 +63,6 @@ const routesArray = [
   { path: appRoute.master_list, element: <MasterList /> },
   { path: appRoute.prospects, element: <Prospects /> },
   { path: appRoute.authorized_applicants, element: <AuthorizedApplicants /> },
-  { path: appRoute.paid_applicants, element: <PaidApplicants /> },
 
   { path: appRoute.dependents, element: <Dependents /> },
   { path: appRoute.settings, element: <Settings /> },
