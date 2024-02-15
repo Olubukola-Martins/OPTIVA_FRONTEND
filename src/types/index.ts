@@ -23,6 +23,7 @@ export interface simpleCardProps {
   icon: string;
   link?: boolean;
   linkPath?: string;
+  handleClick?: () => void;
 }
 
 export interface SidebarLink {

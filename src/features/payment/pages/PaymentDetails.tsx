@@ -44,7 +44,6 @@ import {
   paymentsUrl,
 } from "./Payments";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import { FormEmployeeInput } from "src/features/settings/features/employees/components/FormEmployeeInput";
 import {
   generateFinancialStatement,
   viewProofOfPayment,
@@ -88,7 +87,7 @@ interface IUpdatePaymentDetailBody {
   narration: string;
   date_paid: string;
   fx_rate: string;
-  paid_by: number;
+  paid_by: string;
   naira_payment: number;
   dollar_payment: number;
   proof_of_payment_file: string;
@@ -143,7 +142,7 @@ const PaymentDetails = () => {
     useState<number>();
   const { fileData, fileUploading, fileMutate } = useUploadFile();
   const [fileDataUrl, setFileDataUrl] = useState<string>();
-  console.log(fileDataUrl,indexEdited)
+  console.log(fileDataUrl,indexEdited )
   const { data: paymentProofData, isLoading: paymentProofLoading } =
     viewProofOfPayment({ paymentDetailId: currentDetailIdForProof as number });
   // Fetch Financial Statement
@@ -784,10 +783,6 @@ const PaymentDetails = () => {
     },
   ];
 
-  // const fileUrl =
-  //   "https://optivateststorage.blob.core.windows.net/optiva/uploads/1706193541_Daniel Ayeni - FD.pdf";
-  // const fileNameMatch = fileUrl.match(/\/([^\/]+)$/);
-  // const fileName = fileNameMatch ? fileNameMatch[1] : null;
 
   return (
     <>
@@ -1049,7 +1044,7 @@ const PaymentDetails = () => {
             />
             {preSelectedFile && (
               <Text
-                className={`p-1 bg-gray-200 border-2 rounded ${
+                className={`p-1 bg-gray-200 border-2 rounded w-fit max-w-[80vw] break-words ${
                   fileList.length !== 0 && "hidden"
                 }`}
               >
@@ -1058,11 +1053,13 @@ const PaymentDetails = () => {
             )}
             <FxRatesFormInput extraStyles="pt-6" />
           </div>
-          <FormEmployeeInput
-            control={{ name: "paidBy", label: "Paid By" }}
-            showLabel={true}
-            Form={Form}
-          />
+          <Form.Item
+            name="paidBy"
+            label={"Paid By"}
+            rules={textInputValidationRules}
+          >
+            <Input />
+          </Form.Item>
           <Form.Item
             name="narration"
             label={"Narration"}

@@ -9,6 +9,8 @@ interface IPropsGenerateTemplate {
   reciepientPhone: string;
   reciepientEmail: string;
   date_created: string;
+  hideAuthorizedSignatory?: boolean;
+  showInvoiceParagraph?: boolean;
   children: React.ReactNode;
   handleDownload?: () => void;
 }
@@ -20,7 +22,10 @@ const GenerateTemplate = ({
   receipientName,
   reciepientPhone,
   reciepientEmail,
-  date_created,handleDownload
+  hideAuthorizedSignatory,
+  showInvoiceParagraph,
+  date_created,
+  handleDownload,
 }: IPropsGenerateTemplate) => {
   return (
     <div className="border-2 rounded-md border-gray-100 mt-10 mb-16 pb-16 pt-7 px-4 flex flex-col gap-10 w-full">
@@ -57,9 +62,7 @@ const GenerateTemplate = ({
             {reciepientEmail}
           </div>
         </address>
-        <p className="mt-auto max-sm:text-sm">
-          {date_created}
-        </p>
+        <p className="mt-auto max-sm:text-sm">{date_created}</p>
       </div>
 
       <p className="underline decoration-gray-200 underline-offset-2 decoration-2 text-gray-500 font-semibold text-lg sm:text-2xl text-center">
@@ -70,10 +73,16 @@ const GenerateTemplate = ({
       <div className="flex flex-col gap-10 w-full">
         <div className="flex flex-col gap-10 w-full">{children}</div>
         <p></p>
-        <p className="border-t-2 pt-2 border-gray-600  ml-auto w-fit">
+        <p
+          className={`border-t-2 pt-2 border-gray-600  ml-auto w-fit ${
+            hideAuthorizedSignatory ? "hidden" : ""
+          }`}
+        >
           Authorized Signatory
         </p>
-        <p className="text-center italic max-sm:text-sm">
+        <p
+          className={`text-center italic max-sm:text-sm ${showInvoiceParagraph ?  "" : "hidden"}`}
+        >
           If you have any questions concerning this invoice, please contact us
           directly via phone or email. Thank you for your business!
         </p>
@@ -166,7 +175,11 @@ const GenerateTemplate = ({
       {/* buttons */}
       <div className="place-self-end pt-6 flex flex-row gap-7">
         <AppButton label="Cancel" type="button" variant="transparent" />
-        <AppButton label="Download" type="button" handleClick={handleDownload}/>
+        <AppButton
+          label="Download"
+          type="button"
+          handleClick={handleDownload}
+        />
         <AppButton label="Send" type="submit" />
       </div>
     </div>

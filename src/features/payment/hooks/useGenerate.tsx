@@ -213,7 +213,7 @@ export const generateFinancialStatement = ({ itemId }: { itemId: number }) => {
 
 
 const getContractTemplateData = async (props: { applicantId: number }) => {
-  const url = `${END_POINT.BASE_URL}/admin/generateTemplate?applicantID=${props.applicantId}&templateType=contract`;
+  const url = `${END_POINT.BASE_URL}/admin/generateContract?applicantID=${props.applicantId}&templateType=contract`;
   const token = useGetToken();
 
   const config = {

@@ -178,6 +178,7 @@ const ViewInvoice = () => {
               invoiceData.data.application.applicant.email_address
             }
             reciepientPhone="090123456789"
+            showInvoiceParagraph={true}
           >
             <div>
               <Table
@@ -210,11 +211,14 @@ const ViewInvoice = () => {
                           index={3}
                           className="whitespace-nowrap "
                         >
-                          {invoiceData.data.totalAmountUSD.toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            maximumFractionDigits: 2,
-                          })}
+                          {invoiceData.data.totalAmountUSD.toLocaleString(
+                            "en-US",
+                            {
+                              style: "currency",
+                              currency: "USD",
+                              maximumFractionDigits: 2,
+                            }
+                          )}
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                       <Table.Summary.Row className="font-bold sm:text-lg">
@@ -228,11 +232,14 @@ const ViewInvoice = () => {
                           index={3}
                           className="whitespace-nowrap "
                         >
-                          {invoiceData.data.totalAmountNaira.toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "NGN",
-                            maximumFractionDigits: 2,
-                          })}
+                          {invoiceData.data.totalAmountNaira.toLocaleString(
+                            "en-US",
+                            {
+                              style: "currency",
+                              currency: "NGN",
+                              maximumFractionDigits: 2,
+                            }
+                          )}
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                     </>
@@ -240,8 +247,8 @@ const ViewInvoice = () => {
                 }}
               />
               <p className="text-red-500 max-sm:text-sm">
-                Inflow {invoiceData.data.fx_rate} <br /> Kindly send us evidence of payment so
-                that a receipt can be issued accordingly.
+                Inflow {invoiceData.data.fx_rate} <br /> Kindly send us evidence
+                of payment so that a receipt can be issued accordingly.
                 <br /> Naira payment is subject to the exchange rate, which
                 expires at the close of each business day.
               </p>

@@ -1,12 +1,5 @@
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import {
-  Form,
-  Input,
-  InputNumber,
-  Popover,
-  Select,
-  Table,
-} from "antd";
+import { Form, Input, InputNumber, Popover, Select, Table } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
@@ -20,8 +13,8 @@ import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import useAddEscalation from "../hooks/useAddEscalation";
 import EscalationDateErrorModal from "../components/EscalationDateErrorModal";
 import { IEscalationBody } from "src/features/settings/types/settingsType";
-import { FormEmployeeInput } from "../../employees/components/FormEmployeeInput";
-              
+import { useFetchEmployees } from "../../employees/hooks/useFetchEmployees";
+
 interface DataRow {
   key: number;
   escalateTo: JSX.Element;
@@ -31,21 +24,96 @@ interface DataRow {
 const NewEscalation = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showDateErrorModal, setShowDateErrorModal] = useState(false);
+    const { data: allRoles, isLoading: allRolesLoading } = useFetchAllItems({
+      queryKey: "roles",
+      urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
+    });
+    const { data: employeeData, isLoading: employeeLoading } =
+      useFetchEmployees({
+        currentUrl: "active-employees",
+      });
+    const [form] = Form.useForm();
+  const [currentKey, setCurrentKey] = useState(0);
+  const [currentEscalateTo, setCurrentEscalateTo] = useState<number>();
+  const [dynamicDta, setDynamicData] = useState<DataRow[]>([]);
+  const [data, setData] = useState<DataRow[]>([]);
+
+  const escalateToItem = (key: number) => {
+    return (
+      <Form.Item
+        name={`${key}-escalateTo`}
+        style={{ paddingBottom: 0, marginBottom: 0 }}
+      >
+        <Select
+          popupMatchSelectWidth={false}
+          placeholder="Select Role"
+          loading={allRolesLoading}
+          onChange={(val: number) => {
+            setCurrentEscalateTo(val);
+            setCurrentKey(key);
+          }}
+          options={allRoles?.data.map((role: { name: string; id: number }) => {
+            return { label: role.name, value: role.id };
+          })}
+        />
+      </Form.Item>
+    );
+  };
+  const employeeNameItem = (key: number) => {
+    return (
+      <Form.Item
+        name={`${key}-employeeName`}
+        style={{ paddingBottom: 0, marginBottom: 0 }}
+      >
+        <Select
+          popupMatchSelectWidth={false}
+          placeholder="Select Employee"
+          loading={employeeLoading}
+          onSelect={() => {
+            setCurrentKey(key);
+          }}
+          onClick={() => {
+            setCurrentKey(key);
+          }}
+          // options={employeeOptions}
+          options={
+            // currentEscalateTo && form.getFieldValue(`${key}-escalateTo`)
+            form.getFieldValue(`${key}-escalateTo`)
+              ? employeeData?.data
+                  .filter(
+                    (employee) =>
+                      employee.user.role_id ===
+                      form.getFieldValue(`${key}-escalateTo`)
+                  )
+                  .map((employee: { name: string; id: number }) => {
+                    return { label: employee.name, value: employee.id };
+                  })
+              : employeeData?.data.map(
+                  (employee: { name: string; id: number }) => {
+                    return { label: employee.name, value: employee.id };
+                  }
+                )
+          }
+        />
+      </Form.Item>
+    );
+  };
+  const escalateAfterItem = (key: number) => {
+    return (
+      <Form.Item
+        name={`${key}-escalateAfter`}
+        style={{ paddingBottom: 0, marginBottom: 0 }}
+        className=" min-w-[150px]"
+      >
+        <InputNumber min={0} addonAfter={"Hour(s)"} />
+      </Form.Item>
+    );
+  };
+
+  const [initialDta, setInitialData] = useState<DataRow[]>([]);
   const [openTimePop, setopenTimePop] = useState(false);
-  const [form] = Form.useForm();
   const navigate = useNavigate();
   const { addEscalation } = useAddEscalation();
-  const { data: allRoles, isLoading: allRolesLoading } = useFetchAllItems({
-    queryKey: "roles",
-    urlEndPoint: `${END_POINT.BASE_URL}/admin/roles`,
-  });
-  //  const { data: employeeData, isLoading: loadEmployee } =
-  //    useFetchEmployees("active-employees");
-  // const { data: allEmployees, isLoading: allEmployeesLoading } =
-  //   useFetchAllItems({
-  //     queryKey: "employees",
-  //     urlEndPoint: `${END_POINT.BASE_URL}/admin/employees`,
-  //   });
   const TimePopover: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) => {
@@ -76,75 +144,124 @@ const NewEscalation = () => {
     );
   };
 
-  const escalateToItem = (key: number) => {
-    return (
-      <Form.Item
-        name={`${key}-escalateTo`}
-        style={{ paddingBottom: 0, marginBottom: 0 }}
-      >
-        <Select
-          popupMatchSelectWidth={false}
-          placeholder="Select Role"
-          // loading={allRolesLoading}
-          options={
-            allRoles?.data.map((role: { name: string; id: number }) => {
-              return { label: role.name, value: role.id };
-            })
-            // : []
-          }
-        />
-      </Form.Item>
-    );
-  };
-  const employeeNameItem = (key: number) => {
-    return (
-      <div className="min-w-[120px] mt-5">
-        <FormEmployeeInput
-          control={{ name: `${key}-employeeName`, label: " " }}
-          showLabel={false}
-          Form={Form}
-        />
-      </div>
-    );
-  };
-  const escalateAfterItem = (key: number) => {
-    return (
-      <TimePopover>
-        <Form.Item
-          name={`${key}-escalateAfter`}
-          style={{ paddingBottom: 0, marginBottom: 0 }}
-          className=" min-w-[150px]"
-        >
-          <InputNumber min={0} addonAfter={"Hour(s)"} />
-        </Form.Item>
-      </TimePopover>
-    );
-  };
-  const tableInitialData = [
-    {
-      key: 1,
-      escalateTo: escalateToItem(1),
-      employeeName: employeeNameItem(1),
-      escalateAfter: escalateAfterItem(1),
-    },
-    {
-      key: 2,
-      escalateTo: escalateToItem(2),
-      employeeName: employeeNameItem(2),
-      escalateAfter: escalateAfterItem(2),
-    },
-  ];
 
   useEffect(() => {
-    if (!allRolesLoading && allRoles) setData(tableInitialData);
-  }, [allRolesLoading, allRoles]);
+    if (employeeData && allRoles) {
+      setInitialData([
+        {
+          key: 1,
+          escalateTo: escalateToItem(1),
+          employeeName: employeeNameItem(1),
+          escalateAfter: escalateAfterItem(1),
+        },
+        {
+          key: 2,
+          escalateTo: escalateToItem(2),
+          employeeName: employeeNameItem(2),
+          escalateAfter: escalateAfterItem(2),
+        },
+      ]);
+      // setData([...initialDta, ...dynamicDta])
+    };
+  }, [
+    allRolesLoading,
+    allRoles,
+    employeeData,
+    employeeLoading,
+    // currentEscalateTo,
+    // employeeOptions,
+  ]);
 
-  const [data, setData] = useState<DataRow[]>(tableInitialData);
+  useEffect(() => {
+    const tableData = [...initialDta, ...dynamicDta ].map((item) => {
+      if (item.key === currentKey) {
+        return {
+          key: item.key,
+          escalateTo: item.escalateTo,
+          employeeName: (
+            <Form.Item
+              name={`${currentKey}-employeeName`}
+              style={{ paddingBottom: 0, marginBottom: 0 }}
+            >
+              <Select
+                popupMatchSelectWidth={false}
+                placeholder="Select Employee"
+                loading={employeeLoading}
+                onSelect={() => {
+                  setCurrentKey(currentKey);
+                }}
+                onClick={() => {
+                  setCurrentKey(currentKey);
+                }}
+                options={
+                  // currentEscalateTo &&
+                  form.getFieldValue(`${currentKey}-escalateTo`)
+                    ? employeeData?.data
+                        .filter(
+                          (employee) =>
+                            employee.user.role_id ===
+                            form.getFieldValue(`${currentKey}-escalateTo`)
+                        )
+                        .map((employee: { name: string; id: number }) => {
+                          return {
+                            label: employee.name,
+                            value: employee.id,
+                          };
+                        })
+                    : employeeData?.data.map(
+                        (employee: { name: string; id: number }) => {
+                          return {
+                            label: employee.name,
+                            value: employee.id,
+                          };
+                        }
+                      )
+                }
+              />
+            </Form.Item>
+          ),
+          escalateAfter: item.escalateAfter,
+        };
+      } else {
+        return item;
+      }
+    });
+    setData(tableData);
+  }, [dynamicDta, initialDta, currentKey,form,currentEscalateTo]);
+
+  // useEffect(() => {
+  //   if (employeeData && !currentEscalateTo) {
+  //     const allEmployees = employeeData.data.map(
+  //       (employee: { name: string; id: number }) => {
+  //         return { label: employee.name, value: employee.id };
+  //       }
+  //     );
+  //     setEmployeeOptions(allEmployees);
+  //   }
+  //   if (employeeData && currentEscalateTo) {
+  //     const filteredEmployees = employeeData?.data
+  //       .filter((employee) => employee.user.role_id === currentEscalateTo)
+  //       .map((employee: { name: string; id: number }) => {
+  //         return { label: employee.name, value: employee.id };
+  //       });
+  //     setEmployeeOptions(filteredEmployees);
+  //   }
+  // }, [currentEscalateTo]);
+
+  // const [data, setData] = useState<DataRow[]>(tableInitialData);
+
   const deleteEscalationLevel = (item: DataRow) => {
     setData((pre) => {
       return pre.filter((row) => row.key !== item.key);
     });
+    if (dynamicDta.map((data) => data.key).includes(item.key)) {
+      setDynamicData((pre) => pre.filter((row) => row.key !== item.key));
+    } else {
+      setInitialData((pre) => pre.filter((row) => row.key !== item.key));
+    }
   };
+
+  // useEffect(() => {}, [employeeOptions, data, initialDta]);
 
   const columns: ColumnsType<DataRow> = [
     {
@@ -186,10 +303,10 @@ const NewEscalation = () => {
     const newValue = {
       key: newKey,
       escalateTo: escalateToItem(newKey),
-      employeeName: employeeNameItem(newKey), 
+      employeeName: employeeNameItem(newKey),
       escalateAfter: escalateAfterItem(newKey),
     };
-    setData((pre) => {
+    setDynamicData((pre) => {
       return [...pre, newValue];
     });
   };
@@ -304,10 +421,7 @@ const NewEscalation = () => {
                 <Input placeholder="Input Task" />
               </FormItem>
               <TimePopover>
-                <FormItem
-                  label="Task Deadline"
-                  name="deadline"
-                >
+                <FormItem label="Task Deadline" name="deadline">
                   <InputNumber min={0} addonAfter={"Hour(s)"} />
                 </FormItem>
               </TimePopover>
@@ -325,6 +439,7 @@ const NewEscalation = () => {
                   <Table
                     columns={columns}
                     dataSource={data}
+                    loading={employeeLoading || allRolesLoading}
                     pagination={false}
                     size="small"
                     bordered

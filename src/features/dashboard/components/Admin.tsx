@@ -37,7 +37,7 @@ export const Admin = () => {
           Applicants"
           count={count?.paid_applications || 0}
           link={true}
-          linkPath={appRoute.paid_applicants}
+          linkPath={appRoute.payments}
         />
         <SimpleCard
           icon="ph:user-list-duotone"

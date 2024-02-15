@@ -36,12 +36,11 @@ export const AllPaymentsContext = React.createContext<{
   setPaymentsData: () => {},
 });
 
-export  const paymentsUrl = `${END_POINT.BASE_URL}/admin/payments`;
-export  const QUERY_KEY_PAYMENTS = "AllPayments";
+export const paymentsUrl = `${END_POINT.BASE_URL}/admin/payments`;
+export const QUERY_KEY_PAYMENTS = "AllPayments";
 export const QUERY_KEY_QUOTES = "AllQuotes";
 export const QUERY_KEY_OUTSTANDING_PAYMENTS = "AllOutstandingPayment";
 export const QUERY_KEY_INVOICES = "Invoices";
-
 
 const Payments = () => {
   const quotesUrl = `${END_POINT.BASE_URL}/admin/quotes`;
@@ -124,8 +123,6 @@ const Payments = () => {
   ];
 
   useEffect(() => {
-    console.log("length", allPaymentsData?.data.length);
-    console.log("data", allPaymentsData);
     setPaymentsData(allPaymentsData);
   }, [
     paymentsData,
@@ -246,12 +243,15 @@ const Payments = () => {
           description="View & Update Clients Payments"
           arrowBack={false}
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-full">
+        <div className=" max-w-full  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7 mt-8 cursor-pointer">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              className="cursor-pointer"
+            <SimpleCard
               key={i}
-              onClick={() => {
+              icon="iconoir:page"
+              cardColor={cardColors[i]}
+              title={cardTitles[i]}
+              count={cardCounts[i]}
+              handleClick={() => {
                 switch (i) {
                   case 0:
                     setCurrentTable("Payments List");
@@ -269,14 +269,7 @@ const Payments = () => {
                     setCurrentTable("Payments List");
                 }
               }}
-            >
-              <SimpleCard
-                icon="iconoir:page"
-                cardColor={cardColors[i]}
-                title={cardTitles[i]}
-                count={cardCounts[i]}
-              />
-            </div>
+            />
           ))}
         </div>
         <div className="border-gray-100 border-t-2 border-r-2 border-l-2 border-b-0 rounded-t-md w-full mt-[52px] px-4 flex sm:flex-row flex-col items-center justify-around">

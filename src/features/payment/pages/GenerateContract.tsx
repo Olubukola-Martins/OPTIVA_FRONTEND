@@ -9,13 +9,12 @@ import { generateContract } from "../hooks/useGenerate";
 import { useParams } from "react-router-dom";
 
 const GenerateContract = () => {
-    const { id } = useParams();
+  const { id } = useParams();
   const [applicantId, setApplicantId] = useState<number>(0);
-  const { data } = generateContract({ applicantId });
-  console.log("data",data)
+  const { data, isLoading } = generateContract({ applicantId });
   const [currentPage, setCurrentPage] = useState(1);
+  // const [allPages, setAllPages] = useState<React.ReactElement[]>([<div></div>]);
   const allPages: React.ReactElement[] = [<ContractFirstPage />];
-
 
   useEffect(() => {
     if (id) {
@@ -23,7 +22,24 @@ const GenerateContract = () => {
     }
   }, [id]);
 
+  // // contract generated data
+  // interface RootObject {
+  //   success: boolean;
+  //   data: Data;
+  //   message: string;
+  //   meta: string;
+  // }
 
+  // interface Data {
+  //   page1: string;
+  //   page2: string;
+  // }
+
+  useEffect(() => {
+    if (!isLoading && data?.success) { 
+
+    }
+  }, [isLoading, data]);
 
   for (let index = 1; index <= 3; index++) {
     allPages.push(

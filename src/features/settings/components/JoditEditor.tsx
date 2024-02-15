@@ -272,9 +272,6 @@ export const JoditEditorComponent: React.FC<JoditEditorComponentProps> = ({
     >
       <JoditEditor
         config={config}
-        onChange={(value) => {
-          console.log("valueOnChange", value);
-        }}
         value={""}
         ref={editor}
       />

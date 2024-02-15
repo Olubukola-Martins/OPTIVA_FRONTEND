@@ -74,6 +74,8 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
         : values.paymentsNGN / values.fxRate.value,
       fx_rate: values.fxRate.label,
     };
+        console.log("newData", newData);
+
     generateInvoice(newData, currentApplicationId as number);
     setIsModalOpen(false);
   };

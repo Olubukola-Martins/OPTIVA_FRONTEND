@@ -1,20 +1,20 @@
 export type Appointment = {
-    id?: number;
-    status?: string;
-    location?: string;
-    resource?: string;
-    address?: string;
-    start: string | Date;
-    end: string | Date;
+  id?: number;
+  status?: string;
+  location?: string;
+  resource?: string;
+  address?: string;
+  start: string | Date;
+  end: string | Date;
 };
-  
+
 export type EventItem = {
-    start: Date;
-    end: Date;
-    data?: { appointment?: Appointment };
-    isDraggable?: boolean;
+  start: Date;
+  end: Date;
+  data?: { appointment?: Appointment };
+  isDraggable?: boolean;
 };
-  
+
 export interface INewMeeting {
   title: string;
   description: string;
@@ -77,6 +77,34 @@ interface Pivot {
   availability_status: string;
   created_at: string;
   updated_at: string;
+}
+
+//Single contract and email template data
+export interface ISingleContractEmailTemplateData {
+  success: boolean;
+  data: ContractEmailTemplateDatum[];
+  message: string;
+  meta: string;
+}
+
+export interface ContractEmailTemplateDatum {
+  id: number;
+  name: string;
+  file: string;
+  content: string;
+  type: string;
+  created_at?: any;
+  updated_at: string;
+  pages: Page[];
+}
+
+interface Page {
+  id: number;
+  title: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  email_template_id: number;
 }
 
 // export interface IFetchAllMeetings {
@@ -210,7 +238,7 @@ interface Applicant {
   updated_at: string;
 }
 
-// Quotes 
+// Quotes
 export interface IAllGeneratedQuotes {
   data: IGeneratedQuoteDatum[];
 }
@@ -245,14 +273,12 @@ interface IAllGenQuoteApplicant {
   application: Application;
 }
 
-
 // Outstanding payments
 export interface IAllOutstandingPayments {
   data: OutstandingPaymentDatum[];
   links: Links;
   meta: Meta;
 }
-
 
 export interface OutstandingPaymentDatum {
   id: number;
@@ -345,16 +371,11 @@ interface Updatedby {
   updated_at: string;
 }
 
-
-
-
-
 export interface IAllInvoices {
   data: InvoiceDatum[];
   links: Links;
   meta: Meta;
 }
-
 
 export interface InvoiceDatum {
   id: number;
@@ -367,8 +388,6 @@ export interface InvoiceDatum {
   updated_at: string;
   application: Application;
 }
-
-
 
 interface Application {
   id: number;
@@ -396,8 +415,6 @@ interface Application {
   country: Country;
   investmentroute: Investmentroute;
 }
-
-
 
 // Generate Financial Statement
 export interface IGenFinancialState {
@@ -464,7 +481,6 @@ interface Application {
   programtype: Programtype;
 }
 
-
 interface Applicant {
   id: number;
   application_id: number;
@@ -494,8 +510,6 @@ interface Quote {
   created_at: string;
   updated_at: string;
 }
-
-
 
 // Generate Invoice
 export interface IGenInvoice {
@@ -549,7 +563,6 @@ interface Application {
   programtype: Programtype;
 }
 
-
 // Generate Receipt
 export interface IGenReceipt {
   success: boolean;
@@ -575,7 +588,6 @@ export interface GenReceiptData {
   payment: Payment;
 }
 
-
 // View Quote Breakdown
 export interface IViewQuote {
   success: boolean;
@@ -585,6 +597,70 @@ export interface IViewQuote {
 }
 
 interface ViewQuoteData {
+  Applicant_info: ApplicantDonationInfo | ApplicantRealEstateinfo;
+  Applicant_quote_breakdown:
+    | Antiguadonationquote
+    | Antiguasinglequote
+    | Antiguajointquote
+    | Grenadadonationquote
+    | Dominicadonationquote
+    | Grenadaestatequote
+    | Stkittsandnevisestatequote
+    | Stluciaestatequote;
+}
+export interface ApplicantDonationInfo {
+  id: number;
+  application_id: number;
+  branch_id: number;
+  full_name: string;
+  applicant_unique_id: string;
+  email_address: string;
+  amount_paid: string;
+  user_id?: any;
+  created_at: string;
+  updated_at: string;
+  quote: Quote;
+  antigua_donation_quote?: Antiguadonationquote;
+  dominica_donation_quote?: Dominicadonationquote;
+  grenada_donation_quote?: Grenadadonationquote;
+}
+export interface ApplicantRealEstateinfo {
+  id: number;
+  application_id: number;
+  branch_id: number;
+  full_name: string;
+  applicant_unique_id: string;
+  email_address: string;
+  amount_paid: string;
+  user_id?: any;
+  created_at: string;
+  updated_at: string;
+  quote: Quote;
+  antigua_single_quote?: Antiguasinglequote;
+  grenada_estate_quote?: Grenadaestatequote;
+  antigua_joint_quote?: Antiguajointquote;
+  st_kitts_and_nevis_estate_quote?: Stkittsandnevisestatequote;
+  st_lucia_estate_quote?: Stluciaestatequote;
+}
+interface Quote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  applicant_full_name: string;
+  country: string;
+  investment_route: string;
+  number_of_dependents: string;
+  quotation_total: number;
+  country_investment_total: number;
+  local_prc_fee: number;
+  quotation_status: number;
+  generated_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Quote breakdown for  "investment_route": "Antigua & Barbuda donation"
+export interface Antiguadonationquote {
   id: number;
   applicant_id: number;
   applicant_unique_id: string;
@@ -602,20 +678,243 @@ interface ViewQuoteData {
   program_grand_total_due_on_approval: number;
   created_at: string;
   updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
 }
 
+// Quote breakdown for "investment_route": "Antigua & Barbuda Single Real Estate"
+
+export interface Antiguasinglequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  real_estate_investment_fee: number;
+  govt_processing_fee: number;
+  due_diligence_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  legal_and_advisory_fee: number;
+  antigua_barbuda_single_estate_total: number;
+  local_processing_fee: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_due_on_approval: number;
+  program_grand_total: number;
+  program_grand_total_due_now: number;
+  program_grand_total_due_on_approval: number;
+  created_at: string;
+  updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
+}
+// Quote breakdown for "investment_route": "Antigua & Barbuda Joint Real Estate",
+export interface Antiguajointquote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  real_estate_investment_fee: number;
+  govt_processing_fee: number;
+  due_diligence_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  legal_and_advisory_fee: number;
+  antigua_barbuda_joint_estate_total: number;
+  local_processing_fee: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_due_on_approval: number;
+  program_grand_total: number;
+  program_grand_total_due_now: number;
+  program_grand_total_due_on_approval: number;
+  created_at: string;
+  updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
+}
+// Quote breakdown for  "investment_route": "Dominica donation"
+
+export interface Dominicadonationquote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_contribution_fee: number;
+  govt_processing_fee: number;
+  govt_due_diligence_fee: number;
+  govt_cert_neutralization_fee: number;
+  local_processing_fee: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_after_approval: number;
+  dominica_total: number;
+  program_total: number;
+  program_total_due_now: number;
+  program_total_due_after_approval: number;
+  created_at: string;
+  updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
+}
+
+// Quote breakdown for  "investment_route": "Grenada donation"
+export interface Grenadadonationquote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_contribution_fee: number;
+  govt_ntf_application_fee: number;
+  govt_due_diligence_fee: number;
+  govt_processing_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  grenada_bank_fee: number;
+  grenada_local_agent_fee: number;
+  grenada_legal_and_advisory_fee: number;
+  program_grand_total: number;
+  totalDueNow: number;
+  totalDueAfterApproval: number;
+  created_at: string;
+  updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
+}
+// Quote breakdown for  "investment_route": "Grenada Real Estate"
+
+export interface Grenadaestatequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_fee: number;
+  real_estate_investment_fee: number;
+  govt_application_fee: number;
+  govt_due_diligence_fee: number;
+  govt_processing_fee: number;
+  govt_passport_oath_and_allegiance_fee: number;
+  grenada_bank_fee: number;
+  grenada_local_agent_fee: number;
+  grenada_legal_and_advisory_fee: number;
+  grenadaRealEstateTotal: number;
+  localProcessingFee: number;
+  localProcessingFeeDueNow: number;
+  localProcessingFeeDueAfterApproval: number;
+  program_grand_total: number;
+  programTotalDueNow: number;
+  programTotalDueAfterApproval: number;
+  created_at: string;
+  updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
+}
+// Quote breakdown for  "investment_route": "ST Kitts & Nevis Real Estate"
+
+export interface Stkittsandnevisestatequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  govt_contribution: number;
+  application_fee: number;
+  due_dil_and_prc_fee: number;
+  passport_and_oath_of_allegiance_fee: number;
+  courier_and_bank_fee: number;
+  bank_due_dil_fee: number;
+  local_agent_fee_vat: number;
+  legal_advisory_fee: number;
+  local_prc_fee: number;
+  local_prc_fee_due_now: number;
+  local_prc_due_after_approval: number;
+  program_total: number;
+  program_total_due_now: number;
+  program_total_due_after_approval: number;
+  created_at: string;
+  updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
+  st_kitts_total: number;
+}
+
+// Quote breakdown for  "investment_route": "ST Lucia NEFI Real Estate"
+
+export interface Stluciaestatequote {
+  id: number;
+  applicant_id: number;
+  applicant_unique_id: string;
+  contribution_for_main_applicant: number;
+  contribution_for_dependents: number;
+  govt_prc_fee: number;
+  govt_due_dil: number;
+  govt_passport_fee: number;
+  localProcessingFee: number;
+  localProcessingFeeDueNow: number;
+  localProcessingFeeDueAfterApproval: number;
+  program_grand_total: number;
+  programTotalDueNow: number;
+  programTotalDueAfterApproval: number;
+  created_at: string;
+  updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
+  st_lucia_total: number;
+}
 
 /// FX Rates
 export interface IAllFxRates {
-  data: fxRateDatum[];
-}
-
-export interface fxRateDatum {
+  success: string;
+  message: string;
+  data:{
   id: number;
   source_currency: string;
   target_currency: string;
   source_currency_amount: number;
   target_currency_amount: number;
+  created_at: string;
+  updated_at: string;
+}}
+
+// export interface all prospects
+export interface IAllProspectsData {
+  data: IProspectDatum[];
+}
+
+export interface IProspectDatum {
+  id: number;
+  applicant_name: string;
+  applicant_id: string;
+  country: string;
+  program_type: string;
+  milestone?: string;
+  process?: string;
+  investmentroute: string;
+  branch: string;
+  comments: any[];
+  user_assigned: any[];
+  country_id: number;
+  investmentroute_id: number;
+  programtype_id: number;
   created_at: string;
   updated_at: string;
 }
