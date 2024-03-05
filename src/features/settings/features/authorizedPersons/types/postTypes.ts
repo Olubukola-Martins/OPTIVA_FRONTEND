@@ -6,6 +6,7 @@ export interface IInvestmentByCountry {
   created_at: string;
   updated_at: string;
 }
+
 // GET COUNTRY BY PROGRAM TYPE
 export interface IProgramCountry {
   id: number;

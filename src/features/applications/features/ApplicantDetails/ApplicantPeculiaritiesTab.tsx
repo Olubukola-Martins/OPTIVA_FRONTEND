@@ -4,17 +4,71 @@ import { CriminalHistory } from "./CriminalHistory";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useQueryClient } from "react-query";
+import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { openNotification } from "src/utils/notification";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { ICreateApplicationResponse } from "../../types/types";
+import { AppButton } from "src/components/button/AppButton";
+import { IApplicantDetailsProps } from "./ApplicantBrief";
 
-export const ApplicantPeculiaritiesTab = () => {
-  
+export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
+  onNext,
+  onPrev,
+})  => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { id } = useParams();
-  const { data, } = useGetApplicationResponse({
+  const { data } = useGetApplicationResponse({
     id: id as unknown as number,
     section: "sectionthreeresponse",
   });
+  const queryClient = useQueryClient();
+  const { mutate, isLoading,} = useCreateApplicationResponse(
+    "sectionthreeresponse"
+  );
 
-  console.log('data', data)
+  const handleTabSubmit = (responses: any) => {
+    const applicationData: ICreateApplicationResponse = {
+      application_id: id as unknown as number,
+      responses: Array.isArray(responses)
+        ?responses: Array.isArray(responses)
+        ? responses.map(
+            (response: {
+              question_id: number;
+              schema_name: any;
+              subsection_name: string;
+            }) => ({
+              question_id: response.question_id,
+              response: [form.getFieldValue(response.schema_name)],
+              subsection_name: response.subsection_name,
+            })
+          )
+        : [],
+    };
+
+    mutate(applicationData, {
+      onError: (error: any) => {
+        openNotification({
+          state: "error",
+          title: "Error Occurred",
+          description: error.response.data.message,
+          duration: 5,
+        });
+      },
+      onSuccess: (res: any) => {
+        openNotification({
+          state: "success",
+          title: "Success",
+          description: res.data.data.message,
+        });
+        queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+        if (currentTab < tabItems.length - 1) {
+          setCurrentTab(currentTab + 1);
+        }
+        // onNext()
+      },
+    });
+  };
 
   const [form] = Form.useForm();
   useEffect(() => {
@@ -49,7 +103,7 @@ export const ApplicantPeculiaritiesTab = () => {
     {
       children: (
         <CriminalHistory
-        onPrev={() => setCurrentTab(currentTab - 1)}
+          onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="criminalHistory"
         />
       ),
@@ -57,24 +111,74 @@ export const ApplicantPeculiaritiesTab = () => {
       key: "Criminal History",
       subsectionName: "criminalHistory",
     },
-  ];
+    ];
+  
+    const lastTab = currentTab === tabItems.length - 1;
+
   return (
     <>
-       <Form form={form} layout="vertical" >
-      <Tabs
-        tabBarStyle={{ maxWidth: "1200px" }}
-        activeKey={currentTab.toString()}
-        onChange={(key) => setCurrentTab(Number(key))}
-        tabBarGutter={15}
-        
-      >
-        {tabItems.map((tab, index) => (
-          <Tabs.TabPane tab={tab.label} key={index.toString()}>
-            {tab.children}
-          </Tabs.TabPane>
-        ))}
-      </Tabs>
+      <Form form={form} layout="vertical" onFinish={handleTabSubmit}>
+        <Tabs
+          tabBarStyle={{ maxWidth: "1200px" }}
+          activeKey={currentTab.toString()}
+          onChange={(key) => setCurrentTab(Number(key))}
+          tabBarGutter={15}
+        >
+          {tabItems.map((tab, index) => (
+            <Tabs.TabPane tab={tab.label} key={index.toString()}>
+              {tab.children}
+            </Tabs.TabPane>
+          ))}
+        </Tabs>
+
+        {lastTab && (
+        <div className="flex justify-between my-2">
+          <AppButton
+            label="Previous"
+            type="button"
+            variant="transparent"
+            handleClick={() => {
+              onPrev && onPrev();
+            }}
+          />
+          <div className="flex justify-end items-center gap-5">
+            <AppButton
+              label="Next"
+              type="button"
+              variant="transparent"
+              handleClick={() => {
+                onNext && onNext();
+              }}
+            />
+            <AppButton
+              label="Save"
+              type="submit"
+              isLoading={isLoading}
+              // isDisabled={isSuccess}
+            />
+          </div>
+        </div>
+      )}
+      {!lastTab && (
+        <div className="flex justify-end items-center gap-5">
+          <AppButton
+            label="Prev"
+            type="button"
+            variant="transparent"
+            handleClick={() => {
+              onPrev && onPrev();
+            }}
+          />
+          <AppButton
+            label="Next"
+            type="button"
+            handleClick={() => {
+              onNext && onNext();
+            }}
+          />
+        </div>
+      )}
     </Form>
-    </>
+  </>
   );
 };

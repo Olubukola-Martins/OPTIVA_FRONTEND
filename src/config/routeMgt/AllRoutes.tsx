@@ -54,6 +54,8 @@ import { GenerateQuote } from "src/features/applications/pages/GenerateQuote";
 import MasterList from "src/features/dashboard/pages/MasterList";
 import Prospects from "src/features/dashboard/pages/Prospects";
 import AuthorizedApplicants from "src/features/dashboard/pages/AuthorizedApplicants";
+import { SendEmail } from "src/features/applications/pages/SendEmail";
+import { SupportingDocuments} from "src/features/applications/pages/SupportingDocuments";
 
 const routesArray = [
   {
@@ -163,6 +165,8 @@ const routesArray = [
   { path: appRoute.addWorkflow, element: <AddWorkflow /> },
   { path: appRoute.workflow_details().format, element: <WorkflowDetails /> },
   { path: appRoute.generate_quotes().format, element: <GenerateQuote /> },
+  { path: appRoute.send_email().format, element: <SendEmail /> },
+  { path: appRoute.attach_supporting_documents().format, element: <SupportingDocuments /> }
 ];
 
 export const AllRoutes = () => {

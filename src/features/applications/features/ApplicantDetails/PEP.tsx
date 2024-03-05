@@ -7,7 +7,7 @@ import { renderInput } from "../NewApplication/NewApplicantBrief";
 export const PEP: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
   subsectionName,
-  // onPrevTabItem,
+  onPrevTabItem,
 }) => {
   const { id } = useParams();
   const { data} = useGetApplicationResponse({
@@ -30,7 +30,16 @@ export const PEP: React.FC<IApplicationFormResponseProps> = ({
           )
       )}
 
-      <div className="flex justify-end  my-5 py-2">
+<div className="flex justify-between  my-5 py-2">
+        <Tooltip title="Click to go to the previous section">
+          <i
+            className="ri-arrow-left-s-line cursor-pointer text-2xl font-semibold"
+            onClick={() => {
+              onPrevTabItem && onPrevTabItem();
+            }}
+          ></i>
+        </Tooltip>
+
         <Tooltip title="Click to go to the next section">
           <i
             className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"

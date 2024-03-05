@@ -32,7 +32,6 @@ const CreateProgramType = () => {
   const { data: workflowData } = useGetWorkflow();
   const { data: countryData } = useGetCountry();
 
-
   // DEPENDENT OPTION
   const dependentOptions: SelectProps["options"] =
     dependentData?.map((item) => ({

@@ -20,13 +20,14 @@ const getData = async (props: {
 
   const res = await axios.get(url, config);
   const data: IGetApplicantDocument[] = res.data.data;
+
   return data;
 };
 
-export const useGetApplicantDocumentCategory = (id:number) => {
+export const useGetApplicantDocumentCategory = (id: number) => {
   const { token } = useGetUserInfo();
   const queryData = useQuery(
-    [QUERY_KEY_FOR_APPLICANT_DOCUMENT,id],
+    [QUERY_KEY_FOR_APPLICANT_DOCUMENT, id],
     () => getData({ token, id }),
     {
       onError: () => {},

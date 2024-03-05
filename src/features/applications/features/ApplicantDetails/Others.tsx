@@ -8,8 +8,9 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
 import { renderInput } from "../NewApplication/NewApplicantBrief";
 import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
 import { useEffect } from "react";
+import { IApplicantDetailsProps } from "./ApplicantBrief";
 
-export const Others = () => {
+export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   const { id } = useParams();
   const { data, isLoading } = useGetApplicationResponse({
     id: id as unknown as number,
@@ -25,7 +26,6 @@ export const Others = () => {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      // const initialValues = {};
       const initialValues: Record<string, any> = {};
       data.forEach((item) => {
         initialValues[item.question.schema_name] = item.response;
@@ -39,7 +39,7 @@ export const Others = () => {
       application_id: id as unknown as number,
       responses:
         data?.map((item) => ({
-          question_id: item.id,
+          question_id: item.question_id,
           response: Array.isArray(val[item.question.schema_name])
             ? val[item.question.schema_name]
             : [val[item.question.schema_name]],
@@ -84,19 +84,14 @@ export const Others = () => {
             </Form.Item>
           ))}
 
-          <div className="flex justify-end items-center gap-5">
+          <div className="flex justify-between items-center gap-5">
             <AppButton
-              label="Cancel"
-              type="reset"
+              label="Prev"
+              type="button"
+              handleClick={() => onPrev && onPrev()}
               variant="transparent"
-              // isDisabled={isSuccess}
             />
-            <AppButton
-              label="Save"
-              type="submit"
-              isLoading={postLoading}
-              // isDisabled={isSuccess}
-            />
+            <AppButton label="Save" type="submit" isLoading={postLoading} />
           </div>
         </Form>
       </Skeleton>

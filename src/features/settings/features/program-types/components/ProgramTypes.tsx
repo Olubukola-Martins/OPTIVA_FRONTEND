@@ -9,7 +9,6 @@ import { DeleteModal } from "src/components/modals/DeleteModal";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { useDelete } from "src/hooks/useDelete";
-import { useGetApplicationTemplate } from "../../appTemplate/hooks/useGetApplicationTemplate";
 
 type DataSourceItem = {
   key: React.Key;
@@ -26,14 +25,30 @@ export const ProgramTypes = () => {
   const { data, isLoading } = useGetProgramType();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
   const [programId, setProgramId] = useState<number>();
-  const { data: templateData } = useGetApplicationTemplate();
   const { removeData } = useDelete({
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
     EndPointUrl: "admin/programtypes/",
   });
 
+
+
   console.log("program data", data);
-  console.log("template data", templateData);
+  // const uniqueCountries = data?.countries.filter((country, index, self) => {
+  //   return index === self.findIndex((c) => c.id === country.id);
+  // });
+  
+  // const uniqueDocumentRequirements = data?.documentrequirements.filter(
+  //   (requirement, index, self) => {
+  //     return index === self.findIndex((r) => r.id === requirement.id);
+  //   }
+  // );
+  
+  // const uniqueEligibleDependents = data?.eligibledependents.filter(
+  //   (dependent, index, self) => {
+  //     return index === self.findIndex((d) => d.id === dependent.id);
+  //   }
+  // );
+  
 
   useEffect(() => {
     if (data) {

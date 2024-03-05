@@ -4,7 +4,7 @@ import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
 import { ITimelineExtension } from "../types/types";
 
-interface IAcceptProps{
+export interface IAcceptProps{
     id:number
 }
 

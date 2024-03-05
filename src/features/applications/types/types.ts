@@ -7,7 +7,7 @@ export interface ICreateApplication {
   full_name: string;
   branch_id: number;
   no_of_dependents: number;
-  phone_number:string
+  phone_number: string;
 }
 
 // FETCH ALL APPLICANTS
@@ -326,7 +326,6 @@ interface Applicationcomment {
   updated_at: string;
 }
 
-
 export interface IDocumentComment {
   id: number;
   applicant_document_id: number;
@@ -431,11 +430,10 @@ interface Documentrequirement {
   updated_at: string;
 }
 
-
 // QUOTES
 // St Kitts and Nevis Quotes
 export interface IGenerateStKittsNevisQuotes {
-  id:number
+  id: number;
   total_number_of_applicants: number;
   size_of_family: number;
   does_applicant_have_a_spouse: string;
@@ -453,7 +451,7 @@ export interface IGenerateStKittsNevisQuotes {
 }
 
 export interface IGenerateStLuciaQuotes {
-  id:number
+  id: number;
   total_number_of_applicants: number;
   does_applicant_have_a_spouse: string;
   number_of_add_depn_if_spouse_max_two: number;
@@ -464,7 +462,7 @@ export interface IGenerateStLuciaQuotes {
 }
 
 export interface IGenerateDominicaQuotes {
-  id:number
+  id: number;
   total_number_of_applicants: number;
   size_of_family: number;
   does_applicant_have_a_spouse: string;
@@ -475,7 +473,7 @@ export interface IGenerateDominicaQuotes {
 }
 
 export interface IGenerateGrenadaRealEstateQuotes {
-  id:number
+  id: number;
   total_num_of_applicants: number;
   size_of_family: number;
   does_applicant_have_a_spouse: string;
@@ -485,10 +483,14 @@ export interface IGenerateGrenadaRealEstateQuotes {
   num_of_dependent_greater_than_seventeen: number;
   num_of_dependent_less_than_fifty_five: number;
   num_of_dependent_greater_than_fifty_five: number;
+  number_of_add_dependent_greater_than_eighteen: number;
+  number_of_add_dependent_less_than_eighteen: number;
+  number_of_dependent_greater_than_sixteen: number;
+  number_of_dependent_less_than_sixteen: number;
 }
 
 export interface IGenerateGrenadaDonationQuotes {
-  id:number
+  id: number;
   total_num_of_applicants: number;
   size_of_family: number;
   does_applicant_have_a_spouse: string;
@@ -502,7 +504,7 @@ export interface IGenerateGrenadaDonationQuotes {
 }
 
 export interface IGenerateAntiguaJointRealEstateQuotes {
-  id:number
+  id: number;
   total_number_of_applicants: number;
   does_applicant_have_a_spouse: string;
   number_of_dependent_zero_to_eleven: number;
@@ -512,7 +514,7 @@ export interface IGenerateAntiguaJointRealEstateQuotes {
 }
 
 export interface IGenerateAntiguaDonationQuotes {
-  id:number
+  id: number;
   total_number_of_applicants: number;
   does_applicant_have_a_spouse: string;
   number_of_dependent_zero_to_eleven: number;
@@ -520,7 +522,6 @@ export interface IGenerateAntiguaDonationQuotes {
   number_of_dependent_greater_than_eighteen: number;
   number_of_dependent_greater_than_fifty_eight: number;
 }
-
 
 // MARK APPLICANT AS COMPLETE
 export interface IMarkApplicationComplete {
@@ -534,35 +535,134 @@ export interface IApplicantsByRole {
   applicant_id: string;
   country: string;
   program_type: string;
-  milestone?: any;
-  process?: any;
+  milestone: string;
+  process: string;
   investmentroute: string;
   branch: string;
-  comments: Comment[];
+  comments: any[];
+  applicant_documents: Applicantdocument[];
   user_assigned: any[];
   country_id: number;
+  added_by: string;
+  no_of_dependents: number;
   investmentroute_id: number;
   programtype_id: number;
+  status: string;
   created_at: string;
   updated_at: string;
+  uploaded: string;
+  verified: string;
+  validated: string;
 }
 
-interface Comment {
+interface Applicantdocument {
   id: number;
-  comment: string;
-  application_id: number;
-  user_id: number;
+  name: string;
+  applicants_id: number;
+  uploaded_by: number;
+  document_category_id: number;
+  document_requirement_id: number;
+  status: string;
+  handover_status: string;
+  path: string;
   created_at: string;
   updated_at: string;
+  audit_status: string;
+  internally_reviewed: string;
+  externally_reviewed: string;
+  is_completed: number;
+  dependants: any[];
+  
 }
 
-export interface IAssignApplicant{
+export interface IAssignApplicant {
   application_id: number;
   role_id: number;
-  assigned_user_id: number;
+  user_id: number;
 }
 
 // MOVE TO NEXT STAGE
 export interface IMoveToNextStage {
   milestone_id: number;
+}
+
+// OUTSTANDING DOC
+export interface IOutstandingDoc {
+  id: number;
+  name: string;
+  document_type: string;
+  document_category_id: number;
+  document_format: string[];
+  document_size: number;
+  other_requirement: string;
+  created_at?: any;
+  updated_at?: any;
+}
+
+// Send to Role Head
+export interface ISendToRoleHead {
+  department_id: number;
+  application_id: number;
+}
+
+// FETCH AUTHORIZED APPLICANT
+export interface IGetAuthorizedApplicant{
+  id: number;
+  applicant_name: string;
+  applicant_id: string;
+  country: string;
+  program_type: string;
+  milestone: string;
+  process: string;
+  investmentroute: string;
+  branch: string;
+  comments: any[];
+  applicant_documents: any[];
+  user_assigned: any[];
+  country_id: number;
+  added_by: string;
+  no_of_dependents: number;
+  investmentroute_id: number;
+  programtype_id: number;
+  status: string;
+  uploaded: string;
+  verified: string;
+  validated: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// ALL DOCUMENTS
+export interface IDocuments {
+  id: number;
+  name: string;
+  document_type: string;
+  document_category_id: number;
+  document_format: string[];
+  document_size: number;
+  other_requirement: string;
+  created_at?: string;
+  updated_at?: string;
+  eligible_dependants: Eligibledependant[];
+  document_category: Documentcategory;
+}
+
+interface Documentcategory {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Eligibledependant {
+  id: number;
+  dependant: string;
+  created_at: string;
+  updated_at: string;
+  pivot: Pivot;
+}
+
+interface Pivot {
+  document_requirement_id: number;
+  eligible_dependant_id: number;
 }

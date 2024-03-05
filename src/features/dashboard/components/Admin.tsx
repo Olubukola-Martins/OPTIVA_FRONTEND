@@ -18,8 +18,8 @@ export const Admin = () => {
           cardColor="blue"
           title="Master List"
           count={count?.master_list || 0}
-          // link={true}
-          // linkPath={appRoute.master_list}
+          link={true}
+          linkPath={appRoute.master_list}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
@@ -27,8 +27,8 @@ export const Admin = () => {
           title="Authorized  
             Applicants"
           count={count?.authorized_applications || 0}
-          // link={true}
-          // linkPath={appRoute.authorized_applicants}
+          link={true}
+          linkPath={appRoute.authorized_applicants}
         />
         <SimpleCard
           icon="ph:user-list-duotone"
@@ -44,8 +44,8 @@ export const Admin = () => {
           cardColor="yellow"
           title="Prospects"
           count={count?.prospects || 0}
-          // link={true}
-          // linkPath={appRoute.prospects}
+          link={true}
+          linkPath={appRoute.prospects}
         />
       </div>
 

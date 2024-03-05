@@ -1,20 +1,24 @@
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
   capitalizeName,
-} from "src/features/applications/components/ActiveApplications";
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
 import { openNotification } from "src/utils/notification";
 
-export const AllDMSApplicants = () => {
+interface IDMSProps {
+  selectedFilter: string;
+}
+
+export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [applicantId, setApplicantId] = useState<number>();
@@ -22,28 +26,84 @@ export const AllDMSApplicants = () => {
   const { mutate } = useAcceptApplicant();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
 
-  console.log("data", data);
+  console.log(data);
   useEffect(() => {
     if (data) {
-      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
-        return {
-          key: item.id,
-          sn: index + 1,
-          applicantId: item.applicant_id,
-          applicantName: capitalizeName(item.applicant_name),
-          country: item.country,
-          programType: item.program_type,
-          numberOfDependents: 1234567890,
-          applicationStage: "application",
-          addedBy: "added by",
-          documentsUploaded: "",
-          investmentRoute: item.investmentroute,
-        };
-      });
-
+      let filteredApplicants = [...data]; // Create a copy of the data array
+  
+      if (selectedFilter === "1") {
+        filteredApplicants = filteredApplicants.filter(
+          (applicant) => applicant.applicant_documents.length > 0
+        );
+      } else if (selectedFilter === "2") {
+        filteredApplicants = filteredApplicants.filter(
+          (applicant) => applicant.applicant_documents.length === 0
+        );
+      }
+  
+      // Map filteredApplicants to DataSourceItem format
+      const activeApplicant: DataSourceItem[] = filteredApplicants.map(
+        (item, index) => {
+          return {
+            key: item.id,
+            sn: index + 1,
+            applicantId: item.applicant_id,
+            applicantName: capitalizeName(item.applicant_name),
+            country: item.country,
+            programType: item.program_type,
+            numberOfDependents: item.no_of_dependents,
+            applicationStage: item.process,
+            documentsUploaded: item.uploaded,
+            investmentRoute: item.investmentroute,
+          };
+        }
+      );
+  
       setDataArray(activeApplicant);
+      console.log(dataArray)
     }
-  }, [data]);
+  }, [data, selectedFilter]);
+
+  
+  // useEffect(() => {
+  //   if (data) {
+  //     let filteredApplicants = data;
+  //     const activeApplicant: DataSourceItem[] = filteredApplicants.map(
+  //       (item, index) => {
+  //         return {
+  //           key: item.id,
+  //           sn: index + 1,
+  //           applicantId: item.applicant_id,
+  //           applicantName: capitalizeName(item.applicant_name),
+  //           country: item.country,
+  //           programType: item.program_type,
+  //           numberOfDependents: item.no_of_dependents,
+  //           applicationStage: item.process,
+  //           addedBy: item.added_by,
+  //           documentsUploaded: "-",
+  //           investmentRoute: item.investmentroute,
+  //         };
+  //       }
+  //     );
+  //     if (selectedFilter === "1") {
+  //       filteredApplicants = filteredApplicants.filter(
+  //         (applicant) => applicant.applicant_documents.length > 0
+  //       );
+  //       setDataArray(activeApplicant);
+  //       // setDataArray(filteredApplicants)
+  //       console.log("collated");
+  //     } else if (selectedFilter === "2") {
+  //       filteredApplicants = filteredApplicants.filter(
+  //         (applicant) => applicant.applicant_documents.length === 0
+  //       );
+  //       setDataArray(activeApplicant);
+  //       console.log("uncollated");
+  //     } else if (selectedFilter === "3") {
+  //       setDataArray(activeApplicant);
+  //       console.log("all");
+  //     }
+  //   }
+  // }, [data, selectedFilter]);
 
   const acceptApplicant = () => {
     mutate(
@@ -140,11 +200,6 @@ export const AllDMSApplicants = () => {
       title: "Documents Uploaded",
       dataIndex: "documentsUploaded",
       key: "9",
-    },
-    {
-      title: "Added By",
-      dataIndex: "addedBy",
-      key: "10",
     },
     {
       title: "Action",

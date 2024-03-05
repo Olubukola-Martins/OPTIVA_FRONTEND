@@ -30,7 +30,6 @@ export const useApproveorRejectApplicant = (endpoint: string) => {
       },
       {
         onError: (error: any) => {
-          console.log('approve/reject', error)
           openNotification({
             state: "error",
             title: "Error Occured",
@@ -39,7 +38,6 @@ export const useApproveorRejectApplicant = (endpoint: string) => {
           });
         },
         onSuccess: (res: any) => {
-          console.log('approve/reject', res)
           openNotification({
             state: "success",
             title: "Success",

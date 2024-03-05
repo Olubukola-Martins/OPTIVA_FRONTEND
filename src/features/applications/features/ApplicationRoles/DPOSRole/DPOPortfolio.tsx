@@ -5,7 +5,7 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
   capitalizeName,
-} from "src/features/applications/components/ActiveApplications";
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { OutstandingDocuments } from "../../components/OutstandingDocuments";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
@@ -25,7 +25,6 @@ export const DPOPortfolio = () => {
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
- 
 
   useEffect(() => {
     if (data) {
@@ -37,12 +36,12 @@ export const DPOPortfolio = () => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: 1234567890,
-          applicationStage: "application",
-          addedBy: "added by",
-          documentsUploaded: "",
+          numberOfDependents: item.no_of_dependents,
+          applicationStage: item.process,
+          addedBy: item.added_by,
+          documentsUploaded: item.uploaded,
           investmentRoute: item.investmentroute,
-          verifiedDocuments: "",
+          verifiedDocuments: item.verified,
         };
       });
 
@@ -57,6 +56,8 @@ export const DPOPortfolio = () => {
       },
       {
         onError: (error: any) => {
+          console.log("error", error);
+          console.log(error.response.data.message);
           openNotification({
             state: "error",
             title: "Error Occurred",
@@ -95,7 +96,6 @@ export const DPOPortfolio = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-        
         },
       }
     );
@@ -165,7 +165,7 @@ export const DPOPortfolio = () => {
                   key="1"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && acceptApplicant();
+                    acceptApplicant();
                   }}
                 >
                   Accept Applicant
@@ -192,11 +192,25 @@ export const DPOPortfolio = () => {
                 </Menu.Item>
                 <Menu.Item
                   key="4"
-                  onClick={() => setOpenSupportingDocModal(true)}
+                  onClick={() => {
+                    setApplicantId(val.key as unknown as number);
+                    setOpenSupportingDocModal(true);
+                    console.log("applicant id", applicantId);
+                  }}
                 >
                   Outline Outstanding Documents
                 </Menu.Item>
-                <Menu.Item key="5">Attach Supporting Documents</Menu.Item>
+                <Menu.Item key="5">
+                  <Link
+                    to={
+                      appRoute.attach_supporting_documents(
+                        val.key as unknown as number
+                      ).path
+                    }
+                  >
+                    Attach Supporting Documents
+                  </Link>
+                </Menu.Item>
                 <Menu.Item key="6">
                   <Link
                     to={
@@ -207,7 +221,9 @@ export const DPOPortfolio = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="7" onClick={markApplicationComplete}>Mark as completed</Menu.Item>
+                <Menu.Item key="7" onClick={markApplicationComplete}>
+                  Mark as completed
+                </Menu.Item>
               </Menu>
             }
           >
@@ -231,6 +247,7 @@ export const DPOPortfolio = () => {
       <OutstandingDocuments
         open={openSupportingDocModal}
         onCancel={() => setOpenSupportingDocModal(false)}
+        applicantId={applicantId}
       />
     </>
   );

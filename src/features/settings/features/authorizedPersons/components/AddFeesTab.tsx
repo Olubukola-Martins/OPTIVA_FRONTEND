@@ -67,7 +67,6 @@ const AddFeesTab = () => {
   ];
 
   const handleSubmit = (val: any) => {
-    console.log("form values", val);
     switch (investmentId) {
       case 1:
         mutateGrenadaDonation(

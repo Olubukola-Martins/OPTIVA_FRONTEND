@@ -1,4 +1,4 @@
-import {  Form, } from "antd";
+import {  Form, Tooltip, } from "antd";
 import { useParams } from "react-router-dom";
 import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
 import { IDataResponseProps } from "./TravelDetailsAndHistory";
@@ -6,7 +6,7 @@ import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export const CriminalHistory: React.FC<IDataResponseProps> = ({
   subsectionName,
-  // onPrev,
+  onPrev,
 }) => {
   const { id } = useParams();
   const { data, } = useGetApplicationResponse({
@@ -29,17 +29,17 @@ export const CriminalHistory: React.FC<IDataResponseProps> = ({
           )
       )}
 
-{/* <div className="flex justify-between  my-5 py-2">
+<div className="flex justify-between  my-5 py-2">
         <Tooltip title="Click to go to the previous section">
           <i
             className="ri-arrow-left-s-line cursor-pointer text-2xl font-semibold"
             onClick={() => {
-              onPrevTabItem && onPrevTabItem();
+              onPrev && onPrev();
             }}
           ></i>
         </Tooltip>
 
-      </div> */}
+      </div>
     </>
   );
 };

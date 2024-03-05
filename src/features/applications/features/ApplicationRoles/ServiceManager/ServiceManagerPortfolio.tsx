@@ -5,7 +5,7 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
   capitalizeName,
-} from "src/features/applications/components/ActiveApplications";
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { AssignToModal } from "../../components/AssignToModal";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
@@ -14,6 +14,9 @@ import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApp
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
 import { openNotification } from "src/utils/notification";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
+import { SignOut } from "src/components/layout/SignOut";
+// import { useMoveToNextStage } from "src/features/applications/hooks/useMoveToNextStage";
+import { SendToRoleHead } from "../../components/SendToRoleHead";
 
 export const ServiceManagerPortfolio = () => {
   const { data, isLoading } = useFetchApplicantsByRole();
@@ -22,8 +25,11 @@ export const ServiceManagerPortfolio = () => {
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
+  console.log("applicant data", data);
 
   const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
+  const [openRoleModal, setOpenRoleModal] = useState<boolean>(false);
+  const [openLogout, setOpenLogout] = useState<boolean>(false);
 
   useEffect(() => {
     if (data) {
@@ -35,7 +41,7 @@ export const ServiceManagerPortfolio = () => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: 1234567890,
+          numberOfDependents: item.no_of_dependents,
           investmentRoute: item.investmentroute,
           milestone: item.milestone,
         };
@@ -95,10 +101,7 @@ export const ServiceManagerPortfolio = () => {
     );
   };
 
-  // setSharedData((prevData: any) => ({
-  //   ...prevData,
-  //   applicantId,
-  // }));
+  // const moveApplicantToNextStage = () => {};
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -154,25 +157,72 @@ export const ServiceManagerPortfolio = () => {
                   key="1"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && acceptApplicant();
+                    acceptApplicant();
                   }}
                 >
                   Accept Applicant
                 </Menu.Item>
-                {/* <Menu.Item key="2" title="Send Email"> */}
                 <Menu.SubMenu title="Send Email" key="2">
-                  <Menu.Item key="2-1">Onboarding/Welcome Email</Menu.Item>
+                  <Menu.Item key="2-1">
+                    <Link
+                      to={
+                        appRoute.send_email(val.key as unknown as number, 2).path
+                      }
+                    >
+                      Onboarding/Welcome Email
+                    </Link>
+                  </Menu.Item>
                   <Menu.Item key="2-2">
-                    Collation Appointment Confirmation Email
+                    <Link
+                      to={
+                        appRoute.send_email(val.key as unknown as number, 3)
+                          .path
+                      }
+                    >
+                      Collation Appointment Confirmation Email
+                    </Link>
                   </Menu.Item>
-                  <Menu.Item key="2-3">CBI DD Bank Clearance</Menu.Item>
+                  <Menu.Item key="2-3">
+                    <Link
+                      to={
+                        appRoute.send_email(val.key as unknown as number, 4)
+                          .path
+                      }
+                    >
+                      CBI DD Bank Clearance
+                    </Link>
+                  </Menu.Item>
                   <Menu.Item key="2-4">
-                    CBI Bank Application Soft Copy Passport Receipt
+                    <Link
+                      to={
+                        appRoute.send_email(val.key as unknown as number, 5)
+                          .path
+                      }
+                    >
+                      CBI Bank Application Soft Copy Passport Receipt
+                    </Link>
                   </Menu.Item>
-                  <Menu.Item key="2-5">CBI Bank Application Approval</Menu.Item>
-                  <Menu.Item key="2-6">CBI Bank Submission</Menu.Item>
+                  <Menu.Item key="2-5">
+                    <Link
+                      to={
+                        appRoute.send_email(val.key as unknown as number, 6)
+                          .path
+                      }
+                    >
+                      CBI Bank Application Approval
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key="2-6">
+                    <Link
+                      to={
+                        appRoute.send_email(val.key as unknown as number, 7)
+                          .path
+                      }
+                    >
+                      CBI Bank Submission
+                    </Link>
+                  </Menu.Item>
                 </Menu.SubMenu>
-                {/* </Menu.Item> */}
                 <Menu.Item key="3">
                   <Link
                     to={
@@ -187,7 +237,7 @@ export const ServiceManagerPortfolio = () => {
                 <Menu.Item
                   key="4"
                   onClick={() => {
-
+                    setApplicantId(val.key as unknown as number);
                     setOpenAssignModal(true);
                   }}
                 >
@@ -223,12 +273,26 @@ export const ServiceManagerPortfolio = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="8">
-                  {/* Login as User */}
-                  <Link to={appRoute.login_in}>Login as User</Link>
+                <Menu.Item key="8" onClick={() => setOpenLogout(true)}>
+                  Login as User
                 </Menu.Item>
-                <Menu.Item key="9">Move to Next Stage</Menu.Item>
-                <Menu.Item key="10">Send to audit</Menu.Item>
+                <Menu.Item
+                  key="9"
+                  onClick={() => {
+                    // setMilestoneId()
+                  }}
+                >
+                  Move to Next Stage
+                </Menu.Item>
+                <Menu.Item
+                  key="10"
+                  onClick={() => {
+                    setApplicantId(val.key as unknown as number);
+                    setOpenRoleModal(true);
+                  }}
+                >
+                  Send to audit
+                </Menu.Item>
                 <Menu.Item key="11">View Soft Copy Passport</Menu.Item>
                 <Menu.Item key="12">
                   <a target="_blank" href="">
@@ -236,10 +300,10 @@ export const ServiceManagerPortfolio = () => {
                   </a>
                 </Menu.Item>
                 <Menu.Item
-                  key="12"
+                  key="13"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && markApplicationComplete();
+                    markApplicationComplete();
                   }}
                 >
                   Mark as completed
@@ -264,10 +328,23 @@ export const ServiceManagerPortfolio = () => {
         className="bg-white rounded-md shadow border mt-2"
       />
 
-      <AssignToModal
-        onCancel={() => setOpenAssignModal(false)}
-        open={openAssignModal}
-      />
+      {applicantId && (
+        <AssignToModal
+          onCancel={() => setOpenAssignModal(false)}
+          open={openAssignModal}
+          applicantId={applicantId}
+        />
+      )}
+
+      <SignOut open={openLogout} handleClose={() => setOpenLogout(false)} />
+
+      {applicantId && (
+        <SendToRoleHead
+          applicantId={applicantId}
+          onCancel={() => setOpenRoleModal(false)}
+          open={openRoleModal}
+        />
+      )}
     </>
   );
 };

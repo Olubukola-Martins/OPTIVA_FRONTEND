@@ -7,7 +7,7 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
   capitalizeName,
-} from "src/features/applications/components/ActiveApplications";
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
 import { useApproveorRejectApplicant } from "src/features/applications/hooks/useApproveorRejectApplicant";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
@@ -15,9 +15,6 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useG
 import { openNotification } from "src/utils/notification";
 
 export const AuditPortfolio = () => {
-  // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  // const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
-
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
@@ -36,11 +33,11 @@ export const AuditPortfolio = () => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: 1234567890,
-          validatedDocuments: "-",
-          applicationStage: "application stage",
-          reviewStatus: "-",
-          investmentRoute:item.investmentroute
+          numberOfDependents: item.no_of_dependents,
+          validatedDocuments: item.validated,
+          applicationStage: item.process,
+          reviewStatus: item.status,
+          investmentRoute: item.investmentroute,
         };
       });
 
@@ -175,7 +172,7 @@ export const AuditPortfolio = () => {
                   key="4"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && approveApplicant();
+                    approveApplicant();
                   }}
                 >
                   Approve
@@ -184,7 +181,7 @@ export const AuditPortfolio = () => {
                   key="5"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && rejectApplicant();
+                    rejectApplicant();
                   }}
                 >
                   Reject

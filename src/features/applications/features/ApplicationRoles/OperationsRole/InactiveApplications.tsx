@@ -7,12 +7,12 @@ import { AppButton } from "src/components/button/AppButton";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
+import { useUpdateApplicationStatus } from "../../../hooks/useUpdateApplicationStatus";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
-import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
+import { useFetchActiveandInactiveApplicant } from "../../../hooks/useFetchActiveandInactiveApplicant";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/useGetApplication";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
 
 export const InactiveApplications = () => {

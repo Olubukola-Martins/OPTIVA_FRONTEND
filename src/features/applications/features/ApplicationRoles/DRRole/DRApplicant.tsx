@@ -1,33 +1,53 @@
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
   capitalizeName,
-} from "src/features/applications/components/ActiveApplications";
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
-// import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
-// import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
-// import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
 import { openNotification } from "src/utils/notification";
 
-export const DRApplicant = () => {
+interface IDRProps {
+  pendingFilterActive: boolean;
+  confirmedFilterActive: boolean;
+  declinedFilterActive: boolean;
+}
+
+export const DRApplicant: React.FC<IDRProps> = ({ pendingFilterActive, confirmedFilterActive, declinedFilterActive }) => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
-
-  console.log('data', data)
   const { mutate } = useMarkApplicantAsComplete();
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
+console.log('data', data)
 
   useEffect(() => {
     if (data) {
-      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
+      let filteredData = data;
+      if (pendingFilterActive || confirmedFilterActive || declinedFilterActive) {
+        filteredData = data.filter(item => {
+          return item.applicant_documents.some(doc => {
+            if (pendingFilterActive && doc.handover_status === "pending") {
+              return true;
+            }
+            if (confirmedFilterActive && doc.handover_status === "confirmed") {
+              return true;
+            }
+            if (declinedFilterActive && doc.handover_status === "declined") {
+              return true;
+            }
+            return false;
+          });
+        });
+      }
+
+      const activeApplicant: DataSourceItem[] = filteredData.map((item, index) => {
         return {
           key: item.id,
           sn: index + 1,
@@ -35,9 +55,9 @@ export const DRApplicant = () => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: 1234567890,
-          applicationStage: item.milestone,
-          documentsUploaded: "-",
+          numberOfDependents: item.no_of_dependents,
+          applicationStage: item.process,
+          documentsUploaded: item.uploaded,
           documentsSubmitted: "-",
           investmentRoute: item.investmentroute,
         };
@@ -45,7 +65,7 @@ export const DRApplicant = () => {
 
       setDataArray(activeApplicant);
     }
-  }, [data]);
+  }, [data, pendingFilterActive, confirmedFilterActive, declinedFilterActive]);
 
   const markApplicationComplete = () => {
     mutate(
@@ -124,12 +144,6 @@ export const DRApplicant = () => {
       dataIndex: "documentsSubmitted",
       key: "10",
     },
-
-    // {
-    //   title: "Assigned To",
-    //   dataIndex: "assignedTo",
-    //   key: "10",
-    // },
 
     {
       title: "Action",

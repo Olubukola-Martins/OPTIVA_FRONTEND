@@ -2,21 +2,21 @@ import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
-// import { ImportModal } from "src/components/modals/ImportModal";
 import { ExportModal } from "src/components/modals/ExportModal";
 import { NewApplicationModal } from "../features/NewApplication/NewApplicationModal";
-import { ApplicationsTab } from "../features/ApplicantDetails/ApplicationsTab";
-import { CEApplicantTab } from "../features/ApplicationRoles/CustomerEngagerRole/CEApplicantTab";
 import { UploadModal } from "src/components/modals/UploadModal";
-import { ServiceManagerTab } from "../features/ApplicationRoles/ServiceManager.tsx/ServiceManagerTab";
+import { OperationsApplicationPage } from "../features/ApplicationRoles/OperationsRole/OperationsApplicationPage";
+import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+import { ServiceManagerTab } from "../features/ApplicationRoles/ServiceManager/ServiceManagerTab";
 import { DMSTab } from "../features/ApplicationRoles/DMSRole/DMSTab";
 import { DPOTab } from "../features/ApplicationRoles/DPOSRole/DPOTab";
-import { DRTab } from "../features/ApplicationRoles/DRRole/DRTab";
 import { AuditTab } from "../features/ApplicationRoles/AuditRole/AuditTab";
-
-// export let applicantId: number | undefined;
+import { DRTab } from "../features/ApplicationRoles/DRRole/DRTab";
+import { CEApplicantTab } from "../features/ApplicationRoles/CustomerEngagerRole/CEApplicantTab";
 
 const Applications = () => {
+  const { data } = useFetchUserProfile();
+
   // New Applications Modal
   const [openNewApplicationsModal, setOpenNewApplicationsModal] =
     useState<boolean>(false);
@@ -45,13 +45,6 @@ const Applications = () => {
     setExportModal(false);
   };
 
-  // change roles
-  const [selectedRole, setSelectedRole] = useState<string>("Operations List");
-
-  const handleRoleChange = (role: string) => {
-    setSelectedRole(role);
-  };
-
   return (
     <>
       {/* New Applications Modal */}
@@ -74,23 +67,25 @@ const Applications = () => {
       <div className=" flex flex-col md:flex-row justify-between p-3">
         <PageIntro
           title={
-            selectedRole === "Operations List"
+            data?.roles.id === 1
               ? "Applicants (Operations) List"
-              : selectedRole === "Audit's List"
-              ? "Audit's List"
-              : selectedRole === "DR's List"
-              ? "DR's List"
-              : selectedRole === "DPO's List"
-              ? "DPO's List"
-              : selectedRole === "DMS's List"
-              ? "DMS's List"
-              : selectedRole === "Service Manager's List"
+              : data?.roles.id === 2
               ? "Service Manager's List"
-              : selectedRole === "Customer Engager's List"
+              : data?.roles.id === 3
+              ? "DMS's List"
+              : data?.roles.id === 4
+              ? "DPO's List"
+              : data?.roles.id === 5
+              ? "Audit's List"
+              : data?.roles.id === 6
+              ? "DR's List"
+              : data?.roles.id === 8
+              ? "Customer Experience List"
+              : data?.roles?.id === 9
               ? "Customer Engager's List"
-              : "" // Handle default case here if necessary
+              : "Applications List"
+            //  CE and PAYMENT
           }
-          // title="Applicants (Operations) List"
           description="View & Edit Applicant Details"
           arrowBack={false}
         />
@@ -110,33 +105,15 @@ const Applications = () => {
           <AppButton label="Add New" handleClick={showNewApplicationsModal} />
         </div>
       </div>
-
-      {selectedRole === "Audit's List" && (
-        <AuditTab onRoleSelect={handleRoleChange} />
-      )}
-      {selectedRole === "DR's List" && (
-        <DRTab onRoleSelect={handleRoleChange} />
-      )}
-      {selectedRole === "DPO's List" && (
-        <DPOTab onRoleSelect={handleRoleChange} />
-      )}
-      {selectedRole === "DMS's List" && (
-        <DMSTab onRoleSelect={handleRoleChange} />
-      )}
-      {/* {selectedRole === "Audit's List" && (
-        <AuditTab onRoleSelect={handleRoleChange} />
-      )} */}
-      {selectedRole === "Operations List" && (
-        <ApplicationsTab onRoleSelect={handleRoleChange} />
-      )}
-      {selectedRole === "Service Manager's List" && (
-        <ServiceManagerTab onRoleSelect={handleRoleChange} />
-      )}
-      {selectedRole === "Customer Engager's List" && (
-        <CEApplicantTab onRoleSelect={handleRoleChange} />
-      )}
-
-      {/* <PaymentTab /> */}
+      {data?.roles.id === 1 && <OperationsApplicationPage />}
+      {data?.roles.id === 2 && <ServiceManagerTab onRoleSelect={() => {}} />}
+      {data?.roles.id === 3 && <DMSTab onRoleSelect={() => {}} />}
+      {data?.roles.id === 4 && <DPOTab onRoleSelect={() => {}} />}
+      {data?.roles.id === 5 && <AuditTab onRoleSelect={() => {}} />}
+      {data?.roles.id === 6 && <DRTab onRoleSelect={() => {}} />}
+      {data?.roles?.id === 8 && <OperationsApplicationPage />}
+      {data?.roles?.id === 9 && <CEApplicantTab onRoleSelect={() => {}} />}
+      {/* PAYMETS ROLE  && CUSTOMER EXPERIENCE*/}
     </>
   );
 };

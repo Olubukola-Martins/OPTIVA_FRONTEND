@@ -29,7 +29,7 @@ export const ImmigrationAndCourtProceedings: React.FC<
           )
       )}
 
-<div className="flex justify-between  my-5 py-2">
+<div className="flex justify-end  my-5 py-2">
        
         <Tooltip title="Click to go to the next section">
           <i

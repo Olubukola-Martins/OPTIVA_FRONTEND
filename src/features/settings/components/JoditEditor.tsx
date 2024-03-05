@@ -246,6 +246,15 @@ export const JoditEditorComponent: React.FC<JoditEditorComponentProps> = ({
     //   // },
     // },
     toolbarAdaptive: false,
+    watermark: {
+      text: "", // You can leave this empty as you'll be using an image instead
+      // file: "src\features\applications\assets\opt.png", // Path to your watermark image\
+      width: 200, // Width of the watermark image
+      height: 1000, // Height of the watermark image
+      position: "center", // Position of the watermark (e.g., "center", "bottomRight", etc.)
+      rotate: 0, // Rotation angle of the watermark image
+      file: '../features/applications/assets/opt.png'
+    },
   };
 
 
@@ -269,6 +278,7 @@ export const JoditEditorComponent: React.FC<JoditEditorComponentProps> = ({
       name={control?.name ?? "templateDescription"}
       label={showLabel ? control?.label ?? "Template" : null}
       className=""
+
     >
       <JoditEditor
         config={config}

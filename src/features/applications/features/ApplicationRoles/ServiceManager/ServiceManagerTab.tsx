@@ -1,5 +1,4 @@
 import React from "react";
-// import { AllServiceManagerApplicants } from "./AllServiceManagerApplicants";
 import { ServiceManagerPortfolio } from "./ServiceManagerPortfolio";
 import { Input, Select, Tabs } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
@@ -12,13 +11,9 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
     children: React.ReactNode;
     key: string;
   }[] = [
-    // {
-    //   label: "All Applicants",
-    //   children: <AllServiceManagerApplicants />,
-    //   key: "AllApplicants",
-    // },
+   
     {
-      label: "My Portfolio",
+      label: "All Applicants",
       children: <ServiceManagerPortfolio />,
       key: "MyPortfolio",
     },
@@ -41,31 +36,31 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
               onChange={onRoleSelect}
               options={[
                 {
-                  value: `DR's List`,
+                  value: 1,
                   label: `DR's List`,
                 },
                 {
-                  value: `DPO's List`,
+                  value: 2,
                   label: `DPO's List`,
                 },
                 {
-                  value: `DMS's List`,
+                  value: 3,
                   label: `DMS's List`,
                 },
                 {
-                  value: `Audit's List`,
+                  value: 4,
                   label: `Audit's List`,
                 },
                 {
-                  value: `Operations List`,
+                  value: 5,
                   label: `Operations  List`,
                 },
                 {
-                  value: `Service Manager's List`,
+                  value: 6,
                   label: `Service Manager's  List`,
                 },
                 {
-                  value: `Customer Engager's List`,
+                  value: 7,
                   label: `Customer Engager's  List`,
                 },
               ]}

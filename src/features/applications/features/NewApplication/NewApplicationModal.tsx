@@ -146,7 +146,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
             <div>
               <h2>What is the applicant phone number?</h2>
               <Form.Item name="phone_number" rules={generalValidationRules}>
-                <InputNumber />
+                <InputNumber className="w-full"/>
               </Form.Item>
             </div>
             <div className="flex items-center justify-center gap-4 p-4">

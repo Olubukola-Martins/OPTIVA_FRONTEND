@@ -5,23 +5,23 @@ import { useGetToken } from "src/hooks/useGetToken";
 import { IAssignApplicant } from "../types/types";
 
 const postData = async (props: IAssignApplicant) => {
-    const token = useGetToken();
-    const url = `${END_POINT.BASE_URL}/admin/assign/application`;
-  
-    const config = {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    };
-  
-    const data = {
-      ...props,
-    };
-    const response = await axios.post(url, data, config);
-    return response;
+  const token = useGetToken();
+  const url = `${END_POINT.BASE_URL}/admin/assign/application`;
+
+  const config = {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   };
 
-export const useAssignApplicant =  () => {
-    return  useMutation(postData);
-  }
+  const data = {
+    ...props,
+  };
+  const response = await axios.post(url, data, config);
+  return response;
+};
+
+export const useAssignApplicant = () => {
+  return useMutation(postData);
+};

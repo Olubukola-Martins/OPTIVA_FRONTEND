@@ -167,19 +167,13 @@ export const GenerateStKittsQuote = () => {
 
             <Form.Item
               label="Dependents greater than 15yrs?"
-              name="dependents_gt_than_fifteen"
+              name="dependents_greater_than_fifteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
-            <Form.Item
-              label="Dependents greater than 15yrs?"
-              name="dependents_gt_than_fifteen"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
+           
           </div>
         </div>
 

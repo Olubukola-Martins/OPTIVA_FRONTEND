@@ -109,13 +109,7 @@ export const GenerateAntiguaJointEstateQuote = () => {
               <InputNumber className="w-full" />
             </Form.Item>
 
-            <Form.Item
-              label="Number of additional dependents greater than 18?"
-              name="number_of_add_dependent_greater_than_eighteen"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
+          
           </div>
         </div>
 

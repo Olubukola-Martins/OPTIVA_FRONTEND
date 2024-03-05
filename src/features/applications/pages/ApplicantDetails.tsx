@@ -6,7 +6,6 @@ import { useState } from "react";
 import { ApplicantPeculiarites } from "../features/ApplicantDetails/ApplicantPeculiarites";
 import { Others } from "../features/ApplicantDetails/Others";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { AppButton } from "src/components/button/AppButton";
 
 const ApplicantDetails = () => {
   const { Step } = Steps;
@@ -15,12 +14,6 @@ const ApplicantDetails = () => {
   const handleStepChange = (step: number) => {
     setCurrentStep(step);
   };
-  const steps = [
-    <ApplicantBrief />,
-    <AboutTheApplicant />,
-    <ApplicantPeculiarites />,
-    <Others />,
-  ];
   const handleNext = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
@@ -28,6 +21,13 @@ const ApplicantDetails = () => {
   const handlePrev = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
+  const steps = [
+    <ApplicantBrief onNext={ handleNext} />,
+    <AboutTheApplicant onNext={handleNext} onPrev={ handlePrev} />,
+    <ApplicantPeculiarites onNext={handleNext} onPrev={ handlePrev}/>,
+    <Others onPrev={ handlePrev}/>,
+  ];
+
   return (
     <>
       <PageIntro title="Applicant Details" linkBack={appRoute.applications} />
@@ -47,21 +47,7 @@ const ApplicantDetails = () => {
         </Steps>
       </div>
       <div className="border rounded-lg mx-auto p-5">{steps[currentStep]}</div>
-      {/* Navigation buttons */}
-      <div className="flex justify-end items-center gap-5 my-3">
-        {currentStep > 0 && (
-          <AppButton
-            type="button"
-            handleClick={handlePrev}
-            label=" Previous"
-            variant="transparent"
-          />
-        )}
-        {currentStep < steps.length - 1 && (
-          <AppButton type="button" handleClick={handleNext} label="Next" />
-        )}
-      </div>
-      {/* </div> */}
+      
     </>
   );
 };

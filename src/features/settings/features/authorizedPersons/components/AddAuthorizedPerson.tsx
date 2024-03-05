@@ -181,12 +181,12 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
         </div>
         <Form.Item
           name="chooseFile"
-          label="Choose file to upload"
+          label="Upload Signature"
           rules={[createFileValidationRule(fileRuleOptions)]}
           getValueFromEvent={normFile}
         >
           <Upload {...props} maxCount={1}>
-            <Button icon={<UploadOutlined />}>Upload File</Button>
+            <Button icon={<UploadOutlined />}>Choose file to upload</Button>
           </Upload>
         </Form.Item>
 
@@ -194,7 +194,7 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
           [Only jpeg, png and jpg formats are supported]
         </p>
 
-        <p className="text-center mb-2 text-lg">Maximum upload file size is 5 MB.</p>
+        <p className="text-center mb-2">Maximum upload file size is 5 MB.</p>
 
         <div className="flex items-center justify-center gap-5 my-4">
           <AppButton

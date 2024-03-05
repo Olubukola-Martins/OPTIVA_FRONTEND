@@ -250,7 +250,7 @@ export const ApplicantDocumentComments = () => {
         <PageIntro
           title="Comments"
           description="View and make comments on applicant documents"
-          linkBack={appRoute.applications}
+          linkBack={appRoute.applicant_documents(id as unknown as number).path}
         />
         <div>
           <AppButton

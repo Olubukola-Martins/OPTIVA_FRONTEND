@@ -21,7 +21,6 @@ export const ApplicantDocument = () => {
     setDependentId(value);
   };
 
-  console.log("dependent id", dependantId);
 
   const { data: dependantDocData } = useGetDependentDoc({
     applicantId: id as unknown as number,
@@ -68,30 +67,7 @@ export const ApplicantDocument = () => {
               )}
             </Select>
 
-            {/* <Select>
-              {dependentData?.dependants.map((dependant) => {
-                const matchingData = data.age_brackets.find(
-                  (ageBracket) =>
-                    ageBracket.eligible_dependant_id === dependant.id
-                );
-
-                if (matchingData) {
-                  return (
-                    <Select.Option
-                      key={dependant.id}
-                      value={dependant.eligible_dependant_id}
-                    >
-                      {dependant.dependant}
-                    </Select.Option>
-                  );
-                }
-
-                return null;
-              })}
-            </Select> */}
-
             <Select
-              // className="w-1/2"
               defaultValue={filterValue}
               onChange={(value) => setFilterValue(value)}
             >

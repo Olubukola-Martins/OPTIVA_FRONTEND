@@ -1,23 +1,22 @@
-import { Dropdown, Form, Input, Menu, Modal, Select, Table } from "antd";
+import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { useUpdateApplicationStatus } from "../hooks/useUpdateApplicationStatus";
+import { useUpdateApplicationStatus } from "../../../hooks/useUpdateApplicationStatus";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/useGetApplication";
 import { useQueryClient } from "react-query";
-import { useAcceptApplicant } from "../hooks/useAcceptApplicant";
-import { useFetchRoles } from "src/features/settings/features/rolesAndPermissions/hooks/useFetchRoles";
+import { useAcceptApplicant } from "../../../hooks/useAcceptApplicant";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
-import { useReassignApplicant } from "../hooks/useReassignApplicant";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
-import { useFetchActiveandInactiveApplicant } from "../hooks/useFetchActiveandInactiveApplicant";
+import { useFetchActiveandInactiveApplicant } from "../../../hooks/useFetchActiveandInactiveApplicant";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
-import { useMarkApplicantAsComplete } from "../hooks/useMarkApplicantAsComplete";
+import { useMarkApplicantAsComplete } from "../../../hooks/useMarkApplicantAsComplete";
+import { ApplicationAssignmentModal } from "../../components/ApplicationAssignmentModal";
+import { AssignToModal } from "../../components/AssignToModal";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -40,8 +39,8 @@ export type DataSourceItem = {
   reviewStatus?: string;
   submittedPartner?: string;
   status?: string;
-  countryId?: number
-  investmentId?:number
+  countryId?: number;
+  investmentId?: number;
 };
 
 export const capitalizeName = (name: string) => {
@@ -62,6 +61,7 @@ export const ActiveApplications = () => {
   const { data: investmentData } = useGetInvestmentRoute();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
 
+  console.log("applicants", data);
   const getCountryName = (countryId: number) => {
     const country = countryData?.find((country) => country.id === countryId);
     return country && country.country_name;
@@ -83,16 +83,15 @@ export const ActiveApplications = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
   const { mutate: acceptApplicantMutate } = useAcceptApplicant();
-  const { mutate: reassignApplicantMutate, isLoading: reassignLoading } =
-    useReassignApplicant();
+
   const [form] = Form.useForm();
-  const { data: rolesData } = useFetchRoles();
   const { data: employeesData } = useFetchEmployees({
     currentUrl: "active-employees",
   });
 
-  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
-
+  const [openAssignmentModal, setOpenAssignmentModal] =
+    useState<boolean>(false);
+  const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
   useEffect(() => {
     if (data && employeesData) {
       const activeApplicant: DataSourceItem[] = data.map((item, index) => {
@@ -165,36 +164,7 @@ export const ActiveApplications = () => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           setOpenInactiveModal(false);
-          console.log('acceoted')
-        },
-      }
-    );
-  };
-
-  const reassignApplicant = (val: any) => {
-    reassignApplicantMutate(
-      {
-        id: id as unknown as number,
-        role_id: val.role,
-        assigned_user_id: val.employee,
-      },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-          setOpenInactiveModal(false);
+          console.log("acceoted");
         },
       }
     );
@@ -219,7 +189,6 @@ export const ActiveApplications = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-        
         },
       }
     );
@@ -324,17 +293,20 @@ export const ActiveApplications = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
+                {/* <Menu.Item key="6" onClick={() => setOpenAssignmentModal(true)}>
+                  View Application Assignment
+                </Menu.Item> */}
                 <Menu.Item
-                  key="6"
+                  key="7"
                   onClick={() => {
                     setId(val.key as unknown as number);
-                    showReassignModal();
+                    setOpenAssignModal(true);
                   }}
                 >
                   Reassign Applicants
                 </Menu.Item>
                 <Menu.Item
-                  key="7"
+                  key="8"
                   onClick={() => {
                     setId(val.key as unknown as number);
                     showInactiveModal();
@@ -343,7 +315,7 @@ export const ActiveApplications = () => {
                   Move to Inactive
                 </Menu.Item>
                 <Menu.Item
-                  key="8"
+                  key="9"
                   onClick={() => {
                     setId(val.key as unknown as number);
                     markApplicationComplete();
@@ -361,15 +333,6 @@ export const ActiveApplications = () => {
     },
   ];
 
-  // Reassign Modal
-  const [openReassignModal, setOpenReassignModal] = useState(false);
-  const showReassignModal = () => {
-    setOpenReassignModal(true);
-  };
-  const handleReassignCancel = () => {
-    setOpenReassignModal(false);
-  };
-
   // Inactive Modal
   const [openInactiveModal, setOpenInactiveModal] = useState(false);
   const showInactiveModal = () => {
@@ -381,69 +344,6 @@ export const ActiveApplications = () => {
 
   return (
     <>
-      {/* REASSIGN MODAL */}
-      <Modal
-        open={openReassignModal}
-        onCancel={handleReassignCancel}
-        footer={null}
-      >
-        <div>
-          <h1 className="p-4 font-bold text-center text-lg">
-            Assign Applicant To Service Manager
-          </h1>
-          <Form
-            layout="vertical"
-            form={form}
-            requiredMark={false}
-            onFinish={reassignApplicant}
-          >
-            <Form.Item label="Role" name="role" rules={generalValidationRules}>
-              <Select onChange={(value) => setSelectedRoleId(value)}>
-                {rolesData?.map((item) => (
-                  <Select.Option key={item.id} value={item.id}>
-                    {item.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label="Employee"
-              name="employee"
-              rules={generalValidationRules}
-            >
-              <Select>
-                {employeesData?.data
-                  .filter((item) => item.user.roles.id === selectedRoleId)
-                  .map((item) => (
-                    <Select.Option key={item.id} value={item.id}>
-                      {item.name}
-                    </Select.Option>
-                  ))}
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label="Reason for Reassignment"
-              name="reasonForReassignment"
-            >
-              <Input.TextArea rows={2} />
-            </Form.Item>
-            <div className="flex items-center justify-center gap-4 p-4">
-              <AppButton
-                label="Cancel"
-                variant="transparent"
-                containerStyle="border border-blue"
-              />
-              <AppButton
-                label="Submit"
-                isLoading={reassignLoading}
-                type="submit"
-              />
-            </div>
-          </Form>
-        </div>
-      </Modal>
       {/* INACTIVE MODAL */}
       <Modal
         open={openInactiveModal}
@@ -467,6 +367,18 @@ export const ActiveApplications = () => {
           </Form>
         </div>
       </Modal>
+
+      {/* APPLICATION ASSIGNMENT MODAL */}
+      <ApplicationAssignmentModal
+        open={openAssignmentModal}
+        onCancel={() => setOpenAssignmentModal(false)}
+      />
+
+      <AssignToModal
+        applicantId={id}
+        open={openAssignModal}
+        onCancel={() => setOpenAssignModal(false)}
+      />
 
       {/* TABLE */}
       <Table

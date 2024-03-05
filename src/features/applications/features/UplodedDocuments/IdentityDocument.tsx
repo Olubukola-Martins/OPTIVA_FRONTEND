@@ -67,7 +67,9 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const queryClient = useQueryClient();
   const { mutate } = useApproveorRejectDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const { fileData, fileUploading,  } = useUploadApplicantFile();
+  const { fileData, fileUploading } = useUploadApplicantFile();
+
+  console.log("doc", data);
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -273,7 +275,13 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={() => { setDocUrl(val.path) }}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setDocUrl(val.path);
+                    console.log(docUrl);
+                  }}
+                >
                   <a href={docUrl} target="_blank" rel="noopener noreferrer">
                     View Document
                   </a>
@@ -406,10 +414,11 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
               <Button icon={<UploadOutlined />}>Upload File</Button>
             </Upload>
           </Form.Item>
-          {/* <p className="mt-2 text-center text-lg">
+          <p className="mt-2 text-center text-lg">
             [only xls,xlsx and csv formats are supported]
           </p>
           <p className="text-center">Maximum upload file size is 5 MB.</p>
+          {/* 
           <p className="text-center text-[#7ac98c] mt-5 text-lg">
             Download sample template for import.
           </p> */}
