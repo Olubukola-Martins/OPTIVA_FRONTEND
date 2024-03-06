@@ -85,6 +85,7 @@ const MasterList = () => {
       <PageIntro
         title="Master List"
         description="View, Approve or Reject Applicant"
+        linkBack={appRoute.home}
       />
 
       <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">

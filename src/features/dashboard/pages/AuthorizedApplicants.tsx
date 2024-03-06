@@ -22,36 +22,39 @@ const AuthorizedApplicants = () => {
       key: "1",
       title: "SN",
       dataIndex: "sn",
+      render: (_, __, index) => {
+        return index + 1;
+      },
     },
     {
       title: "Applicant ID",
-      dataIndex: "applicantId",
-      key: "2",
+      dataIndex: "applicant_id",
+      key: "applicant_id",
     },
     {
       title: " Applicant Name",
-      dataIndex: "applicantName",
-      key: "3",
+      dataIndex: "applicant_name",
+      key: "applicant_name",
     },
     {
       title: "Country",
       dataIndex: "country",
-      key: "4",
+      key: "country",
     },
     {
       title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
+      dataIndex: "program_type",
+      key: "program_type",
     },
     {
       title: "Investment Route",
-      dataIndex: "investmentRoute",
-      key: "6",
+      dataIndex: "investmentroute",
+      key: "investmentroute",
     },
     {
       title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
+      dataIndex: "no_of_dependents",
+      key: "no_of_dependents",
     },
     {
       title: "Status",
@@ -94,6 +97,7 @@ const AuthorizedApplicants = () => {
       <PageIntro
         title="Authorized Applicants"
         description="View, Approve or Reject Applicant"
+       linkBack={appRoute.home}
       />
 
       <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">
@@ -110,7 +114,7 @@ const AuthorizedApplicants = () => {
           dataSource={data?.data}
           columns={columns}
           loading={isLoading}
-          bordered={true}
+          // bordered={true}
           scroll={{ x: 900 }}
           className="mt-4"
           pagination={{ ...pagination, total: data?.total }}

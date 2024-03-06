@@ -15,7 +15,7 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useG
 import { openNotification } from "src/utils/notification";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
 import { SignOut } from "src/components/layout/SignOut";
-// import { useMoveToNextStage } from "src/features/applications/hooks/useMoveToNextStage";
+import { useMoveToNextStage } from "src/features/applications/hooks/useMoveToNextStage";
 import { SendToRoleHead } from "../../components/SendToRoleHead";
 
 export const ServiceManagerPortfolio = () => {
@@ -23,14 +23,13 @@ export const ServiceManagerPortfolio = () => {
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
   const [applicantId, setApplicantId] = useState<number>();
+  const [milestoneId, setMilestoneId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
-  console.log("applicant data", data);
-
   const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
   const [openRoleModal, setOpenRoleModal] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
-
+  const { patchData } = useMoveToNextStage();
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.map((item, index) => {
@@ -44,6 +43,7 @@ export const ServiceManagerPortfolio = () => {
           numberOfDependents: item.no_of_dependents,
           investmentRoute: item.investmentroute,
           milestone: item.milestone,
+          milestoneId: item.milestone_id,
         };
       });
 
@@ -101,7 +101,9 @@ export const ServiceManagerPortfolio = () => {
     );
   };
 
-  // const moveApplicantToNextStage = () => {};
+  const moveApplicantToNextStage = () => {
+    patchData(milestoneId as unknown as number)
+  };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -166,7 +168,8 @@ export const ServiceManagerPortfolio = () => {
                   <Menu.Item key="2-1">
                     <Link
                       to={
-                        appRoute.send_email(val.key as unknown as number, 2).path
+                        appRoute.send_email(val.key as unknown as number, 2)
+                          .path
                       }
                     >
                       Onboarding/Welcome Email
@@ -279,7 +282,8 @@ export const ServiceManagerPortfolio = () => {
                 <Menu.Item
                   key="9"
                   onClick={() => {
-                    // setMilestoneId()
+                    setMilestoneId(val.milestoneId as unknown as number);
+                    moveApplicantToNextStage();
                   }}
                 >
                   Move to Next Stage

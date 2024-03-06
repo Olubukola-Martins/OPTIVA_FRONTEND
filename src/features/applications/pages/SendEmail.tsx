@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import { ApplicationApprovalEmail } from "../features/components/Emails/ApplicationApprovalEmail";
-import { AppointmentConfirmationEmail } from "../features/components/Emails/AppointmentConfirmationEmail";
-import { BankClearance } from "../features/components/Emails/BankClearance";
-import { BankSubmissionEmail } from "../features/components/Emails/BankSubmissionEmail";
-import { OnboardingEmail } from "../features/components/Emails/OnboardingEmail";
-import { PassportEmail } from "../features/components/Emails/PassportEmail";
+import { ApplicationApprovalEmail } from "./Emails/ApplicationApprovalEmail";
+import { AppointmentConfirmationEmail } from "./Emails/AppointmentConfirmationEmail";
+import { BankClearance } from "./Emails/BankClearance";
+import { BankSubmissionEmail } from "./Emails/BankSubmissionEmail";
+import { OnboardingEmail } from "./Emails/OnboardingEmail";
+import { PassportEmail } from "./Emails/PassportEmail";
 
 export const SendEmail = () => {
   const {id, emailId} = useParams();

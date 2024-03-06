@@ -529,7 +529,7 @@ export interface IMarkApplicationComplete {
 }
 
 // APPLICANTS BY ROLE
-export interface IApplicantsByRole {
+export interface IApplicantsByRole  {
   id: number;
   applicant_name: string;
   applicant_id: string;
@@ -541,18 +541,50 @@ export interface IApplicantsByRole {
   branch: string;
   comments: any[];
   applicant_documents: Applicantdocument[];
-  user_assigned: any[];
+  user_assigned: Userassigned[];
+  milestone_id: number;
   country_id: number;
   added_by: string;
   no_of_dependents: number;
   investmentroute_id: number;
   programtype_id: number;
   status: string;
-  created_at: string;
-  updated_at: string;
   uploaded: string;
   verified: string;
   validated: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Userassigned {
+  id: number;
+  name: string;
+  current_branch_id: number;
+  is_super_admin: boolean;
+  user_type: string;
+  last_login_at: string;
+  last_login_ip: string;
+  email: string;
+  email_verified_at?: any;
+  phone?: any;
+  employee_id: number;
+  role_id: number;
+  intl_id?: any;
+  applicant_id?: any;
+  is_active: boolean;
+  image: string;
+  created_at?: any;
+  updated_at: string;
+  pivot: Pivot;
+}
+
+interface Pivot {
+  application_id: number;
+  user_id: number;
+  role_id: number;
+  is_task_completed: number;
+  is_accepted: number;
+  task_deadline?: any;
 }
 
 interface Applicantdocument {
@@ -572,9 +604,10 @@ interface Applicantdocument {
   externally_reviewed: string;
   is_completed: number;
   dependants: any[];
-  
 }
 
+
+// ASSIGN APPLICATION
 export interface IAssignApplicant {
   application_id: number;
   role_id: number;
@@ -665,4 +698,10 @@ interface Eligibledependant {
 interface Pivot {
   document_requirement_id: number;
   eligible_dependant_id: number;
+}
+
+// SEND EMAIL
+export interface ISendEmail {
+  application_id: number;
+  emailtemplate_id: number;
 }

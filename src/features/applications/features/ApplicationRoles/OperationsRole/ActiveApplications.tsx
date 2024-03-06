@@ -41,6 +41,7 @@ export type DataSourceItem = {
   status?: string;
   countryId?: number;
   investmentId?: number;
+  milestoneId?: number;
 };
 
 export const capitalizeName = (name: string) => {
