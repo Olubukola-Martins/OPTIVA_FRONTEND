@@ -394,7 +394,7 @@ export const ActiveApplications = () => {
           ) => {
             console.log(
               `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
+              "selectedRows: 6",
               selectedRows
             );
           },
