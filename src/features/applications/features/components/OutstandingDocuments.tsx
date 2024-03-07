@@ -1,42 +1,75 @@
-import { Form, Modal, Select } from "antd";
+import { Empty, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+import { useFetchOutstandingDocuments } from "../../hooks/Documet hooks/useFetchOutstandingDocuments";
 
 export interface IModalProps {
   open: boolean;
   onCancel: () => void;
+  applicantId: number | undefined;
 }
 
 export const OutstandingDocuments: React.FC<IModalProps> = ({
   onCancel,
   open,
+  applicantId,
 }) => {
-  const [form] = Form.useForm();
-  const handleSubmit = () => {};
+  const { data } = useFetchOutstandingDocuments({
+    id: applicantId as unknown as number,
+  });
+
   return (
     <>
       <Modal open={open} onCancel={onCancel} footer={null}>
-        <Form form={form} onFinish={handleSubmit} layout="vertical">
+        <h1 className="p-4 font-bold text-center text-lg">
+          Outstanding Document
+        </h1>
+        {data && data?.length > 0 ? (
+          data?.map((item) => (
+            <div>
+              <p>{item.name}</p>
+            </div>
+          ))
+        ) : (
+          <Empty description="No outstanding documents for this applicant" />
+        )}
+
+        <div className="flex items-center justify-end gap-5">
+          <AppButton
+            label="Cancel"
+            // type="reset"
+            variant="transparent"
+            handleClick={() => onCancel()}
+          />
+          {/* <AppButton label="Save" type="submit" /> */}
+        </div>
+        {/* <Form form={form} onFinish={handleSubmit} layout="vertical">
           <h1 className="p-4 font-bold text-center text-lg">
-            Select Outstanding Document
+            Select Outstanding Document 
           </h1>
-          <Form.Item name="outstandingDoc" label='Select Document(s)' rules={generalValidationRules}>
-            <Select
-              options={[{ label: "Attestation", value: "attestation" }]}
-              mode="multiple"
-            />
-          </Form.Item>
+          <Form.Item
+            name="outstandingDoc"
+            label="Select Document(s)"
+            rules={generalValidationRules}
+          >
+            <Select mode="multiple">
+              {data?.map((item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.name}
+                </Select.Option>
+              ))}
+            </Select>
+
+           </Form.Item>
 
           <div className="flex items-center justify-center gap-5">
             <AppButton
               label="Cancel"
               type="reset"
-              // handleClick={() => handleClose()}
               variant="transparent"
             />
             <AppButton label="Save" type="submit" />
           </div>
-        </Form>
+        </Form> */}
       </Modal>
     </>
   );

@@ -129,4 +129,14 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
+
+  // ROLES
+  send_email: (id?: number, emailId?: number) => ({
+    format: `/applications/:id/send_email/:emailId`,
+    path: `/applications/${id}/send_email/${emailId}`,
+  }),
+  attach_supporting_documents: (id?:number) => ({
+    format: `/applications/:id/attach_documents`,
+    path: `/applications/${id}/attach_documents`,
+  })
 };

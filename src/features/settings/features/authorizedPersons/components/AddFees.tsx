@@ -1,6 +1,5 @@
 import { Form, Input, InputNumber, Select } from "antd";
 import { useGetProgramType } from "../../program-types/hooks/useGetProgramType";
-import type { SelectProps } from "antd";
 import { QUERY_KEY_FOR_COUNTRY } from "../../program-types/hooks/useGetCountry";
 import { useGetInvestmentRoute } from "../../investment/hooks/useGetInvestmentRoute";
 import { useState } from "react";
@@ -32,7 +31,7 @@ export const AddFees = ({
   const { data: countryByProgramData, isLoading: countryByProgramLoading } =
     useGetCountryByProgram({
       queryKey: QUERY_KEY_FOR_COUNTRY,
-      id: selectedProgram as unknown as number,
+      id: selectedProgram as number,
     });
 
   const {
@@ -42,13 +41,6 @@ export const AddFees = ({
     id: selectedCountry as unknown as number,
   });
 
-  console.log('countery by profram', investmentByCountryData)
-  const programOptions: SelectProps["options"] =
-    programData?.map((item) => ({
-      value: item.id,
-      label: item.program_name,
-      key: item.id,
-    })) || [];
 
   return (
     <div className="border rounded-lg p-5">
@@ -67,12 +59,18 @@ export const AddFees = ({
             rules={generalValidationRules}
           >
             <Select
-              loading={programDataLoading}
-              options={programOptions}
+               loading={programDataLoading}
               onChange={(value: number) => {
                 setSelectedProgram(value);
               }}
-            />
+            >
+              {programData?.map((item) => (
+                <Select.Option key={item.id} value={item.id}>
+                  {item.program_name}
+                </Select.Option>
+              ))}
+            </Select>
+           
           </Form.Item>
           <Form.Item
             label="Country"
@@ -87,7 +85,7 @@ export const AddFees = ({
               }}
             >
               {countryByProgramData?.map((item) => (
-                <Select.Option key={item.id +Math.random()} value={item.id}>
+                <Select.Option key={item.id} value={item.id}>
                   {item.country_name}
                 </Select.Option>
               ))}
@@ -106,7 +104,7 @@ export const AddFees = ({
             >
               {investmentData && selectedCountry !== undefined
                 ? investmentByCountryData?.map((item) => (
-                    <Select.Option value={item.id} key={item.id + Math.random()}>
+                    <Select.Option value={item.id} key={item.id}>
                       {item.investment_name}
                     </Select.Option>
                   ))
@@ -173,7 +171,9 @@ export const AddFees = ({
           handleClick={onNext}
           label="Next"
           isDisabled={selectedInvestment === undefined}
-          containerStyle={selectedInvestment === undefined ? "cursor-not-allowed" : ""}
+          containerStyle={
+            selectedInvestment === undefined ? "cursor-not-allowed" : ""
+          }
         />
       </div>
     </div>

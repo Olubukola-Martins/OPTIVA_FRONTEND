@@ -9,7 +9,6 @@ import { DeleteModal } from "src/components/modals/DeleteModal";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { useDelete } from "src/hooks/useDelete";
-import { useGetApplicationTemplate } from "../../appTemplate/hooks/useGetApplicationTemplate";
 
 type DataSourceItem = {
   key: React.Key;
@@ -26,14 +25,10 @@ export const ProgramTypes = () => {
   const { data, isLoading } = useGetProgramType();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
   const [programId, setProgramId] = useState<number>();
-  const { data: templateData } = useGetApplicationTemplate();
   const { removeData } = useDelete({
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
     EndPointUrl: "admin/programtypes/",
   });
-
-  console.log("program data", data);
-  console.log("template data", templateData);
 
   useEffect(() => {
     if (data) {

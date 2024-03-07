@@ -53,23 +53,19 @@ export const ApplicantBriefTemplateDetails = () => {
                     <span className="font-medium">Question:</span>{" "}
                     {item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)}
-                    {/* {item.form_question} */}
                   </p>
                   <p className="py-2 text-base">
                     <span className="font-medium">Input type:</span>{" "}
                     {showInputName(item.input_type)}
                   </p>
                 </div>
-                {data?.map(
-                  (item) =>
-                    item.template_id !== null && (
-                      <div className="flex justify-end  w-[5%]">
-                        <i
-                          className="ri-delete-bin-line text-xl cursor-pointer mt-10"
-                          onClick={() => setShowDeleteModalForItem(item.id)}
-                        ></i>
-                      </div>
-                    )
+                {item.template_id !== null && (
+                  <div className="flex justify-end  w-[5%]">
+                    <i
+                      className="ri-delete-bin-line text-xl cursor-pointer mt-10"
+                      onClick={() => setShowDeleteModalForItem(item.id)}
+                    ></i>
+                  </div>
                 )}
               </div>
               {showDeleteModalForItem === item.id && (

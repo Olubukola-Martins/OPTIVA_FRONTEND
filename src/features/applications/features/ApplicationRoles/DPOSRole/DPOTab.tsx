@@ -3,8 +3,10 @@ import React from "react";
 import { DPOPortfolio } from "./DPOPortfolio";
 import { Tabs, Input, Select } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
+import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+  const {data}=useFetchUserProfile()
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -16,7 +18,7 @@ export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
     //   key: "AllApplicants",
     // },
     {
-      label: "My Portfolio",
+      label: "All Applicants",
       children: <DPOPortfolio />,
       key: "MyPortfolio",
     },
@@ -32,42 +34,44 @@ export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
               placeholder="Search"
               className="md:flex hidden w-[250px]"
             />
-            <Select
-              allowClear
-              placeholder="Role"
-              className="md:flex hidden w-[250px]"
-              onChange={onRoleSelect}
-              options={[
-                {
-                  value: `DR's List`,
-                  label: `DR's List`,
-                },
-                {
-                  value: `DPO's List`,
-                  label: `DPO's List`,
-                },
-                {
-                  value: `DMS's List`,
-                  label: `DMS's List`,
-                },
-                {
-                  value: `Audit's List`,
-                  label: `Audit's List`,
-                },
-                {
-                  value: `Operations List`,
-                  label: `Operations  List`,
-                },
-                {
-                  value: `Service Manager's List`,
-                  label: `Service Manager's  List`,
-                },
-                {
-                  value: `Customer Engager's List`,
-                  label: `Customer Engager's  List`,
-                },
-              ]}
-            />
+           {data?.roles.id === 1 && (
+              <Select
+                allowClear
+                placeholder="Role"
+                className="md:flex hidden w-[250px]"
+                onChange={onRoleSelect}
+                options={[
+                  {
+                    value: 1,
+                    label: `DR's List`,
+                  },
+                  {
+                    value: 2,
+                    label: `DPO's List`,
+                  },
+                  {
+                    value: 3,
+                    label: `DMS's List`,
+                  },
+                  {
+                    value: 4,
+                    label: `Audit's List`,
+                  },
+                  {
+                    value: 5,
+                    label: `Operations  List`,
+                  },
+                  {
+                    value: 6,
+                    label: `Service Manager's  List`,
+                  },
+                  {
+                    value: 7,
+                    label: `Customer Engager's  List`,
+                  },
+                ]}
+              />
+            )}
           </div>
         }
       />

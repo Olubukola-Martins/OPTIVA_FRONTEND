@@ -9,13 +9,13 @@ import { textInputValidationRules } from "src/utils/formHelpers/validations";
 import {
   QUERY_KEY_FOR_DOCUMENT_COMMENT,
   useGetDocumentComments,
-} from "../hooks/useGetDocumentComments";
+} from "../hooks/Documet hooks/useGetDocumentComments";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { formatDate } from "src/features/payment/pages/GenerateFinancialStatement";
 import { useDelete } from "src/hooks/useDelete";
 import { openNotification } from "src/utils/notification";
-import { useCreateDocComment } from "../hooks/useCreateDocComment";
+import { useCreateDocComment } from "../hooks/Documet hooks/useCreateDocComment";
 import { formatTime } from "./Comments";
 
 type DataSourceItem = {
@@ -186,25 +186,25 @@ export const ApplicantDocumentComments = () => {
   return (
     <>
       {/* View Comment Modal */}
-    
-        <Modal
-          open={openDetailsModal}
-          onCancel={handleDetailsCancel}
-          footer={null}
-        >
-          <div className="p-3 my-3 mx-auto">
-            <h2 className="font-bold text-lg text-center">Comment Details</h2>
-            <div className="border rounded p-2 my-4">{selectedComment}</div>
-            <div className="flex justify-end">
-              <AppButton
-                type="button"
-                label="Back"
-                handleClick={handleDetailsCancel}
-              />
-            </div>
+
+      <Modal
+        open={openDetailsModal}
+        onCancel={handleDetailsCancel}
+        footer={null}
+      >
+        <div className="p-3 my-3 mx-auto">
+          <h2 className="font-bold text-lg text-center">Comment Details</h2>
+          <div className="border rounded p-2 my-4">{selectedComment}</div>
+          <div className="flex justify-end">
+            <AppButton
+              type="button"
+              label="Back"
+              handleClick={handleDetailsCancel}
+            />
           </div>
-        </Modal>
-    
+        </div>
+      </Modal>
+
       {/* Delete Modal */}
       <DeleteModal
         header="Comment"
@@ -250,7 +250,7 @@ export const ApplicantDocumentComments = () => {
         <PageIntro
           title="Comments"
           description="View and make comments on applicant documents"
-          linkBack={appRoute.applications}
+          linkBack={appRoute.applicant_documents(id as unknown as number).path}
         />
         <div>
           <AppButton

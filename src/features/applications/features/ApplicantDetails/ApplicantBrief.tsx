@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { Empty, Form, Skeleton } from "antd";
 import { useEffect } from "react";
-import { renderInput } from "../NewApplication/NewApplicantBrief";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { AppButton } from "src/components/button/AppButton";
+import { renderDetailsInput } from "./AcademicHistory";
 
 export const renderPTag = (input_type: string, text: any) => {
   const formattedText = text ? text.join(", ") : text;
@@ -28,7 +28,14 @@ export const renderPTag = (input_type: string, text: any) => {
   }
 };
 
-export const ApplicantBrief = () => {
+export interface IApplicantDetailsProps {
+  onNext?: () => void;
+  onPrev?: () => void;
+}
+
+export const ApplicantBrief: React.FC<IApplicantDetailsProps> = ({
+  onNext,
+}) => {
   const { id } = useParams();
   const { data, isLoading } = useGetApplicationResponse({
     id: id as unknown as number,
@@ -47,21 +54,17 @@ export const ApplicantBrief = () => {
     }
   }, [data]);
 
-  const {
-    mutate,
-    isLoading: postLoading,
-    isSuccess,
-  } = useCreateApplicationResponse("sectiononeresponse");
+  const { mutate, isLoading: postLoading } =
+    useCreateApplicationResponse("sectiononeresponse");
   const queryClient = useQueryClient();
 
   const handleSubmit = (val: any) => {
-    console.log("form vals", val);
 
     const payload = {
       application_id: id as unknown as number,
       responses:
         data?.map((item) => ({
-          question_id: item.id,
+          question_id: item.question_id,
           response: Array.isArray(val[item.question.schema_name])
             ? val[item.question.schema_name]
             : [val[item.question.schema_name]],
@@ -103,35 +106,21 @@ export const ApplicantBrief = () => {
                 name={item.question.schema_name}
                 label={item.question.form_question}
               >
-                {renderInput(item.question.input_type, item.question.options)}
+                {renderDetailsInput(item.question.input_type, item.question.options)}
               </Form.Item>
             ))}
 
-            <div className="flex justify-end items-center gap-5">
+            <div className="flex justify-between items-center gap-5">
               <AppButton
-                label="Cancel"
-                type="reset"
+                label="Next"
+                type="button"
+                handleClick={() => onNext && onNext()}
                 variant="transparent"
-                // isDisabled={isSuccess}
               />
-              <AppButton
-                label="Save"
-                type="submit"
-                isLoading={postLoading}
-                // isDisabled={isSuccess}
-                containerStyle={isSuccess ? "cursor-not-allowed" : ""}
-              />
+              <AppButton label="Save" type="submit" isLoading={postLoading} />
             </div>
           </Form>
         ) : (
-          // <div className="mt-2 py-2" key={item.id}>
-          //   <h2 className="py-3">
-          //     {item.question.form_question.charAt(0).toUpperCase() +
-          //       item.question.form_question.slice(1)}
-          //   </h2>
-          //   {renderPTag(item.question.input_type, item.response)}
-          // </div>
-
           <Empty />
         )}
       </Skeleton>

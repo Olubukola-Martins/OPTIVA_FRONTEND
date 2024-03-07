@@ -5,15 +5,15 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
   capitalizeName,
-} from "src/features/applications/components/ActiveApplications";
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { OutstandingDocuments } from "../../components/OutstandingDocuments";
 import { useEffect, useState } from "react";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
-import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
-import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
+import { useAcceptApplicant } from "src/features/applications/hooks/Application hooks/useAcceptApplicant";
+import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
-import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
+import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
 
 export const DPOPortfolio = () => {
   const [openSupportingDocModal, setOpenSupportingDocModal] =
@@ -25,7 +25,6 @@ export const DPOPortfolio = () => {
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
- 
 
   useEffect(() => {
     if (data) {
@@ -37,12 +36,12 @@ export const DPOPortfolio = () => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: 1234567890,
-          applicationStage: "application",
-          addedBy: "added by",
-          documentsUploaded: "",
+          numberOfDependents: item.no_of_dependents,
+          applicationStage: item.process,
+          addedBy: item.added_by,
+          documentsUploaded: item.uploaded,
           investmentRoute: item.investmentroute,
-          verifiedDocuments: "",
+          verifiedDocuments: item.verified,
         };
       });
 
@@ -95,7 +94,6 @@ export const DPOPortfolio = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-        
         },
       }
     );
@@ -165,7 +163,7 @@ export const DPOPortfolio = () => {
                   key="1"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && acceptApplicant();
+                    acceptApplicant();
                   }}
                 >
                   Accept Applicant
@@ -190,13 +188,28 @@ export const DPOPortfolio = () => {
                     View Uploaded Documents
                   </Link>
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   key="4"
-                  onClick={() => setOpenSupportingDocModal(true)}
+                  onClick={() => {
+                    setApplicantId(val.key as unknown as number);
+                    setOpenSupportingDocModal(true);
+                  }}
                 >
                   Outline Outstanding Documents
-                </Menu.Item>
-                <Menu.Item key="5">Attach Supporting Documents</Menu.Item>
+                </Menu.Item> */}
+                {/* <Menu.Item key="5">
+                  <Link
+                    to={{
+                      pathname: appRoute.attach_supporting_documents(
+                        val.key as unknown as number
+                      ).path,
+                      search: "?documentType=supporting",
+                    }}
+                  >
+                    Attach Supporting Documents
+                  </Link>
+                 
+                </Menu.Item> */}
                 <Menu.Item key="6">
                   <Link
                     to={
@@ -207,7 +220,9 @@ export const DPOPortfolio = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="7" onClick={markApplicationComplete}>Mark as completed</Menu.Item>
+                <Menu.Item key="7" onClick={markApplicationComplete}>
+                  Mark as completed
+                </Menu.Item>
               </Menu>
             }
           >
@@ -231,6 +246,7 @@ export const DPOPortfolio = () => {
       <OutstandingDocuments
         open={openSupportingDocModal}
         onCancel={() => setOpenSupportingDocModal(false)}
+        applicantId={applicantId}
       />
     </>
   );

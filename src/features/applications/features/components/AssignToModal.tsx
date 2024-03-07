@@ -6,22 +6,23 @@ import { IModalProps } from "./OutstandingDocuments";
 import { useFetchRoles } from "src/features/settings/features/rolesAndPermissions/hooks/useFetchRoles";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 import { employeesProps } from "src/features/settings/features/employees/types";
-import { useAssignApplicant } from "../../hooks/useAssignApplicant";
+import { useAssignApplicant } from "../../hooks/Application hooks/useAssignApplicant";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 
-export const AssignToModal: React.FC<IModalProps> = ({ onCancel, open }) => {
+export const AssignToModal: React.FC<IModalProps> = ({
+  onCancel,
+  open,
+  applicantId,
+}) => {
   const [form] = Form.useForm();
   const { data } = useFetchRoles();
   const { data: employeesData } = useFetchEmployees({
     currentUrl: "active-employees",
   });
-  const { mutate, } = useAssignApplicant();
-  // const { sharedData } = useGlobalContext();
+  const { mutate, isLoading } = useAssignApplicant();
   const queryClient = useQueryClient();
-
-  console.log("applicant id");
 
   const [filteredEmployees, setFilteredEmployees] = useState<employeesProps[]>(
     []
@@ -36,8 +37,8 @@ export const AssignToModal: React.FC<IModalProps> = ({ onCancel, open }) => {
   const handleSubmit = (val: any) => {
     mutate(
       {
-        application_id: 1,
-        assigned_user_id: val.selectEmployee,
+        application_id: applicantId as unknown as number,
+        user_id: val.selectEmployee,
         role_id: val.selectRole,
       },
       {
@@ -48,6 +49,7 @@ export const AssignToModal: React.FC<IModalProps> = ({ onCancel, open }) => {
             description: error.response.data.message,
             duration: 5,
           });
+          form.resetFields();
         },
         onSuccess: (res: any) => {
           openNotification({
@@ -56,6 +58,7 @@ export const AssignToModal: React.FC<IModalProps> = ({ onCancel, open }) => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          form.resetFields();
         },
       }
     );
@@ -76,7 +79,6 @@ export const AssignToModal: React.FC<IModalProps> = ({ onCancel, open }) => {
             name="selectRole"
             label="Select Role"
             rules={generalValidationRules}
-
           >
             <Select onChange={handleRoleChange}>
               {data?.map((item) => (
@@ -93,7 +95,7 @@ export const AssignToModal: React.FC<IModalProps> = ({ onCancel, open }) => {
           >
             <Select>
               {filteredEmployees.map((employee) => (
-                <Select.Option value={employee.id} key={employee.id}>
+                <Select.Option value={employee.user.id} key={employee.id}>
                   {employee.name}
                 </Select.Option>
               ))}
@@ -107,7 +109,7 @@ export const AssignToModal: React.FC<IModalProps> = ({ onCancel, open }) => {
               // handleClick={() => handleClose()}
               variant="transparent"
             />
-            <AppButton label="Save" type="submit" />
+            <AppButton label="Save" type="submit" isLoading={isLoading} />
           </div>
         </Form>
       </Modal>

@@ -6,9 +6,9 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
   capitalizeName,
-} from "src/features/applications/components/ActiveApplications";
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 // import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 
 export const PaymentApplicant = () => {
   // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
@@ -17,7 +17,6 @@ export const PaymentApplicant = () => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
 
-  console.log("data", data);
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.map((item, index) => {
@@ -92,14 +91,7 @@ export const PaymentApplicant = () => {
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                  <Link
-                    to={
-                      appRoute.new_application
-                        
-                    }
-                  >
-                    Edit
-                  </Link>
+                  <Link to={appRoute.new_application}>Edit</Link>
                 </Menu.Item>
                 <Menu.Item key="2">
                   <Link

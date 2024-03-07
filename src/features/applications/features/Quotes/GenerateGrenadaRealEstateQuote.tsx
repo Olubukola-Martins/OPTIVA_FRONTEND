@@ -5,7 +5,7 @@ import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateGrenadaRealEstateQuotes } from "../../hooks/useCreateGrenadaRealEstateQuotes";
+import { useCreateGrenadaRealEstateQuotes } from "../../hooks/Quotes hooks/useCreateGrenadaRealEstateQuotes";
 
 export const GenerateGrenadaRealEstateQuote = () => {
   const [form] = Form.useForm();

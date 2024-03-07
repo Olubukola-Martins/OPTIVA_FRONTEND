@@ -1,6 +1,6 @@
 import { Input, Select, Tabs } from "antd";
-import { ActiveApplications } from "../../components/ActiveApplications";
-import { InactiveApplications } from "../../components/InactiveApplications";
+import { ActiveApplications } from "../ApplicationRoles/OperationsRole/ActiveApplications";
+import { InactiveApplications } from "../ApplicationRoles/OperationsRole/InactiveApplications";
 import { IRoleTabProps } from "../ApplicationRoles/AuditRole/AuditTab";
 
 export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
@@ -38,31 +38,31 @@ export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
               onChange={onRoleSelect}
               options={[
                 {
-                  value: `DR's List`,
+                  value: 1,
                   label: `DR's List`,
                 },
                 {
-                  value: `DPO's List`,
+                  value: 2,
                   label: `DPO's List`,
                 },
                 {
-                  value: `DMS's List`,
+                  value: 3,
                   label: `DMS's List`,
                 },
                 {
-                  value: `Audit's List`,
+                  value: 4,
                   label: `Audit's List`,
                 },
                 {
-                  value: `Operations List`,
+                  value: 5,
                   label: `Operations  List`,
                 },
                 {
-                  value: `Service Manager's List`,
+                  value: 6,
                   label: `Service Manager's  List`,
                 },
                 {
-                  value: `Customer Engager's List`,
+                  value: 7,
                   label: `Customer Engager's  List`,
                 },
               ]}

@@ -2,34 +2,23 @@ import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { DataSourceItem, capitalizeName } from "src/features/applications/components/ActiveApplications";
-// import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
+import {
+  DataSourceItem,
+  capitalizeName,
+} from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useEffect, useState } from "react";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
-// import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
+import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
+import { UploadModal } from "src/components/modals/UploadModal";
 
 export const MyPortfolio = () => {
-  
-  // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  // const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   setSharedData((prevData: any) => ({
-  //     ...prevData,
-  //     countryId,
-  //     investmentId
-  //   }));
-  // }, [ countryId, investmentId, setSharedData]);
-
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
-
-  console.log('data', data)
+  const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
+  const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
   useEffect(() => {
-
     if (data) {
       const activeApplicant: DataSourceItem[] = data.map((item, index) => {
-        // setApplicantId()
         return {
           key: item.id,
           sn: index + 1,
@@ -37,12 +26,12 @@ export const MyPortfolio = () => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: 1234567890,
+          numberOfDependents: item.no_of_dependents,
           milestone: item.milestone,
-          addedBy: "added by",
+          addedBy: item.added_by,
           investmentRoute: item.investmentroute,
           countryId: item.country_id,
-          investmentId:item.investmentroute_id
+          investmentId: item.investmentroute_id,
         };
       });
 
@@ -82,7 +71,6 @@ export const MyPortfolio = () => {
       key: "6",
     },
     {
-
       title: "Number Of Dependents",
       dataIndex: "numberOfDependents",
       key: "7",
@@ -111,12 +99,7 @@ export const MyPortfolio = () => {
                     Edit
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="2"
-                  // onClick={() => {
-                  // setCountryId(val.countryId)
-                  // setInvestmentId(val.investmentId)
-                  // }}
-                >
+                <Menu.Item key="2">
                   <Link
                     to={
                       appRoute.generate_quotes(val.key as unknown as number)
@@ -128,9 +111,9 @@ export const MyPortfolio = () => {
                 </Menu.Item>
                 <Menu.Item
                   key="3"
-                  // onClick={() => {
-                  //   setOpenSubmitModal(true);
-                  // }}
+                  onClick={() => {
+                    setOpenSubmitModal(true);
+                  }}
                 >
                   Submit
                 </Menu.Item>
@@ -144,11 +127,10 @@ export const MyPortfolio = () => {
     },
   ];
 
-  // const handleClose = () => {
-  //   setOpenSubmitModal(false);
-  // };
+  const handleClose = () => {
+    setOpenSubmitModal(false);
+  };
 
- 
   return (
     <>
       <Table
@@ -159,17 +141,19 @@ export const MyPortfolio = () => {
         className="bg-white rounded-md shadow border mt-2"
       />
 
-      {/* <SubmitApplicationModal
+      <SubmitApplicationModal
         open={openSubmitModal}
         handleClose={handleClose}
-        // handleOpenImportModal={() => setOpenUploadModal(true)}
-      /> */}
+        handleOpenImportModal={() => setOpenUploadModal(true)}
+      />
 
-      {/* <UploadModal
+      <UploadModal
         header="Proof of Payment"
         open={openUploadModal}
-        onCancel={handleUploadCancel}
-      /> */}
+        onCancel={() => {
+          setOpenUploadModal(false);
+        }}
+      />
     </>
   );
 };

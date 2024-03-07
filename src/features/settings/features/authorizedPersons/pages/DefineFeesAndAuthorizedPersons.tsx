@@ -23,7 +23,6 @@ import { UploadModal } from "src/components/modals/UploadModal";
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
   const { data } = useGetCurrency();
-  console.log("currency data", data);
   form.setFieldsValue({ ...data });
   // Import Modal
   const [openImportModal, setOpenImportModal] = useState(false);
