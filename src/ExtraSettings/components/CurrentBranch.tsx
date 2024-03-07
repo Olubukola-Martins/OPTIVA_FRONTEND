@@ -11,6 +11,7 @@ export const CurrentBranch = () => {
   const { mutate } = useSwitchBranch();
   const { data } = useFetchCurrentBranch();
 
+
   const handleSelect = (val: number) => {
     mutate(val, {
       onError: (err: any) => {
@@ -36,7 +37,7 @@ export const CurrentBranch = () => {
   return (
     <Select
       loading={loadBrach}
-      value={data?.current_branch_id}
+      value={data?.id}
       options={branchData?.data?.map((item) => ({
         value: item.id,
         label: item.name,
