@@ -136,7 +136,7 @@ export const appRoute = {
     path: `/applications/${id}/send_email/${emailId}`,
   }),
   attach_supporting_documents: (id?:number) => ({
-    format: `/applications/:id/attach_supporting_documents`,
-    path: `/applications/${id}/attach_supporting_documents`,
+    format: `/applications/:id/attach_documents`,
+    path: `/applications/${id}/attach_documents`,
   })
 };

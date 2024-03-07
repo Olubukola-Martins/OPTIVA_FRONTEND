@@ -41,7 +41,6 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
         );
       }
   
-      // Map filteredApplicants to DataSourceItem format
       const activeApplicant: DataSourceItem[] = filteredApplicants.map(
         (item, index) => {
           return {
@@ -65,46 +64,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
   }, [data, selectedFilter]);
 
   
-  // useEffect(() => {
-  //   if (data) {
-  //     let filteredApplicants = data;
-  //     const activeApplicant: DataSourceItem[] = filteredApplicants.map(
-  //       (item, index) => {
-  //         return {
-  //           key: item.id,
-  //           sn: index + 1,
-  //           applicantId: item.applicant_id,
-  //           applicantName: capitalizeName(item.applicant_name),
-  //           country: item.country,
-  //           programType: item.program_type,
-  //           numberOfDependents: item.no_of_dependents,
-  //           applicationStage: item.process,
-  //           addedBy: item.added_by,
-  //           documentsUploaded: "-",
-  //           investmentRoute: item.investmentroute,
-  //         };
-  //       }
-  //     );
-  //     if (selectedFilter === "1") {
-  //       filteredApplicants = filteredApplicants.filter(
-  //         (applicant) => applicant.applicant_documents.length > 0
-  //       );
-  //       setDataArray(activeApplicant);
-  //       // setDataArray(filteredApplicants)
-  //       console.log("collated");
-  //     } else if (selectedFilter === "2") {
-  //       filteredApplicants = filteredApplicants.filter(
-  //         (applicant) => applicant.applicant_documents.length === 0
-  //       );
-  //       setDataArray(activeApplicant);
-  //       console.log("uncollated");
-  //     } else if (selectedFilter === "3") {
-  //       setDataArray(activeApplicant);
-  //       console.log("all");
-  //     }
-  //   }
-  // }, [data, selectedFilter]);
-
+ 
   const acceptApplicant = () => {
     mutate(
       {
@@ -232,6 +192,16 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                 <Menu.Item key="3">
                   <Link
                     to={
+                      appRoute.attach_supporting_documents(val.key as unknown as number)
+                        .path
+                    }
+                  >
+                    Attach Required Documents
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="4">
+                  <Link
+                    to={
                       appRoute.applicant_documents(val.key as unknown as number)
                         .path
                     }
@@ -239,7 +209,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                     Applicant's Documents
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="4">
+                <Menu.Item key="5">
                   <Link
                     to={
                       appRoute.timeline_extensions(val.key as unknown as number)
@@ -250,7 +220,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                   </Link>
                 </Menu.Item>
                 <Menu.Item
-                  key="5"
+                  key="6"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
                     applicantId && markApplicationComplete();
