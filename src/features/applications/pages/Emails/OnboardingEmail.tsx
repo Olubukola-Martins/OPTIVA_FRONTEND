@@ -3,8 +3,8 @@ import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { useGetSingleTemplate } from "src/features/settings/features/contractsEmailTemplates/hooks/useGetSingleTemplate";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
-import { useSendEmail } from "../../hooks/useSendEmail";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
+import { useSendEmail } from "../../hooks/Application hooks/useSendEmail";
 import { AppButton } from "src/components/button/AppButton";
 
 export const removeHtmlTags = (htmlString: string) => {
@@ -56,7 +56,10 @@ export const OnboardingEmail = () => {
 
   const handleSendEmail = () => {
     mutate(
-      { application_id: id as unknown as number, emailtemplate_id: emailId as unknown as number},
+      {
+        application_id: id as unknown as number,
+        emailtemplate_id: emailId as unknown as number,
+      },
       {
         onError: (error: any) => {
           openNotification({
@@ -73,7 +76,6 @@ export const OnboardingEmail = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-     
         },
       }
     );
@@ -84,13 +86,16 @@ export const OnboardingEmail = () => {
         <div className="bg-[url('https://optiva-backend.techmur.com/assets/watermark.png')]  bg-contain bg-center bg-no-repeat p-2 m-3 z-10">
           <img src="https://optiva-backend.techmur.com/assets/optivaLogo.png" />
           {data?.data.map((item) => (
-            <div className='my-3'
+            <div
+              className="my-3"
               dangerouslySetInnerHTML={{ __html: removeHtmlTags(item.content) }}
             />
-
           ))}
         </div>
-        <img src="https://optiva-backend.techmur.com/assets/optivaAddr.png" className='my-4 py-5'/>
+        <img
+          src="https://optiva-backend.techmur.com/assets/optivaAddr.png"
+          className="my-4 py-5"
+        />
         <div className="flex justify-end items-center gap-5 my-4 py-5">
           <AppButton
             label="Cancel"

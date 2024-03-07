@@ -6,11 +6,11 @@ import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateStLuciaQuotes } from "../../hooks/useCreateStLuciaQuotes";
+import { useCreateStLuciaQuotes } from "../../hooks/Quotes hooks/useCreateStLuciaQuotes";
 
 export const GenerateStLuciaQuote = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useCreateStLuciaQuotes()
+  const { mutate, isLoading } = useCreateStLuciaQuotes();
   const queryClient = useQueryClient();
   const { id } = useParams();
 

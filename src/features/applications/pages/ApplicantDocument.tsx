@@ -4,30 +4,26 @@ import { ApplicantDocumentTab } from "../features/UplodedDocuments/ApplicantDocu
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { useGetEligibleDependent } from "src/features/settings/features/program-types/hooks/useGetEligibleDependent";
 import { useState } from "react";
-import { useGetApplicantDocumentCategory } from "../hooks/useGetApplicantDocumentCategory";
-import { useGetDependentDoc } from "../hooks/useGetDependentDoc";
-import { useParams } from "react-router-dom";
+import { useGetApplicantDocumentCategory } from "../hooks/Documet hooks/useGetApplicantDocumentCategory";
+// import { useGetDependentDoc } from "../hooks/Documet hooks/useGetDependentDoc";
+// import { useParams } from "react-router-dom";
 
 export const ApplicantDocument = () => {
   const { data } = useGetEligibleDependent();
   const { data: dependentData } = useGetApplicantDocumentCategory(1);
-  const { id } = useParams();
+  // const { id } = useParams();
   const [filterValue, setFilterValue] = useState<string>("required");
-  console.log("data", data);
-  console.log("dependent data", dependentData);
-  const [dependantId, setDependentId] = useState<number>();
+  // const [dependantId, setDependentId] = useState<number>();
 
-  const getDependentId = (value: number) => {
-    setDependentId(value);
-  };
+  // const getDependentId = (value: number) => {
+  //   setDependentId(value);
+  // };
 
+  // const { data: dependantDocData } = useGetDependentDoc({
+  //   applicantId: id as unknown as number,
+  //   dependentId: dependantId as unknown as number,
+  // });
 
-  const { data: dependantDocData } = useGetDependentDoc({
-    applicantId: id as unknown as number,
-    dependentId: dependantId as unknown as number,
-  });
-
-  console.log("dependent doc data", dependantDocData);
   return (
     <>
       <div className="flex justify-between p-2 gap-4 items-center ">
@@ -44,7 +40,9 @@ export const ApplicantDocument = () => {
           </div>
 
           <div className="flex gap-3">
-            <Select defaultValue={0} onChange={getDependentId}>
+            <Select defaultValue={0}
+              // onChange={getDependentId}
+            >
               <Select.Option value={0}>Applicant</Select.Option>
 
               {dependentData?.map((item) =>

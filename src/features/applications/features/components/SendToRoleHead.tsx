@@ -3,9 +3,9 @@ import { IModalProps } from "./OutstandingDocuments";
 import { Form, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { FormDepartmentInput } from "src/features/settings/features/department/components/FormDepartmentInput";
-import { useSendToRoleHead } from "../../hooks/useSendToRoleHead";
+import { useSendToRoleHead } from "../../hooks/Application hooks/useSendToRoleHead";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useQueryClient } from "react-query";
 
 export const SendToRoleHead: React.FC<IModalProps> = ({
@@ -41,7 +41,6 @@ export const SendToRoleHead: React.FC<IModalProps> = ({
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
-          
         },
       }
     );

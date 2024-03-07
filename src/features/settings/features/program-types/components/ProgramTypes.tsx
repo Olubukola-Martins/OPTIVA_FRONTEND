@@ -30,26 +30,6 @@ export const ProgramTypes = () => {
     EndPointUrl: "admin/programtypes/",
   });
 
-
-
-  console.log("program data", data);
-  // const uniqueCountries = data?.countries.filter((country, index, self) => {
-  //   return index === self.findIndex((c) => c.id === country.id);
-  // });
-  
-  // const uniqueDocumentRequirements = data?.documentrequirements.filter(
-  //   (requirement, index, self) => {
-  //     return index === self.findIndex((r) => r.id === requirement.id);
-  //   }
-  // );
-  
-  // const uniqueEligibleDependents = data?.eligibledependents.filter(
-  //   (dependent, index, self) => {
-  //     return index === self.findIndex((d) => d.id === dependent.id);
-  //   }
-  // );
-  
-
   useEffect(() => {
     if (data) {
       const programType: DataSourceItem[] = data.map((item, index) => {

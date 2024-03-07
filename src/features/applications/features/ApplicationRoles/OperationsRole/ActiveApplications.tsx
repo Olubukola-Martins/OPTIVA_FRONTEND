@@ -4,17 +4,17 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { useUpdateApplicationStatus } from "../../../hooks/useUpdateApplicationStatus";
+import { useUpdateApplicationStatus } from "../../../hooks/Application hooks/useUpdateApplicationStatus";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/Application hooks/useGetApplication";
 import { useQueryClient } from "react-query";
-import { useAcceptApplicant } from "../../../hooks/useAcceptApplicant";
+import { useAcceptApplicant } from "../../../hooks/Application hooks/useAcceptApplicant";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
-import { useFetchActiveandInactiveApplicant } from "../../../hooks/useFetchActiveandInactiveApplicant";
+import { useFetchActiveandInactiveApplicant } from "../../../hooks/Application hooks/useFetchActiveandInactiveApplicant";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
-import { useMarkApplicantAsComplete } from "../../../hooks/useMarkApplicantAsComplete";
+import { useMarkApplicantAsComplete } from "../../../hooks/Application hooks/useMarkApplicantAsComplete";
 import { ApplicationAssignmentModal } from "../../components/ApplicationAssignmentModal";
 import { AssignToModal } from "../../components/AssignToModal";
 
@@ -62,7 +62,6 @@ export const ActiveApplications = () => {
   const { data: investmentData } = useGetInvestmentRoute();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
 
-  console.log("applicants", data);
   const getCountryName = (countryId: number) => {
     const country = countryData?.find((country) => country.id === countryId);
     return country && country.country_name;
@@ -165,7 +164,6 @@ export const ActiveApplications = () => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           setOpenInactiveModal(false);
-          console.log("acceoted");
         },
       }
     );

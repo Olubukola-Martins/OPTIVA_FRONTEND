@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useApproveorRejectDoc } from "../../hooks/useApproveorRejectDoc";
+import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import {
   useGetApplicantDocumentCategory,
   QUERY_KEY_FOR_APPLICANT_DOCUMENT,
-} from "../../hooks/useGetApplicantDocumentCategory";
+} from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
@@ -38,12 +38,11 @@ export const Reports: React.FC<IDocumentProps> = ({
         })
         .map((item, index) => {
           setDocUrl(item.path);
-          
+
           return {
             key: item.id,
             sn: index + 1,
-            comments:
-              item.comments.length ,
+            comments: item.comments.length,
             documentName: item.name.charAt(0) + item.name.slice(1),
             documentRequirements:
               item.requirement.document_type.charAt(0).toUpperCase() +
@@ -156,9 +155,10 @@ export const Reports: React.FC<IDocumentProps> = ({
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                <a href={docUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={docUrl} target="_blank" rel="noopener noreferrer">
                     View Document
-                  </a></Menu.Item>
+                  </a>
+                </Menu.Item>
                 <Menu.Item
                   key="2"
                   onClick={() => {

@@ -5,7 +5,7 @@ import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateAntiguaJointEstate } from "../../hooks/useCreateAntiguaJointEstate";
+import { useCreateAntiguaJointEstate } from "../../hooks/Quotes hooks/useCreateAntiguaJointEstate";
 
 export const GenerateAntiguaJointEstateQuote = () => {
   const [form] = Form.useForm();
@@ -91,7 +91,7 @@ export const GenerateAntiguaJointEstateQuote = () => {
               <InputNumber className="w-full" />
             </Form.Item>
           </div>
-          
+
           <div className="w-1/2">
             <Form.Item
               label="Number of dependents greater than 18yrs?"
@@ -108,8 +108,6 @@ export const GenerateAntiguaJointEstateQuote = () => {
             >
               <InputNumber className="w-full" />
             </Form.Item>
-
-          
           </div>
         </div>
 

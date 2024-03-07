@@ -8,9 +8,9 @@ import {
   DataSourceItem,
   capitalizeName,
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
-import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
-import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
+import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
+import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
 import { openNotification } from "src/utils/notification";
 
 interface IDRProps {
@@ -19,20 +19,27 @@ interface IDRProps {
   declinedFilterActive: boolean;
 }
 
-export const DRApplicant: React.FC<IDRProps> = ({ pendingFilterActive, confirmedFilterActive, declinedFilterActive }) => {
+export const DRApplicant: React.FC<IDRProps> = ({
+  pendingFilterActive,
+  confirmedFilterActive,
+  declinedFilterActive,
+}) => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useMarkApplicantAsComplete();
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
-console.log('data', data)
 
   useEffect(() => {
     if (data) {
       let filteredData = data;
-      if (pendingFilterActive || confirmedFilterActive || declinedFilterActive) {
-        filteredData = data.filter(item => {
-          return item.applicant_documents.some(doc => {
+      if (
+        pendingFilterActive ||
+        confirmedFilterActive ||
+        declinedFilterActive
+      ) {
+        filteredData = data.filter((item) => {
+          return item.applicant_documents.some((doc) => {
             if (pendingFilterActive && doc.handover_status === "pending") {
               return true;
             }
@@ -47,21 +54,23 @@ console.log('data', data)
         });
       }
 
-      const activeApplicant: DataSourceItem[] = filteredData.map((item, index) => {
-        return {
-          key: item.id,
-          sn: index + 1,
-          applicantId: item.applicant_id,
-          applicantName: capitalizeName(item.applicant_name),
-          country: item.country,
-          programType: item.program_type,
-          numberOfDependents: item.no_of_dependents,
-          applicationStage: item.process,
-          documentsUploaded: item.uploaded,
-          documentsSubmitted: "-",
-          investmentRoute: item.investmentroute,
-        };
-      });
+      const activeApplicant: DataSourceItem[] = filteredData.map(
+        (item, index) => {
+          return {
+            key: item.id,
+            sn: index + 1,
+            applicantId: item.applicant_id,
+            applicantName: capitalizeName(item.applicant_name),
+            country: item.country,
+            programType: item.program_type,
+            numberOfDependents: item.no_of_dependents,
+            applicationStage: item.process,
+            documentsUploaded: item.uploaded,
+            documentsSubmitted: "-",
+            investmentRoute: item.investmentroute,
+          };
+        }
+      );
 
       setDataArray(activeApplicant);
     }

@@ -1,8 +1,8 @@
 import { Form, Tooltip } from "antd";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
-import { renderInput } from "../NewApplication/NewApplicantBrief";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
+import { renderDetailsInput } from "./AcademicHistory";
 
 export interface IDataResponseProps {
   subsectionName: string;
@@ -13,7 +13,7 @@ export const TravelDetailsAndHistory: React.FC<IDataResponseProps> = ({
   onPrev,
 }) => {
   const { id } = useParams();
-  const { data, } = useGetApplicationResponse({
+  const { data } = useGetApplicationResponse({
     id: id as unknown as number,
     section: "sectiontworesponse",
   });
@@ -28,12 +28,12 @@ export const TravelDetailsAndHistory: React.FC<IDataResponseProps> = ({
               name={item.question.schema_name}
               label={item.question.form_question}
             >
-              {renderInput(item.question.input_type, item.question.options)}
+              {renderDetailsInput(item.question.input_type, item.question.options)}
             </Form.Item>
           )
       )}
 
-<div className="flex justify-between  my-5 py-2">
+      <div className="flex justify-between  my-5 py-2">
         <Tooltip title="Click to go to the previous section">
           <i
             className="ri-arrow-left-s-line cursor-pointer text-2xl font-semibold"
@@ -42,7 +42,6 @@ export const TravelDetailsAndHistory: React.FC<IDataResponseProps> = ({
             }}
           ></i>
         </Tooltip>
-
       </div>
     </>
   );

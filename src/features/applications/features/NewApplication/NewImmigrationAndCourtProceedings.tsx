@@ -15,7 +15,6 @@ export const NewImmigrationAndCourtProceedings: React.FC<
   const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
     id: sharedData.templateId as unknown as number,
-    // id:9,
     endpointUrl: "section-three",
   });
 

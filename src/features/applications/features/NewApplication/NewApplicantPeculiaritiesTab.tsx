@@ -1,16 +1,16 @@
 import { Form, Tabs } from "antd";
 import { NewImmigrationAndCourtProceedings } from "./NewImmigrationAndCourtProceedings";
 import { NewCriminalHistory } from "./NewCriminalHistory";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { ICreateApplicationResponse } from "../../types/types";
 import { useQueryClient } from "react-query";
 import { useState } from "react";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
 import { IProps } from "./NewApplicantBrief";
 
-export const NewApplicantPeculiaritiesTab:React.FC<IProps> = ({ onNext }) => {
+export const NewApplicantPeculiaritiesTab: React.FC<IProps> = ({ onNext }) => {
   const queryClient = useQueryClient();
   const { mutate, isLoading, isSuccess } = useCreateApplicationResponse(
     "sectionthreeresponse"
@@ -57,7 +57,7 @@ export const NewApplicantPeculiaritiesTab:React.FC<IProps> = ({ onNext }) => {
         if (currentTab < tabItems.length - 1) {
           setCurrentTab(currentTab + 1);
         }
-        onNext()
+        onNext();
       },
     });
   };

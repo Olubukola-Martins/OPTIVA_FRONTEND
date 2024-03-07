@@ -11,11 +11,11 @@ import { AcademicHistory } from "./AcademicHistory";
 import { TravelDetailsAndHistory } from "./TravelDetailsAndHistory";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { ICreateApplicationResponse } from "../../types/types";
 import { AppButton } from "src/components/button/AppButton";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
@@ -36,7 +36,6 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
     useCreateApplicationResponse("sectiontworesponse");
 
   const handleTabSubmit = (responses: any) => {
-    console.log("responses", responses);
     const applicationData: ICreateApplicationResponse = {
       application_id: id as unknown as number,
       responses: Array.isArray(responses)

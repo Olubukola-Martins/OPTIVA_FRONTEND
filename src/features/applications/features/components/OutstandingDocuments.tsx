@@ -1,6 +1,6 @@
 import { Empty, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
-import { useFetchOutstandingDocuments } from "../../hooks/useFetchOutstandingDocuments";
+import { useFetchOutstandingDocuments } from "../../hooks/Documet hooks/useFetchOutstandingDocuments";
 
 export interface IModalProps {
   open: boolean;
@@ -13,13 +13,10 @@ export const OutstandingDocuments: React.FC<IModalProps> = ({
   open,
   applicantId,
 }) => {
-  // const [form] = Form.useForm();
   const { data } = useFetchOutstandingDocuments({
     id: applicantId as unknown as number,
   });
 
-  console.log("applicant doc", data);
-  // const handleSubmit = () => {};
   return (
     <>
       <Modal open={open} onCancel={onCancel} footer={null}>

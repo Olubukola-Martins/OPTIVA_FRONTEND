@@ -45,16 +45,13 @@ export const OthersTemplateDetails = () => {
                     {showInputName(item.input_type)}
                   </p>
                 </div>
-                {data?.map(
-                  (item) =>
-                    item.template_id !== null && (
-                      <div className="flex justify-end  w-[5%]">
-                        <i
-                          className="ri-delete-bin-line text-xl cursor-pointer mt-10"
-                          onClick={() => setShowDeleteModalForItem(item.id)}
-                        ></i>
-                      </div>
-                    )
+                {item.template_id !== null && (
+                  <div className="flex justify-end  w-[5%]">
+                    <i
+                      className="ri-delete-bin-line text-xl cursor-pointer mt-10"
+                      onClick={() => setShowDeleteModalForItem(item.id)}
+                    ></i>
+                  </div>
                 )}
               </div>
               {showDeleteModalForItem === item.id && (

@@ -12,21 +12,21 @@ import { ColumnsType } from "antd/es/table";
 import {
   QUERY_KEY_FOR_APPLICANT_DOCUMENT,
   useGetApplicantDocumentCategory,
-} from "../../hooks/useGetApplicantDocumentCategory";
+} from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useApproveorRejectDoc } from "../../hooks/useApproveorRejectDoc";
+import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { END_POINT } from "src/config/environment";
-import { useUpdateApplicantDoc } from "../../hooks/useUpdateApplicantDoc";
+import { useUpdateApplicantDoc } from "../../hooks/Documet hooks/useUpdateApplicantDoc";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps, RcFile } from "antd/lib/upload/interface";
 import { createFileValidationRule } from "src/features/settings/features/authorizedPersons/types";
 import { TFileType } from "src/features/settings/features/authorizedPersons/components/AddAuthorizedPerson";
-import useUploadApplicantFile from "../../hooks/useUploadApplicantFile";
+import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -41,9 +41,10 @@ export type DataSourceItem = {
 };
 
 export interface IDocumentProps {
-  filterValue: string;
+  filterValue?: string;
   onNext?: () => void;
   onPrev?: () => void;
+  docId?:number
 }
 
 const fileRuleOptions = {
@@ -69,7 +70,6 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
 
-  console.log("doc", data);
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -402,12 +402,12 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
           </svg>
         </div>
         <h1 className="p-4 font-bold text-center text-lg">Upload document</h1>
-        <Form layout="vertical" name="" onFinish={updateApplicantDoc}>
+        <Form layout="vertical" onFinish={updateApplicantDoc} requiredMark={false}>
           <Form.Item
             name="chooseFile"
             label="Choose file to upload"
             rules={[createFileValidationRule(fileRuleOptions)]}
-            // valuePropName="fileList"
+            
             getValueFromEvent={normFile}
           >
             <Upload {...props} maxCount={1}>
@@ -415,13 +415,10 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
             </Upload>
           </Form.Item>
           <p className="mt-2 text-center text-lg">
-            [only xls,xlsx and csv formats are supported]
+            [Only png, jpeg and pdf formats are supported]
           </p>
           <p className="text-center">Maximum upload file size is 5 MB.</p>
-          {/* 
-          <p className="text-center text-[#7ac98c] mt-5 text-lg">
-            Download sample template for import.
-          </p> */}
+         
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
             <AppButton
               label="Cancel"

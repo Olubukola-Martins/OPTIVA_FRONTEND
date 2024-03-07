@@ -7,9 +7,9 @@ import { OnboardingEmail } from "./Emails/OnboardingEmail";
 import { PassportEmail } from "./Emails/PassportEmail";
 
 export const SendEmail = () => {
-  const {id, emailId} = useParams();
+  const { id, emailId } = useParams();
+  console.log(id)
   let renderEmail;
-console.log('email', id)
 
   switch (emailId) {
     case "2":

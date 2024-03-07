@@ -14,8 +14,8 @@ import {
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateApplication } from "../../hooks/useCreateApplication";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { useCreateApplication } from "../../hooks/Application hooks/useCreateApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 
 interface INewApplicationProps {
   open: boolean;
@@ -146,7 +146,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
             <div>
               <h2>What is the applicant phone number?</h2>
               <Form.Item name="phone_number" rules={generalValidationRules}>
-                <InputNumber className="w-full"/>
+                <InputNumber className="w-full" />
               </Form.Item>
             </div>
             <div className="flex items-center justify-center gap-4 p-4">

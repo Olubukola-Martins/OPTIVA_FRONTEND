@@ -2,9 +2,9 @@ import { Skeleton } from "antd";
 import { useGetSingleTemplate } from "src/features/settings/features/contractsEmailTemplates/hooks/useGetSingleTemplate";
 import { removeHtmlTags } from "./OnboardingEmail";
 import { AppButton } from "src/components/button/AppButton";
-import { useSendEmail } from "../../hooks/useSendEmail";
+import { useSendEmail } from "../../hooks/Application hooks/useSendEmail";
 import { useParams } from "react-router-dom";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 
@@ -16,7 +16,10 @@ export const ApplicationApprovalEmail = () => {
 
   const handleSendEmail = () => {
     mutate(
-      { application_id: id as unknown as number, emailtemplate_id: emailId as unknown as number},
+      {
+        application_id: id as unknown as number,
+        emailtemplate_id: emailId as unknown as number,
+      },
       {
         onError: (error: any) => {
           openNotification({
@@ -33,7 +36,6 @@ export const ApplicationApprovalEmail = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-     
         },
       }
     );
@@ -52,13 +54,16 @@ export const ApplicationApprovalEmail = () => {
             <p>Nigeria.</p>
           </div>
           {data?.data.map((item) => (
-            <div className='my-3'
+            <div
+              className="my-3"
               dangerouslySetInnerHTML={{ __html: removeHtmlTags(item.content) }}
             />
-
           ))}
         </div>
-        <img src="https://optiva-backend.techmur.com/assets/optivaAddr.png" className='my-4 py-5'/>
+        <img
+          src="https://optiva-backend.techmur.com/assets/optivaAddr.png"
+          className="my-4 py-5"
+        />
         <div className="flex justify-end items-center gap-5 my-4 py-5">
           <AppButton
             label="Cancel"

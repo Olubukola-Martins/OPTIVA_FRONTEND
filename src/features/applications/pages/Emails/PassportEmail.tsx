@@ -4,8 +4,8 @@ import { removeHtmlTags } from "./OnboardingEmail";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
-import { useSendEmail } from "../../hooks/useSendEmail";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
+import { useSendEmail } from "../../hooks/Application hooks/useSendEmail";
 import { AppButton } from "src/components/button/AppButton";
 
 export const PassportEmail = () => {
@@ -16,7 +16,10 @@ export const PassportEmail = () => {
 
   const handleSendEmail = () => {
     mutate(
-      { application_id: id as unknown as number, emailtemplate_id: emailId as unknown as number},
+      {
+        application_id: id as unknown as number,
+        emailtemplate_id: emailId as unknown as number,
+      },
       {
         onError: (error: any) => {
           openNotification({
@@ -33,7 +36,6 @@ export const PassportEmail = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-     
         },
       }
     );
@@ -52,13 +54,16 @@ export const PassportEmail = () => {
             <p>Nigeria.</p>
           </div>
           {data?.data.map((item) => (
-            <div className='my-3'
+            <div
+              className="my-3"
               dangerouslySetInnerHTML={{ __html: removeHtmlTags(item.content) }}
             />
-
           ))}
         </div>
-        <img src="https://optiva-backend.techmur.com/assets/optivaAddr.png" className='my-4 py-5'/>
+        <img
+          src="https://optiva-backend.techmur.com/assets/optivaAddr.png"
+          className="my-4 py-5"
+        />
         <div className="flex justify-end items-center gap-5 my-4 py-5">
           <AppButton
             label="Cancel"

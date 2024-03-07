@@ -2,10 +2,10 @@ import { Empty, Form, Skeleton } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "./NewApplicantBrief";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
 
 export const NewOthers = () => {

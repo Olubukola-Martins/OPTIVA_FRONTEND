@@ -8,10 +8,10 @@ import {
   DataSourceItem,
   capitalizeName,
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
-import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
-import { useApproveorRejectApplicant } from "src/features/applications/hooks/useApproveorRejectApplicant";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
-import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
+import { useAcceptApplicant } from "src/features/applications/hooks/Application hooks/useAcceptApplicant";
+import { useApproveorRejectApplicant } from "src/features/applications/hooks/Application hooks/useApproveorRejectApplicant";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
+import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
 import { openNotification } from "src/utils/notification";
 
 export const AuditPortfolio = () => {

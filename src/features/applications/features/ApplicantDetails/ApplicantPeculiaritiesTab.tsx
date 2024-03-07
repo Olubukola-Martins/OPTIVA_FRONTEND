@@ -3,11 +3,11 @@ import { ImmigrationAndCourtProceedings } from "./ImmigrationAndCourtProceedings
 import { CriminalHistory } from "./CriminalHistory";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { ICreateApplicationResponse } from "../../types/types";
 import { AppButton } from "src/components/button/AppButton";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
@@ -15,7 +15,7 @@ import { IApplicantDetailsProps } from "./ApplicantBrief";
 export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
   onNext,
   onPrev,
-})  => {
+}) => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { id } = useParams();
   const { data } = useGetApplicationResponse({
@@ -23,7 +23,7 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
     section: "sectionthreeresponse",
   });
   const queryClient = useQueryClient();
-  const { mutate, isLoading,} = useCreateApplicationResponse(
+  const { mutate, isLoading } = useCreateApplicationResponse(
     "sectionthreeresponse"
   );
 
@@ -31,7 +31,8 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
     const applicationData: ICreateApplicationResponse = {
       application_id: id as unknown as number,
       responses: Array.isArray(responses)
-        ?responses: Array.isArray(responses)
+        ? responses
+        : Array.isArray(responses)
         ? responses.map(
             (response: {
               question_id: number;
@@ -111,9 +112,9 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
       key: "Criminal History",
       subsectionName: "criminalHistory",
     },
-    ];
-  
-    const lastTab = currentTab === tabItems.length - 1;
+  ];
+
+  const lastTab = currentTab === tabItems.length - 1;
 
   return (
     <>
@@ -132,53 +133,53 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
         </Tabs>
 
         {lastTab && (
-        <div className="flex justify-between my-2">
-          <AppButton
-            label="Previous"
-            type="button"
-            variant="transparent"
-            handleClick={() => {
-              onPrev && onPrev();
-            }}
-          />
+          <div className="flex justify-between my-2">
+            <AppButton
+              label="Previous"
+              type="button"
+              variant="transparent"
+              handleClick={() => {
+                onPrev && onPrev();
+              }}
+            />
+            <div className="flex justify-end items-center gap-5">
+              <AppButton
+                label="Next"
+                type="button"
+                variant="transparent"
+                handleClick={() => {
+                  onNext && onNext();
+                }}
+              />
+              <AppButton
+                label="Save"
+                type="submit"
+                isLoading={isLoading}
+                // isDisabled={isSuccess}
+              />
+            </div>
+          </div>
+        )}
+        {!lastTab && (
           <div className="flex justify-end items-center gap-5">
+            <AppButton
+              label="Prev"
+              type="button"
+              variant="transparent"
+              handleClick={() => {
+                onPrev && onPrev();
+              }}
+            />
             <AppButton
               label="Next"
               type="button"
-              variant="transparent"
               handleClick={() => {
                 onNext && onNext();
               }}
             />
-            <AppButton
-              label="Save"
-              type="submit"
-              isLoading={isLoading}
-              // isDisabled={isSuccess}
-            />
           </div>
-        </div>
-      )}
-      {!lastTab && (
-        <div className="flex justify-end items-center gap-5">
-          <AppButton
-            label="Prev"
-            type="button"
-            variant="transparent"
-            handleClick={() => {
-              onPrev && onPrev();
-            }}
-          />
-          <AppButton
-            label="Next"
-            type="button"
-            handleClick={() => {
-              onNext && onNext();
-            }}
-          />
-        </div>
-      )}
-    </Form>
-  </>
+        )}
+      </Form>
+    </>
   );
 };

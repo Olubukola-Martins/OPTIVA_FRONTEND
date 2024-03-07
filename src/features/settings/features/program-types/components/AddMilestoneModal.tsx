@@ -34,68 +34,7 @@ export const AddMilestoneModal = ({
     queryKey: QUERY_KEY_FOR_MILESTONE,
   });
 
-  console.log("single milestone", singleMilestone);
-
-  // useEffect(() => {
-  //   if (singleMilestone && isSuccess) {
-  //     const { milestone, timeline, processes } = singleMilestone;
-  //     // Set values for milestone and timeline fields
-  //     form.setFieldsValue({
-  //       milestone,
-  //       timeline,
-  //     });
-  //     // Set values for the first process (assuming there is always at least one process)
-  //     if (processes.length > 0) {
-  //       const firstProcess = processes[0];
-  //       form.setFieldsValue({
-  //         title:
-  //           firstProcess.title.charAt(0).toUpperCase() +
-  //           firstProcess.title.slice(1),
-  //         duration: firstProcess.duration,
-  //       });
-  //     }
-  //     // Set values for new processes, if any
-  //     if (processes.length > 1) {
-  //       const newProcesses = processes.slice(1).map((item, index) => ({
-  //         newTitle: item.title.charAt(0).toUpperCase() + item.title.slice(1),
-  //         newDuration: item.duration,
-  //         key: index,
-  //       }));
-  //       form.setFieldsValue({
-  //         newProcess: newProcesses,
-  //       });
-  //     }
-  //   }
-  // }, [singleMilestone, isSuccess]);
-
-  // useEffect(() => {
-  //   if (singleMilestone ) {
-  //     const { milestone, timeline, processes } = singleMilestone;
-  //     form.setFieldsValue({
-  //       milestone,
-  //       timeline,
-  //     });
-  //     form.setFieldsValue({
-  //       title:
-  //         processes[0].title.charAt(0).toUpperCase() +
-  //         processes[0].title.slice(1),
-  //       duration: processes[0].duration,
-  //     });
-  //     if (processes.length > 1) {
-  //       const newProcesses = processes.slice(1).map((item, index) => ({
-  //         newTitle: item.title.charAt(0).toUpperCase() + item.title.slice(1),
-  //         newDuration: item.duration,
-  //         key: index,
-  //       }));
-
-  //       form.setFieldsValue({
-  //         newProcess: newProcesses,
-  //       });
-  //     }
-  //   }
-  // }, [singleMilestone]);
-
-  useEffect(() => {
+    useEffect(() => {
     if (singleMilestone) {
       const { milestone, timeline, processes } = singleMilestone;
       form.setFieldsValue({

@@ -1,14 +1,14 @@
 import { Form, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
 import { AppButton } from "src/components/button/AppButton";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
-import { renderInput } from "../NewApplication/NewApplicantBrief";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { useEffect } from "react";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
+import { renderDetailsInput } from "./AcademicHistory";
 
 export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   const { id } = useParams();
@@ -80,7 +80,7 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
               name={item.question.schema_name}
               label={item.question.form_question}
             >
-              {renderInput(item.question.input_type, item.question.options)}
+              {renderDetailsInput(item.question.input_type, item.question.options)}
             </Form.Item>
           ))}
 

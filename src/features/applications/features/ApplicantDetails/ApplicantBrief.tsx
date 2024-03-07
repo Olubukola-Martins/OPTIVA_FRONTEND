@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { Empty, Form, Skeleton } from "antd";
 import { useEffect } from "react";
-import { renderInput } from "../NewApplication/NewApplicantBrief";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { AppButton } from "src/components/button/AppButton";
+import { renderDetailsInput } from "./AcademicHistory";
 
 export const renderPTag = (input_type: string, text: any) => {
   const formattedText = text ? text.join(", ") : text;
@@ -59,7 +59,6 @@ export const ApplicantBrief: React.FC<IApplicantDetailsProps> = ({
   const queryClient = useQueryClient();
 
   const handleSubmit = (val: any) => {
-    console.log("form vals", val);
 
     const payload = {
       application_id: id as unknown as number,
@@ -107,7 +106,7 @@ export const ApplicantBrief: React.FC<IApplicantDetailsProps> = ({
                 name={item.question.schema_name}
                 label={item.question.form_question}
               >
-                {renderInput(item.question.input_type, item.question.options)}
+                {renderDetailsInput(item.question.input_type, item.question.options)}
               </Form.Item>
             ))}
 

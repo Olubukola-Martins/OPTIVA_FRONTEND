@@ -1,4 +1,4 @@
-import { Dropdown, Input, Menu } from "antd";
+import { Button, Dropdown, Input, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
@@ -8,14 +8,21 @@ import { useFetchAuthorizedApplicant } from "../hooks/useFetchAuthorizedApplican
 import { usePagination } from "src/hooks/usePagination";
 import { useState } from "react";
 import { useDebounce } from "src/hooks/useDebounce";
+import { useDashboardFilterValues } from "../hooks/useDashboardFilterValues";
+import {FilterDrawer} from "../components/FilterDrawer";
 
 const AuthorizedApplicants = () => {
   const { onChange, pagination } = usePagination();
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const { filterValues } = useDashboardFilterValues();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-  const { data, isLoading } = useFetchAuthorizedApplicant({ pagination, search:debouncedSearchTerm });
+  const { data, isLoading } = useFetchAuthorizedApplicant({
+    pagination,
+    search: debouncedSearchTerm,
+  });
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
- 
+  console.log("filetr values", filterValues);
 
   const columns: ColumnsType<IGetAuthorizedApplicant> = [
     {
@@ -97,7 +104,7 @@ const AuthorizedApplicants = () => {
       <PageIntro
         title="Authorized Applicants"
         description="View, Approve or Reject Applicant"
-       linkBack={appRoute.home}
+        linkBack={appRoute.home}
       />
 
       <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">
@@ -108,6 +115,14 @@ const AuthorizedApplicants = () => {
             onSearch={(val) => setSearchTerm(val)}
             onChange={(e) => e.target.value === "" && setSearchTerm("")}
           />
+          <Button
+            onClick={() => {
+              setDrawerOpen(true);
+
+            }}
+          >
+            Filter
+          </Button>
         </div>
 
         <Table
@@ -121,6 +136,11 @@ const AuthorizedApplicants = () => {
           onChange={onChange}
         />
       </div>
+
+      <FilterDrawer
+        handleClose={() => setDrawerOpen(false)}
+        isDrawerOpen={drawerOpen}
+      />
     </>
   );
 };

@@ -10,10 +10,10 @@ import { NewBusinessIncomeAndNetwork } from "./NewBusinessIncomeAndNetwork";
 import { NewAcademicHistory } from "./NewAcademicHistory";
 import { NewTravelDetailsAndHistory } from "./NewTravelDetailsAndHistory";
 import { useQueryClient } from "react-query";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { useState } from "react";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { ICreateApplicationResponse } from "../../types/types";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
 import { IProps } from "./NewApplicantBrief";
@@ -27,7 +27,6 @@ export const NewAboutTheApplicantsTab: React.FC<IProps> = ({ onNext }) => {
   const { sharedData } = useGlobalContext();
 
   const handleTabSubmit = (responses: any) => {
-    console.log("form responses", responses);
     const applicationId = sharedData.applicantId as unknown as number;
     const applicationData: ICreateApplicationResponse = {
       application_id: applicationId,

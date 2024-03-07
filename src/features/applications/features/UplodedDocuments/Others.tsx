@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useApproveorRejectDoc } from "../../hooks/useApproveorRejectDoc";
+import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import {
   useGetApplicantDocumentCategory,
   QUERY_KEY_FOR_APPLICANT_DOCUMENT,
-} from "../../hooks/useGetApplicantDocumentCategory";
+} from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
@@ -20,7 +20,7 @@ export const Others: React.FC<IDocumentProps> = ({ filterValue, onPrev }) => {
   const [docUrl, setDocUrl] = useState<string>();
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
-  const { mutate} = useApproveorRejectDoc();
+  const { mutate } = useApproveorRejectDoc();
 
   useEffect(() => {
     if (data) {

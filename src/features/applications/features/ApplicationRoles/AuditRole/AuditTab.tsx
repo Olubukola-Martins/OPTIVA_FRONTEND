@@ -75,7 +75,7 @@ export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
               />
             )}
 
-            <Select
+            {/* <Select
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
@@ -93,7 +93,7 @@ export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
                   label: `Submitted to Partners`,
                 },
               ]}
-            />
+            /> */}
           </div>
         }
       />

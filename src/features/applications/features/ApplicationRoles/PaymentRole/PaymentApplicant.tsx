@@ -8,7 +8,7 @@ import {
   capitalizeName,
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 // import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 
 export const PaymentApplicant = () => {
   // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);

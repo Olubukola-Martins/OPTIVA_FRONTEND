@@ -1,15 +1,14 @@
-import { Form,  Tooltip } from "antd";
+import { Form, Tooltip } from "antd";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
-
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
-import { renderInput } from "../NewApplication/NewApplicantBrief";
+import { renderDetailsInput } from "./AcademicHistory";
 
 export const ImmigrationAndCourtProceedings: React.FC<
   IApplicationFormResponseProps
 > = ({ onNextTabItem, subsectionName }) => {
   const { id } = useParams();
-  const { data,  } = useGetApplicationResponse({
+  const { data } = useGetApplicationResponse({
     id: id as unknown as number,
     section: "sectionthreeresponse",
   });
@@ -24,13 +23,12 @@ export const ImmigrationAndCourtProceedings: React.FC<
               name={item.question.schema_name}
               label={item.question.form_question}
             >
-              {renderInput(item.question.input_type, item.question.options)}
+              {renderDetailsInput(item.question.input_type, item.question.options)}
             </Form.Item>
           )
       )}
 
-<div className="flex justify-end  my-5 py-2">
-       
+      <div className="flex justify-end  my-5 py-2">
         <Tooltip title="Click to go to the next section">
           <i
             className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"

@@ -1,6 +1,6 @@
 import { Form, InputNumber, Select } from "antd";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
-import { useCreateStKittsNevisQuotes } from "../../hooks/useCreateStKittsNevisQuotes";
+import { useCreateStKittsNevisQuotes } from "../../hooks/Quotes hooks/useCreateStKittsNevisQuotes";
 import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { useQueryClient } from "react-query";
@@ -172,8 +172,6 @@ export const GenerateStKittsQuote = () => {
             >
               <InputNumber className="w-full" />
             </Form.Item>
-
-           
           </div>
         </div>
 

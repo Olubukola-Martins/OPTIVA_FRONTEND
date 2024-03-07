@@ -60,6 +60,10 @@ export interface paginationAndFilterProps {
   };
   search?: string;
   currentUrl?: string;
+  country_id?: number[]
+  program_id?: number[]
+  status?: string
+  
 }
 
 export interface searchValueProps {

@@ -8,10 +8,10 @@ import {
   DataSourceItem,
   capitalizeName,
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
-import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
-import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
-import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
+import { useAcceptApplicant } from "src/features/applications/hooks/Application hooks/useAcceptApplicant";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
+import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
+import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
 import { openNotification } from "src/utils/notification";
 
 interface IDMSProps {
@@ -26,11 +26,10 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
   const { mutate } = useAcceptApplicant();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
 
-  console.log(data);
   useEffect(() => {
     if (data) {
-      let filteredApplicants = [...data]; // Create a copy of the data array
-  
+      let filteredApplicants = [...data]; 
+
       if (selectedFilter === "1") {
         filteredApplicants = filteredApplicants.filter(
           (applicant) => applicant.applicant_documents.length > 0
@@ -40,7 +39,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
           (applicant) => applicant.applicant_documents.length === 0
         );
       }
-  
+
       const activeApplicant: DataSourceItem[] = filteredApplicants.map(
         (item, index) => {
           return {
@@ -57,14 +56,11 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
           };
         }
       );
-  
+
       setDataArray(activeApplicant);
-      console.log(dataArray)
     }
   }, [data, selectedFilter]);
 
-  
- 
   const acceptApplicant = () => {
     mutate(
       {
@@ -189,16 +185,19 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                     View Applicant's Details
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="3">
+                {/* <Menu.Item key="3">
                   <Link
-                    to={
-                      appRoute.attach_supporting_documents(val.key as unknown as number)
-                        .path
-                    }
+                    to={{
+                      pathname: appRoute.attach_supporting_documents(
+                        val.key as unknown as number
+                      ).path,
+                      search: "?documentType=required",
+                    }}
                   >
                     Attach Required Documents
                   </Link>
-                </Menu.Item>
+                 
+                </Menu.Item> */}
                 <Menu.Item key="4">
                   <Link
                     to={

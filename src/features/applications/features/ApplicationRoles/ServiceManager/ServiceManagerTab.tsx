@@ -2,10 +2,12 @@ import React from "react";
 import { ServiceManagerPortfolio } from "./ServiceManagerPortfolio";
 import { Input, Select, Tabs } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
+import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
   onRoleSelect,
 }) => {
+  const { data} =useFetchUserProfile()
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -29,43 +31,45 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
               placeholder="Search"
               className="md:flex hidden w-[250px]"
             />
-            <Select
-              allowClear
-              placeholder="Role"
-              className="md:flex hidden w-[250px]"
-              onChange={onRoleSelect}
-              options={[
-                {
-                  value: 1,
-                  label: `DR's List`,
-                },
-                {
-                  value: 2,
-                  label: `DPO's List`,
-                },
-                {
-                  value: 3,
-                  label: `DMS's List`,
-                },
-                {
-                  value: 4,
-                  label: `Audit's List`,
-                },
-                {
-                  value: 5,
-                  label: `Operations  List`,
-                },
-                {
-                  value: 6,
-                  label: `Service Manager's  List`,
-                },
-                {
-                  value: 7,
-                  label: `Customer Engager's  List`,
-                },
-              ]}
-            />
-             <Select
+             {data?.roles.id === 1 && (
+              <Select
+                allowClear
+                placeholder="Role"
+                className="md:flex hidden w-[250px]"
+                onChange={onRoleSelect}
+                options={[
+                  {
+                    value: 1,
+                    label: `DR's List`,
+                  },
+                  {
+                    value: 2,
+                    label: `DPO's List`,
+                  },
+                  {
+                    value: 3,
+                    label: `DMS's List`,
+                  },
+                  {
+                    value: 4,
+                    label: `Audit's List`,
+                  },
+                  {
+                    value: 5,
+                    label: `Operations  List`,
+                  },
+                  {
+                    value: 6,
+                    label: `Service Manager's  List`,
+                  },
+                  {
+                    value: 7,
+                    label: `Customer Engager's  List`,
+                  },
+                ]}
+              />
+            )}
+             {/* <Select
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
@@ -87,7 +91,7 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
                   label: `Submitted to Audit`,
                 },
               ]}
-            />
+            /> */}
           </div>
         }
       />

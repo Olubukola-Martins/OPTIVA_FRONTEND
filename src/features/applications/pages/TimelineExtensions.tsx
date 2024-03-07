@@ -17,17 +17,17 @@ import { useEffect, useState } from "react";
 import {
   QUERY_KEY_FOR_TIMELINE_EXTENSIONS,
   useFetchTimelineExtensions,
-} from "../hooks/useFetchTimelineExtensions";
+} from "../hooks/Application hooks/useFetchTimelineExtensions";
 import { formatDate } from "src/features/settings/features/authorizedPersons/components/AuthorizedPersons";
-import { useCreateTimelineExtension } from "../hooks/useCreateTimelineExtension";
+import { useCreateTimelineExtension } from "../hooks/Application hooks/useCreateTimelineExtension";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import {
   generalValidationRules,
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
-import { useApproveTimeline } from "../hooks/useApproveTimeline";
-import { useRejectTimeline } from "../hooks/useRejectTimeline";
+import { useApproveTimeline } from "../hooks/Application hooks/useApproveTimeline";
+import { useRejectTimeline } from "../hooks/Application hooks/useRejectTimeline";
 
 type DataSourceItem = {
   key: React.Key;
@@ -117,7 +117,6 @@ const TimelineExtensions = () => {
   };
 
   const rejectTimeline = (val: any) => {
-    console.log("reject", val);
     rejectData(id as unknown as number, val.extensionReject);
     setOpenRejectModal(false);
   };

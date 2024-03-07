@@ -8,12 +8,12 @@ import {
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { OutstandingDocuments } from "../../components/OutstandingDocuments";
 import { useEffect, useState } from "react";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
-import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
-import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
+import { useAcceptApplicant } from "src/features/applications/hooks/Application hooks/useAcceptApplicant";
+import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
-import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
+import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
 
 export const DPOPortfolio = () => {
   const [openSupportingDocModal, setOpenSupportingDocModal] =
@@ -56,8 +56,6 @@ export const DPOPortfolio = () => {
       },
       {
         onError: (error: any) => {
-          console.log("error", error);
-          console.log(error.response.data.message);
           openNotification({
             state: "error",
             title: "Error Occurred",
@@ -190,27 +188,28 @@ export const DPOPortfolio = () => {
                     View Uploaded Documents
                   </Link>
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   key="4"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
                     setOpenSupportingDocModal(true);
-                    console.log("applicant id", applicantId);
                   }}
                 >
                   Outline Outstanding Documents
-                </Menu.Item>
-                <Menu.Item key="5">
+                </Menu.Item> */}
+                {/* <Menu.Item key="5">
                   <Link
-                    to={
-                      appRoute.attach_supporting_documents(
+                    to={{
+                      pathname: appRoute.attach_supporting_documents(
                         val.key as unknown as number
-                      ).path
-                    }
+                      ).path,
+                      search: "?documentType=supporting",
+                    }}
                   >
                     Attach Supporting Documents
                   </Link>
-                </Menu.Item>
+                 
+                </Menu.Item> */}
                 <Menu.Item key="6">
                   <Link
                     to={

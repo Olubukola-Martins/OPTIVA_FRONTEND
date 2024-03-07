@@ -8,14 +8,14 @@ import {
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { AssignToModal } from "../../components/AssignToModal";
 import { useEffect, useState } from "react";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { useQueryClient } from "react-query";
-import { useAcceptApplicant } from "src/features/applications/hooks/useAcceptApplicant";
-import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/useGetApplication";
+import { useAcceptApplicant } from "src/features/applications/hooks/Application hooks/useAcceptApplicant";
+import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
 import { openNotification } from "src/utils/notification";
-import { useMarkApplicantAsComplete } from "src/features/applications/hooks/useMarkApplicantAsComplete";
+import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
 import { SignOut } from "src/components/layout/SignOut";
-import { useMoveToNextStage } from "src/features/applications/hooks/useMoveToNextStage";
+// import { useMoveToNextStage } from "src/features/applications/hooks/Application hooks/useMoveToNextStage";
 import { SendToRoleHead } from "../../components/SendToRoleHead";
 
 export const ServiceManagerPortfolio = () => {
@@ -23,13 +23,13 @@ export const ServiceManagerPortfolio = () => {
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
   const [applicantId, setApplicantId] = useState<number>();
-  const [milestoneId, setMilestoneId] = useState<number>();
+  // const [milestoneId, setMilestoneId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
   const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
   const [openRoleModal, setOpenRoleModal] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
-  const { patchData } = useMoveToNextStage();
+  // const { patchData } = useMoveToNextStage(applicantId as unknown as number);
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.map((item, index) => {
@@ -101,9 +101,9 @@ export const ServiceManagerPortfolio = () => {
     );
   };
 
-  const moveApplicantToNextStage = () => {
-    patchData(milestoneId as unknown as number)
-  };
+  // const moveApplicantToNextStage = () => {
+  //   patchData(milestoneId as unknown as number);
+  // };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -279,7 +279,7 @@ export const ServiceManagerPortfolio = () => {
                 <Menu.Item key="8" onClick={() => setOpenLogout(true)}>
                   Login as User
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   key="9"
                   onClick={() => {
                     setMilestoneId(val.milestoneId as unknown as number);
@@ -287,7 +287,7 @@ export const ServiceManagerPortfolio = () => {
                   }}
                 >
                   Move to Next Stage
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item
                   key="10"
                   onClick={() => {

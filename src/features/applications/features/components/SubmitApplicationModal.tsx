@@ -19,7 +19,7 @@ export const SubmitApplicationModal: React.FC<ISubmitProps> = ({
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   const handleSubmit = (val: any) => {
-    console.log("form values", val);
+    console.log('form vals', val)
     setFormSubmitted(true);
   };
 

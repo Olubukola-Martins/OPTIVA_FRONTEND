@@ -7,7 +7,7 @@ import {
   capitalizeName,
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useEffect, useState } from "react";
-import { useFetchApplicantsByRole } from "src/features/applications/hooks/useFetchApplicantsByRole";
+import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
 import { UploadModal } from "src/components/modals/UploadModal";
 

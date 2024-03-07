@@ -1,8 +1,8 @@
-import {Form,  Tooltip } from "antd";
+import { Form, Tooltip } from "antd";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
-import { renderInput } from "../NewApplication/NewApplicantBrief";
+import { renderDetailsInput } from "./AcademicHistory";
 
 export const PEP: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
@@ -10,7 +10,7 @@ export const PEP: React.FC<IApplicationFormResponseProps> = ({
   onPrevTabItem,
 }) => {
   const { id } = useParams();
-  const { data} = useGetApplicationResponse({
+  const { data } = useGetApplicationResponse({
     id: id as unknown as number,
     section: "sectiontworesponse",
   });
@@ -25,12 +25,12 @@ export const PEP: React.FC<IApplicationFormResponseProps> = ({
               name={item.question.schema_name}
               label={item.question.form_question}
             >
-              {renderInput(item.question.input_type, item.question.options)}
+              {renderDetailsInput(item.question.input_type, item.question.options)}
             </Form.Item>
           )
       )}
 
-<div className="flex justify-between  my-5 py-2">
+      <div className="flex justify-between  my-5 py-2">
         <Tooltip title="Click to go to the previous section">
           <i
             className="ri-arrow-left-s-line cursor-pointer text-2xl font-semibold"

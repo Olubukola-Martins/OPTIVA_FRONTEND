@@ -1,4 +1,4 @@
-import { Button,  Dropdown,  Input, Menu } from "antd";
+import { Button, Dropdown, Input, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
@@ -8,7 +8,8 @@ import {
   IProspectDatum,
 } from "src/features/meetings/types/types";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import FilterDrawer from "../components/filterDrawer";
+import {FilterDrawer} from "../components/FilterDrawer";
+
 
 export const QUERY_KEY_FOR_PROSPECTS = "AllProspects";
 export const prospectsURL = `${END_POINT.BASE_URL}/admin/prospect-list/applicants`;
@@ -86,13 +87,11 @@ const Prospects = () => {
     },
   ];
 
-
   useEffect(() => {
     if (data?.data) {
       setDataSource(data.data);
     }
   }, [isLoading, data]);
-
 
   return (
     <>
@@ -121,7 +120,12 @@ const Prospects = () => {
           scroll={{ x: 900 }}
           className="mt-4"
         />
-        <FilterDrawer isDrawerOpen={drawerOpen} handleClose={()=>{setDrawerOpen(false)}}  />
+        <FilterDrawer
+          isDrawerOpen={drawerOpen}
+          handleClose={() => {
+            setDrawerOpen(false);
+          }}
+        />
       </div>
     </>
   );
