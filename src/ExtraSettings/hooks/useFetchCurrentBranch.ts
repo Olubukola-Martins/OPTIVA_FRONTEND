@@ -17,6 +17,7 @@ const getData = async (): Promise<userProfileProps> => {
     },
   };
   const res = await axios.get(url, config);
+  
   const item: userProfileProps = res.data.data;
   const data: userProfileProps = {
     ...item,
