@@ -1,7 +1,7 @@
-import { Form, Input, InputNumber, Modal } from "antd";
+import { Form, Input, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { IdentifierProps } from "src/types";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+import { generalValidationRules, phoneNumberValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
 import { useEditProfile } from "../hooks/useEditProfile";
 import {
@@ -70,9 +70,9 @@ export const EditProfile = ({ handleClose, open }: IdentifierProps) => {
         <Form.Item
           name="phone"
           label="Phone Number"
-          rules={generalValidationRules}
+          rules={phoneNumberValidationRules}
         >
-          <InputNumber className="w-full" />
+          <Input className="w-full" type="tel"/>
         </Form.Item>
 
         <AppButton type="submit" isLoading={isLoading} />
