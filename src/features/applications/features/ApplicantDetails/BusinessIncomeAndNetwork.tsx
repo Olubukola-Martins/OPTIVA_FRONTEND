@@ -1,4 +1,4 @@
-import { Form, Tooltip } from "antd";
+import { Empty, Form, Tooltip } from "antd";
 import { useParams } from "react-router-dom";
 import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
@@ -15,19 +15,27 @@ export const BusinessIncomeAndNetwork: React.FC<
 
   return (
     <>
-      {data?.map(
-        (item) =>
-          item.subsection_name === subsectionName && (
-            <Form.Item
-              key={item.id}
-              name={item.question.schema_name}
-              label={item.question.form_question}
-            >
-              {renderDetailsInput(item.question.input_type, item.question.options)}
-            </Form.Item>
-          )
+    
+      {data?.length ? (
+        data.map(
+          (item) =>
+            item.subsection_name === subsectionName && (
+              <Form.Item
+                key={item.id}
+                name={item.question.schema_name}
+                label={item.question.form_question}
+              >
+                {renderDetailsInput(
+                  item.question.input_type,
+                  item.question.options
+                )}
+              </Form.Item>
+            )
+        )
+      ) : (
+        <Empty />
       )}
-
+     
       <div className="flex justify-between  my-5 py-2">
         <Tooltip title="Click to go to the previous section">
           <i
@@ -47,6 +55,27 @@ export const BusinessIncomeAndNetwork: React.FC<
           ></i>
         </Tooltip>
       </div>
+   
+
+      {/* <div className="flex justify-between  my-5 py-2">
+        <Tooltip title="Click to go to the previous section">
+          <i
+            className="ri-arrow-left-s-line cursor-pointer text-2xl font-semibold"
+            onClick={() => {
+              onPrevTabItem && onPrevTabItem();
+            }}
+          ></i>
+        </Tooltip>
+
+        <Tooltip title="Click to go to the next section">
+          <i
+            className="ri-arrow-right-s-line cursor-pointer text-2xl font-semibold"
+            onClick={() => {
+              onNextTabItem && onNextTabItem();
+            }}
+          ></i>
+        </Tooltip>
+      </div> */}
     </>
   );
 };

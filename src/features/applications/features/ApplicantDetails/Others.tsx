@@ -1,4 +1,4 @@
-import { Form, Skeleton } from "antd";
+import { Empty, Form, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
@@ -68,32 +68,39 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   return (
     <>
       <Skeleton active loading={isLoading}>
-        <Form
-          onFinish={handleSubmit}
-          form={form}
-          layout="vertical"
-          requiredMark={false}
-        >
-          {data?.map((item) => (
-            <Form.Item
-              key={item.id}
-              name={item.question.schema_name}
-              label={item.question.form_question}
-            >
-              {renderDetailsInput(item.question.input_type, item.question.options)}
-            </Form.Item>
-          ))}
+        {data?.length !== 0 ? (
+          <Form
+            onFinish={handleSubmit}
+            form={form}
+            layout="vertical"
+            requiredMark={false}
+          >
+            {data?.map((item) => (
+              <Form.Item
+                key={item.id}
+                name={item.question.schema_name}
+                label={item.question.form_question}
+              >
+                {renderDetailsInput(
+                  item.question.input_type,
+                  item.question.options
+                )}
+              </Form.Item>
+            ))}
 
-          <div className="flex justify-between items-center gap-5">
-            <AppButton
-              label="Prev"
-              type="button"
-              handleClick={() => onPrev && onPrev()}
-              variant="transparent"
-            />
-            <AppButton label="Save" type="submit" isLoading={postLoading} />
-          </div>
-        </Form>
+            <div className="flex justify-between items-center gap-5">
+              <AppButton
+                label="Prev"
+                type="button"
+                handleClick={() => onPrev && onPrev()}
+                variant="transparent"
+              />
+              <AppButton label="Save" type="submit" isLoading={postLoading} />
+            </div>
+          </Form>
+        ) : (
+          <Empty />
+        )}
       </Skeleton>
     </>
   );
