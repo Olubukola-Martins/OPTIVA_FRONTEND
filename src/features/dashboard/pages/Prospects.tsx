@@ -8,7 +8,7 @@ import {
   IProspectDatum,
 } from "src/features/meetings/types/types";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import {FilterDrawer} from "../components/FilterDrawer";
+// import {FilterDrawer} from "../components/FilterDrawer";
 
 
 export const QUERY_KEY_FOR_PROSPECTS = "AllProspects";
@@ -24,7 +24,7 @@ const Prospects = () => {
       urlEndPoint: prospectsURL,
     });
   const [dataSource, setDataSource] = useState<IProspectDatum[]>();
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  // const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const columns: ColumnsType<IProspectDatum> = [
     {
@@ -120,12 +120,12 @@ const Prospects = () => {
           scroll={{ x: 900 }}
           className="mt-4"
         />
-        <FilterDrawer
+        {/* <FilterDrawer
           isDrawerOpen={drawerOpen}
           handleClose={() => {
             setDrawerOpen(false);
           }}
-        />
+        /> */}
       </div>
     </>
   );

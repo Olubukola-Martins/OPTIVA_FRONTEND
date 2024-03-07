@@ -9,7 +9,7 @@ import { usePagination } from "src/hooks/usePagination";
 import { useState } from "react";
 import { useDebounce } from "src/hooks/useDebounce";
 import { useDashboardFilterValues } from "../hooks/useDashboardFilterValues";
-import {FilterDrawer} from "../components/FilterDrawer";
+// import { FilterDrawer } from "../components/FilterDrawer";
 
 const AuthorizedApplicants = () => {
   const { onChange, pagination } = usePagination();
@@ -20,7 +20,7 @@ const AuthorizedApplicants = () => {
     pagination,
     search: debouncedSearchTerm,
   });
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  // const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   console.log("filetr values", filterValues);
 
@@ -136,11 +136,15 @@ const AuthorizedApplicants = () => {
           onChange={onChange}
         />
       </div>
-
-      <FilterDrawer
+      {/* <FilterDrawer
         handleClose={() => setDrawerOpen(false)}
         isDrawerOpen={drawerOpen}
-      />
+      /> */}
+
+      {/* <FilterDrawer
+        handleClose={() => setDrawerOpen(false)}
+        isDrawerOpen={drawerOpen}
+      /> */}
     </>
   );
 };
