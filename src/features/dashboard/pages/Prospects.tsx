@@ -1,4 +1,4 @@
-import { Button, Dropdown, Input, Menu } from "antd";
+import { Dropdown, Input, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
@@ -103,13 +103,13 @@ const Prospects = () => {
       <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">
         <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row sm:items-start items-center sm:pl-5">
           <Input.Search placeholder="Search" className=" w-52" />
-          <Button
+          {/* <Button
             onClick={() => {
               setDrawerOpen(true);
             }}
           >
             Filter
-          </Button>
+          </Button> */}
         </div>
 
         <Table

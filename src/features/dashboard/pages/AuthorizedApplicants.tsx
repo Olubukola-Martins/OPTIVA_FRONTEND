@@ -1,4 +1,4 @@
-import { Button, Dropdown, Input, Menu } from "antd";
+import { Dropdown, Input, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
@@ -115,14 +115,14 @@ const AuthorizedApplicants = () => {
             onSearch={(val) => setSearchTerm(val)}
             onChange={(e) => e.target.value === "" && setSearchTerm("")}
           />
-          <Button
+          {/* <Button
             onClick={() => {
               setDrawerOpen(true);
 
             }}
           >
             Filter
-          </Button>
+          </Button> */}
         </div>
 
         <Table
