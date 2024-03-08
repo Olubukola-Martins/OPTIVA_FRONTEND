@@ -45,20 +45,6 @@ export const OperationsApplicationPage = () => {
 
   return (
     <>
-      {/* {selectedRole === 4 && <AuditTab onRoleSelect={handleRoleChange} />}
-      {selectedRole === 1 && <DRTab onRoleSelect={handleRoleChange} />}
-      {selectedRole === 2 && <DPOTab onRoleSelect={handleRoleChange} />}
-      {selectedRole === 3 && <DMSTab onRoleSelect={handleRoleChange} />} */}
-      {/* {selectedRole === "Audit's List" && (
-        <AuditTab onRoleSelect={handleRoleChange} />
-      )} */}
-      {/* {selectedRole === 5 && (
-        <ApplicationsTab onRoleSelect={handleRoleChange} />
-      )}
-      {selectedRole === 6 && (
-        <ServiceManagerTab onRoleSelect={handleRoleChange} />
-      )}
-      {selectedRole === 7 && <CEApplicantTab onRoleSelect={handleRoleChange} />} */}
       {renderApplications}
  
     </>

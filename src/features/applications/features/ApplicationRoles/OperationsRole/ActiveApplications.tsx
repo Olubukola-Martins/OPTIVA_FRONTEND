@@ -1,4 +1,4 @@
-import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
+import { Dropdown, Form, Input, Menu, Modal, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -246,10 +246,16 @@ export const ActiveApplications = () => {
                   key="1"
                   onClick={() => {
                     setId(val.key as unknown as number);
-                    acceptApplicant();
                   }}
                 >
-                  Accept Applicant
+                  <Popconfirm
+                    title="Accept Applicant"
+                    description={`Are you sure to accept ${val.applicantName}'s application?`}
+                    onConfirm={acceptApplicant}
+                    okType="default"
+                  >
+                    Accept Applicant
+                  </Popconfirm>
                 </Menu.Item>
                 <Menu.Item key="2">
                   <Link
