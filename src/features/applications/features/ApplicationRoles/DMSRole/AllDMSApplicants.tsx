@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
@@ -28,7 +28,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
 
   useEffect(() => {
     if (data) {
-      let filteredApplicants = [...data]; 
+      let filteredApplicants = [...data];
 
       if (selectedFilter === "1") {
         filteredApplicants = filteredApplicants.filter(
@@ -170,10 +170,16 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                   key="1"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && acceptApplicant();
                   }}
                 >
-                  Accept Applicant
+                  <Popconfirm
+                    title="Accept Applicant"
+                    description={`Are you sure to accept ${val.applicantName}'s application?`}
+                    onConfirm={acceptApplicant}
+                    okType="default"
+                  >
+                    Accept Applicant
+                  </Popconfirm>
                 </Menu.Item>
                 <Menu.Item key="2">
                   <Link
@@ -222,10 +228,16 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                   key="6"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && markApplicationComplete();
                   }}
                 >
-                  Mark as completed
+                  <Popconfirm
+                    title="Mark as completed"
+                    description={`Are you sure to complete ${val.applicantName}'s application?`}
+                    onConfirm={markApplicationComplete}
+                    okType="default"
+                  >
+                    Mark as completed
+                  </Popconfirm>
                 </Menu.Item>
               </Menu>
             }

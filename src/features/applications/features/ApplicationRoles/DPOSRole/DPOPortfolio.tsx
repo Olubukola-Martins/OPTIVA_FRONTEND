@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -80,18 +80,22 @@ export const DPOPortfolio = () => {
       { application_id: applicantId as unknown as number },
       {
         onError: (error: any) => {
+          console.log(error);
           openNotification({
             state: "error",
             title: "Error Occurred",
-            description: error.response.data.message,
+            // description: error.response.data.message,
             duration: 5,
+            description: "Request failed with status code 404",
           });
         },
         onSuccess: (res: any) => {
+          console.log("res", res);
           openNotification({
             state: "success",
             title: "Success",
-            description: res.data.message,
+            // description: res.data.message,
+            description: "Applicants marked as completed successfully",
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
         },
@@ -163,10 +167,16 @@ export const DPOPortfolio = () => {
                   key="1"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    acceptApplicant();
                   }}
                 >
-                  Accept Applicant
+                  <Popconfirm
+                    title="Accept Applicant"
+                    description={`Are you sure to accept ${val.applicantName}'s application?`}
+                    onConfirm={acceptApplicant}
+                    okType="default"
+                  >
+                    Accept Applicant
+                  </Popconfirm>
                 </Menu.Item>
                 <Menu.Item key="2">
                   <Link
@@ -220,8 +230,20 @@ export const DPOPortfolio = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="7" onClick={markApplicationComplete}>
-                  Mark as completed
+                <Menu.Item
+                  key="7"
+                  onClick={() => {
+                    setApplicantId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Mark as completed"
+                    description={`Are you sure to complete ${val.applicantName}'s application?`}
+                    onConfirm={markApplicationComplete}
+                    okType="default"
+                  >
+                    Mark as completed
+                  </Popconfirm>
                 </Menu.Item>
               </Menu>
             }

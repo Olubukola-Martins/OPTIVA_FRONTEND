@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
@@ -143,10 +143,16 @@ export const AuditPortfolio = () => {
                   key="1"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    applicantId && acceptApplicant();
                   }}
                 >
-                  Accept Applicant
+                  <Popconfirm
+                    title="Accept Applicant"
+                    description={`Are you sure to accept ${val.applicantName}'s application?`}
+                    onConfirm={acceptApplicant}
+                    okType="default"
+                  >
+                    Accept Applicant
+                  </Popconfirm>
                 </Menu.Item>
                 <Menu.Item key="2">
                   <Link
@@ -172,21 +178,34 @@ export const AuditPortfolio = () => {
                   key="4"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    approveApplicant();
                   }}
                 >
-                  Approve
+                  <Popconfirm
+                    title="Approve"
+                    description={`Are you sure to approve ${val.applicantName}'s application?`}
+                    onConfirm={approveApplicant}
+                    okType="default"
+                  >
+                    Approve
+                  </Popconfirm>
                 </Menu.Item>
+
                 <Menu.Item
                   key="5"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
-                    rejectApplicant();
                   }}
                 >
-                  Reject
+                  <Popconfirm
+                    title="Reject"
+                    description={`Are you sure to reject ${val.applicantName}'s application?`}
+                    onConfirm={rejectApplicant}
+                    okType="default"
+                  >
+                    Reject
+                  </Popconfirm>
                 </Menu.Item>
-                <Menu.Item key="6">Submit to International Partners</Menu.Item>
+                {/* <Menu.Item key="6">Submit to International Partners</Menu.Item> */}
               </Menu>
             }
           >
