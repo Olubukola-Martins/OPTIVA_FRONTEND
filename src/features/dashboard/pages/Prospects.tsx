@@ -102,7 +102,7 @@ const Prospects = () => {
 
       <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">
         <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row sm:items-start items-center sm:pl-5">
-          <Input.Search placeholder="Search" className=" w-52" />
+          <Input.Search placeholder="Search" className=" w-52 hidden" />
           {/* <Button
             onClick={() => {
               setDrawerOpen(true);
