@@ -5,7 +5,7 @@ import { useFetchOutstandingDocuments } from "../../hooks/Documet hooks/useFetch
 export interface IModalProps {
   open: boolean;
   onCancel: () => void;
-  applicantId: number | undefined;
+  applicantId: number | undefined | string;
 }
 
 export const OutstandingDocuments: React.FC<IModalProps> = ({

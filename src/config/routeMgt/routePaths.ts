@@ -135,8 +135,14 @@ export const appRoute = {
     format: `/applications/:id/send_email/:emailId`,
     path: `/applications/${id}/send_email/${emailId}`,
   }),
-  attach_supporting_documents: (id?:number) => ({
+  attach_supporting_documents: (id?: number) => ({
     format: `/applications/:id/attach_documents`,
     path: `/applications/${id}/attach_documents`,
-  })
+  }),
+
+  // SEND GENERATED QUOTES
+  send_generated_quotes: (id?: number) => ({
+    format: `/admin/send-quote/:id`,
+    path: `/admin/send-quote/${id}`,
+  }),
 };

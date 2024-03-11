@@ -706,3 +706,9 @@ export interface ISendEmail {
   application_id: number;
   emailtemplate_id: number;
 }
+
+// SUBMIT PAYMENT THRESHOLD
+export interface ISubmitPayment {
+  threshold_payment: boolean;
+  id: number
+}

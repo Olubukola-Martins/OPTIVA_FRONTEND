@@ -16,6 +16,7 @@ export const MyPortfolio = () => {
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
   const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
+  const [applicantId, setApplicantId]= useState<number>()
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.map((item, index) => {
@@ -112,6 +113,7 @@ export const MyPortfolio = () => {
                 <Menu.Item
                   key="3"
                   onClick={() => {
+                    setApplicantId(val.key as unknown as number)
                     setOpenSubmitModal(true);
                   }}
                 >
@@ -142,6 +144,7 @@ export const MyPortfolio = () => {
       />
 
       <SubmitApplicationModal
+        applicantId={applicantId as unknown as number}
         open={openSubmitModal}
         handleClose={handleClose}
         handleOpenImportModal={() => setOpenUploadModal(true)}

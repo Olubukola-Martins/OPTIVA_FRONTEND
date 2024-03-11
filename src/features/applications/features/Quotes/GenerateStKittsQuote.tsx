@@ -5,13 +5,15 @@ import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const GenerateStKittsQuote = () => {
   const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateStKittsNevisQuotes();
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate = useNavigate()
 
   const handleSubmit = (val: any) => {
     mutate(
@@ -34,6 +36,7 @@ export const GenerateStKittsQuote = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
+          navigate(appRoute.send_generated_quotes(id as unknown as number).path)
         },
       }
     );

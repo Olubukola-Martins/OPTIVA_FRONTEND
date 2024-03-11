@@ -1,18 +1,20 @@
 import { Form, InputNumber, Select } from "antd";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
 import { useCreateStLuciaQuotes } from "../../hooks/Quotes hooks/useCreateStLuciaQuotes";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const GenerateStLuciaQuote = () => {
   const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateStLuciaQuotes();
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = (val: any) => {
     mutate(
@@ -35,6 +37,9 @@ export const GenerateStLuciaQuote = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
+          navigate(
+            appRoute.send_generated_quotes(id as unknown as number).path
+          );
         },
       }
     );

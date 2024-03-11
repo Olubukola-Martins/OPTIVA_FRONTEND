@@ -14,7 +14,6 @@ import { Skeleton } from "antd";
 export const GenerateQuote = () => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const { id } = useParams();
-
   const [countryId, setCountryId] = useState<number>();
   const [investmentId, setInvestmentId] = useState<number>();
 
