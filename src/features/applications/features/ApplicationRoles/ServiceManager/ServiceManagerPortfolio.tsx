@@ -285,15 +285,15 @@ export const ServiceManagerPortfolio = () => {
                 <Menu.Item key="8" onClick={() => setOpenLogout(true)}>
                   Login as User
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="9"
                   onClick={() => {
-                    setMilestoneId(val.milestoneId as unknown as number);
-                    moveApplicantToNextStage();
+                  //  setMilestoneId (val.milestoneId as unknown as number);
+                  //   moveApplicantToNextStage();
                   }}
                 >
                   Move to Next Stage
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item
                   key="10"
                   onClick={() => {

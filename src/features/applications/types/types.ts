@@ -450,6 +450,7 @@ export interface IGenerateStKittsNevisQuotes {
   dependents_greater_than_fifteen: number;
 }
 
+// St Lucia
 export interface IGenerateStLuciaQuotes {
   id: number;
   total_number_of_applicants: number;
@@ -461,6 +462,7 @@ export interface IGenerateStLuciaQuotes {
   number_of_dependents_gt_than_sixteen: number;
 }
 
+// DOMINCA
 export interface IGenerateDominicaQuotes {
   id: number;
   total_number_of_applicants: number;
@@ -472,6 +474,7 @@ export interface IGenerateDominicaQuotes {
   number_of_add_dependent_greater_than_eighteen: number;
 }
 
+// GRENADA REAL ESTATE
 export interface IGenerateGrenadaRealEstateQuotes {
   id: number;
   total_num_of_applicants: number;
@@ -483,12 +486,9 @@ export interface IGenerateGrenadaRealEstateQuotes {
   num_of_dependent_greater_than_seventeen: number;
   num_of_dependent_less_than_fifty_five: number;
   num_of_dependent_greater_than_fifty_five: number;
-  number_of_add_dependent_greater_than_eighteen: number;
-  number_of_add_dependent_less_than_eighteen: number;
-  number_of_dependent_greater_than_sixteen: number;
-  number_of_dependent_less_than_sixteen: number;
 }
 
+// GRENADA DONATION
 export interface IGenerateGrenadaDonationQuotes {
   id: number;
   total_num_of_applicants: number;
@@ -503,6 +503,7 @@ export interface IGenerateGrenadaDonationQuotes {
   num_of_parents_greater_than_fifty_five: number;
 }
 
+// ANTIGUA JOINT ESTATE
 export interface IGenerateAntiguaJointRealEstateQuotes {
   id: number;
   total_number_of_applicants: number;
@@ -513,6 +514,7 @@ export interface IGenerateAntiguaJointRealEstateQuotes {
   number_of_dependent_greater_than_fifty_eight: number;
 }
 
+// ANTIGUA DONATION
 export interface IGenerateAntiguaDonationQuotes {
   id: number;
   total_number_of_applicants: number;
@@ -529,7 +531,7 @@ export interface IMarkApplicationComplete {
 }
 
 // APPLICANTS BY ROLE
-export interface IApplicantsByRole  {
+export interface IApplicantsByRole {
   id: number;
   applicant_name: string;
   applicant_id: string;
@@ -606,7 +608,6 @@ interface Applicantdocument {
   dependants: any[];
 }
 
-
 // ASSIGN APPLICATION
 export interface IAssignApplicant {
   application_id: number;
@@ -639,7 +640,7 @@ export interface ISendToRoleHead {
 }
 
 // FETCH AUTHORIZED APPLICANT
-export interface IGetAuthorizedApplicant{
+export interface IGetAuthorizedApplicant {
   id: number;
   applicant_name: string;
   applicant_id: string;

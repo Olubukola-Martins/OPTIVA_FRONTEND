@@ -79,6 +79,8 @@ const Applications = () => {
               ? "Audit's List"
               : data?.roles.id === 6
               ? "DR's List"
+              : data?.roles?.id === 7
+              ? "Payment's List"
               : data?.roles.id === 8
               ? "Customer Experience List"
               : data?.roles?.id === 9
@@ -111,9 +113,10 @@ const Applications = () => {
       {data?.roles.id === 4 && <DPOTab onRoleSelect={() => {}} />}
       {data?.roles.id === 5 && <AuditTab onRoleSelect={() => {}} />}
       {data?.roles.id === 6 && <DRTab onRoleSelect={() => {}} />}
-      {data?.roles?.id === 8 && <OperationsApplicationPage />}
-      {data?.roles?.id === 9 && <CEApplicantTab onRoleSelect={() => {}} />}
-      {/* PAYMETS ROLE  && CUSTOMER EXPERIENCE*/}
+      {data?.roles?.id === 8 && <OperationsApplicationPage />}  {/* CUSTOMER EXPERIENCE*/}
+      {data?.roles?.id === 9 && <CEApplicantTab onRoleSelect={() => { }} />}
+      {data?.roles.id === 7 && <ServiceManagerTab  onRoleSelect={() => {}} />}
+     
     </>
   );
 };

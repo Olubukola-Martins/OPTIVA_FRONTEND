@@ -50,7 +50,7 @@ export const GenerateGrenadaRealEstateQuote = () => {
           <div className="w-1/2">
             <Form.Item
               label="What is the total number of applicants?"
-              name="total_number_of_applicants"
+              name="total_num_of_applicants"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />

@@ -18,39 +18,39 @@ export const AttachOthers: React.FC<IDocumentProps> = ({  docId
 
   return (
     <>
-      {filteredData?.map((item) =>
-        item.document_category_id === docId ? (
-            <div className="m-2 p-3">
-            <Form.Item key={item.id} label={item.name}>
-              <Upload maxCount={1} className="w-full">
-                <Button
-                  icon={<UploadOutlined />}
-                  className="w-[300px] md:w-[600px]"
-                >
-                  Upload File
-                </Button>
-              </Upload>
-            </Form.Item>
-            <p className="mt-1 font-medium">
-              [Only png, jpeg and pdf formats are supported]
-            </p>
-            <p className="">Maximum upload file size is 5MB</p>
-          </div>
-        ) : (
-          <Empty className="m-5 p-3" description="No document requirements have been created. Create a document requirement in settings"
-          />
-        )
-      )}
-      {/* <div className="flex justify-end gap-3 my-5 py-2">
-        <AppButton
-          label="Previous"
-          variant="transparent"
-          type="button"
-          handleClick={() => {
-            onPrev && onPrev();
-          }}
-        />
-      </div> */}
-    </>
+    {filteredData && filteredData.length > 0 ? (
+      <Form>
+        {filteredData.map(
+          (item) =>
+            item.document_category_id === docId && (
+              <div className="m-2 p-3" key={item.id}>
+                <Form.Item label={item.name}>
+                  <Upload
+                    maxCount={1}
+                    className="w-full"
+                   
+                    beforeUpload={()=>{}}
+                  >
+                    <Button
+                      icon={<UploadOutlined />}
+                      className="w-[300px] md:w-[600px]"
+                      
+                    >
+                      Upload File
+                    </Button>
+                  </Upload>
+                </Form.Item>
+              </div>
+            )
+        )}
+        <Button type="primary" >Save</Button>
+      </Form>
+    ) : (
+      <Empty
+        className="m-5 p-3"
+        description="No document requirements have been created. Create a document requirement in settings"
+      />
+    )}
+  </>
   );
 };

@@ -137,6 +137,7 @@ export const ActiveApplications = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          handleInactiveCancel()
         },
       }
     );
@@ -188,6 +189,7 @@ export const ActiveApplications = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+
         },
       }
     );
@@ -298,9 +300,9 @@ export const ActiveApplications = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                {/* <Menu.Item key="6" onClick={() => setOpenAssignmentModal(true)}>
+                <Menu.Item key="6" onClick={() => setOpenAssignmentModal(true)}>
                   View Application Assignment
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item
                   key="7"
                   onClick={() => {

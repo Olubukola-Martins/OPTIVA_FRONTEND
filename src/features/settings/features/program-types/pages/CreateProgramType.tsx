@@ -31,6 +31,7 @@ const CreateProgramType = () => {
   const { data: milestoneData } = useGetMilestone();
   const { data: workflowData } = useGetWorkflow();
   const { data: countryData } = useGetCountry();
+  console.log('dependent', dependentData)
 
   // DEPENDENT OPTION
   const dependentOptions: SelectProps["options"] =

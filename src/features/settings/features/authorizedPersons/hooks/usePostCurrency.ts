@@ -8,7 +8,7 @@ import { QUERY_KEY_FOR_CURRENCY } from "./useGetCurrency";
 
 const postData = async (props: IPostCurrency) => {
   const token = useGetToken();
-  const url = `${END_POINT.BASE_URL}/admin/update/currency-rates`;
+  const url = `${END_POINT.BASE_URL}/admin/update/currency-rates/1`;
 
   const config = {
     headers: {

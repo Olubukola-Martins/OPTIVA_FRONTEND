@@ -109,14 +109,14 @@ export const MyPortfolio = () => {
                     Generate Quote
                   </Link>
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="3"
                   onClick={() => {
                     setOpenSubmitModal(true);
                   }}
                 >
                   Submit
-                </Menu.Item> */}
+                </Menu.Item>
               </Menu>
             }
           >
