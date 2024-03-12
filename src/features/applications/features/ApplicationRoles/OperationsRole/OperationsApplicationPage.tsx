@@ -9,7 +9,7 @@ import { ServiceManagerTab } from "../ServiceManager/ServiceManagerTab";
 
 export const OperationsApplicationPage = () => {
   // change roles
-  const [selectedRole, setSelectedRole] = useState<number>(1);
+  const [selectedRole, setSelectedRole] = useState<number>(8);
 
   const handleRoleChange = (role: number) => {
     setSelectedRole(role);
@@ -33,20 +33,20 @@ export const OperationsApplicationPage = () => {
       renderApplications = <ApplicationsTab onRoleSelect={handleRoleChange} />;
       break;
     case 6:
-      renderApplications = <ServiceManagerTab onRoleSelect={handleRoleChange} />;
+      renderApplications = (
+        <ServiceManagerTab onRoleSelect={handleRoleChange} />
+      );
       break;
     case 7:
       renderApplications = <CEApplicantTab onRoleSelect={handleRoleChange} />;
+      break;
+    case 8:
+      renderApplications = <ApplicationsTab onRoleSelect={handleRoleChange} />;
       break;
     default:
       renderApplications = <ApplicationsTab onRoleSelect={handleRoleChange} />;
       break;
   }
 
-  return (
-    <>
-      {renderApplications}
- 
-    </>
-  );
+  return <>{renderApplications}</>;
 };

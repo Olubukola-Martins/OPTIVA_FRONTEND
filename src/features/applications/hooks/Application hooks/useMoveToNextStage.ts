@@ -5,8 +5,7 @@ import { useGetToken } from "src/hooks/useGetToken";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "./useGetApplication";
 
-
-const handlePatchData = async (props: { milestone_id: number; id:number }) => {
+const handlePatchData =  async (props: { milestone_id: number; id:number }) => {
   const token = useGetToken();
   const url = `${END_POINT.BASE_URL}/admin/application/${props.id}/change/stage`;
 
@@ -17,7 +16,10 @@ const handlePatchData = async (props: { milestone_id: number; id:number }) => {
     },
   };
 
-  const response = await axios.patch(url, props.milestone_id, config);
+  const body = {
+    milestone_id: props.milestone_id,
+  }
+  const response = await axios.patch(url, body, config);
   return response;
 };
 export const useMoveToNextStage = (id:number) => {
@@ -51,3 +53,4 @@ export const useMoveToNextStage = (id:number) => {
   };
   return { patchData };
 };
+

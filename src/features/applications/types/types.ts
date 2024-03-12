@@ -72,6 +72,7 @@ interface Question {
 export interface IApplicationStatus {
   id: number;
   status: string;
+  reason:string
 }
 
 // ACCEPT APPLICANT
@@ -860,6 +861,7 @@ interface Quote {
   total_due_on_citizenship_approval: number;
 }
 
+
 // GRENADA REAL ESTATE
 export interface IGrenadaEstateQuote {
   Applicant_info: Applicantinfo;
@@ -1356,27 +1358,22 @@ interface Stkittsandnevisestatequote {
   st_kitts_total: number;
 }
 
-interface Quote {
+
+// SINGLE APPLICANT
+export interface IGetSingleApplicant {
   id: number;
-  applicant_id: number;
   applicant_unique_id: string;
-  applicant_full_name: string;
+  application_id: number;
+  applicant_name: string;
+  active: boolean;
+  completed: boolean;
   country: string;
-  investment_route: string;
-  number_of_dependents: string;
-  quotation_total: number;
-  country_investment_total: number;
-  local_prc_fee: number;
-  quotation_status: number;
-  generated_by: string;
+  branch: string;
+  program_type: string;
+  investmentroute: string;
+  number_of_dependents: number;
+  application_milestone: string;
+  assigned_to?: any;
   created_at: string;
   updated_at: string;
-  country_fee_due_now: number;
-  country_fee_due_on_approval: number;
-  country_fee_due_now_percentage: number;
-  local_processing_fee_due_now: number;
-  local_processing_fee_due_on_approval: number;
-  local_processing_fee_due_now_percentage: number;
-  total_due_now: number;
-  total_due_on_citizenship_approval: number;
 }

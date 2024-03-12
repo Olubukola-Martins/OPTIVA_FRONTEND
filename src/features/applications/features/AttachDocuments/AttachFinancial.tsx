@@ -1,9 +1,9 @@
 import React from "react";
 import { IDocumentProps } from "../UplodedDocuments/IdentityDocument";
-import { UploadOutlined } from "@ant-design/icons";
-import { Upload, Button, Empty, Form } from "antd";
+import { Button, Empty, Form } from "antd";
 import { useLocation } from "react-router-dom";
 import { useGetDocuments } from "../../hooks/Documet hooks/useGetDocuments";
+import { FormFileInput } from "src/features/settings/features/authorizedPersons/components/FormFileInput";
 
 export const AttachFinancial: React.FC<IDocumentProps> = ({
  
@@ -26,26 +26,26 @@ export const AttachFinancial: React.FC<IDocumentProps> = ({
             (item) =>
               item.document_category_id === docId && (
                 <div className="m-2 p-3" key={item.id}>
-                  <Form.Item label={item.name}>
-                    <Upload
-                      maxCount={1}
-                      className="w-full"
-                     
-                      beforeUpload={()=>{}}
-                    >
-                      <Button
-                        icon={<UploadOutlined />}
-                        className="w-[300px] md:w-[600px]"
-                        
-                      >
-                        Upload File
-                      </Button>
-                    </Upload>
-                  </Form.Item>
+                  <FormFileInput
+                    Form={Form}
+                    multiple={true}
+                    triggerComp
+                    name=""
+                    ruleOptions={{
+                      required: true,
+                      maxFileSize: 1024 * 1024 * 5,
+                      allowedFileTypes: [
+                        "image/jpeg",
+                        "image/png",
+                        "application/pdf",
+                      ],
+                      maxFileUploadCount: 1,
+                    }}
+                  />
                 </div>
               )
           )}
-          <Button type="primary" >Save</Button>
+          <Button type="default">Save</Button>
         </Form>
       ) : (
         <Empty

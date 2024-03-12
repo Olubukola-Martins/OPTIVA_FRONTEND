@@ -118,9 +118,13 @@ export const ActiveApplications = () => {
     }
   }, [data, employeesData]);
 
-  const changeToInactive = () => {
+  const changeToInactive = (val:any) => {
     mutate(
-      { id: id as unknown as number, status: "inactive" },
+      {
+        id: id as unknown as number,
+        status: "inactive",
+        reason: val.inactivityReason,
+      },
       {
         onError: (error: any) => {
           openNotification({
@@ -137,7 +141,7 @@ export const ActiveApplications = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-          handleInactiveCancel()
+          handleInactiveCancel();
         },
       }
     );
@@ -189,7 +193,6 @@ export const ActiveApplications = () => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-
         },
       }
     );
@@ -300,9 +303,9 @@ export const ActiveApplications = () => {
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="6" onClick={() => setOpenAssignmentModal(true)}>
+                {/* <Menu.Item key="6" onClick={() => setOpenAssignmentModal(true)}>
                   View Application Assignment
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item
                   key="7"
                   onClick={() => {

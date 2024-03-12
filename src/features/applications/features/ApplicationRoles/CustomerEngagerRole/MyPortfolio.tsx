@@ -9,13 +9,11 @@ import {
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
-import { UploadModal } from "src/components/modals/UploadModal";
 
 export const MyPortfolio = () => {
   const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
   const [applicantId, setApplicantId]= useState<number>()
   useEffect(() => {
     if (data) {
@@ -147,16 +145,10 @@ export const MyPortfolio = () => {
         applicantId={applicantId as unknown as number}
         open={openSubmitModal}
         handleClose={handleClose}
-        handleOpenImportModal={() => setOpenUploadModal(true)}
+        // handleOpenImportModal={() => setOpenUploadModal(true)}
       />
 
-      <UploadModal
-        header="Proof of Payment"
-        open={openUploadModal}
-        onCancel={() => {
-          setOpenUploadModal(false);
-        }}
-      />
+      
     </>
   );
 };

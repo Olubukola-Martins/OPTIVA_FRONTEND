@@ -1,4 +1,4 @@
-import { Modal, Form } from "antd";
+import { Modal, Form, Button } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { FormFileInput } from "src/features/settings/features/authorizedPersons/components/FormFileInput";
 import { IModalProps } from "./OutstandingDocuments";
@@ -7,12 +7,13 @@ import useUploadFile from "src/features/payment/hooks/useUploadFile";
 import { openNotification } from "src/utils/notification";
 import { END_POINT } from "src/config/environment";
 import { useQueryClient } from "react-query";
+import { UploadOutlined } from "@ant-design/icons";
 
 export const UploadProofofPaymentModal = (props: IModalProps) => {
   const { fileData, fileMutate, fileUploading } = useUploadFile();
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
-  
+
   const handleSubmit = (val: any) => {
     console.log("form values", val);
     console.log("file data", fileData);
@@ -21,7 +22,8 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
         url: `${END_POINT.BASE_URL}/admin/upload-proof-of-payment/${
           props.applicantId as unknown as string
         }`,
-        newData: val.uploadFile,
+            newData: val.uploadFile,
+        
       },
       {
         onError: (error: any) => {
@@ -42,7 +44,7 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
-          props.onCancel;
+          props.onCancel();
         },
       }
     );
@@ -85,21 +87,17 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
         <h1 className="p-4 font-bold text-center text-lg">
           Upload Proof of Payment
         </h1>
-        <Form
-          form={form}
-          //   layout="vertical"
-          onFinish={handleSubmit}
-          requiredMark={false}
-        >
-          {" "}
+        <Form form={form} onFinish={handleSubmit} requiredMark={false}>
           <div className="flex items-center justify-center">
-            {/* <h2 className="text-lg"> Select File</h2> */}
-
             <FormFileInput
               Form={Form}
               name="uploadFile"
-              //   label="Select File"
-           ruleOptions   ={{
+              triggerComp={
+                <Button icon={<UploadOutlined />} className="flex w-full">
+                  Click to upload
+                </Button>
+              }
+              ruleOptions={{
                 required: true,
                 maxFileSize: 1024 * 1024 * 5,
                 allowedFileTypes: [
@@ -112,7 +110,7 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
             />
           </div>
           <p className="mt-2 text-center">
-            [Only png, jpeg and pdf formats are supported]
+            [Only png, jpeg, and pdf formats are supported]
           </p>
           <p className="text-center">Maximum upload file size is 5 MB.</p>
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
@@ -123,12 +121,9 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
               type="reset"
               handleClick={props.onCancel}
             />
-            <AppButton
-              label="Submit"
-              type="submit"
-              isLoading={fileUploading}
-              //   handleClick={props.onUpload}
-            />
+                      <AppButton label="Submit" type="submit"
+                          isLoading={fileUploading}
+                      />
           </div>
         </Form>
       </Modal>

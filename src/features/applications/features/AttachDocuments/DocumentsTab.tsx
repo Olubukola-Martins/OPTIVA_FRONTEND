@@ -96,7 +96,8 @@ export const DocumentsTab = () => {
 
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit}>
-      <Tabs activeKey={currentTab.toString()}>
+      <Tabs activeKey={currentTab.toString()}
+        onChange={(key) => setCurrentTab(Number(key))}>
         {tabItems.map((tab, index) => (
           <Tabs.TabPane tab={tab.label} key={index.toString()}>
             {tab.children}

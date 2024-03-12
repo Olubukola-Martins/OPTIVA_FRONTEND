@@ -11,23 +11,20 @@ import { UploadProofofPaymentModal } from "./UploadProofofPaymentModal";
 interface ISubmitProps {
   open: boolean;
   handleClose: () => void;
-  handleOpenImportModal: () => void;
-  applicantId: number
+  applicantId: number;
 }
 
 export const SubmitApplicationModal: React.FC<ISubmitProps> = ({
   open,
   handleClose,
-  handleOpenImportModal,
-  applicantId
+  applicantId,
 }) => {
   const [form] = Form.useForm();
-  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
+  const [openPaymentModal, setOpenPaymentModal] = useState<boolean>(false);
   const { mutate, isLoading } = useSubmitPaymentApplication();
   const queryClient = useQueryClient();
 
   const handleSubmit = (val: any) => {
-    console.log("form vals", val);
     mutate(
       { threshold_payment: val.thresholdPayment, id: applicantId },
       {
@@ -41,7 +38,6 @@ export const SubmitApplicationModal: React.FC<ISubmitProps> = ({
           form.resetFields();
         },
         onSuccess: (res: any) => {
-          console.log("success", res);
           openNotification({
             state: "success",
             title: "Success",
@@ -49,11 +45,11 @@ export const SubmitApplicationModal: React.FC<ISubmitProps> = ({
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
-          handleClose();
+          handleClose()
+          setOpenPaymentModal(true)
         },
       }
     );
-    setFormSubmitted(true);
   };
 
   return (
@@ -66,7 +62,7 @@ export const SubmitApplicationModal: React.FC<ISubmitProps> = ({
           <Form.Item
             rules={generalValidationRulesOpt}
             name={"thresholdPayment"}
-            label='Select a threshold payment option'
+            label="Select a threshold payment option"
           >
             <Select
               options={[
@@ -81,16 +77,7 @@ export const SubmitApplicationModal: React.FC<ISubmitProps> = ({
                 },
               ]}
             />
-            {/* <Checkbox>Prospect is ready to pay full threshold payment</Checkbox> */}
           </Form.Item>
-          {/* <Form.Item
-            className="border p-2 rounded-md"
-            rules={generalValidationRulesOpt}
-          >
-            <Checkbox>
-              Prospect is ready to pay 0% or less than the threshold payment
-            </Checkbox>
-          </Form.Item> */}
 
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
             <AppButton
@@ -102,22 +89,17 @@ export const SubmitApplicationModal: React.FC<ISubmitProps> = ({
             <AppButton
               label="Next"
               type="submit"
-              handleClick={() => handleOpenImportModal()}
+              // handleClick={() => handleOpenImportModal()}
               isLoading={isLoading}
             />
           </div>
         </Form>
-
-        {/* {formSubmitted && ( */}
-          <UploadProofofPaymentModal
-            // header="Proof of Payment"
-
-            applicantId={applicantId as unknown as number}
-            open={formSubmitted}
-            onCancel={() => setFormSubmitted(false)}
-          />
-        {/* )} */}
       </Modal>
+      <UploadProofofPaymentModal
+        applicantId={applicantId as unknown as number}
+        open={openPaymentModal}
+        onCancel={() => setOpenPaymentModal(false)}
+      />
     </>
   );
 };
