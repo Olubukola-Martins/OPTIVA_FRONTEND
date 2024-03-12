@@ -141,8 +141,8 @@ export const appRoute = {
   }),
 
   // SEND GENERATED QUOTES
-  send_generated_quotes: (id?: number) => ({
-    format: `/admin/send-quote/:id`,
-    path: `/admin/send-quote/${id}`,
+  send_generated_quotes: (id?: number, investId?:number) => ({
+    format: `/admin/send-quote/:id/:investId`,
+    path: `/admin/send-quote/${id}/${investId}`,
   }),
 };

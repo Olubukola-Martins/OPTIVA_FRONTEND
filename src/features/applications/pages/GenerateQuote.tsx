@@ -1,11 +1,11 @@
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { GenerateAntiguaDonationQuote } from "../features/Quotes/GenerateAntiguaDonationQuote";
-import { GenerateGrenadaDonation } from "../features/Quotes/GenerateGrenadaDonation";
-import { GenerateGrenadaRealEstateQuote } from "../features/Quotes/GenerateGrenadaRealEstateQuote";
-import { GenerateStKittsQuote } from "../features/Quotes/GenerateStKittsQuote";
-import { GenerateDominicaQuote } from "../features/Quotes/GenerateDominicaQuote";
-import { GenerateStLuciaQuote } from "../features/Quotes/GenerateStLuciaQuote";
+import { GenerateAntiguaDonationQuote } from "../features/Quotes/Generate Quotes/GenerateAntiguaDonationQuote";
+import { GenerateGrenadaDonation } from "../features/Quotes/Generate Quotes/GenerateGrenadaDonation";
+import { GenerateGrenadaRealEstateQuote } from "../features/Quotes/Generate Quotes/GenerateGrenadaRealEstateQuote";
+import { GenerateStKittsQuote } from "../features/Quotes/Generate Quotes/GenerateStKittsQuote";
+import { GenerateDominicaQuote } from "../features/Quotes/Generate Quotes/GenerateDominicaQuote";
+import { GenerateStLuciaQuote } from "../features/Quotes/Generate Quotes/GenerateStLuciaQuote";
 import { useFetchApplicantsByRole } from "../hooks/Application hooks/useFetchApplicantsByRole";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -51,6 +51,8 @@ export const GenerateQuote = () => {
       renderGenerateQuote = <GenerateAntiguaDonationQuote />;
       break;
     case "5-7":
+      renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
+      break;
     case "5-8":
       renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
       break;

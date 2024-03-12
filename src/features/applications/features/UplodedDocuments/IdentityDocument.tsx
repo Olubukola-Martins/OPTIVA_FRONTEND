@@ -217,6 +217,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
               description: res.data.message,
             });
             queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+            setFileList([])
           },
         }
       );

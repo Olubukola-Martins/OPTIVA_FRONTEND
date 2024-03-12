@@ -5,16 +5,16 @@ import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateGrenadaDonationQuote } from "../../hooks/Quotes hooks/useCreateGrenadaDonationQuote";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import { useCreateAntiguaDonationQuote } from "src/features/applications/hooks/Quotes hooks/useCreateAntiguaDonationQuote";
 
-export const GenerateGrenadaDonation = () => {
+export const GenerateAntiguaDonationQuote = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useCreateGrenadaDonationQuote();
+  const { mutate, isLoading } = useCreateAntiguaDonationQuote();
   const queryClient = useQueryClient();
   const { id } = useParams();
   const navigate = useNavigate();
-
+  
   const handleSubmit = (val: any) => {
     mutate(
       { id, ...val },
@@ -36,7 +36,9 @@ export const GenerateGrenadaDonation = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
-          navigate(appRoute.send_generated_quotes(id as unknown as number).path)
+          navigate(
+            appRoute.send_generated_quotes(id as unknown as number, 6).path
+          );
         },
       }
     );
@@ -53,15 +55,7 @@ export const GenerateGrenadaDonation = () => {
           <div className="w-1/2">
             <Form.Item
               label="What is the total number of applicants?"
-              name="total_num_of_applicants"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="What is the size of the family?"
-              name="size_of_family"
+              name="total_number_of_applicants"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -87,24 +81,16 @@ export const GenerateGrenadaDonation = () => {
             </Form.Item>
 
             <Form.Item
-              label="Number of additional dependents?"
-              name="num_of_add_dependents"
+              label="Number of dependents 0-11yrs?"
+              name="number_of_dependent_zero_to_eleven"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of unmarried dependents?"
-              name="num_of_unmarried_dependents"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Number of dependents less than or equal to 16yrs?"
-              name="num_of_dependent_less_than_eq_sixteen"
+              label="Number of dependents 12-17yrs?"
+              name="number_of_dependent_twelve_to_seventeen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -113,32 +99,16 @@ export const GenerateGrenadaDonation = () => {
 
           <div className="w-1/2">
             <Form.Item
-              label="Number of dependents greater than 17?"
-              name="num_of_dependent_greater_than_seventeen"
+              label="Number of dependents greater than 18yrs?"
+              name="number_of_dependent_greater_than_eighteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents 17-25yrs?"
-              name="num_of_dependent_seventeen_to_twenty_five"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Number of parents less than 55yrs?"
-              name="num_of_parents_less_than_fifty_five"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Number of parents greater than 55yrs?"
-              name="num_of_parents_greater_than_fifty_five"
+              label="Number of dependents greater than 58?"
+              name="number_of_dependent_greater_than_fifty_eight"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />

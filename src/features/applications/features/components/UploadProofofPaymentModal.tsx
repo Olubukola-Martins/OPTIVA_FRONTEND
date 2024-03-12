@@ -99,7 +99,7 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
               Form={Form}
               name="uploadFile"
               //   label="Select File"
-              ruleOptions={{
+           ruleOptions   ={{
                 required: true,
                 maxFileSize: 1024 * 1024 * 5,
                 allowedFileTypes: [
