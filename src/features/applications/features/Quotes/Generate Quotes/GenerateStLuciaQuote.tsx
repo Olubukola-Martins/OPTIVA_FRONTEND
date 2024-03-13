@@ -1,17 +1,20 @@
 import { Form, InputNumber, Select } from "antd";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateAntiguaJointEstate } from "../../hooks/Quotes hooks/useCreateAntiguaJointEstate";
+import { useCreateStLuciaQuotes } from "../../../hooks/Quotes hooks/useCreateStLuciaQuotes";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
-export const GenerateAntiguaJointEstateQuote = () => {
+export const GenerateStLuciaQuote = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useCreateAntiguaJointEstate();
+  const { mutate, isLoading } = useCreateStLuciaQuotes();
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = (val: any) => {
     mutate(
@@ -34,6 +37,9 @@ export const GenerateAntiguaJointEstateQuote = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
+          navigate(
+            appRoute.send_generated_quotes(id as unknown as number,3).path
+          );
         },
       }
     );
@@ -76,16 +82,24 @@ export const GenerateAntiguaJointEstateQuote = () => {
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents 0-11yrs?"
-              name="number_of_dependent_zero_to_eleven"
+              label="Number of additional dependents (if there's a spouse, maximum of 2)"
+              name="number_of_add_depn_if_spouse_max_two"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents 12-17yrs?"
-              name="number_of_dependent_twelve_to_seventeen"
+              label="Number of additional dependents (if there's a spouse, maximum of 2)"
+              name="number_of_add_depn_if_spouse_max_two"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="Number of additional dependents (if there's a spouse)"
+              name="number_of_add_depn_if_spouse"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -94,16 +108,24 @@ export const GenerateAntiguaJointEstateQuote = () => {
 
           <div className="w-1/2">
             <Form.Item
-              label="Number of dependents greater than 18yrs?"
-              name="number_of_dependent_greater_than_eighteen"
+              label="Number of additional dependents (if there's no spouse)"
+              name="number_of_add_depn_no_spouse"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents greater than 58?"
-              name="number_of_dependent_greater_than_fifty_eight"
+              label="Number of dependents less than 16"
+              name="number_of_dependents_ls_than_sixteen"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="Number of dependents greater than 16"
+              name="number_of_dependents_gt_than_sixteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />

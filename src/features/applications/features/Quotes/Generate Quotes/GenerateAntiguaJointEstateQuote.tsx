@@ -1,17 +1,19 @@
 import { Form, InputNumber, Select } from "antd";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateDominicaQuotes } from "../../hooks/Quotes hooks/useCreateDominicaQuotes";
+import { useCreateAntiguaJointEstate } from "../../../hooks/Quotes hooks/useCreateAntiguaJointEstate";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
-export const GenerateDominicaQuote = () => {
+export const GenerateAntiguaJointEstateQuote = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useCreateDominicaQuotes();
+  const { mutate, isLoading } = useCreateAntiguaJointEstate();
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = (val: any) => {
     mutate(
@@ -34,6 +36,9 @@ export const GenerateDominicaQuote = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
+          navigate(
+            appRoute.send_generated_quotes(id as unknown as number,8).path
+          );
         },
       }
     );
@@ -51,14 +56,6 @@ export const GenerateDominicaQuote = () => {
             <Form.Item
               label="What is the total number of applicants?"
               name="total_number_of_applicants"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="What is the size of the family?"
-              name="size_of_family"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -84,8 +81,16 @@ export const GenerateDominicaQuote = () => {
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents less than 16?"
-              name="number_of_dependent_less_than_sixteen"
+              label="Number of dependents 0-11yrs?"
+              name="number_of_dependent_zero_to_eleven"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="Number of dependents 12-17yrs?"
+              name="number_of_dependent_twelve_to_seventeen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -94,24 +99,16 @@ export const GenerateDominicaQuote = () => {
 
           <div className="w-1/2">
             <Form.Item
-              label="Number of dependents greater than 16?"
-              name="number_of_dependent_greater_than_sixteen"
+              label="Number of dependents greater than 18yrs?"
+              name="number_of_dependent_greater_than_eighteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of additional dependents less than 18?"
-              name="number_of_add_dependent_less_than_eighteen"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Number of additional dependents greater than 18?"
-              name="number_of_add_dependent_greater_than_eighteen"
+              label="Number of dependents greater than 58?"
+              name="number_of_dependent_greater_than_fifty_eight"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />

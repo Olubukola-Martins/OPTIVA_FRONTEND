@@ -72,7 +72,9 @@ export const AuditPortfolio = () => {
   };
 
   const approveApplicant = () => {
-    patchData(applicantId as unknown as number);
+    console.log('applicant id', applicantId)
+    if(applicantId !== undefined)
+    patchData(applicantId);
   };
   const rejectApplicant = () => {
     rejectPatch(applicantId as unknown as number);
@@ -104,7 +106,6 @@ export const AuditPortfolio = () => {
       dataIndex: "programType",
       key: "5",
     },
-
     {
       title: "Investment Route",
       dataIndex: "investmentRoute",
@@ -149,6 +150,7 @@ export const AuditPortfolio = () => {
                     title="Accept Applicant"
                     description={`Are you sure to accept ${val.applicantName}'s application?`}
                     onConfirm={acceptApplicant}
+                    
                     okType="default"
                   >
                     Accept Applicant
@@ -205,7 +207,7 @@ export const AuditPortfolio = () => {
                     Reject
                   </Popconfirm>
                 </Menu.Item>
-                {/* <Menu.Item key="6">Submit to International Partners</Menu.Item> */}
+                <Menu.Item key="6">Submit to International Partners</Menu.Item>
               </Menu>
             }
           >

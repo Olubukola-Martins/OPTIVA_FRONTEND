@@ -1,9 +1,53 @@
-import { Modal, Form, } from "antd";
-import { AppButton } from "../button/AppButton";
-import { IModalProps } from "./DeleteModal";
+import { Modal, Form, Button } from "antd";
+import { AppButton } from "src/components/button/AppButton";
 import { FormFileInput } from "src/features/settings/features/authorizedPersons/components/FormFileInput";
+import { IModalProps } from "./OutstandingDocuments";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
+import useUploadFile from "src/features/payment/hooks/useUploadFile";
+import { openNotification } from "src/utils/notification";
+import { END_POINT } from "src/config/environment";
+import { useQueryClient } from "react-query";
+import { UploadOutlined } from "@ant-design/icons";
 
-export const UploadModal = (props: IModalProps) => {
+export const UploadProofofPaymentModal = (props: IModalProps) => {
+  const { fileData, fileMutate, fileUploading } = useUploadFile();
+  const queryClient = useQueryClient();
+  const [form] = Form.useForm();
+
+  const handleSubmit = (val: any) => {
+    console.log("form values", val);
+    console.log("file data", fileData);
+    fileMutate(
+      {
+        url: `${END_POINT.BASE_URL}/admin/upload-proof-of-payment/${
+          props.applicantId as unknown as string
+        }`,
+        newData: val.uploadFile[0],
+      },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+          form.resetFields();
+        },
+        onSuccess: (res: any) => {
+          console.log("success", res);
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          form.resetFields();
+          props.onCancel();
+        },
+      }
+    );
+  };
   return (
     <>
       <Modal open={props.open} onCancel={props.onCancel} footer={null}>
@@ -40,35 +84,34 @@ export const UploadModal = (props: IModalProps) => {
           </svg>
         </div>
         <h1 className="p-4 font-bold text-center text-lg">
-          Import {props.header}
+          Upload Proof of Payment
         </h1>
-        <Form layout="vertical" name="">
-          <FormFileInput
-            Form={Form}
-            name="uploadFile"
-            ruleOptions={{
-              // Pass validation rule options
-              required: true, // File upload is required
-              maxFileSize: 1024 * 1024 * 5, // Maximum file size in bytes (e.g., 5 MB)
-              allowedFileTypes: ["image/jpeg", "image/png", "application/pdf"], // Array of allowed file types
-              maxFileUploadCount: 1, // Maximum number of files to upload
-            }}
-          />
-          {/* <div className="text-center w-full ">
-            <Form.Item name="chooseFile" className="border rounded-md text-lg border-slate-300">
-              <Upload {...props} maxCount={1}>
-                <button className="">
-                  <UploadOutlined /> Upload File
-                </button>
-              </Upload>
-            </Form.Item>
-          </div> */}
-
-          {/* <p className="mt-2 text-center text-lg">
-            [only xls,xlsx and csv formats are supported]
-          </p> */}
+        <Form form={form} onFinish={handleSubmit} requiredMark={false}>
+          <div className="flex items-center justify-center">
+            <FormFileInput
+              Form={Form}
+              name="uploadFile"
+              triggerComp={
+                <Button icon={<UploadOutlined />} className="flex w-full">
+                  Click to upload
+                </Button>
+              }
+              ruleOptions={{
+                required: true,
+                maxFileSize: 1024 * 1024 * 5,
+                allowedFileTypes: [
+                  "image/jpeg",
+                  "image/png",
+                  "application/pdf",
+                ],
+                maxFileUploadCount: 1,
+              }}
+            />
+          </div>
+          <p className="mt-2 text-center">
+            [Only png, jpeg, and pdf formats are supported]
+          </p>
           <p className="text-center">Maximum upload file size is 5 MB.</p>
-
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
             <AppButton
               label="Cancel"
@@ -77,14 +120,30 @@ export const UploadModal = (props: IModalProps) => {
               type="reset"
               handleClick={props.onCancel}
             />
-            <AppButton
-              label="Submit"
-              type="submit"
-              handleClick={props.onUpload}
-            />
+            <AppButton label="Submit" type="submit" isLoading={fileUploading} />
           </div>
         </Form>
       </Modal>
     </>
   );
 };
+
+
+// const { mutate, isLoading } = useUploadProofofPayment();
+  // const { fileData, fileMutate, fileUploading } = useUploadFile();
+  // const queryClient = useQueryClient();
+  // const [form] = Form.useForm();
+  // const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false);
+  // const handleSubmit = async (val: any) => {
+  //   console.log("form values", val);
+  //   console.log("file data", fileData);
+  //   setIsUploadingFile(true);
+
+  //  await fileMutate({
+  //     newData: val.uploadFile,
+  //     url: `${END_POINT.BASE_URL}/admin/upload-file`,
+  //   });
+  //   setIsUploadingFile(false);
+
+  //   mutate({})
+  // };

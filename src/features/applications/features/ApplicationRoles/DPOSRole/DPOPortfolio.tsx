@@ -198,7 +198,7 @@ export const DPOPortfolio = () => {
                     View Uploaded Documents
                   </Link>
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="4"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
@@ -206,8 +206,8 @@ export const DPOPortfolio = () => {
                   }}
                 >
                   Outline Outstanding Documents
-                </Menu.Item> */}
-                {/* <Menu.Item key="5">
+                </Menu.Item>
+                <Menu.Item key="5">
                   <Link
                     to={{
                       pathname: appRoute.attach_supporting_documents(
@@ -219,7 +219,7 @@ export const DPOPortfolio = () => {
                     Attach Supporting Documents
                   </Link>
                  
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item key="6">
                   <Link
                     to={

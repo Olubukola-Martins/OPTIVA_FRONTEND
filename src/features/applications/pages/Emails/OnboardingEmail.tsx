@@ -6,6 +6,8 @@ import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useSendEmail } from "../../hooks/Application hooks/useSendEmail";
 import { AppButton } from "src/components/button/AppButton";
+import { useGetSingleApplicant } from "../../hooks/Application hooks/useGetSingleApplicant";
+import { todaysDate } from "../SendQuote";
 
 export const removeHtmlTags = (htmlString: string) => {
   // Regular expression to match HTML tags
@@ -53,6 +55,9 @@ export const OnboardingEmail = () => {
   const { mutate, isLoading: postLoading } = useSendEmail();
   const { id, emailId } = useParams();
   const queryClient = useQueryClient();
+  const { data: applicantData } = useGetSingleApplicant({
+    id: id as unknown as number,
+  });
 
   const handleSendEmail = () => {
     mutate(
@@ -85,6 +90,15 @@ export const OnboardingEmail = () => {
       <Skeleton active loading={isLoading}>
         <div className="bg-[url('https://optiva-backend.techmur.com/assets/watermark.png')]  bg-contain bg-center bg-no-repeat p-2 m-3 z-10">
           <img src="https://optiva-backend.techmur.com/assets/optivaLogo.png" />
+          {/* <p className=" border-b-[#801d22]"/> */}
+          <div className="p-2 m-4 border-t border-t-[#801d22]">
+            <p className="mt-2">{todaysDate}</p>
+            <p>{applicantData?.applicant_name} </p>
+            <p>14th Floor, Churchgate Towers 2,</p>
+            <p>PC 30, Churchgate Street,</p>
+            <p>Victoria Island, Lagos,</p>
+            <p>Nigeria.</p>
+          </div>
           {data?.data.map((item) => (
             <div
               className="my-3"
@@ -92,10 +106,13 @@ export const OnboardingEmail = () => {
             />
           ))}
         </div>
+        <div className="w-full">
         <img
           src="https://optiva-backend.techmur.com/assets/optivaAddr.png"
-          className="my-4 py-5"
+          className="my-4 py-5 w-full"
         />
+        </div>
+        
         <div className="flex justify-end items-center gap-5 my-4 py-5">
           <AppButton
             label="Cancel"

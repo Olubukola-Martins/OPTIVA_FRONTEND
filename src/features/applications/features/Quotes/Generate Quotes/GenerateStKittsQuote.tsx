@@ -1,18 +1,19 @@
 import { Form, InputNumber, Select } from "antd";
-
-import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
+import { useCreateStKittsNevisQuotes } from "../../../hooks/Quotes hooks/useCreateStKittsNevisQuotes";
 import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useCreateAntiguaJointEstate } from "../../hooks/Quotes hooks/useCreateAntiguaJointEstate";
+import { useNavigate, useParams } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
-export const GenerateAntiguaSingleEstate = () => {
+export const GenerateStKittsQuote = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useCreateAntiguaJointEstate();
+  const { mutate, isLoading } = useCreateStKittsNevisQuotes();
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = (val: any) => {
     mutate(
@@ -35,6 +36,9 @@ export const GenerateAntiguaSingleEstate = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
+          navigate(
+            appRoute.send_generated_quotes(id as unknown as number,5).path
+          );
         },
       }
     );
@@ -52,6 +56,14 @@ export const GenerateAntiguaSingleEstate = () => {
             <Form.Item
               label="What is the total number of applicants?"
               name="total_number_of_applicants"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="What is the size of the family?"
+              name="size_of_family"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -77,16 +89,40 @@ export const GenerateAntiguaSingleEstate = () => {
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents 0-11yrs?"
-              name="number_of_dependent_zero_to_eleven"
+              label="Additional dependents less than 18?"
+              name="add_dependents_ls_than_eighteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents 12-17yrs?"
-              name="number_of_dependent_twelve_to_seventeen"
+              label="Additional dependents greater than 18?"
+              name="add_dependents_gt_than_eighteen"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="Children aged 0-15yrs?"
+              name="children_zero_to_fifteen"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="Children aged 16-18yrs?"
+              name="children_sixteen_to_eighteen"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="Children greater than 18yrs?"
+              name="children_gt_than_eighteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -95,24 +131,48 @@ export const GenerateAntiguaSingleEstate = () => {
 
           <div className="w-1/2">
             <Form.Item
-              label="Number of dependents greater than 18yrs?"
-              name="number_of_dependent_greater_than_eighteen"
+              label="Parents greater than 65yrs?"
+              name="parents_gt_than_sixty_five"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents greater than 58?"
-              name="number_of_dependent_greater_than_fifty_eight"
+              label="Grandparents greater than 55yrs?"
+              name="grand_parents_gt_than_fifty_five"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of additional dependents greater than 18?"
-              name="number_of_add_dependent_greater_than_eighteen"
+              label="Siblings age 0-15yrs?"
+              name="siblings_zero_to_fifteen"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="Siblings greater than 15yrs?"
+              name="siblings_gt_than_fifteen"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            {/* <Form.Item
+              label="Dependents less than 15yrs?"
+              name="dependents_ls_than_fifteen"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item> */}
+
+            <Form.Item
+              label="Dependents greater than 15yrs?"
+              name="dependents_greater_than_fifteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />

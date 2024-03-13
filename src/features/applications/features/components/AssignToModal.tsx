@@ -59,6 +59,7 @@ export const AssignToModal: React.FC<IModalProps> = ({
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
+          onCancel()
         },
       }
     );

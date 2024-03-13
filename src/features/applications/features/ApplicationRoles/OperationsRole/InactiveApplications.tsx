@@ -19,6 +19,7 @@ export const InactiveApplications = () => {
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
     section: "inactive",
   });
+  console.log("inactive", data);
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -55,10 +56,12 @@ export const InactiveApplications = () => {
             employee.user.roles.id === item.assigned_role_id &&
             employee.id === item.assigned_user_id
         );
-        const reasons =
-          item.applicationcomment
-            ?.map((comment) => comment.comment[0])
-            .join(", ") || "-";
+        const lastComment =
+        item.applicationcomment && item.applicationcomment.length > 0
+          ? item.applicationcomment[item.applicationcomment.length - 1]
+          : undefined;
+        const reasons = lastComment ? lastComment.comment[0] : "-";
+      
         return {
           key: item.id,
           sn: index + 1,
@@ -77,9 +80,13 @@ export const InactiveApplications = () => {
     }
   }, [data, employeesData]);
 
-  const changeToInactive = () => {
+  const changeToInactive = (val: any) => {
     mutate(
-      { id: id as unknown as number, status: "active" },
+      {
+        id: id as unknown as number,
+        status: "active",
+        reason: val.activityReason,
+      },
       {
         onError: (error: any) => {
           openNotification({
@@ -146,6 +153,7 @@ export const InactiveApplications = () => {
       title: "Reason",
       dataIndex: "reasons",
       key: "9",
+      render: (_, val) => <p>{ val.reasons}</p>,
     },
     {
       title: "Action",

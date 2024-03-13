@@ -5,10 +5,12 @@ import { BankClearance } from "./Emails/BankClearance";
 import { BankSubmissionEmail } from "./Emails/BankSubmissionEmail";
 import { OnboardingEmail } from "./Emails/OnboardingEmail";
 import { PassportEmail } from "./Emails/PassportEmail";
+import { PageIntro } from "src/components/PageIntro";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const SendEmail = () => {
   const { id, emailId } = useParams();
-  console.log(id)
+  console.log(id);
   let renderEmail;
 
   switch (emailId) {
@@ -33,5 +35,12 @@ export const SendEmail = () => {
     default:
       break;
   }
-  return <>{renderEmail}</>;
+  return (
+    <>
+      <div className="my-5">
+        <PageIntro title="Send Email" linkBack={appRoute.applications} />
+      </div>
+      {renderEmail}
+    </>
+  );
 };

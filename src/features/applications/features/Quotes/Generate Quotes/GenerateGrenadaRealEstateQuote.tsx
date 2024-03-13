@@ -1,18 +1,19 @@
 import { Form, InputNumber, Select } from "antd";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateStLuciaQuotes } from "../../hooks/Quotes hooks/useCreateStLuciaQuotes";
+import { useCreateGrenadaRealEstateQuotes } from "../../../hooks/Quotes hooks/useCreateGrenadaRealEstateQuotes";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
-export const GenerateStLuciaQuote = () => {
+export const GenerateGrenadaRealEstateQuote = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useCreateStLuciaQuotes();
+  const { mutate, isLoading } = useCreateGrenadaRealEstateQuotes();
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = (val: any) => {
     mutate(
@@ -35,6 +36,9 @@ export const GenerateStLuciaQuote = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
+          navigate(
+            appRoute.send_generated_quotes(id as unknown as number,2).path
+          );
         },
       }
     );
@@ -51,7 +55,15 @@ export const GenerateStLuciaQuote = () => {
           <div className="w-1/2">
             <Form.Item
               label="What is the total number of applicants?"
-              name="total_number_of_applicants"
+              name="total_num_of_applicants"
+              rules={generalValidationRules}
+            >
+              <InputNumber className="w-full" />
+            </Form.Item>
+
+            <Form.Item
+              label="What is the size of the family?"
+              name="size_of_family"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -77,24 +89,24 @@ export const GenerateStLuciaQuote = () => {
             </Form.Item>
 
             <Form.Item
-              label="Number of additional dependents (if there's a spouse, maximum of 2)"
-              name="number_of_add_depn_if_spouse_max_two"
+              label="Number of additional dependents?"
+              name="num_of_add_dependents"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of additional dependents (if there's a spouse, maximum of 2)"
-              name="number_of_add_depn_if_spouse_max_two"
+              label="Number of unmarried siblings?"
+              name="num_of_unmarried_siblings"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of additional dependents (if there's a spouse)"
-              name="number_of_add_depn_if_spouse"
+              label="Number of dependents less than or equal to 16yrs?"
+              name="num_of_dependent_less_than_eq_sixteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -103,24 +115,24 @@ export const GenerateStLuciaQuote = () => {
 
           <div className="w-1/2">
             <Form.Item
-              label="Number of additional dependents (if there's no spouse)"
-              name="number_of_add_depn_no_spouse"
+              label="Number of dependents greater than 17?"
+              name="num_of_dependent_greater_than_seventeen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents less than 16"
-              name="number_of_dependents_ls_than_sixteen"
+              label="Number of dependents less than 55yrs?"
+              name="num_of_dependent_less_than_fifty_five"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents greater than 16"
-              name="number_of_dependents_gt_than_sixteen"
+              label="Number of dependents greater than 55yrs?"
+              name="num_of_dependent_greater_than_fifty_five"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />

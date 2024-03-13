@@ -1,4 +1,4 @@
-import { Form, Tabs } from "antd";
+import { Tabs } from "antd";
 import { AttachFinancial } from "./AttachFinancial";
 import { AttachOthers } from "./AttachOthers";
 import { AttachReport } from "./AttachReport";
@@ -11,9 +11,9 @@ import { AppButton } from "src/components/button/AppButton";
 
 export const DocumentsTab = () => {
   const [currentTab, setCurrentTab] = useState<number>(0);
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
 
-  const handleSubmit = () => {};
+  // const handleSubmit = () => {};
   const tabItems: {
     children: React.ReactNode;
     label: string;
@@ -95,8 +95,10 @@ export const DocumentsTab = () => {
   const isLastTab = currentTab === tabItems.length - 1;
 
   return (
-    <Form form={form} layout="vertical" onFinish={handleSubmit}>
-      <Tabs activeKey={currentTab.toString()}>
+    // <Form form={form} layout="vertical" onFinish={handleSubmit}>
+    <>
+      <Tabs activeKey={currentTab.toString()}
+        onChange={(key) => setCurrentTab(Number(key))}>
         {tabItems.map((tab, index) => (
           <Tabs.TabPane tab={tab.label} key={index.toString()}>
             {tab.children}
@@ -119,6 +121,7 @@ export const DocumentsTab = () => {
         )}
         {isLastTab && <AppButton label="Submit" type="submit" />}
       </div>
-    </Form>
+      </>
+    // </Form>
   );
 };

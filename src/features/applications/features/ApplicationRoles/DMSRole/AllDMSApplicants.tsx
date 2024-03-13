@@ -191,7 +191,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                     View Applicant's Details
                   </Link>
                 </Menu.Item>
-                {/* <Menu.Item key="3">
+                <Menu.Item key="3">
                   <Link
                     to={{
                       pathname: appRoute.attach_supporting_documents(
@@ -203,7 +203,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                     Attach Required Documents
                   </Link>
                  
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item key="4">
                   <Link
                     to={

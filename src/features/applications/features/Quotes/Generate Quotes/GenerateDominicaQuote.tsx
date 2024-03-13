@@ -1,17 +1,19 @@
 import { Form, InputNumber, Select } from "antd";
 import { useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { QUERY_KEY_QUOTES } from "src/features/payment/pages/Payments";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
-import { useCreateGrenadaRealEstateQuotes } from "../../hooks/Quotes hooks/useCreateGrenadaRealEstateQuotes";
+import { useCreateDominicaQuotes } from "../../../hooks/Quotes hooks/useCreateDominicaQuotes";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
-export const GenerateGrenadaRealEstateQuote = () => {
+export const GenerateDominicaQuote = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useCreateGrenadaRealEstateQuotes();
+  const { mutate, isLoading } = useCreateDominicaQuotes();
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = (val: any) => {
     mutate(
@@ -34,6 +36,9 @@ export const GenerateGrenadaRealEstateQuote = () => {
           });
           form.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_QUOTES]);
+          navigate(
+            appRoute.send_generated_quotes(id as unknown as number,4).path
+          );
         },
       }
     );
@@ -84,24 +89,8 @@ export const GenerateGrenadaRealEstateQuote = () => {
             </Form.Item>
 
             <Form.Item
-              label="Number of additional dependents?"
-              name="num_of_add_dependents"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Number of unmarried siblings?"
-              name="num_of_unmarried_siblings"
-              rules={generalValidationRules}
-            >
-              <InputNumber className="w-full" />
-            </Form.Item>
-
-            <Form.Item
-              label="Number of dependents less than or equal to 16yrs?"
-              name="num_of_dependent_less_than_eq_sixteen"
+              label="Number of dependents less than 16?"
+              name="number_of_dependent_less_than_sixteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
@@ -110,24 +99,24 @@ export const GenerateGrenadaRealEstateQuote = () => {
 
           <div className="w-1/2">
             <Form.Item
-              label="Number of dependents greater than 17?"
-              name="num_of_dependent_greater_than_seventeen"
+              label="Number of dependents greater than 16?"
+              name="number_of_dependent_greater_than_sixteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents less than 55yrs?"
-              name="num_of_dependent_less_than_fifty_five"
+              label="Number of additional dependents less than 18?"
+              name="number_of_add_dependent_less_than_eighteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
             </Form.Item>
 
             <Form.Item
-              label="Number of dependents greater than 55yrs?"
-              name="num_of_dependent_greater_than_fifty_five"
+              label="Number of additional dependents greater than 18?"
+              name="number_of_add_dependent_greater_than_eighteen"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />

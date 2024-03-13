@@ -84,7 +84,7 @@ export const createFileValidationRule = (
   };
 };
 
-const fileRuleOptions = {
+export const fileRuleOptions = {
   required: true,
   allowedFileTypes: [
     "image/jpeg",

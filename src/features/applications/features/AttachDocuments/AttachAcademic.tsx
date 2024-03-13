@@ -2,8 +2,8 @@ import React from "react";
 import { IDocumentProps } from "../UplodedDocuments/IdentityDocument";
 import { useLocation } from "react-router-dom";
 import { useGetDocuments } from "../../hooks/Documet hooks/useGetDocuments";
-import { Button, Empty, Form, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Button, Empty, Form,  } from "antd";
+import { FormFileInput } from "src/features/settings/features/authorizedPersons/components/FormFileInput";
 
 export const AttachAcademic: React.FC<IDocumentProps> = ({
 
@@ -19,49 +19,39 @@ export const AttachAcademic: React.FC<IDocumentProps> = ({
   );
   return (
     <>
-      {filteredData?.map((item) =>
-        item.document_category_id === docId ? (
-          <div className="m-2 p-3">
-            <Form.Item key={item.id} label={item.name} name={`${item.name}`}>
-              <Upload maxCount={1} className="w-full">
-                <Button
-                  icon={<UploadOutlined />}
-                  className="w-[300px] md:w-[600px]"
-                >
-                  Upload File
-                </Button>
-              </Upload>
-            </Form.Item>
-            <p className="mt-1 font-medium">
-              [Only png, jpeg and pdf formats are supported]
-            </p>
-            <p className="">Maximum upload file size is 5MB</p>
-          </div>
-        ) : (
-          <Empty
-            className="m-5 p-3"
-            description="No document requirements have been created. Create a document requirement in settings"
-          />
-        )
-      )}
-      {/* <div className="flex justify-end gap-3 my-5 py-2">
-        <AppButton
-          label="Previous"
-          variant="transparent"
-          type="button"
-          handleClick={() => {
-            onPrev && onPrev();
-          }}
-        />
-
-        <AppButton
-          label="Next"
-          type="button"
-          handleClick={() => {
-            onNext && onNext();
-          }}
-        />
-      </div> */}
-    </>
+    {filteredData && filteredData.length > 0 ? (
+      <Form>
+        {filteredData.map(
+          (item) =>
+            item.document_category_id === docId && (
+              <div className="m-2 p-3" key={item.id}>
+                <FormFileInput
+                  Form={Form}
+                  multiple={true}
+                  triggerComp
+                  name=""
+                  ruleOptions={{
+                    required: true,
+                    maxFileSize: 1024 * 1024 * 5,
+                    allowedFileTypes: [
+                      "image/jpeg",
+                      "image/png",
+                      "application/pdf",
+                    ],
+                    maxFileUploadCount: 1,
+                  }}
+                />
+              </div>
+            )
+        )}
+        <Button type="default">Save</Button>
+      </Form>
+    ) : (
+      <Empty
+        className="m-5 p-3"
+        description="No document requirements have been created. Create a document requirement in settings"
+      />
+    )}
+  </>
   );
 };

@@ -29,7 +29,7 @@ export const ServiceManagerPortfolio = () => {
   const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
   const [openRoleModal, setOpenRoleModal] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
-  // const { patchData } = useMoveToNextStage(applicantId as unknown as number);
+  // const { patchData} = useMoveToNextStage(applicantId as unknown as number);
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.map((item, index) => {
@@ -102,6 +102,7 @@ export const ServiceManagerPortfolio = () => {
   };
 
   // const moveApplicantToNextStage = () => {
+  //   // patchMutate({ id: applicantId as unknown as number, milestone_id: milestoneId as number});
   //   patchData(milestoneId as unknown as number);
   // };
 
@@ -289,10 +290,16 @@ export const ServiceManagerPortfolio = () => {
                   key="9"
                   onClick={() => {
                     setMilestoneId(val.milestoneId as unknown as number);
-                    moveApplicantToNextStage();
                   }}
                 >
-                  Move to Next Stage
+                  <Popconfirm
+                    title="Mark as completed"
+                    description={`Are you sure to complete ${val.applicantName}'s application?`}
+                    onConfirm={moveApplicantToNextStage}
+                    okType="default"
+                  >
+                    Move to Next Stage
+                  </Popconfirm>
                 </Menu.Item> */}
                 <Menu.Item
                   key="10"
@@ -323,7 +330,7 @@ export const ServiceManagerPortfolio = () => {
                   >
                     Mark as completed
                   </Popconfirm>
-                  </Menu.Item>
+                </Menu.Item>
               </Menu>
             }
           >
