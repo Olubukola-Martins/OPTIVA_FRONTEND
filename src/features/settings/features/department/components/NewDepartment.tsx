@@ -80,7 +80,11 @@ export const NewDepartment = ({ handleClose, open, id }: IdentifierProps) => {
           //   })
           // }
         />
-        <FormEmployeeInput Form={Form} optional={true}/>
+        <FormEmployeeInput
+          Form={Form}
+          optional={true}
+          control={{ label: "Head of department", name: "department_head_id" }}
+        />
 
         <AppButton type="submit" isLoading={isLoading} />
       </Form>

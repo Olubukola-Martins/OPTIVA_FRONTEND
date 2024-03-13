@@ -35,10 +35,7 @@ export const FormEmployeeInput: React.FC<{
 
   const handleSearch = (val: string) => {
     setSearchTerm(val);
-  };
-
-  console.log(data);
-  
+  };  
 
   return (
     <Form.Item
