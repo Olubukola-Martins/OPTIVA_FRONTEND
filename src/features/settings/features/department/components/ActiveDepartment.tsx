@@ -31,7 +31,7 @@ export const ActiveDepartment = ({ searchValue }: searchValueProps) => {
       dataIndex: "name",
     },
     {
-      title: "head",
+      title: "head of department",
       dataIndex: "head",
       render: (_, val) => <span>{val?.head?.name}</span>,
     },
