@@ -165,7 +165,7 @@ import { Button, Form, Upload,  } from "antd";
 import { useLocation, useParams } from "react-router-dom";
 import { useGetDocuments } from "../../hooks/Documet hooks/useGetDocuments";
 import { UploadOutlined } from "@ant-design/icons";
-import { RcFile, UploadFile, UploadProps } from "antd/es/upload";
+import { UploadFile, UploadProps } from "antd/es/upload";
 import { useQueryClient } from "react-query";
 import { createFileValidationRule } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
@@ -296,6 +296,7 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({ docId }) => {
                   });
                 },
                 onSuccess: (res: any) => {
+                  console.log(res)
                   openNotification({
                     title: "Success",
                     state: "success",
