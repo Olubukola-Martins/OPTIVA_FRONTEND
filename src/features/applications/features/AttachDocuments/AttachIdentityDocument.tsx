@@ -165,7 +165,7 @@ import { Button, Form, Upload,  } from "antd";
 import { useLocation, useParams } from "react-router-dom";
 import { useGetDocuments } from "../../hooks/Documet hooks/useGetDocuments";
 import { UploadOutlined } from "@ant-design/icons";
-import { RcFile, UploadFile, UploadProps } from "antd/es/upload";
+import { UploadFile, UploadProps } from "antd/es/upload";
 import { useQueryClient } from "react-query";
 import { createFileValidationRule } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
@@ -215,47 +215,106 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({ docId }) => {
     // return e
   };
 
+  // const handleSubmit = async (values: any) => {
+  //   console.log("form values", values);
+  //   const fileUploadData = new FormData();
+  //   fileList.forEach((file) => {
+  //     fileUploadData.append("files[]", file as RcFile);
+  //   });
+
+  //   await uploadFile({ file: values.chooseFile.originFileObj });
+  //   console.log("file data", fileData);
+  //   if (fileData?.data) {
+  //     mutate(
+  //       {
+  //         applicants_id: id as unknown as number,
+  //         document_category_id: docId as unknown as number,
+  //         document_requirement_id: 1,
+  //         file: fileData?.data.path,
+  //         name: "",
+  //       },
+  //       {
+  //         onError: (err: any) => {
+  //           openNotification({
+  //             title: "Error",
+  //             state: "error",
+  //             description: err.response.data.message,
+  //             duration: 8.0,
+  //           });
+  //         },
+  //         onSuccess: (res: any) => {
+  //           openNotification({
+  //             title: "Success",
+  //             state: "success",
+  //             description: res.data.message,
+  //             duration: 6.0,
+  //           });
+  //           form.resetFields();
+  //           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //         },
+  //       }
+  //     );
+  //   }
+  //   }
+  
   const handleSubmit = async (values: any) => {
     console.log("form values", values);
-    const fileUploadData = new FormData();
-    fileList.forEach((file) => {
-      fileUploadData.append("files[]", file as RcFile);
-    });
-
-    await uploadFile({ file: values.chooseFile[0].originFileObj });
-    console.log("file data", fileData);
-    if (fileData?.data) {
-      mutate(
-        {
-          applicants_id: id as unknown as number,
-          document_category_id: docId as unknown as number,
-          document_requirement_id: 1,
-          file: fileData?.data.path,
-          name: "",
-        },
-        {
-          onError: (err: any) => {
-            openNotification({
-              title: "Error",
-              state: "error",
-              description: err.response.data.message,
-              duration: 8.0,
-            });
-          },
-          onSuccess: (res: any) => {
-            openNotification({
-              title: "Success",
-              state: "success",
-              description: res.data.message,
-              duration: 6.0,
-            });
-            form.resetFields();
-            queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-          },
+  
+    // Iterate over each form item
+    for (const item of filteredData || []) {
+      // Get the fileList for the current form item
+      const fileList = values[item.id];
+  
+      // Check if fileList exists and is not empty
+      if (fileList && fileList.length > 0) {
+        // Access the originFileObj for each file in the fileList
+        for (const file of fileList) {
+          const originFileObj = file.originFileObj;
+          // Use originFileObj as needed
+          console.log("Origin File Object:", originFileObj);
+  
+          // Perform upload and mutation logic here
+          await uploadFile({ file: originFileObj });
+  
+          // Check if upload was successful
+          if (fileData?.data) {
+            mutate(
+              {
+                applicants_id: id as unknown as number,
+                document_category_id: docId as unknown as number,
+                document_requirement_id: 1,
+                file: fileData?.data.path,
+                name: "",
+              },
+              {
+                onError: (err: any) => {
+                  openNotification({
+                    title: "Error",
+                    state: "error",
+                    description: err.response.data.message,
+                    duration: 8.0,
+                  });
+                },
+                onSuccess: (res: any) => {
+                  console.log(res)
+                  openNotification({
+                    title: "Success",
+                    state: "success",
+                    description: 'Documents successfully uploaded',
+                    duration: 6.0,
+                  });
+                  form.resetFields();
+                  queryClient.invalidateQueries([
+                    QUERY_KEY_FOR_APPLICANT_DOCUMENT,
+                  ]);
+                },
+              }
+            );
+          }
         }
-      );
+      }
     }
-    }
+  };
   
   return (
     <>
