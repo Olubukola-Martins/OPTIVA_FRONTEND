@@ -105,7 +105,7 @@ export const DocumentsTab = () => {
           </Tabs.TabPane>
         ))}
       </Tabs>
-      <div className="flex justify-end items-center gap-5">
+      {/* <div className="flex justify-end items-center gap-5">
         {currentTab !== 0 && (
           <AppButton
             label="Prev"
@@ -120,7 +120,7 @@ export const DocumentsTab = () => {
           />
         )}
         {isLastTab && <AppButton label="Submit" type="submit" />}
-      </div>
+      </div> */}
       </>
     // </Form>
   );
