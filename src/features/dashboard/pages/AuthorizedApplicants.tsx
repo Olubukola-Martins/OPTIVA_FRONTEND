@@ -1,4 +1,4 @@
-import { Dropdown, Input, Menu } from "antd";
+import { Dropdown, Input, Menu, Popconfirm } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
@@ -9,6 +9,7 @@ import { usePagination } from "src/hooks/usePagination";
 import { useState } from "react";
 import { useDebounce } from "src/hooks/useDebounce";
 import { useDashboardFilterValues } from "../hooks/useDashboardFilterValues";
+import { useApproveorRejectApplicant } from "src/features/applications/hooks/Application hooks/useApproveorRejectApplicant";
 // import { FilterDrawer } from "../components/FilterDrawer";
 
 const AuthorizedApplicants = () => {
@@ -20,10 +21,17 @@ const AuthorizedApplicants = () => {
     pagination,
     search: debouncedSearchTerm,
   });
+  const { patchData } = useApproveorRejectApplicant("approve");
+  const { patchData: rejectData } = useApproveorRejectApplicant("reject");
   // const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-
   console.log("filetr values", filterValues);
 
+  const approveApplicant = (id: number) => {
+    patchData(id);
+  };
+  const rejectApplicant = (id: number) => {
+    rejectData(id);
+  };
   const columns: ColumnsType<IGetAuthorizedApplicant> = [
     {
       key: "1",
@@ -71,25 +79,42 @@ const AuthorizedApplicants = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                  <Link to={appRoute.applicant_details().path}>
+                  <Link to={appRoute.applicant_details(val.id).path}>
                     View Applicant Details
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="2">
-                  <Link to={appRoute.paymentProof().path}>
+                  <Link to={appRoute.paymentProof(val.id).path}>
                     View Proof of Payment
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="3">Approve</Menu.Item>
-                <Menu.Item key="4">Reject</Menu.Item>
+                <Menu.Item key="3">
+                  <Popconfirm
+                    title={`Do you want to approve ${val.applicant_name}'s application?`}
+                    onConfirm={() => approveApplicant(val.id)}
+                    okType="default"
+                  >
+                    Approve
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item key="4">
+                  {" "}
+                  <Popconfirm
+                    title={`Do you want to reject ${val.applicant_name}'s application?`}
+                    onConfirm={() => rejectApplicant(val.id)}
+                    okType="default"
+                  >
+                    Reject
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >

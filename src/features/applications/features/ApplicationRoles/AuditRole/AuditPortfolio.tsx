@@ -72,7 +72,9 @@ export const AuditPortfolio = () => {
   };
 
   const approveApplicant = () => {
-    patchData(applicantId as unknown as number);
+    console.log('applicant id', applicantId)
+    if(applicantId !== undefined)
+    patchData(applicantId);
   };
   const rejectApplicant = () => {
     rejectPatch(applicantId as unknown as number);

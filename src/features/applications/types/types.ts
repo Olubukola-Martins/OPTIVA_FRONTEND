@@ -72,7 +72,7 @@ interface Question {
 export interface IApplicationStatus {
   id: number;
   status: string;
-  reason:string
+  reason: string;
 }
 
 // ACCEPT APPLICANT
@@ -861,7 +861,6 @@ interface Quote {
   total_due_on_citizenship_approval: number;
 }
 
-
 // GRENADA REAL ESTATE
 export interface IGrenadaEstateQuote {
   Applicant_info: Applicantinfo;
@@ -1358,7 +1357,6 @@ interface Stkittsandnevisestatequote {
   st_kitts_total: number;
 }
 
-
 // SINGLE APPLICANT
 export interface IGetSingleApplicant {
   id: number;
@@ -1376,4 +1374,13 @@ export interface IGetSingleApplicant {
   assigned_to?: any;
   created_at: string;
   updated_at: string;
+}
+
+// UPLOAD MULTIPLE FILES
+export interface IUploadMultipleFiles {
+  name: string;
+  applicants_id: number;
+  document_category_id: number;
+  document_requirement_id: number;
+  file: string;
 }

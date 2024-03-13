@@ -22,8 +22,7 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
         url: `${END_POINT.BASE_URL}/admin/upload-proof-of-payment/${
           props.applicantId as unknown as string
         }`,
-            newData: val.uploadFile,
-        
+        newData: val.uploadFile[0],
       },
       {
         onError: (error: any) => {
@@ -121,12 +120,30 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
               type="reset"
               handleClick={props.onCancel}
             />
-                      <AppButton label="Submit" type="submit"
-                          isLoading={fileUploading}
-                      />
+            <AppButton label="Submit" type="submit" isLoading={fileUploading} />
           </div>
         </Form>
       </Modal>
     </>
   );
 };
+
+
+// const { mutate, isLoading } = useUploadProofofPayment();
+  // const { fileData, fileMutate, fileUploading } = useUploadFile();
+  // const queryClient = useQueryClient();
+  // const [form] = Form.useForm();
+  // const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false);
+  // const handleSubmit = async (val: any) => {
+  //   console.log("form values", val);
+  //   console.log("file data", fileData);
+  //   setIsUploadingFile(true);
+
+  //  await fileMutate({
+  //     newData: val.uploadFile,
+  //     url: `${END_POINT.BASE_URL}/admin/upload-file`,
+  //   });
+  //   setIsUploadingFile(false);
+
+  //   mutate({})
+  // };
