@@ -76,10 +76,11 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
           });
         },
         onSuccess: (res: any) => {
+          console.log('res', res)
           openNotification({
             state: "success",
             title: "Success",
-            description: res.data.message,
+            description: "Applicant successfully accepted",
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
         },

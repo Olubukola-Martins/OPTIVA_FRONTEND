@@ -7,7 +7,6 @@ import { AttachAcademic } from "./AttachAcademic";
 import { AttachTravelHistory } from "./AttachTravelHistory";
 import { AttachIdentityDocument } from "./AttachIdentityDocument";
 import { useState } from "react";
-import { AppButton } from "src/components/button/AppButton";
 
 export const DocumentsTab = () => {
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -92,7 +91,7 @@ export const DocumentsTab = () => {
       ),
     },
   ];
-  const isLastTab = currentTab === tabItems.length - 1;
+  // const isLastTab = currentTab === tabItems.length - 1;
 
   return (
     // <Form form={form} layout="vertical" onFinish={handleSubmit}>
@@ -105,7 +104,7 @@ export const DocumentsTab = () => {
           </Tabs.TabPane>
         ))}
       </Tabs>
-      <div className="flex justify-end items-center gap-5">
+      {/* <div className="flex justify-end items-center gap-5">
         {currentTab !== 0 && (
           <AppButton
             label="Prev"
@@ -120,7 +119,7 @@ export const DocumentsTab = () => {
           />
         )}
         {isLastTab && <AppButton label="Submit" type="submit" />}
-      </div>
+      </div> */}
       </>
     // </Form>
   );

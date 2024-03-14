@@ -3,12 +3,12 @@ import { DataSourceItem, IDocumentProps } from "./IdentityDocument";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useQueryClient } from "react-query";
-import { openNotification } from "src/utils/notification";
-import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+// import { useQueryClient } from "react-query";
+// import { openNotification } from "src/utils/notification";
+// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import {
   useGetApplicantDocumentCategory,
-  QUERY_KEY_FOR_APPLICANT_DOCUMENT,
+  // QUERY_KEY_FOR_APPLICANT_DOCUMENT,
 } from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -22,9 +22,9 @@ export const Reports: React.FC<IDocumentProps> = ({
 
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [docUrl, setDocUrl] = useState<string>();
-  const [docId, setDocId] = useState<number>();
-  const queryClient = useQueryClient();
-  const { mutate } = useApproveorRejectDoc();
+  // const [docId, setDocId] = useState<number>();
+  // const queryClient = useQueryClient();
+  // const { mutate } = useApproveorRejectDoc();
 
   useEffect(() => {
     if (data) {
@@ -61,53 +61,53 @@ export const Reports: React.FC<IDocumentProps> = ({
     }
   }, [data, filterValue]);
 
-  const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const approveDoc = () => {
+  //   mutate(
+  //     { approve: "accepted", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
-  const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const rejectDoc = () => {
+  //   mutate(
+  //     { decline: "declined", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -159,7 +159,7 @@ export const Reports: React.FC<IDocumentProps> = ({
                     View Document
                   </a>
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   key="2"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
@@ -176,7 +176,7 @@ export const Reports: React.FC<IDocumentProps> = ({
                   }}
                 >
                   Decline Document
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item key="4">
                   {" "}
                   <Link

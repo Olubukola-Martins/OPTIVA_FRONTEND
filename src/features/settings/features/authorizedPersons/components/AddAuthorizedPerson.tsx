@@ -131,7 +131,7 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
       fileUploadData.append("files[]", file as RcFile);
     });
     await uploadFile({ file: values.chooseFile[0].originFileObj });
-
+    console.log("url", fileData?.data.path);
     if (fileData?.data) {
       mutate(
         {

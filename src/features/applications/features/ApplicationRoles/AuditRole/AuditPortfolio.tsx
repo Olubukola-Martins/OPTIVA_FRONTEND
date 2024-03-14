@@ -1,3 +1,4 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
@@ -22,6 +23,9 @@ export const AuditPortfolio = () => {
   const queryClient = useQueryClient();
   const { patchData } = useApproveorRejectApplicant("approve");
   const { patchData: rejectPatch } = useApproveorRejectApplicant("reject");
+  // const [openAcceptConfirm, setOpenAcceptConfirm] = useState<boolean>(false);
+  // const [openApproveConfirm, setOpenApproveConfirm] = useState<boolean>(false);
+  // const [openRejectConfirm, setOpenRejectConfirm] = useState<boolean>(false);
 
   useEffect(() => {
     if (data) {
@@ -46,6 +50,11 @@ export const AuditPortfolio = () => {
   }, [data]);
 
   const acceptApplicant = () => {
+    openNotification({
+      state: "info",
+      title: "Wait a second ...",
+      description: <LoadingOutlined />,
+    });
     mutate(
       {
         application_id: applicantId as unknown as number,
@@ -60,24 +69,27 @@ export const AuditPortfolio = () => {
           });
         },
         onSuccess: (res: any) => {
+          console.log('res', res)
           openNotification({
             state: "success",
             title: "Success",
-            description: res.data.message,
+            // description: res.data.message,
+            description: 'Applicaant accepted successfully'
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          // setOpenAcceptConfirm(false);
         },
       }
     );
   };
 
   const approveApplicant = () => {
-    console.log('applicant id', applicantId)
-    if(applicantId !== undefined)
-    patchData(applicantId);
+    if (applicantId !== undefined) patchData(applicantId);
+    // setOpenApproveConfirm(false);
   };
   const rejectApplicant = () => {
     rejectPatch(applicantId as unknown as number);
+    // setOpenRejectConfirm(false);
   };
 
   const columns: ColumnsType<DataSourceItem> = [
@@ -144,14 +156,15 @@ export const AuditPortfolio = () => {
                   key="1"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
+                    // setOpenAcceptConfirm(true);
                   }}
                 >
                   <Popconfirm
                     title="Accept Applicant"
                     description={`Are you sure to accept ${val.applicantName}'s application?`}
-                    onConfirm={acceptApplicant}
-                    
+                    onConfirm={() => acceptApplicant()}
                     okType="default"
+                    // open={openAcceptConfirm}
                   >
                     Accept Applicant
                   </Popconfirm>
@@ -180,6 +193,7 @@ export const AuditPortfolio = () => {
                   key="4"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
+                    // setOpenApproveConfirm(true);
                   }}
                 >
                   <Popconfirm
@@ -187,6 +201,7 @@ export const AuditPortfolio = () => {
                     description={`Are you sure to approve ${val.applicantName}'s application?`}
                     onConfirm={approveApplicant}
                     okType="default"
+                    // open={openApproveConfirm}
                   >
                     Approve
                   </Popconfirm>
@@ -196,6 +211,7 @@ export const AuditPortfolio = () => {
                   key="5"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
+                    // setOpenRejectConfirm(true)
                   }}
                 >
                   <Popconfirm
@@ -203,6 +219,7 @@ export const AuditPortfolio = () => {
                     description={`Are you sure to reject ${val.applicantName}'s application?`}
                     onConfirm={rejectApplicant}
                     okType="default"
+                    // open={openRejectConfirm}
                   >
                     Reject
                   </Popconfirm>

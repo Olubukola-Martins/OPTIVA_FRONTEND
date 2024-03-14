@@ -4,7 +4,7 @@ import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
 import { IUploadMultipleFiles } from "../../types/types";
 
-const postData = async (props: IUploadMultipleFiles) => {
+const postData = async (props: IUploadMultipleFiles[]) => {
     const token = useGetToken();
     const url = `${END_POINT.BASE_URL}/admin/save-multiple-applicant-document`;
   
