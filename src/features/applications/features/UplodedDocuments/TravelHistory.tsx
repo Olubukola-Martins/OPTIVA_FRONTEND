@@ -22,9 +22,9 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
 
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [docUrl, setDocUrl] = useState<string>();
-  const [docId, setDocId] = useState<number>();
-  const queryClient = useQueryClient();
-  const { mutate } = useApproveorRejectDoc();
+  // const [docId, setDocId] = useState<number>();
+  // const queryClient = useQueryClient();
+  // const { mutate } = useApproveorRejectDoc();
 
   useEffect(() => {
     if (data) {
@@ -62,53 +62,53 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
     // refetch()
   }, [data, filterValue]);
 
-  const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const approveDoc = () => {
+  //   mutate(
+  //     { approve: "accepted", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
-  const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const rejectDoc = () => {
+  //   mutate(
+  //     { decline: "declined", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -160,7 +160,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                     View Document
                   </a>{" "}
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   key="2"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
@@ -177,7 +177,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                   }}
                 >
                   Decline Document
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item key="4">
                   <Link
                     to={

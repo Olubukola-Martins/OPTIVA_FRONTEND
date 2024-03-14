@@ -31,7 +31,7 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
 
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
-  const { mutate } = useApproveorRejectDoc();
+  // const { mutate } = useApproveorRejectDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
   const {
@@ -90,53 +90,53 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
     }
   }, [data, filterValue]);
 
-  const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const approveDoc = () => {
+  //   mutate(
+  //     { approve: "accepted", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
-  const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const rejectDoc = () => {
+  //   mutate(
+  //     { decline: "declined", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
    const normFile = (e: any) => {
     if (Array.isArray(e)) {
@@ -250,7 +250,7 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
                     View Document
                   </a>
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   key="2"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
@@ -267,7 +267,7 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
                   }}
                 >
                   Decline Document
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item key="4">
                   {" "}
                   <Link

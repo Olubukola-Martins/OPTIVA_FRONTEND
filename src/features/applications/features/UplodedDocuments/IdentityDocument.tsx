@@ -67,10 +67,10 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const [docUrl, setDocUrl] = useState<string>();
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
-  const { mutate } = useApproveorRejectDoc();
+  // const { mutate } = useApproveorRejectDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
-  const { data: userData } = useFetchUserProfile();
+  // const { data: userData } = useFetchUserProfile();
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -127,53 +127,53 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
     isLoading: updateApplicantDocLoading,
   } = useUpdateApplicantDoc();
 
-  const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const approveDoc = () => {
+  //   mutate(
+  //     { approve: "accepted", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
-  const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const rejectDoc = () => {
+  //   mutate(
+  //     { decline: "declined", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
@@ -288,7 +288,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                     View Document
                   </a>
                 </Menu.Item>
-                {userData?.id === 3 && (
+                {/* {userData?.id === 3 && (
                   <Menu.Item
                     key="2"
                     onClick={() => {
@@ -310,7 +310,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   >
                     Decline Document
                   </Menu.Item>
-                )}
+                )} */}
                 <Menu.Item key="4">
                   {" "}
                   <Link
