@@ -172,7 +172,7 @@ export const DomincaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
               style={tdStyle}
               className="bg-[#012168] text-[#012168]"
             >
-             -
+              -
             </td>
           </tr>
 
@@ -183,14 +183,29 @@ export const DomincaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             </td>
           </tr>
 
-          {/* ROW 13 */}
+          {/* ROW 17 */}
           <tr>
             <td style={tdStyle} colSpan={2}>
-              Program Total
+              Total Due On Citizenship Approval
             </td>
-            <td style={tdStyle}>${applicantQuote?.program_total}</td>
+            <td style={tdStyle}>
+              ${applicantQuote?.total_due_on_citizenship_approval}
+            </td>
           </tr>
 
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Total Due Now
+            </td>
+            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
+          </tr>
+          <tr>
+            <td colSpan={3} style={tdStyle} className="bg-white text-white">
+              -
+            </td>
+          </tr>
+          {/* ROW 13 */}
+          {/* EMPTY ROW */}
           {/* ROW 14 */}
           <tr>
             <td
@@ -215,27 +230,11 @@ export const DomincaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             </td>
           </tr>
 
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-             -
-            </td>
-          </tr>
-          {/* ROW 17 */}
           <tr>
             <td style={tdStyle} colSpan={2}>
-              Total Due On Citizenship Approval
+              Program Total
             </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.total_due_on_citizenship_approval}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due Now
-            </td>
-            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
+            <td style={tdStyle}>${applicantQuote?.program_total}</td>
           </tr>
         </table>
       </div>
