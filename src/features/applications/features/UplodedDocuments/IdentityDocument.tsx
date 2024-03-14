@@ -27,6 +27,7 @@ import type { UploadProps, RcFile } from "antd/lib/upload/interface";
 import { createFileValidationRule } from "src/features/settings/features/authorizedPersons/types";
 import { TFileType } from "src/features/settings/features/authorizedPersons/components/AddAuthorizedPerson";
 import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
+import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -44,7 +45,7 @@ export interface IDocumentProps {
   filterValue?: string;
   onNext?: () => void;
   onPrev?: () => void;
-  docId?:number
+  docId?: number;
 }
 
 const fileRuleOptions = {
@@ -69,7 +70,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const { mutate } = useApproveorRejectDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
-
+  const { data: userData } = useFetchUserProfile();
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -217,7 +218,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
               description: res.data.message,
             });
             queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-            setFileList([])
+            setFileList([]);
           },
         }
       );
@@ -287,24 +288,29 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                     View Document
                   </a>
                 </Menu.Item>
-                <Menu.Item
-                  key="2"
-                  onClick={() => {
-                    setDocId(val.key as unknown as number);
-                    approveDoc();
-                  }}
-                >
-                  Accept Document
-                </Menu.Item>
-                <Menu.Item
-                  key="3"
-                  onClick={() => {
-                    setDocId(val.key as unknown as number);
-                    rejectDoc();
-                  }}
-                >
-                  Decline Document
-                </Menu.Item>
+                {userData?.id === 3 && (
+                  <Menu.Item
+                    key="2"
+                    onClick={() => {
+                      setDocId(val.key as unknown as number);
+                      approveDoc();
+                    }}
+                  >
+                    Accept Document
+                  </Menu.Item>
+                )}
+
+                {userData?.id === 3 && (
+                  <Menu.Item
+                    key="3"
+                    onClick={() => {
+                      setDocId(val.key as unknown as number);
+                      rejectDoc();
+                    }}
+                  >
+                    Decline Document
+                  </Menu.Item>
+                )}
                 <Menu.Item key="4">
                   {" "}
                   <Link
@@ -403,12 +409,15 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
           </svg>
         </div>
         <h1 className="p-4 font-bold text-center text-lg">Upload document</h1>
-        <Form layout="vertical" onFinish={updateApplicantDoc} requiredMark={false}>
+        <Form
+          layout="vertical"
+          onFinish={updateApplicantDoc}
+          requiredMark={false}
+        >
           <Form.Item
             name="chooseFile"
             label="Choose file to upload"
             rules={[createFileValidationRule(fileRuleOptions)]}
-            
             getValueFromEvent={normFile}
           >
             <Upload {...props} maxCount={1}>
@@ -419,7 +428,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
             [Only png, jpeg and pdf formats are supported]
           </p>
           <p className="text-center">Maximum upload file size is 5 MB.</p>
-         
+
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
             <AppButton
               label="Cancel"
