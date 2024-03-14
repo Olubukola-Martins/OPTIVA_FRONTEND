@@ -11,9 +11,10 @@ import { CustomerExperience } from "../components/CustomerExperience";
 import { CE } from "../components/CE";
 import { NewApplicationModal } from "src/features/applications/features/NewApplication/NewApplicationModal";
 import { useState } from "react";
+import { Skeleton } from "antd";
 
 const Dashboard = () => {
-  const { data } = useFetchUserProfile();
+  const { data, isLoading } = useFetchUserProfile();
   const [openNewApplicationsModal, setOpenNewApplicationsModal] =
     useState<boolean>(false);
   const showNewApplicationsModal = () => {
@@ -22,28 +23,37 @@ const Dashboard = () => {
   const handleNewApplicationsCancel = () => {
     setOpenNewApplicationsModal(false);
   };
-  
+
   return (
     <>
-      <div className="flex items-center justify-between">
-        <PageIntro title="Dashboard" arrowBack={false} />
-        <AppButton
-          label="Add Applicants"
-          handleClick={showNewApplicationsModal}
-        />
-      </div>
-      <NewApplicationModal
-        open={openNewApplicationsModal}
-        handleClose={handleNewApplicationsCancel}
-      />
-      {data?.roles?.id === 1 && <Admin />}
-      {data?.roles?.id === 2 && <ServiceManager />}
-      {data?.roles?.id === 3 && <DSM />}
-      {data?.roles?.id === 4 && <DPO />}
-      {data?.roles?.id === 5 && <Audit />}
-      {data?.roles?.id === 6 && <DR />}
-      {data?.roles?.id === 8 && <CustomerExperience />}
-      {data?.roles?.id === 9 && <CE />}
+      <Skeleton
+        active
+        loading={isLoading}
+        className="w-full mt-5"
+        paragraph={{ rows: 15 }}
+      >
+        <div>
+          <div className="flex items-center justify-between">
+            <PageIntro title="Dashboard" arrowBack={false} />
+            <AppButton
+              label="Add Applicants"
+              handleClick={showNewApplicationsModal}
+            />
+          </div>
+          <NewApplicationModal
+            open={openNewApplicationsModal}
+            handleClose={handleNewApplicationsCancel}
+          />
+          {data?.roles?.id === 1 && <Admin />}
+          {data?.roles?.id === 2 && <ServiceManager />}
+          {data?.roles?.id === 3 && <DSM />}
+          {data?.roles?.id === 4 && <DPO />}
+          {data?.roles?.id === 5 && <Audit />}
+          {data?.roles?.id === 6 && <DR />}
+          {data?.roles?.id === 8 && <CustomerExperience />}
+          {data?.roles?.id === 9 && <CE />}
+        </div>
+      </Skeleton>
     </>
   );
 };
