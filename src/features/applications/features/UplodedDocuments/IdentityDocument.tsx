@@ -15,7 +15,7 @@ import {
 } from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { AppButton } from "src/components/button/AppButton";
@@ -27,7 +27,7 @@ import type { UploadProps, RcFile } from "antd/lib/upload/interface";
 import { createFileValidationRule } from "src/features/settings/features/authorizedPersons/types";
 import { TFileType } from "src/features/settings/features/authorizedPersons/components/AddAuthorizedPerson";
 import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
-import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+// import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export type DataSourceItem = {
   key: React.Key;

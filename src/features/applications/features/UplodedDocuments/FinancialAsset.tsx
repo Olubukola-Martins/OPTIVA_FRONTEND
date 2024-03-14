@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import {
   useGetApplicantDocumentCategory,
   QUERY_KEY_FOR_APPLICANT_DOCUMENT,

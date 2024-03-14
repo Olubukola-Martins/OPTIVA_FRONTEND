@@ -4,12 +4,12 @@ import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  QUERY_KEY_FOR_APPLICANT_DOCUMENT,
+  // QUERY_KEY_FOR_APPLICANT_DOCUMENT,
   useGetApplicantDocumentCategory,
 } from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
-import { useQueryClient } from "react-query";
-import { openNotification } from "src/utils/notification";
-import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+// import { useQueryClient } from "react-query";
+// import { openNotification } from "src/utils/notification";
+// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 

@@ -1,3 +1,4 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
@@ -49,6 +50,11 @@ export const AuditPortfolio = () => {
   }, [data]);
 
   const acceptApplicant = () => {
+    openNotification({
+      state: "info",
+      title: "Wait a second ...",
+      description: <LoadingOutlined />,
+    });
     mutate(
       {
         application_id: applicantId as unknown as number,
@@ -156,7 +162,7 @@ export const AuditPortfolio = () => {
                   <Popconfirm
                     title="Accept Applicant"
                     description={`Are you sure to accept ${val.applicantName}'s application?`}
-                    onConfirm={acceptApplicant}
+                    onConfirm={() => acceptApplicant()}
                     okType="default"
                     // open={openAcceptConfirm}
                   >

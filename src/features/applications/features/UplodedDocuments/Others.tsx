@@ -3,12 +3,12 @@ import { DataSourceItem, IDocumentProps } from "./IdentityDocument";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useQueryClient } from "react-query";
-import { openNotification } from "src/utils/notification";
-import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+// import { useQueryClient } from "react-query";
+// import { openNotification } from "src/utils/notification";
+// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import {
   useGetApplicantDocumentCategory,
-  QUERY_KEY_FOR_APPLICANT_DOCUMENT,
+  // QUERY_KEY_FOR_APPLICANT_DOCUMENT,
 } from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
