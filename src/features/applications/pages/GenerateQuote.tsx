@@ -10,6 +10,8 @@ import { useFetchApplicantsByRole } from "../hooks/Application hooks/useFetchApp
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Skeleton } from "antd";
+import { GenerateAntiguaSingleEstate } from "../features/Quotes/Generate Quotes/GenerateAntiguaSingleEstate";
+import { GenerateAntiguaJointEstateQuote } from "../features/Quotes/Generate Quotes/GenerateAntiguaJointEstateQuote";
 
 export const GenerateQuote = () => {
   const { data, isLoading } = useFetchApplicantsByRole();
@@ -51,10 +53,10 @@ export const GenerateQuote = () => {
       renderGenerateQuote = <GenerateAntiguaDonationQuote />;
       break;
     case "5-7":
-      renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
+      renderGenerateQuote = <GenerateAntiguaSingleEstate />;
       break;
     case "5-8":
-      renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
+      renderGenerateQuote = <GenerateAntiguaJointEstateQuote />;
       break;
     default:
       // renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;

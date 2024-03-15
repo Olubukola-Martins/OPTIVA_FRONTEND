@@ -10,16 +10,17 @@ import {
   tdStyle,
 } from "src/features/applications/pages/SendQuote";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Skeleton } from "antd";
 
 export const GrenadaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
-  const { data } = useGetSingleQuote<IGrenadaDonationQuote>({
+  const { data, isLoading } = useGetSingleQuote<IGrenadaDonationQuote>({
     id: id as unknown as number,
   });
   const applicantInfo = data?.Applicant_info;
   const applicantQuote = data?.Applicant_info.grenada_donation_quote;
 
   return (
-    <div>
+    <Skeleton active loading={isLoading}>
       <div>
         <h1 className="text-lg font-semibold pb-2">
           {applicantInfo?.full_name}{" "}
@@ -232,6 +233,6 @@ export const GrenadaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
           </tr>
         </table>
       </div>
-    </div>
+    </Skeleton>
   );
 };

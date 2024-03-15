@@ -10,16 +10,17 @@ import {
   tdStyle,
 } from "src/features/applications/pages/SendQuote";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Skeleton } from "antd";
 
 export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
-  const { data } = useGetSingleQuote<IGrenadaEstateQuote>({
+  const { data, isLoading } = useGetSingleQuote<IGrenadaEstateQuote>({
     id: id as unknown as number,
   });
   const applicantInfo = data?.Applicant_info;
   const applicantQuote = data?.Applicant_info.grenada_estate_quote;
 
   return (
-    <div>
+    <Skeleton active loading={isLoading}>
       <div>
         <h1 className="text-lg font-semibold pb-2">
           {applicantInfo?.full_name}{" "}
@@ -56,7 +57,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
 
           {/* ROW 2 */}
           <tr>
-            <td rowSpan={20} style={colOneStyle} colSpan={2}>
+            <td rowSpan={27} style={colOneStyle} colSpan={2}>
               Grenada Real Estate Quote
             </td>
             <td style={tdStyle} colSpan={3}>
@@ -214,6 +215,44 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
               -
             </td>
           </tr>
+          {/* ROW 17 */}
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Real Estate Investment Fee
+            </td>
+            <td style={tdStyle}>
+              ${applicantQuote?.real_estate_investment_fee}
+            </td>
+          </tr>
+          {/* EMPTY ROW */}
+          <tr>
+            <td colSpan={3} style={tdStyle} className="bg-white text-white">
+              -
+            </td>
+          </tr>
+          {/* ROW 17 */}
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Total Due On Citizenship Approval
+            </td>
+            <td style={tdStyle}>
+              ${applicantQuote?.total_due_on_citizenship_approval}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Total Due Now
+            </td>
+            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
+          </tr>
+
+          {/* EMPTY ROW */}
+          <tr>
+            <td colSpan={3} style={tdStyle} className="bg-white text-white">
+              -
+            </td>
+          </tr>
 
           {/* ROW 13 */}
           <tr>
@@ -246,46 +285,8 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             </td>
             <td style={tdStyle}>${applicantQuote?.program_grand_total}</td>
           </tr>
-
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-          {/* ROW 17 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Real Estate Investment Fee
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.real_estate_investment_fee}
-            </td>
-          </tr>
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-          {/* ROW 17 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due On Citizenship Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.total_due_on_citizenship_approval}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due Now
-            </td>
-            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
-          </tr>
         </table>
       </div>
-    </div>
+    </Skeleton>
   );
 };

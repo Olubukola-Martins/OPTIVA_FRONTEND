@@ -937,7 +937,7 @@ interface Quote {
   total_due_now: number;
   total_due_on_citizenship_approval: number;
 }
-
+// 
 // ANTIGUA SINGLE REAL ESTATE
 export interface IAntiguaSingleRealEstate {
   Applicant_info: Applicantinfo;
@@ -1010,7 +1010,6 @@ interface Quote {
   total_due_now: number;
   total_due_on_citizenship_approval: number;
 }
-
 // ANTIGUA JOINT ESTATE
 export interface IAntiguaJointRealEstate {
   Applicant_info: Applicantinfo;
@@ -1369,6 +1368,7 @@ export interface IGetSingleApplicant {
   branch: string;
   program_type: string;
   investmentroute: string;
+  investmentroute_id: number
   number_of_dependents: number;
   application_milestone: string;
   assigned_to?: any;

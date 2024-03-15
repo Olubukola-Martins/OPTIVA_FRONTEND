@@ -69,7 +69,7 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
                 ]}
               />
             )}
-             {/* <Select
+             <Select
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
@@ -91,7 +91,7 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
                   label: `Submitted to Audit`,
                 },
               ]}
-            /> */}
+            />
           </div>
         }
       />
