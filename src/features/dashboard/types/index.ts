@@ -131,8 +131,29 @@ interface CustomerExperience {
   application_status: ApplicationStatus;
 }
 
-
-
+// Master Lists
+export interface IMasterList {
+  id: number;
+  applicant_name: string;
+  applicant_id: string;
+  country: string;
+  program_type: string;
+  milestone?: any;
+  process?: any;
+  investmentroute: string;
+  branch: string;
+  comments: any[];
+  applicant_documents: any[];
+  user_assigned: any[];
+  country_id: number;
+  added_by?: any;
+  no_of_dependents: number;
+  investmentroute_id: number;
+  programtype_id: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
 
 
 

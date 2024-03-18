@@ -2,7 +2,6 @@ import { Skeleton, Form, Empty, Tooltip } from "antd";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "./NewApplicantBrief";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export interface IApplicationFormResponseProps {
   onNextTabItem?: () => void;
@@ -16,7 +15,6 @@ export const NewImmigrationAndCourtProceedings: React.FC<
   const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
     id: sharedData.templateId as unknown as number,
-    // id:9,
     endpointUrl: "section-three",
   });
 
@@ -31,7 +29,7 @@ export const NewImmigrationAndCourtProceedings: React.FC<
                   <Form.Item
                     required={false}
                     name={item.schema_name}
-                    rules={generalValidationRules}
+                    // rules={generalValidationRules}
                     label={
                       item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)

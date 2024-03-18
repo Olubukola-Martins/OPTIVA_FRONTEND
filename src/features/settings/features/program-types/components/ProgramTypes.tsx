@@ -36,13 +36,16 @@ export const ProgramTypes = () => {
         return {
           key: item.id,
           sn: index + 1,
-          programType: item.program_name.charAt(0).toUpperCase() + item.program_name.slice(1),
+          programType:
+            item.program_name.charAt(0).toUpperCase() +
+            item.program_name.slice(1),
           eligibleDependent: item.eligibledependents.map(
             (item) => item.dependant
           ),
-          applicationTemplate: item.program_link,
-          documentRequirements: item.documentrequirements
-            .map((item) => item.name),
+          applicationTemplate: item.applicationtemplate.template_name,
+          documentRequirements: item.documentrequirements.map(
+            (item) => item.name
+          ),
           milestones: item.milestones.map((item) => item.milestone),
         };
       });
@@ -67,7 +70,9 @@ export const ProgramTypes = () => {
       key: "3",
       render(_, record) {
         return record.eligibleDependent.map((item) => (
-          <Tag key={item} className="m-1">{item}</Tag>
+          <Tag key={item} className="m-1">
+            {item}
+          </Tag>
         ));
       },
     },
@@ -81,7 +86,11 @@ export const ProgramTypes = () => {
       dataIndex: "documentRequirements",
       key: "5",
       render(_, record) {
-        return record.documentRequirements.map((item) => <Tag key={item} className="m-1">{item}</Tag>);
+        return record.documentRequirements.map((item) => (
+          <Tag key={item} className="m-1">
+            {item}
+          </Tag>
+        ));
       },
     },
     {
@@ -89,7 +98,11 @@ export const ProgramTypes = () => {
       dataIndex: "milestones",
       key: "6",
       render(_, record) {
-        return record.milestones.map((item) =>   <Tag key={item} className="m-1">{item}</Tag>);
+        return record.milestones.map((item) => (
+          <Tag key={item} className="m-1">
+            {item}
+          </Tag>
+        ));
       },
     },
     {

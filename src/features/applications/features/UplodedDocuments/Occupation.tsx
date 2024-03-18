@@ -3,25 +3,29 @@ import { DataSourceItem, IDocumentProps } from "./IdentityDocument";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
-import { openNotification } from "src/utils/notification";
-import { useApproveorRejectDoc } from "../../hooks/useApproveorRejectDoc";
+// import { useQueryClient } from "react-query";
+// import { openNotification } from "src/utils/notification";
+// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import {
   useGetApplicantDocumentCategory,
-  QUERY_KEY_FOR_APPLICANT_DOCUMENT,
-} from "../../hooks/useGetApplicantDocumentCategory";
+  // QUERY_KEY_FOR_APPLICANT_DOCUMENT,
+} from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
-export const Occupation:React.FC<IDocumentProps> = ({ filterValue, onNext, onPrev }) => {
+export const Occupation: React.FC<IDocumentProps> = ({
+  filterValue,
+  onNext,
+  onPrev,
+}) => {
   const { data, isLoading } = useGetApplicantDocumentCategory(4);
 
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [docUrl, setDocUrl] = useState<string>();
-  const [docId, setDocId] = useState<number>();
-  const queryClient = useQueryClient();
-  const { mutate, } = useApproveorRejectDoc();
- 
+  // const [docId, setDocId] = useState<number>();
+  // const queryClient = useQueryClient();
+  // const { mutate } = useApproveorRejectDoc();
+
   useEffect(() => {
     if (data) {
       const identityDocument: DataSourceItem[] = data
@@ -34,12 +38,11 @@ export const Occupation:React.FC<IDocumentProps> = ({ filterValue, onNext, onPre
         })
         .map((item, index) => {
           setDocUrl(item.path);
-         
+
           return {
             key: item.id,
             sn: index + 1,
-            comments:
-              item.comments.length ,
+            comments: item.comments.length,
             documentName: item.name.charAt(0) + item.name.slice(1),
             documentRequirements:
               item.requirement.document_type.charAt(0).toUpperCase() +
@@ -58,54 +61,53 @@ export const Occupation:React.FC<IDocumentProps> = ({ filterValue, onNext, onPre
     }
   }, [data, filterValue]);
 
+  // const approveDoc = () => {
+  //   mutate(
+  //     { approve: "accepted", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
-  const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
-
-  const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const rejectDoc = () => {
+  //   mutate(
+  //     { decline: "declined", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -153,10 +155,11 @@ export const Occupation:React.FC<IDocumentProps> = ({ filterValue, onNext, onPre
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                <a href={docUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={docUrl} target="_blank" rel="noopener noreferrer">
                     View Document
-                  </a> </Menu.Item>
-                <Menu.Item
+                  </a>{" "}
+                </Menu.Item>
+                {/* <Menu.Item
                   key="2"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
@@ -173,8 +176,10 @@ export const Occupation:React.FC<IDocumentProps> = ({ filterValue, onNext, onPre
                   }}
                 >
                   Decline Document
-                </Menu.Item>
-                <Menu.Item key="4"> <Link
+                </Menu.Item> */}
+                <Menu.Item key="4">
+                  {" "}
+                  <Link
                     to={
                       appRoute.applicant_documents_comments(
                         val.key as unknown as number
@@ -182,7 +187,8 @@ export const Occupation:React.FC<IDocumentProps> = ({ filterValue, onNext, onPre
                     }
                   >
                     Comments
-                  </Link></Menu.Item>
+                  </Link>
+                </Menu.Item>
                 <Menu.Item key="5">Download</Menu.Item>
                 <Menu.Item key="6">Replace</Menu.Item>
               </Menu>

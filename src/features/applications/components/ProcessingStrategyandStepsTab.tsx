@@ -2,10 +2,10 @@ import { Form, Tabs } from "antd";
 import { ProcessingSteps } from "./ProcessingSteps";
 import { ProcessingStrategy } from "./ProcessingStrategy";
 import { useState } from "react";
-import { useCreateProcessingStrategy } from "../hooks/useCreateProcessingStrategy";
+import { useCreateProcessingStrategy } from "../hooks/Application hooks/useCreateProcessingStrategy";
 import { useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
-import { QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS } from "../hooks/useGetProcessingStrategy";
+import { QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS } from "../hooks/Application hooks/useGetProcessingStrategy";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 
@@ -16,34 +16,38 @@ export const ProcessingStrategyandStepsTab = () => {
   const { mutate, isLoading } = useCreateProcessingStrategy();
   const queryClient = useQueryClient();
 
-
   const handleSubmit = (val: any) => {
-    mutate({
-      application_id: id as unknown as number,
-      steps: val.processingSteps,
-      strategy: val.processingStrategy,
-    }, {
-      onError: (error: any) => {
-        openNotification({
-          state: "error",
-          title: "Error Occurred",
-          description: error.response.data.message,
-          duration: 5,
-        });
+    mutate(
+      {
+        application_id: id as unknown as number,
+        steps: val.processingSteps,
+        strategy: val.processingStrategy,
       },
-      onSuccess: (res: any) => {
-        openNotification({
-          state: "success",
-          title: "Success",
-          description: res.data.data.message,
-        });
-        queryClient.invalidateQueries([QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS]);
-        form.resetFields()
-        if (currentTab < tabItems.length - 1) {
-          setCurrentTab(currentTab + 1);
-        }
-      },
-    });
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.data.message,
+          });
+          queryClient.invalidateQueries([
+            QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS,
+          ]);
+          form.resetFields();
+          if (currentTab < tabItems.length - 1) {
+            setCurrentTab(currentTab + 1);
+          }
+        },
+      }
+    );
   };
 
   const tabItems: {

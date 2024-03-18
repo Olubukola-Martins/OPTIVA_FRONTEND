@@ -35,21 +35,38 @@ const AllContractsEmailTemplates = () => {
     urlEndPoint: emailContractTemplatesURL,
   });
   const [templatesData, settemplatesData] = useState<TemplateContent>([]);
+  // useEffect(() => {
+  //   if (allEmailTemplates?.data && Array.isArray(allEmailTemplates.data)) {
+  //     const contractsEmailTemplateRoutes = allEmailTemplates.data?.map(
+  //       (template: any) => {
+  //         const { name, type } = template;
+  //         return {
+  //           name: name,
+  //           link: appRoute.viewEditEmailTemplate(type).path,
+  //         };
+  //       }
+  //     );
+  //     settemplatesData(contractsEmailTemplateRoutes);
+  //   }
+  // }, [allEmailTemplates, allEmailTemplatesLoading]);
+
+
   useEffect(() => {
     if (allEmailTemplates?.data && Array.isArray(allEmailTemplates.data)) {
-      const contractsEmailTemplateRoutes = allEmailTemplates.data?.map(
-        (template: any) => {
+      const contractsEmailTemplateRoutes = allEmailTemplates.data
+        .slice(1) // Skip the first item
+        .map((template: any) => {
           const { name, type } = template;
           return {
             name: name,
             link: appRoute.viewEditEmailTemplate(type).path,
           };
-        }
-      );
+        });
       settemplatesData(contractsEmailTemplateRoutes);
     }
   }, [allEmailTemplates, allEmailTemplatesLoading]);
 
+  console.log('all email templates', allEmailTemplates)
   return (
     <div>
       <PageIntro

@@ -158,10 +158,12 @@ export const NewMeetingModal: React.FC<{
               label="End Time"
               name="end_time"
               rules={generalValidationRules}
+            
             >
               <TimePicker
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
+                
               />
             </Form.Item>
           </div>

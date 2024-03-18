@@ -21,6 +21,7 @@ export const EditFeesTab = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
   const { data: investmentData } = useGetInvestmentRoute();
+  const [currentTab, setCurrentTab] = useState<number>(0);
 
   // SINGLE GET REQUESTS
   const { data: singleFeeData, isLoading } = useGetSingleFee({
@@ -154,7 +155,13 @@ export const EditFeesTab = () => {
     {
       label: "Fees",
       key: "Fees",
-      children: <AddFees setInvestmentRoute={setInvestmentId} />,
+      children: (
+        <AddFees
+          setInvestmentRoute={setInvestmentId}
+          selectedInvestment={investmentId}
+          onNext={() => setCurrentTab(currentTab + 1)}
+        />
+      ),
     },
     {
       label: "Program Fees Breakdown",
@@ -232,9 +239,42 @@ export const EditFeesTab = () => {
         requiredMark={false}
         form={form}
       >
-        <Tabs items={tabItems} />
+        <Tabs
+          activeKey={currentTab.toString()}
+          onChange={(key) => setCurrentTab(Number(key))}
+        >
+          {tabItems.map((tab, index) => (
+            <Tabs.TabPane tab={tab.label} key={index.toString()}>
+              {tab.children}
+              {index === tabItems.length - 1 && (
+                <div className="flex items-center justify-end gap-4 mt-5">
+                  <AppButton
+                    label="Cancel"
+                    type="reset"
+                    variant="transparent"
+                  />
+                  <AppButton
+                    label="Save"
+                    type="submit"
+                    isLoading={
+                      antiguaDonationLoading ||
+                      antiguaJointEstateLoading ||
+                      antiguaSingleEstateLoading ||
+                      grenadaEstateLoading ||
+                      grenadaDonationLoading ||
+                      stKittsLoading ||
+                      stLuciaLoading ||
+                      dominicaLoading
+                    }
+                  />
+                </div>
+              )}
+            </Tabs.TabPane>
+          ))}
+        </Tabs>
+        {/* <Tabs items={tabItems} /> */}
 
-        <div className="flex items-center justify-end gap-4 mt-5">
+        {/* <div className="flex items-center justify-end gap-4 mt-5">
           <AppButton label="Cancel" type="reset" variant="transparent" />
           <AppButton
             label="Save"
@@ -250,7 +290,7 @@ export const EditFeesTab = () => {
               dominicaLoading
             }
           />
-        </div>
+        </div> */}
       </Form>
     </Skeleton>
   );

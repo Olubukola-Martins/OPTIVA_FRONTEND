@@ -62,9 +62,7 @@ export const Navbar = () => {
                     {userInfo?.name}
                   </h3>
 
-                  <p className="text-xs">
-                    Service Manager | Customer Experience{" "}
-                  </p>
+                  <p className="text-xs">{userInfo?.roles.name}</p>
                   <div className="flex items-center gap-2 text-xs mt-2 mb-4">
                     <div className="flex items-center gap-2">
                       <i className="ri-mail-line text-green-600"></i>

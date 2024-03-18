@@ -1,6 +1,7 @@
 import {
   Checkbox,
   DatePicker,
+  // DatePicker,
   Empty,
   Form,
   Input,
@@ -10,12 +11,12 @@ import {
 } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
-import { useCreateApplicationResponse } from "../../hooks/useCreateApplicationResponse";
+import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/useGetApplication";
+import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useQueryClient } from "react-query";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+// import { generalValidationRules } from "src/utils/formHelpers/validations";
 import React from "react";
 
 export interface IProps {
@@ -29,15 +30,14 @@ export const renderInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "select") {
     return (
       <div className="w-1/2">
-         <Select className="w-1/2">
-        {options?.map((option, index) => (
-          <Select.Option key={index} value={option}>
-            {option.charAt(0).toUpperCase() + option.slice(1)}
-          </Select.Option>
-        ))}
-      </Select>
+        <Select className="w-1/2">
+          {options?.map((option, index) => (
+            <Select.Option key={index} value={option}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </Select.Option>
+          ))}
+        </Select>
       </div>
-     
     );
   } else if (inputType === "check_box") {
     return (
@@ -52,14 +52,14 @@ export const renderInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "number_input") {
     return <InputNumber className="w-1/2" />;
   } else if (inputType === "date_input") {
-    return <DatePicker className="w-1/2" />;
+    return <DatePicker className="w-1/2" format="YYYY-MM-DD"/>;
   }
 };
 
 export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
   const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
-    // id: 15,
+
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-one",
   });
@@ -72,11 +72,10 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
 
   const [form] = Form.useForm();
   const handleSubmit = (val: any) => {
-    console.log('form vals', val)
     const applicationId = sharedData.applicantId as unknown as number;
 
     const payload = {
-      application_id:applicationId,
+      application_id: applicationId,
       responses:
         data?.map((item) => ({
           question_id: item.id,
@@ -101,7 +100,7 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
           description: res.data.message,
         });
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-       onNext();
+        onNext();
       },
     });
   };
@@ -112,12 +111,17 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
         <Empty />
       ) : (
         <Skeleton active loading={isLoading}>
-          <Form onFinish={handleSubmit} form={form} layout="vertical" requiredMark={false}>
+          <Form
+            onFinish={handleSubmit}
+            form={form}
+            layout="vertical"
+            requiredMark={false}
+          >
             {data?.map((item) => (
               <div className="w-full">
                 <Form.Item
                   name={item.schema_name}
-                  rules={generalValidationRules}
+                  // rules={generalValidationRules}
                   label={
                     item.form_question.charAt(0).toUpperCase() +
                     item.form_question.slice(1)

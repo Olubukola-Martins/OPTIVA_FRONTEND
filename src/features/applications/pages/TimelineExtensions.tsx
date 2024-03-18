@@ -17,17 +17,17 @@ import { useEffect, useState } from "react";
 import {
   QUERY_KEY_FOR_TIMELINE_EXTENSIONS,
   useFetchTimelineExtensions,
-} from "../hooks/useFetchTimelineExtensions";
+} from "../hooks/Application hooks/useFetchTimelineExtensions";
 import { formatDate } from "src/features/settings/features/authorizedPersons/components/AuthorizedPersons";
-import { useCreateTimelineExtension } from "../hooks/useCreateTimelineExtension";
+import { useCreateTimelineExtension } from "../hooks/Application hooks/useCreateTimelineExtension";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import {
   generalValidationRules,
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
-import { useApproveTimeline } from "../hooks/useApproveTimeline";
-import { useRejectTimeline } from "../hooks/useRejectTimeline";
+import { useApproveTimeline } from "../hooks/Application hooks/useApproveTimeline";
+import { useRejectTimeline } from "../hooks/Application hooks/useRejectTimeline";
 
 type DataSourceItem = {
   key: React.Key;
@@ -43,7 +43,6 @@ const TimelineExtensions = () => {
   const { data, isLoading } = useFetchTimelineExtensions({
     id: id as unknown as number,
   });
-  const [timelineId, setTimelineId] = useState<number>()
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -83,7 +82,7 @@ const TimelineExtensions = () => {
     };
 
     const formattedDate = formatDateToString(val.endDate.$d);
-   
+
     mutate(
       {
         application_id: id as unknown as number,
@@ -114,11 +113,11 @@ const TimelineExtensions = () => {
   };
 
   const approveTimeline = () => {
-    patchData(timelineId as unknown as number);
+    patchData(id as unknown as number);
   };
 
   const rejectTimeline = (val: any) => {
-    rejectData(timelineId as unknown as number, val.extensionReject);
+    rejectData(id as unknown as number, val.extensionReject);
     setOpenRejectModal(false);
   };
 
@@ -139,7 +138,6 @@ const TimelineExtensions = () => {
   const handleRejectCancel = () => {
     setOpenRejectModal(false);
   };
-
 
   // Columns
   const columns: ColumnsType<DataSourceItem> = [
@@ -177,7 +175,7 @@ const TimelineExtensions = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: (_, val) => (
+      render: () => (
         <div>
           <Dropdown
             trigger={["click"]}
@@ -196,16 +194,15 @@ const TimelineExtensions = () => {
                 >
                   View
                 </Menu.Item> */}
-                <Menu.Item
-                  key="1"
-                  onClick={() => {
-                    setTimelineId(val.key as unknown as number)
-                    approveTimeline();
-                  }}
-                >
+                <Menu.Item key="1" onClick={approveTimeline}>
                   Approve
                 </Menu.Item>
-                <Menu.Item key="2" onClick={showRejectModal}>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    showRejectModal();
+                  }}
+                >
                   Reject
                 </Menu.Item>
               </Menu>
@@ -220,8 +217,6 @@ const TimelineExtensions = () => {
 
   return (
     <>
-     
-
       <Modal
         open={openRequestModal}
         onCancel={handleRequestCancel}
@@ -277,7 +272,7 @@ const TimelineExtensions = () => {
           <Form
             layout="vertical"
             form={form}
-            onFinish={rejectTimeline}
+            onFinish={(val: any) => rejectTimeline(val)}
             requiredMark={false}
           >
             <Form.Item

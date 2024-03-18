@@ -1,5 +1,9 @@
 import { AboutTheApplicantsTab } from "./AboutTheApplicantsTab";
+import { IApplicantDetailsProps } from "./ApplicantBrief";
 
-export const AboutTheApplicant = () => {
-  return <AboutTheApplicantsTab />;
+export const AboutTheApplicant: React.FC<IApplicantDetailsProps> = ({
+  onNext,
+  onPrev,
+}) => {
+  return <AboutTheApplicantsTab onNext={onNext} onPrev={onPrev}/>;
 };

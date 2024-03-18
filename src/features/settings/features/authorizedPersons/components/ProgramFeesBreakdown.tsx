@@ -31,6 +31,6 @@ export const ProgramFeesBreakdown = ({
       return <AntiguaBarbacudaJointEstate />;
 
     default:
-      return null;
+      return 'Select an investment route to view this form section';
   }
 };

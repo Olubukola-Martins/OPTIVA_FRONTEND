@@ -35,20 +35,17 @@ export const ApplicantBriefTemplateDetails = () => {
     queryKey: QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE,
   });
 
-  const dataSectionOne = data;
-
   const [showDeleteModalForItem, setShowDeleteModalForItem] = useState<
     number | null
   >(null);
 
-  console.log("data", data);
   return (
     <>
-      {dataSectionOne?.length === 0 ? (
+      {data?.length === 0 ? (
         <Empty description="No questions has been created for this section" />
       ) : (
         <List itemLayout="vertical" loading={isLoading}>
-          {dataSectionOne?.map((item) => (
+          {data?.map((item) => (
             <List.Item key={item.id}>
               <div className="flex justify-between items-center">
                 <div className="my-3 p-2">
@@ -56,19 +53,20 @@ export const ApplicantBriefTemplateDetails = () => {
                     <span className="font-medium">Question:</span>{" "}
                     {item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)}
-                    {/* {item.form_question} */}
                   </p>
                   <p className="py-2 text-base">
                     <span className="font-medium">Input type:</span>{" "}
                     {showInputName(item.input_type)}
                   </p>
                 </div>
-                <div className="flex justify-end  w-[5%]">
-                  <i
-                    className="ri-delete-bin-line text-xl cursor-pointer mt-10"
-                    onClick={() => setShowDeleteModalForItem(item.id)}
-                  ></i>
-                </div>
+                {item.template_id !== null && (
+                  <div className="flex justify-end  w-[5%]">
+                    <i
+                      className="ri-delete-bin-line text-xl cursor-pointer mt-10"
+                      onClick={() => setShowDeleteModalForItem(item.id)}
+                    ></i>
+                  </div>
+                )}
               </div>
               {showDeleteModalForItem === item.id && (
                 <DeleteModal

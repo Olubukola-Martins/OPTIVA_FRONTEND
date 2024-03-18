@@ -4,7 +4,10 @@ import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
 import { useEffect, useState } from "react";
-import { QUERY_KEY_FOR_COMMENT, useGetComment } from "../hooks/useGetComment";
+import {
+  QUERY_KEY_FOR_COMMENT,
+  useGetComment,
+} from "../hooks/Application hooks/useGetComment";
 import { useParams } from "react-router-dom";
 import { formatDate } from "src/features/settings/features/authorizedPersons/components/AuthorizedPersons";
 import { DeleteModal } from "src/components/modals/DeleteModal";
@@ -12,7 +15,7 @@ import { useDelete } from "src/hooks/useDelete";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { textInputValidationRules } from "src/utils/formHelpers/validations";
-import { useCreateInactiveComment } from "../hooks/useCreateInactiveComment";
+import { useCreateInactiveComment } from "../hooks/Application hooks/useCreateInactiveComment";
 
 type DataSourceItem = {
   key: React.Key;
@@ -267,7 +270,7 @@ const Comments = () => {
 
       <div className=" flex flex-col md:flex-row items-center justify-between p-1">
         <PageIntro
-          title="Comments"
+          title="Reasons"
           description="View and make comments on applicants"
           linkBack={appRoute.applications}
         />

@@ -84,16 +84,15 @@ export const createFileValidationRule = (
   };
 };
 
-const fileRuleOptions = {
+export const fileRuleOptions = {
   required: true,
   allowedFileTypes: [
     "image/jpeg",
     "image/png",
     "image/jpg",
-    "application/pdf",
+    // "application/pdf",
   ] as TFileType[],
 };
-
 
 export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
   const [form] = Form.useForm();
@@ -101,8 +100,7 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
   const { mutate, isLoading } = usePostAuthorizedPersons();
   const queryClient = useQueryClient();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const { fileData, fileUploading, uploadFile } = useUploadFile()
-
+  const { fileData, fileUploading, uploadFile } = useUploadFile();
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -113,7 +111,7 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
     },
     beforeUpload: (file) => {
       setFileList([...fileList, file]);
- 
+
       return false;
     },
     fileList,
@@ -127,47 +125,41 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
     // return e
   };
 
-  
   const handleSubmit = async (values: any) => {
-
     const fileUploadData = new FormData();
     fileList.forEach((file) => {
       fileUploadData.append("files[]", file as RcFile);
     });
     await uploadFile({ file: values.chooseFile[0].originFileObj });
-    
-    console.log("file data no path", fileData);
-    console.log("file data", fileData?.data.path);
-    console.log("form vals", values);
-
+    console.log("url", fileData?.data.path);
     if (fileData?.data) {
-    mutate(
-      {
-        employee_id: values.employee_id,
-        signature: fileData?.data.path,
-        token,
-      },
-      {
-        onError: (err: any) => {
-          openNotification({
-            title: "Error",
-            state: "error",
-            description: err.response.data.message,
-            duration: 8.0,
-          });
+      mutate(
+        {
+          employee_id: values.employee_id,
+          signature: fileData?.data.path,
+          token,
         },
-        onSuccess: (res: any) => {
-          openNotification({
-            title: "Success",
-            state: "success",
-            description: res.data.message,
-            duration: 6.0,
-          });
-          form.resetFields();
-          queryClient.invalidateQueries([QUERY_KEY_FOR_AUTHORIZED_PERSON]);
-        },
-      }
-    );
+        {
+          onError: (err: any) => {
+            openNotification({
+              title: "Error",
+              state: "error",
+              description: err.response.data.message,
+              duration: 8.0,
+            });
+          },
+          onSuccess: (res: any) => {
+            openNotification({
+              title: "Success",
+              state: "success",
+              description: res.data.message,
+              duration: 6.0,
+            });
+            form.resetFields();
+            queryClient.invalidateQueries([QUERY_KEY_FOR_AUTHORIZED_PERSON]);
+          },
+        }
+      );
     }
   };
 
@@ -187,73 +179,35 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
 
           <FormEmployeeInput Form={Form} showLabel={false} />
         </div>
-        {/* <div>
-          <h2 className="mb-2">Upload File</h2>
-          <Form.Item
-            name="fileContent"
-            rules={generalValidationRules}
-          >
-            <div className="border border-slate-200 px-3 py-2 rounded-md">
-              <Upload {...props}  maxCount={1}>
-                <UploadOutlined /> {""} Choose file to upload
-              </Upload>
-            </div>
-          </Form.Item>
-
-          <p className="my-2 text-center text-lg">
-            [only xls,xlsx and csv formats are supported]
-          </p>
-          <p className="text-center my-2">Maximum upload file size is 5 MB.</p>
-        </div> */}
-        {/* <Form.Item
-          name="chooseFile"
-          label="Choose file to upload"
-          rules={[createFileValidationRule(fileRuleOptions)]}
-          // valuePropName="fileList"
-          getValueFromEvent={normFile}
-        >
-          <Upload {...props} maxCount={1}>
-            <Button icon={<UploadOutlined />}>Upload File</Button>
-          </Upload>
-        </Form.Item> */}
-
         <Form.Item
           name="chooseFile"
-          label="Choose file to upload"
-        rules={[createFileValidationRule(fileRuleOptions)]}
-          // valuePropName="fileList"
+          label="Upload Signature"
+          rules={[createFileValidationRule(fileRuleOptions)]}
           getValueFromEvent={normFile}
         >
           <Upload {...props} maxCount={1}>
-            <Button icon={<UploadOutlined />}>Upload File</Button>
+            <Button icon={<UploadOutlined />}>Choose file to upload</Button>
           </Upload>
         </Form.Item>
 
-        {/* <FormFileInput
-          label="Supporting Documents"
-          name="documents"
-          Form={Form}
-          multiple={true}
-          ruleOptions={{
-            maxFileUploadCount: 1,
-            allowedFileTypes: [
-              "application/pdf",
-              "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-              "image/jpeg",
-              "image/jpg",
-              "image/png",
-            ],
-          }}
-        /> */}
+        <p className="my-2 text-center text-lg">
+          [Only jpeg, png and jpg formats are supported]
+        </p>
 
-        <div className="flex items-center justify-center gap-5">
+        <p className="text-center mb-2">Maximum upload file size is 5 MB.</p>
+
+        <div className="flex items-center justify-center gap-5 my-4">
           <AppButton
             label="Cancel"
             type="reset"
             handleClick={() => handleClose()}
             variant="transparent"
           />
-          <AppButton label="Save" type="submit" isLoading={fileUploading || isLoading} />
+          <AppButton
+            label="Save"
+            type="submit"
+            isLoading={fileUploading || isLoading}
+          />
         </div>
       </Form>
     </Modal>

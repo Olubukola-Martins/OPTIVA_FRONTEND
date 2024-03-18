@@ -72,6 +72,7 @@ const SettingsTemplate = () => {
     );
   };
 
+
   useEffect(() => {
     setTemplate(data?.data[0]);
     if (data?.data) {

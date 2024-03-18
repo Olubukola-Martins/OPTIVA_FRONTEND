@@ -1,8 +1,49 @@
-import { Empty, Skeleton, Tooltip } from "antd";
-import { renderPTag } from "./ApplicantBrief";
+import {
+  Checkbox,
+  Empty,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Tooltip,
+} from "antd";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/useGetApplicationResponse";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
+
+export const renderDetailsInput = (inputType: string, options?: any[]) => {
+  if (inputType === "textarea") {
+    return <Input.TextArea className="w-full" />;
+  } else if (inputType === "text_input") {
+    return <Input className="w-1/2" />;
+  } else if (inputType === "select") {
+    return (
+      <div className="w-1/2">
+        <Select className="w-1/2">
+          {options?.map((option, index) => (
+            <Select.Option key={index} value={option}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </Select.Option>
+          ))}
+        </Select>
+      </div>
+    );
+  } else if (inputType === "check_box") {
+    return (
+      <Checkbox.Group className="w-full">
+        {options?.map((option, index) => (
+          <Checkbox key={index} value={option}>
+            {option.charAt(0).toUpperCase() + option.slice(1)}
+          </Checkbox>
+        ))}
+      </Checkbox.Group>
+    );
+  } else if (inputType === "number_input") {
+    return <InputNumber className="w-1/2" />;
+  } else if (inputType === "date_input") {
+    return <Input className="w-1/2" disabled />;
+  }
+};
 
 export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
@@ -10,24 +51,27 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
   onPrevTabItem,
 }) => {
   const { id } = useParams();
-  const { data, isLoading } = useGetApplicationResponse({
+  const { data } = useGetApplicationResponse({
     id: id as unknown as number,
     section: "sectiontworesponse",
   });
 
   return (
-    <Skeleton active loading={isLoading}>
-      {data?.length !== 0 ? (
-        data?.map(
+    <>
+      {data?.length ? (
+        data.map(
           (item) =>
-            item.question.subsection_name === subsectionName && (
-              <div className="mt-2 py-2" key={item.id}>
-                <h2 className="py-3">
-                  {item.question.form_question.charAt(0).toUpperCase() +
-                    item.question.form_question.slice(1)}
-                </h2>
-                {renderPTag(item.question.input_type, item.response)}
-              </div>
+            item.subsection_name === subsectionName && (
+              <Form.Item
+                key={item.id}
+                name={item.question.schema_name}
+                label={item.question.form_question}
+              >
+                {renderDetailsInput(
+                  item.question.input_type,
+                  item.question.options
+                )}
+              </Form.Item>
             )
         )
       ) : (
@@ -53,6 +97,6 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
           ></i>
         </Tooltip>
       </div>
-    </Skeleton>
+    </>
   );
 };

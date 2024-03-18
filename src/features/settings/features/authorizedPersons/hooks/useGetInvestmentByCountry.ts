@@ -19,7 +19,7 @@ const getData = async (props: IDataProps) => {
   };
 
   const res = await axios.get(url, config);
-  const item: IInvestmentByCountry[] = res.data;
+  const item: IInvestmentByCountry[] = res.data.data;
   return item;
 };
 

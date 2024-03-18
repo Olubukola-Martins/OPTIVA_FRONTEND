@@ -1,5 +1,4 @@
 export const appRoute = {
-
   // Authentication
   login_in: `/login`,
   forgot_password: `/forgot-password`,
@@ -130,4 +129,20 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
+
+  // ROLES
+  send_email: (id?: number, emailId?: number) => ({
+    format: `/applications/:id/send_email/:emailId`,
+    path: `/applications/${id}/send_email/${emailId}`,
+  }),
+  attach_supporting_documents: (id?: number) => ({
+    format: `/applications/:id/attach_documents`,
+    path: `/applications/${id}/attach_documents`,
+  }),
+
+  // SEND GENERATED QUOTES
+  send_generated_quotes: (id?: number, investId?:number) => ({
+    format: `/admin/send-quote/:id/:investId`,
+    path: `/admin/send-quote/${id}/${investId}`,
+  }),
 };

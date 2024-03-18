@@ -6,6 +6,7 @@ export interface IInvestmentByCountry {
   created_at: string;
   updated_at: string;
 }
+
 // GET COUNTRY BY PROGRAM TYPE
 export interface IProgramCountry {
   id: number;
@@ -26,6 +27,8 @@ export interface IGrenadaRealEstate {
   local_processing_fee: number;
   local_processing_fee_threshold_payment: number;
   local_processing_fee_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
   govt_sposeless_fee: number;
@@ -48,7 +51,7 @@ export interface IGrenadaRealEstate {
   real_estate_investment_for_family: number;
   bank_escrow_management_fee: number;
   legal_advisory_fee: number;
-  id?:number
+  id?: number;
 }
 
 export interface IGrenadaDonation {
@@ -59,6 +62,8 @@ export interface IGrenadaDonation {
   local_processing_fee: number;
   local_processing_fee_threshold_payment: number;
   local_processing_fee_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
   govt_ntf_bution_for_family_ls_than_eq_four: number;
@@ -80,7 +85,7 @@ export interface IGrenadaDonation {
   govt_passport_and_oath_of_allegiance_fee: number;
   legal_advisory_fee: number;
   local_agent_fee_and_vat: number;
-  id?:number
+  id?: number;
 }
 
 export interface IDominicaDonation {
@@ -93,6 +98,8 @@ export interface IDominicaDonation {
   local_processing_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   edf_bution_for_main_applicant: number;
   edf_bution_for_spouse: number;
   edf_bution_for_family_ls_than_eq_to_four: number;
@@ -109,7 +116,7 @@ export interface IDominicaDonation {
   govt_expedited_passport_issuance_fee: number;
   bank_and_courier_charges: number;
   local_agent_fee: number;
-  id?:number
+  id?: number;
 }
 
 export interface IAntiguaBarbacudaDonation {
@@ -122,6 +129,8 @@ export interface IAntiguaBarbacudaDonation {
   local_processing_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   bution_fee_for_applicants_ls_than_eq_to_four: number;
   bution_fee_for_applicants_eq_to_five: number;
   bution_fee_for_applicants_gt_than_eq_to_six: number;
@@ -148,6 +157,8 @@ export interface IAntiguaSingleRealEstate {
   local_processing_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   real_estate_investment_fee: number;
   govt_prc_fee_for_family_of_four: number;
   govt_prc_fee_for_family_gt_than_four: number;
@@ -174,6 +185,8 @@ export interface IAntiguaJointRealEstate {
   local_processing_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   real_estate_investment_fee: number;
   govt_prc_fee_for_family_of_four: number;
   govt_prc_fee_for_family_gt_than_four: number;
@@ -200,6 +213,8 @@ export interface IStKittsNevis {
   local_processing_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   sgf_dona_for_principal_applicant: number;
   sgf_dona_for_spouse_or_other_dependent: number;
   sgf_dona_for_family_of_four: number;
@@ -223,7 +238,7 @@ export interface IStKittsNevis {
   bank_due_dil_fee_for_depn_gt_than_fifteen: number;
   legal_advisory_fee: number;
   local_agent_fee_and_vat: number;
-  id?:number
+  id?: number;
 }
 
 export interface IStLucia {
@@ -236,6 +251,8 @@ export interface IStLucia {
   local_processing_fee_balance_payment: number;
   program_threshold_payment: number;
   program_balance_payment: number;
+  country_fee_threshold_payment: number;
+  country_fee_balance_payment: number;
   nefi_bution_for_main_applicant: number;
   nefi_bution_for_spouse: number;
   nefi_bution_for_add_depn: number;
@@ -251,7 +268,7 @@ export interface IStLucia {
   legal_and_advisory_fee: number;
   local_agent_and_vat_fee: number;
   passport_fee: number;
-  id?:number
+  id?: number;
 }
 
 // SINGLE FEE
@@ -481,7 +498,6 @@ export interface ISingleFee {
   antigua_single_real_estate_fee?: Antiguasinglerealestatefee;
   antigua_joint_real_estate_fee?: Antiguajointrealestatefee;
 }
-
 
 // CURRENCY
 export interface ICurrency {

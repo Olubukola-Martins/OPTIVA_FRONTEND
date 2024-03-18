@@ -16,11 +16,11 @@ const getData = async (props: IDataProps) => {
   };
 
     const res = await axios.get(url, config);
-  const item: IProgramCountry[] = res.data;
+  const item: IProgramCountry[] = res.data.data;
   return item;
 };
 
-export const useGetCountryByProgram = ({ id,  }: ISingleInvestment) => {
+export const useGetCountryByProgram = ({ id  }: ISingleInvestment) => {
   const { token } = useGetUserInfo();
   const queryData = useQuery([QUERY_KEY_FOR_COUNTRY, id], () => getData({ id, token }), {
     onError: () => {},

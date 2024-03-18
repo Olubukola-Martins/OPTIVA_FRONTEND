@@ -1,8 +1,9 @@
 import { Input, Select, Tabs } from "antd";
-import { ActiveApplications } from "../../components/ActiveApplications";
-import { InactiveApplications } from "../../components/InactiveApplications";
+import { ActiveApplications } from "../ApplicationRoles/OperationsRole/ActiveApplications";
+import { InactiveApplications } from "../ApplicationRoles/OperationsRole/InactiveApplications";
+import { IRoleTabProps } from "../ApplicationRoles/AuditRole/AuditTab";
 
-export const ApplicationsTab = () => {
+export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -32,8 +33,39 @@ export const ApplicationsTab = () => {
             />
             <Select
               allowClear
-              placeholder="Filter"
+              placeholder="Role"
               className="md:flex hidden w-[250px]"
+              onChange={onRoleSelect}
+              options={[
+                {
+                  value: 1,
+                  label: `DR's List`,
+                },
+                {
+                  value: 2,
+                  label: `DPO's List`,
+                },
+                {
+                  value: 3,
+                  label: `DMS's List`,
+                },
+                {
+                  value: 4,
+                  label: `Audit's List`,
+                },
+                {
+                  value: 5,
+                  label: `Operations  List`,
+                },
+                {
+                  value: 6,
+                  label: `Service Manager's  List`,
+                },
+                {
+                  value: 7,
+                  label: `Customer Engager's  List`,
+                },
+              ]}
             />
           </div>
         }

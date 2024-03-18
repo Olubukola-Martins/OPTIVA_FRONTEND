@@ -1,9 +1,13 @@
+import { IApplicantDetailsProps } from "./ApplicantBrief";
 import { ApplicantPeculiaritiesTab } from "./ApplicantPeculiaritiesTab";
 
-export const ApplicantPeculiarites = () => {
+export const ApplicantPeculiarites: React.FC<IApplicantDetailsProps> = ({
+  onNext,
+  onPrev,
+}) => {
   return (
     <>
-      <ApplicantPeculiaritiesTab />
+      <ApplicantPeculiaritiesTab onNext={onNext} onPrev={onPrev}/>
     </>
   );
 };

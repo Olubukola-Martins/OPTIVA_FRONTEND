@@ -1,4 +1,4 @@
-import { Dropdown, Menu, Table,  } from "antd";
+import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
 import {
@@ -24,6 +24,7 @@ export const Milestones = () => {
   const { data, isLoading } = useGetMilestone();
   const [dataArray, setDataArray] = useState<DataSourceItem[]>([]);
 
+
   useEffect(() => {
     if (data) {
       const milestone: DataSourceItem[] = data.map((item, index) => {
@@ -31,7 +32,7 @@ export const Milestones = () => {
           key: item.id,
           sn: index + 1,
           dateCreated: formatDate(item.created_at),
-          duration: item.timeline + ' days',
+          duration: item.timeline + " days",
           lastModified: formatDate(item.updated_at),
           milestones: item.milestone,
         };
@@ -42,8 +43,7 @@ export const Milestones = () => {
 
   const [milestoneId, setMilestoneId] = useState<number>();
 
-
- const {removeData}= useDelete({
+  const { removeData } = useDelete({
     queryKey: QUERY_KEY_FOR_MILESTONE,
     EndPointUrl: "admin/milestone/",
   });
@@ -159,12 +159,13 @@ export const Milestones = () => {
       />
 
       {/*ADD MILESTONE MODAL */}
-      {milestoneId &&   <AddMilestoneModal
-        handleClose={handleAddMilestoneModalCancel}
-        open={openMilestoneModal}
-        milestoneId={milestoneId}
-      />}
-    
+      {milestoneId && (
+        <AddMilestoneModal
+          handleClose={handleAddMilestoneModalCancel}
+          open={openMilestoneModal}
+          milestoneId={milestoneId}
+        />
+      )}
 
       {/* DELETE MODAL */}
       <DeleteModal

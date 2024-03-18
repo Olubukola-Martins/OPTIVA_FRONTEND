@@ -29,13 +29,13 @@ export const FormEmployeeInput: React.FC<{
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
 
   const { data, isLoading, isSuccess } = useFetchEmployees({
-    currentUrl: "active-employees",
+    currentUrl: "users/employees",
     search: debouncedSearchTerm,
   });
 
   const handleSearch = (val: string) => {
     setSearchTerm(val);
-  };
+  };  
 
   return (
     <Form.Item

@@ -12,21 +12,22 @@ import { ColumnsType } from "antd/es/table";
 import {
   QUERY_KEY_FOR_APPLICANT_DOCUMENT,
   useGetApplicantDocumentCategory,
-} from "../../hooks/useGetApplicantDocumentCategory";
+} from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useApproveorRejectDoc } from "../../hooks/useApproveorRejectDoc";
+// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { END_POINT } from "src/config/environment";
-import { useUpdateApplicantDoc } from "../../hooks/useUpdateApplicantDoc";
+import { useUpdateApplicantDoc } from "../../hooks/Documet hooks/useUpdateApplicantDoc";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps, RcFile } from "antd/lib/upload/interface";
 import { createFileValidationRule } from "src/features/settings/features/authorizedPersons/types";
 import { TFileType } from "src/features/settings/features/authorizedPersons/components/AddAuthorizedPerson";
-import useUploadApplicantFile from "../../hooks/useUploadApplicantFile";
+import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
+// import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -41,9 +42,10 @@ export type DataSourceItem = {
 };
 
 export interface IDocumentProps {
-  filterValue: string;
+  filterValue?: string;
   onNext?: () => void;
   onPrev?: () => void;
+  docId?: number;
 }
 
 const fileRuleOptions = {
@@ -65,9 +67,10 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const [docUrl, setDocUrl] = useState<string>();
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
-  const { mutate } = useApproveorRejectDoc();
+  // const { mutate } = useApproveorRejectDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const { fileData, fileUploading,  } = useUploadApplicantFile();
+  const { fileData, fileUploading } = useUploadApplicantFile();
+  // const { data: userData } = useFetchUserProfile();
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -124,53 +127,53 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
     isLoading: updateApplicantDocLoading,
   } = useUpdateApplicantDoc();
 
-  const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const approveDoc = () => {
+  //   mutate(
+  //     { approve: "accepted", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
-  const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
+  // const rejectDoc = () => {
+  //   mutate(
+  //     { decline: "declined", document_id: docId as unknown as number },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+  //       },
+  //     }
+  //   );
+  // };
 
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
@@ -215,6 +218,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
               description: res.data.message,
             });
             queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+            setFileList([]);
           },
         }
       );
@@ -273,29 +277,40 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key="1" onClick={() => { setDocUrl(val.path) }}>
+                <Menu.Item
+                  key="1"
+                  onClick={() => {
+                    setDocUrl(val.path);
+                    console.log(docUrl);
+                  }}
+                >
                   <a href={docUrl} target="_blank" rel="noopener noreferrer">
                     View Document
                   </a>
                 </Menu.Item>
-                <Menu.Item
-                  key="2"
-                  onClick={() => {
-                    setDocId(val.key as unknown as number);
-                    approveDoc();
-                  }}
-                >
-                  Accept Document
-                </Menu.Item>
-                <Menu.Item
-                  key="3"
-                  onClick={() => {
-                    setDocId(val.key as unknown as number);
-                    rejectDoc();
-                  }}
-                >
-                  Decline Document
-                </Menu.Item>
+                {/* {userData?.id === 3 && (
+                  <Menu.Item
+                    key="2"
+                    onClick={() => {
+                      setDocId(val.key as unknown as number);
+                      approveDoc();
+                    }}
+                  >
+                    Accept Document
+                  </Menu.Item>
+                )}
+
+                {userData?.id === 3 && (
+                  <Menu.Item
+                    key="3"
+                    onClick={() => {
+                      setDocId(val.key as unknown as number);
+                      rejectDoc();
+                    }}
+                  >
+                    Decline Document
+                  </Menu.Item>
+                )} */}
                 <Menu.Item key="4">
                   {" "}
                   <Link
@@ -320,7 +335,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                     Download
                   </a>
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="6"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
@@ -328,7 +343,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   }}
                 >
                   Replace
-                </Menu.Item> */}
+                </Menu.Item>
               </Menu>
             }
           >
@@ -394,25 +409,26 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
           </svg>
         </div>
         <h1 className="p-4 font-bold text-center text-lg">Upload document</h1>
-        <Form layout="vertical" name="" onFinish={updateApplicantDoc}>
+        <Form
+          layout="vertical"
+          onFinish={updateApplicantDoc}
+          requiredMark={false}
+        >
           <Form.Item
             name="chooseFile"
             label="Choose file to upload"
             rules={[createFileValidationRule(fileRuleOptions)]}
-            // valuePropName="fileList"
             getValueFromEvent={normFile}
           >
             <Upload {...props} maxCount={1}>
               <Button icon={<UploadOutlined />}>Upload File</Button>
             </Upload>
           </Form.Item>
-          {/* <p className="mt-2 text-center text-lg">
-            [only xls,xlsx and csv formats are supported]
+          <p className="mt-2 text-center text-lg">
+            [Only png, jpeg and pdf formats are supported]
           </p>
           <p className="text-center">Maximum upload file size is 5 MB.</p>
-          <p className="text-center text-[#7ac98c] mt-5 text-lg">
-            Download sample template for import.
-          </p> */}
+
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
             <AppButton
               label="Cancel"
