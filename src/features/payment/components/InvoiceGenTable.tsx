@@ -97,13 +97,6 @@ const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
                   View
                 </Link>
               </Menu.Item>
-              {/* <Menu.Item key="2" onClick={() => {
-                // downloadInvoice({ invoiceId: record.key as number })
-                setInvoiceId(record.key as number)
-
-              }}>Download
-              
-              </Menu.Item> */}
               <Menu.Item>
                 <a
                   href={`https://optiva-backend.techmur.com/api/admin/invoice/${record.id}/download-pdf`}
