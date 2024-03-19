@@ -50,8 +50,7 @@ export const useFetchSingleItem = ({
           duration: 5,
         });
       },
-      onSuccess: (res) => {
-        console.log("res", res);
+      onSuccess: () => {
         // {onSuccessAction}
         // queryClient.invalidateQueries([queryKey,itemId])
       },

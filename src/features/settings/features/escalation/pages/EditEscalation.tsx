@@ -16,7 +16,6 @@ import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { END_POINT } from "src/config/environment";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import SuccessModal from "src/features/settings/components/SuccessModal";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
 import { QUERY_KEY_ESCALATION, escalationURL } from "../hooks/useAddEscalation";
@@ -33,7 +32,7 @@ interface DataRow {
 const EditEscalation = () => {
   const { id } = useParams();
   const itemId = parseInt(id as string);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  // const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [currentKey, setCurrentKey] = useState(0);
   const [tableInitialData, setTableInitialData] = useState<DataRow[]>([]);
   const [currentEscalateTo, setCurrentEscalateTo] = useState<number>();
@@ -73,6 +72,8 @@ const EditEscalation = () => {
           onSelect={(val: number) => {
             setCurrentEscalateTo(val);
             setCurrentKey(key);
+            form.resetFields([`${key}-employeeName`]);
+
           }}
           options={allRoles?.data.map((role: { name: string; id: number }) => {
             return { label: role.name, value: role.id };
@@ -97,11 +98,11 @@ const EditEscalation = () => {
           onClick={() => {
             setCurrentKey(key);
           }}
-          // options={employeeOptions}
+          notFoundContent={"No employee available for this role"}
           options={
-            // currentEscalateTo && form.getFieldValue(`${key}-escalateTo`)
-            form.getFieldValue(`${key}-escalateTo`)
-              ? employeeData?.data
+            // form.getFieldValue(`${key}-escalateTo`)
+            //   ? 
+              employeeData?.data
                   .filter(
                     (employee) =>
                       employee.user.role_id ===
@@ -110,11 +111,12 @@ const EditEscalation = () => {
                   .map((employee: { name: string; id: number }) => {
                     return { label: employee.name, value: employee.id };
                   })
-              : employeeData?.data.map(
-                  (employee: { name: string; id: number }) => {
-                    return { label: employee.name, value: employee.id };
-                  }
-                )
+              // : 
+              // employeeData?.data.map(
+              //     (employee: { name: string; id: number }) => {
+              //       return { label: employee.name, value: employee.id };
+              //     }
+              //   ) 
           }
         />
       </Form.Item>
@@ -153,6 +155,7 @@ const EditEscalation = () => {
                 onClick={() => {
                   setCurrentKey(currentKey);
                 }}
+          notFoundContent={"No employee available for this role"}
                 options={
                   currentEscalateTo &&
                   form.getFieldValue(`${currentKey}-escalateTo`)
@@ -168,14 +171,15 @@ const EditEscalation = () => {
                             value: employee.id,
                           };
                         })
-                    : employeeData?.data.map(
-                        (employee: { name: string; id: number }) => {
-                          return {
-                            label: employee.name,
-                            value: employee.id,
-                          };
-                        }
-                      )
+                    : []
+                    //  employeeData?.data.map(
+                    //     (employee: { name: string; id: number }) => {
+                    //       return {
+                    //         label: employee.name,
+                    //         value: employee.id,
+                    //       };
+                    //     }
+                    //   )
                 }
               />
             </Form.Item>
@@ -187,7 +191,7 @@ const EditEscalation = () => {
       }
     });
     setTableInitialData([...tempData]);
-  }, [originalData, dynamicDta, currentEscalateTo, currentKey,form,allRolesLoading,employeeLoading,employeeData,allRoles]);
+  }, [originalData, dynamicDta, currentEscalateTo, currentKey,form,allRolesLoading,employeeLoading,allRoles, employeeData?.data]);
 
   useEffect(() => {
     if (singleEscData && !Array.isArray(singleEscData)) {
@@ -208,24 +212,28 @@ const EditEscalation = () => {
                   onSelect={() => {
                     setCurrentEscalateTo(undefined);
                   }}
+          notFoundContent={"No employee available for this role"}
                   // options={employeeOptions}
                   options={
-                    // currentEscalateTo && form.getFieldValue(`${level.id}-escalateTo`)
-                    //   ?
-                    employeeData?.data
-                      .filter(
-                        (employee) =>
-                          employee.user.role_id ===
-                          form.getFieldValue(`${level.id}-escalateTo`)
-                      )
-                      .map((employee: { name: string; id: number }) => {
-                        return { label: employee.name, value: employee.id };
-                      })
-                    // : employeeData?.data.map(
-                    //     (employee: { name: string; id: number }) => {
-                    //       return { label: employee.name, value: employee.id };
-                    //     }
-                    //   )
+
+                    form.getFieldValue(`${level.id}-escalateTo`)
+                    ? employeeData?.data
+                        .filter(
+                          (employee) =>
+                            employee.user.role_id ===
+                            form.getFieldValue(`${level.id}-escalateTo`)
+                        )
+                        .map((employee: { name: string; id: number }) => {
+                          return { label: employee.name, value: employee.id };
+                        })
+                    :
+                    employeeData?.data.map(
+                        (employee: { name: string; id: number }) => {
+                          return { label: employee.name, value: employee.id };
+                        }
+                      ) 
+      
+      
                   }
                 />
               </Form.Item>
@@ -316,6 +324,7 @@ const EditEscalation = () => {
 
   const handleAddTableRow = () => {
     const newKey = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
+
     const newValue = {
       key: newKey,
       escalateTo: escalateToItem(newKey),
@@ -367,21 +376,18 @@ const EditEscalation = () => {
       reminder_frequency: formValues.reminderFrequency,
       levels: levels,
     };
-    console.log("escalationBody", escalationBody);
     editEscalation(itemId, escalationBody);
   };
 
   return (
     <>
-      <SuccessModal
+      {/* <SuccessModal
         open={showSuccessModal}
         description="Escalation Added Successfully"
         handleClose={() => {
           setShowSuccessModal(false);
-            navigate(appRoute.escalation);
-          // navigate(appRoute.escalation);
         }}
-      />
+      /> */}
       <PageIntro
         title="Edit Escalation "
         description="Edit preset  escalation on the system"
@@ -449,10 +455,11 @@ const EditEscalation = () => {
                     <Table
                       columns={columns}
                       loading={
-                        singleEscisLoading ||
-                        isFetching ||
-                        allRolesLoading ||
+                        singleEscisLoading &&
+                        isFetching &&
+                        allRolesLoading &&
                         employeeLoading
+
                       }
                       className="min-w-300px"
                       dataSource={tableInitialData}
@@ -498,7 +505,7 @@ const EditEscalation = () => {
               <AppButton
                 type="submit"
                 label="Save"
-                handleClick={() => setShowSuccessModal(true)}
+                // handleClick={() => setShowSuccessModal(true)}
               />
             </div>
           </Form>
