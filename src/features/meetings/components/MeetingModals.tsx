@@ -300,7 +300,6 @@ console.log(editModalVisible)
       }
     );
   };
-  // onEditLoading?.(editMeetingLoading) ;
   useEffect(() => {
     if (currentEvent) {
       const {
@@ -308,7 +307,6 @@ console.log(editModalVisible)
         end,
         id,
         organizer_id,
-        // organizer_name,
         start,
         title,
         description,
