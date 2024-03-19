@@ -11,6 +11,7 @@ import {
   Popconfirm,
 } from "antd";
 import dayjs from "dayjs";
+import "../assets/style.css"
 import { AppButton } from "src/components/button/AppButton";
 import { IEvent } from "./Calendar";
 import { useContext, useEffect, useState } from "react";
@@ -125,11 +126,13 @@ export const NewMeetingModal: React.FC<{
               label="Start Time"
               name="start_time"
               rules={generalValidationRules}
+              
             >
               <TimePicker
+              id="meetingTime"
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
-                
+              
               />
             </Form.Item>
             <Form.Item
@@ -138,7 +141,9 @@ export const NewMeetingModal: React.FC<{
               rules={generalValidationRules}
             
             >
-              <TimePicker
+              <TimePicker 
+              id="meetingTime"
+
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
                 
@@ -314,7 +319,6 @@ console.log(editModalVisible)
         location,
       } = currentEvent;
       setMeetingId(id);
-      console.log("meetingData", meetingId);
       setTypeMeeting(link ? "virtual" : "physical");
       editForm.setFieldsValue({
         title,
