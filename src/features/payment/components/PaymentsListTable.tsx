@@ -50,6 +50,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
   const { generateInvoice, generateInvoiceLoading } = useGenerateInvoice();
   const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
 
+
   // Handle generate invoice
   const handleGenerateInvoice = (values: {
     fxRate: {
@@ -74,7 +75,6 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
         : values.paymentsNGN / values.fxRate.value,
       fx_rate: values.fxRate.label,
     };
-        console.log("newData", newData);
 
     generateInvoice(newData, currentApplicationId as number);
     setIsModalOpen(false);
@@ -297,7 +297,6 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           setIsModalOpen(false);
         }}
       >
-        {/* make everything compulsory */}
         <Form
           name="generateInvoice"
           form={modalForm}
