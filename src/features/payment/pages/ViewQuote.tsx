@@ -124,102 +124,6 @@ const ViewQuote = () => {
     },
   ];
 
-  // const data = [
-  //   {
-  //     key: "1",
-  //     program: (
-  //       <>
-  //         <p style={{ fontSize: "1.125rem" }}>
-  //           Click here for this quote basis from the Grenada Government website
-  //         </p>
-  //         <a
-  //           href="google.com"
-  //           style={{
-  //             fontSize: "1.9rem",
-  //             fontWeight: 400,
-  //             textDecoration: "underline",
-  //             color: "rgb(105, 168, 12)",
-  //             padding: "12px",
-  //             textUnderlineOffset: "6px",
-  //           }}
-  //         >
-  //           Grenada Citizenship by Investments
-  //         </a>
-  //       </>
-  //     ),
-  //     description:
-  //       "Payment for processing & various fees. The payment is as follows:",
-  //     // amount: "",
-  //   },
-  //   {
-  //     key: "2",
-  //     description: "Grenada Real Estate Investment",
-  //     amount: "$30,000",
-  //   },
-  //   {
-  //     key: "3",
-  //     description: "Grenada Gov’t Fee",
-  //     amount: "$30,000",
-  //   },
-  //   {
-  //     key: "4",
-  //     description: "Grenada Gov’t Application Fee",
-  //     amount: "$15,000",
-  //   },
-  //   {
-  //     key: "5",
-  //     description: "Grenada Gov’t Due Diligence Fee",
-  //     amount: "$7,500",
-  //   },
-  //   {
-  //     key: "6",
-  //     description: "Grenada Gov’t Processing Fee",
-  //     amount: "$7,500",
-  //   },
-  //   {
-  //     key: "7",
-  //     description: "Grenada Gov’t Passport & Oath of Allegiance Fee",
-  //     amount: "$2,000",
-  //   },
-  //   {
-  //     key: "8",
-  //     description: "Grenada Legal & Advisory Fee",
-  //     amount: "$4,000",
-  //   },
-  //   {
-  //     key: "total",
-  //     description: "Grenada Total",
-  //     amount: "$150,000",
-  //   },
-  //   {
-  //     key: "spacer",
-  //     description: <div className="bg-[#012168]"></div>,
-  //   },
-  //   {
-  //     key: "paymentPlan",
-  //     description: "Payment Plan",
-  //   },
-  //   {
-  //     key: "9",
-  //     description: "Grenada Total Due Now",
-  //     amount: "$4,000",
-  //   },
-  //   {
-  //     key: "10",
-  //     description: "Local Processing Fee Due Now",
-  //     amount: "$4,000",
-  //   },
-  //   {
-  //     key: "11",
-  //     description: "Total Due Now",
-  //     amount: "$4,000",
-  //   },
-  //   {
-  //     key: "12",
-  //     description: "Balance Due on Citizenship Approval",
-  //     amount: "$4,000",
-  //   },
-  // ];
 
   useEffect(() => {
     if (
@@ -1163,6 +1067,9 @@ const ViewQuote = () => {
             reciepientEmail={quoteData.data.Applicant_info.email_address}
             reciepientPhone="090123456789"
             hideAuthorizedSignatory
+            handleDownload={()=>{window.open(`https://optiva-backend.techmur.com/api/admin/download-quote/${
+              itemId as number
+            }`, '_blank')}}
           >
             <Table
               dataSource={dataTable}
