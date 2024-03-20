@@ -12,19 +12,23 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { formatDate } from "./GenerateFinancialStatement";
+import { useSendQuote } from "../hooks/useSendOrDownloadQuote";
+
 
 const ViewQuote = () => {
   const { id } = useParams();
   const [itemId, setItemId] = useState<number>();
   const [dataTable, setDataTable] = useState<any>([]);
-  //   const [programType, setProgramType] = useState<string>("Program");
+  const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>();
   const {
     data: quoteData,
     isLoading: quoteLoading,
   }: { data: IViewQuote | undefined; isLoading: boolean } = viewQuoteBreakdown({
     itemId: itemId as number,
   });
-
+  const { isLoading: sendingQuote } = useSendQuote({
+    itemId: sendQuoteKey as number,
+  });
   // default dataTable length is 15
   const columns: ColumnsType<any> = [
     {
@@ -1057,7 +1061,7 @@ const ViewQuote = () => {
     <>
       <PageIntro title="Generate Quote" linkBack={appRoute.payments} />
 
-      <Spin spinning={quoteLoading}>
+      <Spin spinning={quoteLoading || sendingQuote}>
         {quoteData?.data && (
           <GenerateTemplate
             title={`QUOTE FOR ${quoteData.data.Applicant_info.quote.investment_route.toUpperCase()}`}
@@ -1070,6 +1074,7 @@ const ViewQuote = () => {
             handleDownload={()=>{window.open(`https://optiva-backend.techmur.com/api/admin/download-quote/${
               itemId as number
             }`, '_blank')}}
+            handleSend={()=>{setSendQuoteKey(itemId as number)}}
           >
             <Table
               dataSource={dataTable}

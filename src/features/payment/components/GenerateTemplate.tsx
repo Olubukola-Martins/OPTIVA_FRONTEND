@@ -15,6 +15,7 @@ interface IPropsGenerateTemplate {
   showInvoiceParagraph?: boolean;
   children: React.ReactNode;
   handleDownload?: () => void;
+  handleSend?: () => void;
 }
 
 const GenerateTemplate = ({
@@ -28,6 +29,7 @@ const GenerateTemplate = ({
   showInvoiceParagraph,
   date_created,
   handleDownload,
+  handleSend,
 }: IPropsGenerateTemplate) => {
 
   const navigate = useNavigate();
@@ -183,8 +185,9 @@ const GenerateTemplate = ({
           label="Download"
           type="button"
           handleClick={handleDownload}
+          
         />
-        <AppButton label="Send" type="submit" />
+        <AppButton label="Send" type="submit" handleClick={handleSend} containerStyle={`${handleSend ? "" : "hidden"}`}/>
       </div>
     </div>
   );

@@ -54,7 +54,6 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
   const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
   const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>();
-  // undefined
   // const [downloadQuoteKey, setDownloadQuoteKey] = useState<number | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalForm] = useForm();
