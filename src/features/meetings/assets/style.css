@@ -26,5 +26,13 @@
 }
 .rbc-events-container {
   width: 100% !important ;
-  /* background-color: blanchedalmond !important; */
+  background-color: blanchedalmond !important;
+}
+
+.ant-picker-ok button {
+  background-color: #1890ff; 
+}
+
+.ant-picker-ok button:hover {
+  opacity: 70%; 
 }
