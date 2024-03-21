@@ -16,7 +16,8 @@ import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Appl
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
-import { OutstandingDocuments } from "../../Components/OutstandingDocuments";
+// import { OutstandingDocuments } from "../../Components/OutstandingDocuments";
+import { OutstandingDocuments } from "../../components/OutstandingDocuments";
 
 export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
   const { onChange, pagination } = usePagination();
