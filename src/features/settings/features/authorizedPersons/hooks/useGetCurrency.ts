@@ -6,7 +6,7 @@ import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 
 export const QUERY_KEY_FOR_CURRENCY = "currency";
 
-const getData = async (props: { token: string }):Promise<ICurrency[]> => {
+const getData = async (props: { token: string }):Promise<ICurrency> => {
   const url = `${END_POINT.BASE_URL}/admin/show/currency-rates/1`;
   const config = {
     headers: {
@@ -16,7 +16,7 @@ const getData = async (props: { token: string }):Promise<ICurrency[]> => {
   };
 
   const res = await axios.get(url, config);
-  const data: ICurrency[] = res.data.data
+  const data: ICurrency = res.data.data
   return data
 };
 

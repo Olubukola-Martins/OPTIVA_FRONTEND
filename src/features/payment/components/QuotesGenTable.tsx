@@ -8,7 +8,7 @@ import {
   Select,
   Spin,
 } from "antd";
-import Table, { ColumnsType } from "antd/es/table";
+import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import {
   IAllGeneratedQuotes,
@@ -48,14 +48,15 @@ type DataSourceItem = {
 interface IProps {
   allData: IAllGeneratedQuotes | undefined;
   dataLoading: boolean;
+  pagination: TablePaginationConfig;
+  onChange: (pagination: TablePaginationConfig) => void;
+
 }
 
-const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
+const QuotesGenTable = ({ allData, dataLoading,pagination,onChange }: IProps) => {
   const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
   const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>();
-  // undefined
-  // const [downloadQuoteKey, setDownloadQuoteKey] = useState<number | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalForm] = useForm();
   const [currentProgram, setCurrentProgram] = useState<string>();
@@ -67,9 +68,6 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
     itemId: sendQuoteKey as number,
   });
 
-  // const { isLoading: downloadinGQuote } = useDownloadQuote({
-  //   itemId: downloadQuoteKey as number,
-  // });
 
   // Handle generate invoice
   const handleGenerateInvoice = (values: {
@@ -82,14 +80,12 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
     quantity: number;
     paymentsUSD: number;
   }) => {
-    // const { fxRateString, exchangeRate } = values.fxRate;
     const newData = {
       description: values.description,
       quantity: values.quantity,
       amount_in_naira: values.paymentsNGN
         ? values.paymentsNGN
         : values.paymentsUSD * values.fxRate.value,
-      // amount in USD
       amount: values.paymentsUSD
         ? values.paymentsUSD
         : values.paymentsNGN / values.fxRate.value,
@@ -102,7 +98,6 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
 
   useEffect(() => {}, [
     sendQuoteKey,
-    // downloadQuoteKey,
     currentApplicationId,
     currentProgram,
   ]);
@@ -279,6 +274,8 @@ const QuotesGenTable = ({ allData, dataLoading }: IProps) => {
           }}
           columns={columns}
           dataSource={dataSource}
+          // pagination={{ ...pagination, total: allData?. }}
+          onChange={onChange}  
           scroll={{ x: 900 }}
           className="border-gray-100 border-t-0 border-2 rounded-b-md"
         />

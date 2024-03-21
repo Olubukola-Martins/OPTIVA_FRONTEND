@@ -2,15 +2,14 @@ import {  Select } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { useEffect, useState } from "react";
 import { END_POINT } from "src/config/environment";
-import { IAllFxRates } from "src/features/meetings/types/types";
-import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
+import { useGetCurrency } from "src/features/settings/features/authorizedPersons/hooks/useGetCurrency";
 import {
   generalValidationRules,
   generalValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
 
 export const QUERY_KEY_FOR_FXRATES = "FxRates";
-export const fxRatesUrl = `${END_POINT.BASE_URL}/admin/show/currency-rates`;
+export const fxRatesUrl = `${END_POINT.BASE_URL}/admin/show/currency-rates/1`;
 
 interface IProps {
   multiple?: true;
@@ -33,37 +32,26 @@ const FxRatesFormInput = ({
     value: number;
     label: string;
   }>();
-  // {
-  //   value: {
-  //     id: number;
-  //     exchangeRate: number;
-  //     fxRateString: string;
-  //   }
-  //   label: string;
-  // }
-  // [];
-  const {
-    data,
-    isLoading,
-  }: { data: IAllFxRates | undefined; isLoading: boolean } = useFetchAllItems({
-    queryKey: QUERY_KEY_FOR_FXRATES,
-    urlEndPoint: fxRatesUrl,
-  });
+  
+
+ const {data,isLoading} = useGetCurrency();
   useEffect(() => {
-    if (data?.data) {
-      console.log(data.data);
-      const rate = data.data;
+    if (data) {
+      // console.log("fxDta",data)
+      // console.log("rate",rate)
+      // const rate = data[0];
+
       const {
         // id,
         source_currency,
         source_currency_amount,
         target_currency,
         target_currency_amount,
-      } = rate;
+      } = data;
 
       const fxRateString = `${source_currency} ${source_currency_amount} ~ ${target_currency} ${target_currency_amount}`;
       const rateValue = {
-        value: target_currency_amount / source_currency_amount,
+        value: +target_currency_amount / +source_currency_amount,
         label: fxRateString,
       };
       setAllRatesData(rateValue);

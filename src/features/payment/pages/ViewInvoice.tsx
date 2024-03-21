@@ -179,6 +179,7 @@ const ViewInvoice = () => {
             }
             reciepientPhone="090123456789"
             showInvoiceParagraph={true}
+            handleDownload={()=>{window.open(`https://optiva-backend.techmur.com/api/admin/invoice/${itemId as number}/download-pdf`,'_blank')}}
           >
             <div>
               <Table
@@ -266,6 +267,7 @@ const ViewInvoice = () => {
               bordered
               pagination={false}
               scroll={{ x: 700 }}
+              
             />
             <p className="text-red-500 max-sm:text-sm">
               ***For dollar payments, please select all bank charges to be borne

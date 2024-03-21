@@ -9,9 +9,9 @@ import {
   FormInstance,
   Tooltip,
   Popconfirm,
-  // Spin,
 } from "antd";
 import dayjs from "dayjs";
+import "../assets/style.css"
 import { AppButton } from "src/components/button/AppButton";
 import { IEvent } from "./Calendar";
 import { useContext, useEffect, useState } from "react";
@@ -70,27 +70,6 @@ export const NewMeetingModal: React.FC<{
           >
             <Input />
           </Form.Item>
-          {/* <Form.Item
-            name="attendees"
-            label="Attendee(s)"
-            rules={[
-              { required: true, message: "Please enter meeting attendee(s)" },
-            ]}
-          >
-            <Select
-              mode="multiple"
-              options={[
-                {
-                  value: 1,
-                  label: "Ruth Godwin",
-                },
-                {
-                  value: 2,
-                  label: "Godswill Omenuko",
-                },
-              ]}
-            />
-          </Form.Item> */}
           <FormEmployeeInput
             control={{ name: "attendees", label: "Attendee(s)" }}
             showLabel={true}
@@ -147,11 +126,12 @@ export const NewMeetingModal: React.FC<{
               label="Start Time"
               name="start_time"
               rules={generalValidationRules}
+              
             >
               <TimePicker
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
-                
+              
               />
             </Form.Item>
             <Form.Item
@@ -160,7 +140,7 @@ export const NewMeetingModal: React.FC<{
               rules={generalValidationRules}
             
             >
-              <TimePicker
+              <TimePicker 
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
                 
@@ -265,7 +245,7 @@ export const MeetingDetailsModal: React.FC<{
             ?.filter((attendee) => attendee.name !== organizer_name)
             .map((attendee) => {
               return (
-                <div className="border rounded-lg h-[45px] p-2 ">
+                <div className="border rounded-lg p-2  ">
                   <span>{attendee.name}</span>
                 </div>
               );
@@ -315,7 +295,6 @@ console.log(editModalVisible)
             description: response.message,
           });
           newfetch();
-          // onCancel();
           setEditModalVisible(false);
           editForm.resetFields();
           queryClient.invalidateQueries([QUERY_KEY_MEETINGS, id]);
@@ -323,7 +302,6 @@ console.log(editModalVisible)
       }
     );
   };
-  // onEditLoading?.(editMeetingLoading) ;
   useEffect(() => {
     if (currentEvent) {
       const {
@@ -331,7 +309,6 @@ console.log(editModalVisible)
         end,
         id,
         organizer_id,
-        // organizer_name,
         start,
         title,
         description,
@@ -339,7 +316,6 @@ console.log(editModalVisible)
         location,
       } = currentEvent;
       setMeetingId(id);
-      console.log("meetingData", meetingId);
       setTypeMeeting(link ? "virtual" : "physical");
       editForm.setFieldsValue({
         title,
@@ -509,8 +485,8 @@ export const MeetingModalActions: React.FC<{
   userInfo: any;
   currentEvent: IEvent;
 }> = ({ open, onCancel, currentEvent, userInfo }) => {
-  console.log("useerInfo", userInfo);
-  console.log("currentEvent", currentEvent);
+  // console.log("useerInfo", userInfo);
+  // console.log("currentEvent", currentEvent);
       // const { newfetch } = useContext(MeetingContext);
   const queryClient = useQueryClient();
   const { mutate,responseLoading } = useRespondToMeeting();

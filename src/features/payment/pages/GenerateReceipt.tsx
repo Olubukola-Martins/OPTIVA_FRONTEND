@@ -103,7 +103,6 @@ const GenerateReceipt = () => {
             }
             reciepientPhone="090123456789"
             handleDownload={() => {
-              // setReceiptId(itemId);
 const link = `https://optiva-backend.techmur.com/api/admin/receipt/${itemId}/download-pdf`;
 window.open(link, "_blank");
             }}

@@ -898,7 +898,10 @@ export interface IAllFxRates {
 // export interface all prospects
 export interface IAllProspectsData {
   data: IProspectDatum[];
+  links: Links;
+  meta: Meta;
 }
+
 
 export interface IProspectDatum {
   id: number;
@@ -906,16 +909,32 @@ export interface IProspectDatum {
   applicant_id: string;
   country: string;
   program_type: string;
-  milestone?: string;
-  process?: string;
+  milestone: string;
+  process: string;
   investmentroute: string;
   branch: string;
-  comments: any[];
+  comments: Comment[];
+  applicant_documents: any[];
   user_assigned: any[];
+  milestone_id: number;
   country_id: number;
+  added_by: string;
+  no_of_dependents: number;
   investmentroute_id: number;
   programtype_id: number;
+  status: string;
+  uploaded: string;
+  verified: string;
+  validated: string;
   created_at: string;
   updated_at: string;
 }
 
+interface Comment {
+  id: number;
+  comment: string;
+  application_id: number;
+  user_id: number;
+  created_at: string;
+  updated_at: string;
+}
