@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { generateFinancialStatement } from "../hooks/useGenerate";
 import { useEffect, useState } from "react";
 import {
-  // GenFinStatementDatum,
   IAllPaymentDetails,
   IGenFinancialState,
 } from "src/features/meetings/types/types";
