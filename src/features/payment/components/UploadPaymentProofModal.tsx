@@ -2,7 +2,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, Form, FormInstance, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { FormFileInput } from "src/features/settings/features/authorizedPersons/components/FormFileInput";
-import useUploadFile from "../hooks/useUploadFile";
 
 type IProps = {open:boolean;onCancel:()=>void,handleUploadSubmit:(val:any)=>void,fileUploading:boolean, onSetUploadForm:(form:FormInstance<any>)=>void}
 

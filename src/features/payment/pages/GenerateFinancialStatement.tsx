@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { generateFinancialStatement } from "../hooks/useGenerate";
 import { useEffect, useState } from "react";
 import {
-  // GenFinStatementDatum,
   IAllPaymentDetails,
   IGenFinancialState,
 } from "src/features/meetings/types/types";
@@ -333,7 +332,7 @@ const GenerateFinancialStatement = () => {
         title="Generate Financial Statement"
         linkBack={appRoute.paymentDetails(Number(id) as number).path}
       />
-      <Spin spinning={finStatementLoading}>
+      <Spin spinning={finStatementLoading || sendingFinStatement}>
         {finStatementData?.data && (
           <GenerateTemplate
             title="FINANCIAL STATEMENT"
