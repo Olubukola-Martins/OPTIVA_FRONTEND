@@ -185,7 +185,7 @@ const GenerateTemplate = ({
           label="Download"
           type="button"
           handleClick={handleDownload}
-          
+          containerStyle={`${handleDownload ? "" : "hidden"}`}
         />
         <AppButton label="Send" type="submit" handleClick={handleSend} containerStyle={`${handleSend ? "" : "hidden"}`}/>
       </div>
