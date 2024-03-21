@@ -56,7 +56,6 @@ export const Calendar: React.FC<ICalendarProps> = ({ events }) => {
   const {  statusChangeLoading } = useChangeMeetingStatus();
 
   useEffect(() => {
-    console.log("allEvents", events);
     const event = events.find((event) => event.id === currentEvetId);
     if (event) {
       setSelectedEvent(event);
