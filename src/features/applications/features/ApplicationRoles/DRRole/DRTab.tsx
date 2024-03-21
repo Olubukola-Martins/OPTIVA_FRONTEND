@@ -5,31 +5,8 @@ import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
-  const { data} =useFetchUserProfile()
-   const [pendingFilterActive, setPendingFilterActive] = useState<boolean>(false);
-  const [confirmedFilterActive, setConfirmedFilterActive] = useState<boolean>(false);
-  const [declinedFilterActive, setDeclinedFilterActive] = useState<boolean>(false);
-
-  const handleFilterChange = (value: string) => {
-    if (value === "pending") {
-      setPendingFilterActive(true);
-      setConfirmedFilterActive(false);
-      setDeclinedFilterActive(false);
-    } else if (value === "confirmed") {
-      setPendingFilterActive(false);
-      setConfirmedFilterActive(true);
-      setDeclinedFilterActive(false);
-    } else if (value === "declined") {
-      setPendingFilterActive(false);
-      setConfirmedFilterActive(false);
-      setDeclinedFilterActive(true);
-    } else { 
-      setPendingFilterActive(false);
-      setConfirmedFilterActive(false);
-      setDeclinedFilterActive(false);
-    }
-  };
-
+  const { data } = useFetchUserProfile();
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const tabItems: {
     label: string;
@@ -38,11 +15,9 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
   }[] = [
     {
       label: "All Applicants",
-      children: <DRApplicant  pendingFilterActive={pendingFilterActive}
-      confirmedFilterActive={confirmedFilterActive}
-        declinedFilterActive={declinedFilterActive}
-        // filter={filter}
-      />,
+      children: (
+        <DRApplicant searchTerm={searchTerm} />
+      ),
       key: "AllApplicants",
     },
   ];
@@ -56,8 +31,10 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
             <Input.Search
               placeholder="Search"
               className="md:flex hidden w-[250px]"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
             />
-             {data?.roles.id === 1 && (
+            {data?.roles.id === 1 && (
               <Select
                 allowClear
                 placeholder="Role"
@@ -99,7 +76,7 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
-              onChange={handleFilterChange}
+              // onChange={handleFilterChange}
               options={[
                 {
                   value: `pending`,

@@ -11,70 +11,44 @@ import {
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
+import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
-interface IDRProps {
-  pendingFilterActive: boolean;
-  confirmedFilterActive: boolean;
-  declinedFilterActive: boolean;
-}
-
-export const DRApplicant: React.FC<IDRProps> = ({
-  pendingFilterActive,
-  confirmedFilterActive,
-  declinedFilterActive,
-}) => {
-  const { data, isLoading } = useFetchApplicantsByRole();
+export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const { data, isLoading } = useFetchApplicantsByRole({
+    pagination,
+    search: debouncedSearchTerm,
+  });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useMarkApplicantAsComplete();
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (data) {
-      let filteredData = data;
-      if (
-        pendingFilterActive ||
-        confirmedFilterActive ||
-        declinedFilterActive
-      ) {
-        filteredData = data.filter((item) => {
-          return item.applicant_documents.some((doc) => {
-            if (pendingFilterActive && doc.handover_status === "pending") {
-              return true;
-            }
-            if (confirmedFilterActive && doc.handover_status === "confirmed") {
-              return true;
-            }
-            if (declinedFilterActive && doc.handover_status === "declined") {
-              return true;
-            }
-            return false;
-          });
-        });
-      }
-
-      const activeApplicant: DataSourceItem[] = filteredData.map(
-        (item, index) => {
-          return {
-            key: item.id,
-            sn: index + 1,
-            applicantId: item.applicant_id,
-            applicantName: capitalizeName(item.applicant_name),
-            country: item.country,
-            programType: item.program_type,
-            numberOfDependents: item.no_of_dependents,
-            applicationStage: item.process,
-            documentsUploaded: item.uploaded,
-            documentsSubmitted: "-",
-            investmentRoute: item.investmentroute,
-          };
-        }
-      );
+    if (data?.data) {
+      const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          applicantId: item.applicant_id,
+          applicantName: capitalizeName(item.applicant_name),
+          country: item.country,
+          programType: item.program_type,
+          numberOfDependents: item.no_of_dependents,
+          applicationStage: item.process,
+          documentsUploaded: item.uploaded,
+          documentsSubmitted: "-",
+          investmentRoute: item.investmentroute,
+        };
+      });
 
       setDataArray(activeApplicant);
     }
-  }, [data, pendingFilterActive, confirmedFilterActive, declinedFilterActive]);
+  }, [data]);
 
   const markApplicationComplete = () => {
     mutate(
@@ -83,7 +57,7 @@ export const DRApplicant: React.FC<IDRProps> = ({
       },
       {
         onError: (error: any) => {
-          console.log(error)
+          console.log(error);
           openNotification({
             state: "error",
             title: "Error Occurred",
@@ -218,6 +192,8 @@ export const DRApplicant: React.FC<IDRProps> = ({
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         loading={isLoading}
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         rowSelection={{
           type: "checkbox",
           onChange: (

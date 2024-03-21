@@ -5,7 +5,7 @@ import { END_POINT } from "src/config/environment";
 import { QUERY_KEY_FOR_APPLICATIONS } from "./useGetApplication";
 import { useQuery } from "react-query";
 
-const getData = async (props: { id: number }): Promise<IGetSingleApplicant> => {
+const getData = async (props: { id: number}): Promise<IGetSingleApplicant> => {
   const url = `${END_POINT.BASE_URL}/admin/applicants/${props.id}`;
   const { token } = useGetToken();
   const config = {
@@ -18,7 +18,6 @@ const getData = async (props: { id: number }): Promise<IGetSingleApplicant> => {
   const res = await axios.get(url, config);
   const item = res.data.data;
   const data: IGetSingleApplicant = { ...item };
-  console.log("applicant data", data);
   return data;
 };
 

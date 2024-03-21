@@ -6,7 +6,6 @@ import {
   DataSourceItem,
   capitalizeName,
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
-import { OutstandingDocuments } from "../../components/OutstandingDocuments";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { useAcceptApplicant } from "src/features/applications/hooks/Application hooks/useAcceptApplicant";
@@ -14,12 +13,22 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Appl
 import { openNotification } from "src/utils/notification";
 import { useQueryClient } from "react-query";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
+import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
+// import { OutstandingDocuments } from "../../Components/OutstandingDocuments";
+import { OutstandingDocuments } from "../../components/OutstandingDocuments";
 
-export const DPOPortfolio = () => {
+export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const { data, isLoading } = useFetchApplicantsByRole({
+    pagination,
+    search: debouncedSearchTerm,
+  });
   const [openSupportingDocModal, setOpenSupportingDocModal] =
     useState<boolean>(false);
 
-  const { data, isLoading } = useFetchApplicantsByRole();
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
   const [applicantId, setApplicantId] = useState<number>();
@@ -27,8 +36,8 @@ export const DPOPortfolio = () => {
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
 
   useEffect(() => {
-    if (data) {
-      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
+    if (data?.data) {
+      const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
         return {
           key: item.id,
           sn: index + 1,
@@ -218,7 +227,6 @@ export const DPOPortfolio = () => {
                   >
                     Attach Supporting Documents
                   </Link>
-                 
                 </Menu.Item>
                 <Menu.Item key="6">
                   <Link
@@ -263,6 +271,8 @@ export const DPOPortfolio = () => {
         loading={isLoading}
         scroll={{ x: 700 }}
         className="bg-white rounded-md shadow border mt-2"
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
       />
 
       <OutstandingDocuments

@@ -1,5 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Dropdown, Menu, Popconfirm, Table } from "antd";
+import { Dropdown,  Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
@@ -13,23 +13,31 @@ import { useAcceptApplicant } from "src/features/applications/hooks/Application 
 import { useApproveorRejectApplicant } from "src/features/applications/hooks/Application hooks/useApproveorRejectApplicant";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
 
-export const AuditPortfolio = () => {
-  const { data, isLoading } = useFetchApplicantsByRole();
+export interface IPortfolioProps {
+  searchTerm: string;
+}
+
+export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const { data, isLoading } = useFetchApplicantsByRole({
+    pagination,
+    search: debouncedSearchTerm,
+  });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
   const { patchData } = useApproveorRejectApplicant("approve");
   const { patchData: rejectPatch } = useApproveorRejectApplicant("reject");
-  // const [openAcceptConfirm, setOpenAcceptConfirm] = useState<boolean>(false);
-  // const [openApproveConfirm, setOpenApproveConfirm] = useState<boolean>(false);
-  // const [openRejectConfirm, setOpenRejectConfirm] = useState<boolean>(false);
 
   useEffect(() => {
-    if (data) {
-      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
+    if (data?.data) {
+      const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
         return {
           key: item.id,
           sn: index + 1,
@@ -47,7 +55,7 @@ export const AuditPortfolio = () => {
 
       setDataArray(activeApplicant);
     }
-  }, [data]);
+  }, [data?.data]);
 
   const acceptApplicant = () => {
     openNotification({
@@ -69,12 +77,12 @@ export const AuditPortfolio = () => {
           });
         },
         onSuccess: (res: any) => {
-          console.log('res', res)
+          console.log("res", res);
           openNotification({
             state: "success",
             title: "Success",
             // description: res.data.message,
-            description: 'Applicaant accepted successfully'
+            description: "Applicaant accepted successfully",
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           // setOpenAcceptConfirm(false);
@@ -241,19 +249,26 @@ export const AuditPortfolio = () => {
 
   return (
     <>
+      {/* <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">
+        <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row sm:items-start items-center sm:pl-5">
+          <Input.Search
+            placeholder="Search"
+            className=" w-52"
+            onSearch={(val) => setSearchTerm(val)}
+            onChange={(e) => e.target.value === "" && setSearchTerm("")}
+          />
+        </div>
+      </div> */}
+
       <Table
         columns={columns}
         dataSource={dataArray}
         scroll={{ x: 700 }}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
       />
-
-      {/* <UploadModal
-      header="Proof of Payment"
-      open={openUploadModal}
-      onCancel={handleUploadCancel}
-    /> */}
     </>
   );
 };

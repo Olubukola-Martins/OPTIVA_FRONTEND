@@ -1,5 +1,5 @@
 import { Dropdown, Menu } from "antd";
-import Table, { ColumnsType } from "antd/es/table";
+import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -21,9 +21,11 @@ type DataSourceItem = {
 interface IProps {
   allData: IAllOutstandingPayments | undefined;
   dataLoading: boolean;
+  pagination: TablePaginationConfig;
+  onChange: (pagination: TablePaginationConfig) => void;
 }
 
-const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
+const OutstandingPaymentsTable = ({ allData, dataLoading,onChange,pagination }: IProps) => {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
 
   const rowSelection = {
@@ -156,6 +158,9 @@ const OutstandingPaymentsTable = ({ allData, dataLoading }: IProps) => {
       }}
       columns={columns}
       dataSource={dataSource}
+      loading={dataLoading }
+      pagination={{ ...pagination, total: allData?.meta.total }}
+      onChange={onChange}
       scroll={{ x: 900 }}
       className="border-gray-100 border-t-0 border-2 rounded-b-md"
     />

@@ -10,9 +10,10 @@ import {
 import { IStLuciaQuote } from "src/features/applications/types/types";
 import { IGetQuoteProps } from "./DomincaQuoteTable";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Skeleton } from "antd";
 
 export const StLuciaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
-  const { data } = useGetSingleQuote<IStLuciaQuote>({
+  const { data, isLoading } = useGetSingleQuote<IStLuciaQuote>({
     id: id as unknown as number,
   });
 
@@ -20,7 +21,7 @@ export const StLuciaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
   const applicantQuote = data?.Applicant_info.st_lucia_estate_quote;
 
   return (
-    <div>
+    <Skeleton active loading={isLoading}>
       <div>
         <h1 className="text-lg font-semibold pb-2">
           {applicantInfo?.full_name}{" "}
@@ -57,7 +58,7 @@ export const StLuciaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
 
           {/* ROW 2 */}
           <tr>
-            <td rowSpan={20} style={colOneStyle} colSpan={2}>
+            <td rowSpan={22} style={colOneStyle} colSpan={2}>
               ST Lucia NEFI Real Estate Quote
             </td>
             <td style={tdStyle} colSpan={3}>
@@ -167,34 +168,6 @@ export const StLuciaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             </td>
           </tr>
 
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-
-          {/* ROW 9 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Grand Total Due Now
-            </td>
-            <td style={tdStyle}>${applicantQuote?.programTotalDueNow}</td>
-          </tr>
-
-          {/* ROW 10 */}
-          <tr>
-            <td style={tdStyle}> Program Grand Total Due on Approval</td>
-            <td style={tdStyle}>
-              ${applicantQuote?.programTotalDueAfterApproval}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle}> Program Grand Total</td>
-            <td style={tdStyle}>${applicantQuote?.program_grand_total}</td>
-          </tr>
-
           {/* BLUE ROW */}
           <tr>
             <td
@@ -214,7 +187,7 @@ export const StLuciaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
           </tr>
 
           <tr>
-            <td style={tdStyle}> St. Lucia Total</td>
+            <td style={tdStyle} colSpan={2}> St. Lucia Total</td>
             <td style={tdStyle}>${applicantQuote?.st_lucia_total}</td>
           </tr>
           {/* ROW 17 */}
@@ -233,8 +206,41 @@ export const StLuciaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             </td>
             <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
           </tr>
+
+          {/* EMPTY ROW */}
+          <tr>
+            <td colSpan={3} style={tdStyle} className="bg-white text-white">
+              -
+            </td>
+          </tr>
+
+          {/* ROW 9 */}
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Program Grand Total Due Now
+            </td>
+            <td style={tdStyle}>${applicantQuote?.programTotalDueNow}</td>
+          </tr>
+
+          {/* ROW 10 */}
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              {" "}
+              Program Grand Total Due on Approval
+            </td>
+            <td style={tdStyle}>
+              ${applicantQuote?.programTotalDueAfterApproval}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tdStyle} colSpan={2}> Program Grand Total</td>
+            <td style={tdStyle} >
+              ${applicantQuote?.program_grand_total}
+            </td>
+          </tr>
         </table>
       </div>
-    </div>
+    </Skeleton>
   );
 };

@@ -12,14 +12,20 @@ import { useAcceptApplicant } from "src/features/applications/hooks/Application 
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Application hooks/useGetApplication";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
+import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
-interface IDMSProps {
-  selectedFilter: string;
-}
 
-export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
-  const { data, isLoading } = useFetchApplicantsByRole();
+
+export const AllDMSApplicants: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const { data, isLoading } = useFetchApplicantsByRole({
+    pagination,
+    search: debouncedSearchTerm,
+  });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [applicantId, setApplicantId] = useState<number>();
   const queryClient = useQueryClient();
@@ -27,39 +33,25 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
 
   useEffect(() => {
-    if (data) {
-      let filteredApplicants = [...data];
-
-      if (selectedFilter === "1") {
-        filteredApplicants = filteredApplicants.filter(
-          (applicant) => applicant.applicant_documents.length > 0
-        );
-      } else if (selectedFilter === "2") {
-        filteredApplicants = filteredApplicants.filter(
-          (applicant) => applicant.applicant_documents.length === 0
-        );
-      }
-
-      const activeApplicant: DataSourceItem[] = filteredApplicants.map(
-        (item, index) => {
-          return {
-            key: item.id,
-            sn: index + 1,
-            applicantId: item.applicant_id,
-            applicantName: capitalizeName(item.applicant_name),
-            country: item.country,
-            programType: item.program_type,
-            numberOfDependents: item.no_of_dependents,
-            applicationStage: item.process,
-            documentsUploaded: item.uploaded,
-            investmentRoute: item.investmentroute,
-          };
-        }
-      );
+    if (data?.data) {
+      const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
+        return {
+          key: item.id,
+          sn: index + 1,
+          applicantId: item.applicant_id,
+          applicantName: capitalizeName(item.applicant_name),
+          country: item.country,
+          programType: item.program_type,
+          numberOfDependents: item.no_of_dependents,
+          applicationStage: item.process,
+          documentsUploaded: item.uploaded,
+          investmentRoute: item.investmentroute,
+        };
+      });
 
       setDataArray(activeApplicant);
     }
-  }, [data, selectedFilter]);
+  }, [data]);
 
   const acceptApplicant = () => {
     mutate(
@@ -76,7 +68,7 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
           });
         },
         onSuccess: (res: any) => {
-          console.log('res', res)
+          console.log("res", res);
           openNotification({
             state: "success",
             title: "Success",
@@ -203,7 +195,6 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
                   >
                     Attach Required Documents
                   </Link>
-                 
                 </Menu.Item>
                 <Menu.Item key="4">
                   <Link
@@ -258,6 +249,9 @@ export const AllDMSApplicants: React.FC<IDMSProps> = ({ selectedFilter }) => {
         loading={isLoading}
         scroll={{ x: 700 }}
         className="bg-white rounded-md shadow border mt-2"
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
+        
       />
     </>
   );

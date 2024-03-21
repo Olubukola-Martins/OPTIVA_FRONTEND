@@ -140,8 +140,8 @@ export const appRoute = {
     path: `/applications/${id}/attach_documents`,
   }),
 
-  // SEND GENERATED QUOTES
-  send_generated_quotes: (id?: number, investId?:number) => ({
+   // SEND GENERATED QUOTES
+   send_generated_quotes: (id?: number, investId?:number) => ({
     format: `/admin/send-quote/:id/:investId`,
     path: `/admin/send-quote/${id}/${investId}`,
   }),

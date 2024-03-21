@@ -1,5 +1,5 @@
 import { Dropdown, Menu  } from "antd";
-import Table, { ColumnsType } from "antd/es/table";
+import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import {  Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -8,10 +8,13 @@ import { IAllInvoices, InvoiceDatum } from "src/features/meetings/types/types";
 interface IProps {
   allData: IAllInvoices | undefined;
   dataLoading: boolean;
+  pagination: TablePaginationConfig;
+  onChange: (pagination: TablePaginationConfig) => void;
+
 }
 
 
-const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
+const InvoiceGenTable = ({ allData, dataLoading,onChange,pagination }: IProps) => {
 
   type DataSourceItem = {
     id: React.Key;
@@ -156,6 +159,8 @@ const InvoiceGenTable = ({ allData, dataLoading }: IProps) => {
         columns={columns}
         dataSource={dataSource}
         loading={dataLoading }
+        pagination={{ ...pagination, total: allData?.meta.total }}
+        onChange={onChange}  
         scroll={{ x: 900 }}
         className="border-gray-100 border-t-0 border-2 rounded-b-md"
       />
