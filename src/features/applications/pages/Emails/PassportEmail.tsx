@@ -16,7 +16,7 @@ export const PassportEmail = () => {
   const { id, emailId } = useParams();
   const queryClient = useQueryClient();
   const { data: applicantData } = useGetSingleApplicant({
-    id: id as unknown as number,
+    id: id as unknown as number, 
   });
 
   const handleSendEmail = () => {

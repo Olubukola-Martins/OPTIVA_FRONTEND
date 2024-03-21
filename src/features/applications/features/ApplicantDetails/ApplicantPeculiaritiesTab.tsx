@@ -23,6 +23,7 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
     section: "sectionthreeresponse",
   });
   const queryClient = useQueryClient();
+  const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateApplicationResponse(
     "sectionthreeresponse"
   );
@@ -31,8 +32,6 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
     const applicationData: ICreateApplicationResponse = {
       application_id: id as unknown as number,
       responses: Array.isArray(responses)
-        ? responses
-        : Array.isArray(responses)
         ? responses.map(
             (response: {
               question_id: number;
@@ -63,21 +62,16 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
           description: res.data.data.message,
         });
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-        if (currentTab < tabItems.length - 1) {
-          setCurrentTab(currentTab + 1);
-        }
-        // onNext()
       },
     });
   };
 
-  const [form] = Form.useForm();
   useEffect(() => {
     if (data && data.length > 0) {
       const initialValues: Record<string, any> = {};
       data.forEach((item) => {
         if (item.subsection_name === tabItems[currentTab].subsectionName) {
-          initialValues[item.question.schema_name] = item.response;
+          initialValues[item.schema_name] = item.response;
         }
       });
       form.setFieldsValue(initialValues);

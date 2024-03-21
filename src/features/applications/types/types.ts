@@ -40,32 +40,24 @@ interface Response {
   response: string[];
   subsection_name?: string;
 }
+// 
 
 //GET APPLICATION RESPONSE
 export interface IGetApplicationResponse {
   id: number;
-  question_id: number;
-  application_id: number;
-  section_name: string;
-  subsection_name?: any;
-  response: string[];
-  created_at: string;
-  updated_at: string;
-  question: Question;
-}
-
-interface Question {
-  id: number;
-  template_id: number;
+  template_id?: any;
   form_question: string;
   input_type: string;
-  options?: any;
+  options?: any[]
   is_required: number;
   section_name: string;
   subsection_name?: string;
   schema_name: string;
   created_at: string;
   updated_at: string;
+  question_id: number;
+  application_id: number;
+  response: string;
 }
 
 // UPDATE APPLICATION STATUS
@@ -937,7 +929,7 @@ interface Quote {
   total_due_now: number;
   total_due_on_citizenship_approval: number;
 }
-
+// 
 // ANTIGUA SINGLE REAL ESTATE
 export interface IAntiguaSingleRealEstate {
   Applicant_info: Applicantinfo;
@@ -1010,7 +1002,6 @@ interface Quote {
   total_due_now: number;
   total_due_on_citizenship_approval: number;
 }
-
 // ANTIGUA JOINT ESTATE
 export interface IAntiguaJointRealEstate {
   Applicant_info: Applicantinfo;
@@ -1369,6 +1360,7 @@ export interface IGetSingleApplicant {
   branch: string;
   program_type: string;
   investmentroute: string;
+  investmentroute_id: number
   number_of_dependents: number;
   application_milestone: string;
   assigned_to?: any;
@@ -1384,3 +1376,4 @@ export interface IUploadMultipleFiles {
   document_requirement_id: number;
   file: string;
 }
+

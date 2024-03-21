@@ -30,7 +30,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
     id: id as unknown as number,
     section: "sectiontworesponse",
   });
-
+  const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { mutate, isLoading } =
     useCreateApplicationResponse("sectiontworesponse");
@@ -69,27 +69,21 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           description: res.data.data.message,
         });
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-        // if (currentTab < tabItems.length - 1) {
-        //   setCurrentTab(currentTab + 1);
-        // }
-        // onNext();
       },
     });
   };
 
-  const [form] = Form.useForm();
   useEffect(() => {
     if (data && data.length > 0) {
       const initialValues: Record<string, any> = {};
       data.forEach((item) => {
         if (item.subsection_name === tabItems[currentTab].subsectionName) {
-          initialValues[item.question.schema_name] = item.response;
+          initialValues[item.schema_name] = item.response;
         }
       });
       form.setFieldsValue(initialValues);
     }
   }, [data, currentTab]);
-
   const tabItems: {
     label: string;
     children: React.ReactNode;

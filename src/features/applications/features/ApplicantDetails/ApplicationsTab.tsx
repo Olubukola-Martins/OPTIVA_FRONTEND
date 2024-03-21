@@ -2,8 +2,10 @@ import { Input, Select, Tabs } from "antd";
 import { ActiveApplications } from "../ApplicationRoles/OperationsRole/ActiveApplications";
 import { InactiveApplications } from "../ApplicationRoles/OperationsRole/InactiveApplications";
 import { IRoleTabProps } from "../ApplicationRoles/AuditRole/AuditTab";
+import { useState } from "react";
 
 export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -11,12 +13,12 @@ export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
   }[] = [
     {
       label: "Active Applications",
-      children: <ActiveApplications />,
+      children: <ActiveApplications searchTerm={searchTerm} />,
       key: "Active Applications",
     },
     {
       label: "Inactive Applications",
-      children: <InactiveApplications />,
+      children: <InactiveApplications searchTerm={searchTerm} />,
       key: "Inactive Applications",
     },
   ];
@@ -30,6 +32,8 @@ export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
             <Input.Search
               placeholder="Search"
               className="md:flex hidden w-[250px]"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
             />
             <Select
               allowClear

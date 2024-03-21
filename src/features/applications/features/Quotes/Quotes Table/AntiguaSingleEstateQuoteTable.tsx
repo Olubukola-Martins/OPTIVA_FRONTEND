@@ -10,18 +10,19 @@ import {
   tdStyle,
 } from "src/features/applications/pages/SendQuote";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Skeleton } from "antd";
 
 export const AntiguaSingleEstateQuoteTable: React.FC<IGetQuoteProps> = ({
   id,
 }) => {
-  const { data } = useGetSingleQuote<IAntiguaSingleRealEstate>({
+  const { data, isLoading } = useGetSingleQuote<IAntiguaSingleRealEstate>({
     id: id as unknown as number,
   });
 
   const applicantInfo = data?.Applicant_info;
   const applicantQuote = data?.Applicant_info.antigua_single_quote;
   return (
-    <div>
+    <Skeleton active loading={isLoading}>
       <div>
         <h1 className="text-lg font-semibold pb-2">
           {applicantInfo?.full_name}{" "}
@@ -181,7 +182,7 @@ export const AntiguaSingleEstateQuoteTable: React.FC<IGetQuoteProps> = ({
 
           {/* ROW 10 */}
           <tr>
-            <td style={tdStyle}> Program Grand Total Due on Approval</td>
+            <td style={tdStyle} colSpan={2}> Program Grand Total Due on Approval</td>
             <td style={tdStyle}>
               ${applicantQuote?.program_grand_total_due_on_approval}
             </td>
@@ -233,6 +234,6 @@ export const AntiguaSingleEstateQuoteTable: React.FC<IGetQuoteProps> = ({
           </tr>
         </table>
       </div>
-    </div>
+    </Skeleton>
   );
 };

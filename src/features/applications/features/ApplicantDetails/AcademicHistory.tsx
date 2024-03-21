@@ -19,10 +19,11 @@ export const renderDetailsInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "select") {
     return (
       <div className="w-1/2">
-        <Select className="w-1/2">
-          {options?.map((option, index) => (
-            <Select.Option key={index} value={option}>
+        <Select className="w-1/2" >
+          {options?.map((option, ) => (
+            <Select.Option key={option.id} value={option} >
               {option.charAt(0).toUpperCase() + option.slice(1)}
+              {/* {option} */}
             </Select.Option>
           ))}
         </Select>
@@ -62,14 +63,26 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
         data.map(
           (item) =>
             item.subsection_name === subsectionName && (
+              // <Form.Item
+              //   key={item.id}
+              //   name={item.question.schema_name}
+              //   label={item.question.form_question}
+              // >
+              //   {renderDetailsInput(
+              //     item.question.input_type,
+              //     item.question.options
+              //   )}
+              // </Form.Item>
               <Form.Item
                 key={item.id}
-                name={item.question.schema_name}
-                label={item.question.form_question}
+                name={item.form_question}
+                label={item.form_question}
               >
                 {renderDetailsInput(
-                  item.question.input_type,
-                  item.question.options
+                  item.input_type,
+                  item.options,
+                  // item.section_one_response,
+                  // (value) => handleSelectChange(item.form_question, value)
                 )}
               </Form.Item>
             )
