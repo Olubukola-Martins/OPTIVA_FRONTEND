@@ -15,8 +15,11 @@ import { useGetProgramType } from "src/features/settings/features/program-types/
 import { useFetchActiveandInactiveApplicant } from "../../../hooks/Application hooks/useFetchActiveandInactiveApplicant";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
 import { useMarkApplicantAsComplete } from "../../../hooks/Application hooks/useMarkApplicantAsComplete";
-import { ApplicationAssignmentModal } from "../../components/ApplicationAssignmentModal";
-import { AssignToModal } from "../../components/AssignToModal";
+import { ApplicationAssignmentModal } from "../../Components/ApplicationAssignmentModal";
+import { AssignToModal } from "../../Components/AssignToModal";
+// import { useDebounce } from "src/hooks/useDebounce";
+// import { usePagination } from "src/hooks/usePagination";
+import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -52,10 +55,19 @@ export const capitalizeName = (name: string) => {
   return capitalizedWords.join(" ");
 };
 
-export const ActiveApplications = () => {
+export const ActiveApplications: React.FC<IPortfolioProps> = ({
+  searchTerm,
+}) => {
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
     section: "active",
   });
+  // const { onChange, pagination } = usePagination();
+  // const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  // const { data, isLoading } = useFetchActiveandInactiveApplicant({
+  //   pagination,
+  //   search: debouncedSearchTerm,
+  // });
+  console.log("search term", searchTerm);
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -118,7 +130,7 @@ export const ActiveApplications = () => {
     }
   }, [data, employeesData]);
 
-  const changeToInactive = (val:any) => {
+  const changeToInactive = (val: any) => {
     mutate(
       {
         id: id as unknown as number,
@@ -397,6 +409,8 @@ export const ActiveApplications = () => {
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         loading={isLoading}
+        // onChange={onChange}
+        // pagination={{ ...pagination, total: data?.total }}
         rowSelection={{
           type: "checkbox",
           onChange: (

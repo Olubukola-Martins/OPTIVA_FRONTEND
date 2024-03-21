@@ -8,16 +8,24 @@ import {
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
-import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
+import { SubmitApplicationModal } from "../../Components/SubmitApplicationModal";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
+import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
-export const MyPortfolio = () => {
-  const { data, isLoading } = useFetchApplicantsByRole();
+export const MyPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const { data, isLoading } = useFetchApplicantsByRole({
+    pagination,
+    search: debouncedSearchTerm,
+  });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  const [applicantId, setApplicantId]= useState<number>()
+  const [applicantId, setApplicantId] = useState<number>();
   useEffect(() => {
-    if (data) {
-      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
+    if (data?.data) {
+      const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
         return {
           key: item.id,
           sn: index + 1,
@@ -111,7 +119,7 @@ export const MyPortfolio = () => {
                 <Menu.Item
                   key="3"
                   onClick={() => {
-                    setApplicantId(val.key as unknown as number)
+                    setApplicantId(val.key as unknown as number);
                     setOpenSubmitModal(true);
                   }}
                 >
@@ -139,6 +147,8 @@ export const MyPortfolio = () => {
         scroll={{ x: 700 }}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
       />
 
       <SubmitApplicationModal
@@ -147,8 +157,6 @@ export const MyPortfolio = () => {
         handleClose={handleClose}
         // handleOpenImportModal={() => setOpenUploadModal(true)}
       />
-
-      
     </>
   );
 };

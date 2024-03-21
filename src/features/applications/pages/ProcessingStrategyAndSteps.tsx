@@ -1,9 +1,8 @@
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { ProcessingStrategyandStepsTab } from "../components/ProcessingStrategyandStepsTab";
+import { ProcessingStrategyandStepsTab } from "../features/Components/ProcessingStrategyandStepsTab";
 
 const ProcessingStrategyAndSteps = () => {
- 
   return (
     <>
       <PageIntro
@@ -12,20 +11,8 @@ const ProcessingStrategyAndSteps = () => {
         linkBack={appRoute.applications}
       />
       <div className="border rounded-lg  p-5 my-5">
-      <ProcessingStrategyandStepsTab />
+        <ProcessingStrategyandStepsTab />
       </div>
-             
-      {/* <Form
-        className="border rounded-lg  p-5 my-5"
-        onFinish={handleSubmit}
-        form={form}
-      >
-
-        <div className="w-full flex justify-end py-3 gap-4">
-          <AppButton label="Cancel" variant="transparent" type="reset" />
-          <AppButton label="Submit" type="submit" />
-        </div>
-      </Form> */}
     </>
   );
 };

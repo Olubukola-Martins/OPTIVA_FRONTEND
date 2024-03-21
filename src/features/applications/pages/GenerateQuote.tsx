@@ -21,7 +21,7 @@ export const GenerateQuote = () => {
 
   useEffect(() => {
     if (id) {
-      const renderItem = data?.find(
+      const renderItem = data?.data.find(
         (item) => item.id === (+id as unknown as number)
       );
       if (renderItem) {
@@ -43,7 +43,7 @@ export const GenerateQuote = () => {
     case "2-5":
       renderGenerateQuote = <GenerateStKittsQuote />;
       break;
-    case "3-4":
+    case "3-2":
       renderGenerateQuote = <GenerateDominicaQuote />;
       break;
     case "4-3":
@@ -59,7 +59,7 @@ export const GenerateQuote = () => {
       renderGenerateQuote = <GenerateAntiguaJointEstateQuote />;
       break;
     default:
-      // renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
+      
       break;
   }
 
@@ -72,6 +72,7 @@ export const GenerateQuote = () => {
       />
       <Skeleton loading={isLoading} active>
         {renderGenerateQuote}
+        {/* <GenerateGrenadaDonation/> */}
       </Skeleton>
     </>
   );

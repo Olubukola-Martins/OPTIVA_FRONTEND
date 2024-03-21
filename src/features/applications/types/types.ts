@@ -40,32 +40,24 @@ interface Response {
   response: string[];
   subsection_name?: string;
 }
+// 
 
 //GET APPLICATION RESPONSE
 export interface IGetApplicationResponse {
   id: number;
-  question_id: number;
-  application_id: number;
-  section_name: string;
-  subsection_name?: any;
-  response: string[];
-  created_at: string;
-  updated_at: string;
-  question: Question;
-}
-
-interface Question {
-  id: number;
-  template_id: number;
+  template_id?: any;
   form_question: string;
   input_type: string;
-  options?: any;
+  options?: any[]
   is_required: number;
   section_name: string;
   subsection_name?: string;
   schema_name: string;
   created_at: string;
   updated_at: string;
+  question_id: number;
+  application_id: number;
+  response: string;
 }
 
 // UPDATE APPLICATION STATUS
@@ -1384,3 +1376,4 @@ export interface IUploadMultipleFiles {
   document_requirement_id: number;
   file: string;
 }
+

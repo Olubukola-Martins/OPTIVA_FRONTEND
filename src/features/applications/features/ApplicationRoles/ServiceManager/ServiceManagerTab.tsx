@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ServiceManagerPortfolio } from "./ServiceManagerPortfolio";
 import { Input, Select, Tabs } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
@@ -7,16 +7,21 @@ import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile
 export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
   onRoleSelect,
 }) => {
-  const { data} =useFetchUserProfile()
+  const { data } = useFetchUserProfile();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
   const tabItems: {
     label: string;
     children: React.ReactNode;
     key: string;
   }[] = [
-   
     {
       label: "All Applicants",
-      children: <ServiceManagerPortfolio />,
+      children: (
+        <ServiceManagerPortfolio
+          searchTerm={searchTerm}
+        />
+      ),
       key: "MyPortfolio",
     },
   ];
@@ -30,8 +35,10 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
             <Input.Search
               placeholder="Search"
               className="md:flex hidden w-[250px]"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
             />
-             {data?.roles.id === 1 && (
+            {data?.roles.id === 1 && (
               <Select
                 allowClear
                 placeholder="Role"
@@ -69,7 +76,7 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
                 ]}
               />
             )}
-             <Select
+            <Select
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"

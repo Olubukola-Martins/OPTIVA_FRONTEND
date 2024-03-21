@@ -14,12 +14,24 @@ import { useFetchEmployees } from "src/features/settings/features/employees/hook
 import { useFetchActiveandInactiveApplicant } from "../../../hooks/Application hooks/useFetchActiveandInactiveApplicant";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/Application hooks/useGetApplication";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
+// import { useDebounce } from "src/hooks/useDebounce";
+// import { usePagination } from "src/hooks/usePagination";
+import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
-export const InactiveApplications = () => {
+export const InactiveApplications: React.FC<IPortfolioProps> = ({
+  searchTerm,
+}) => {
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
     section: "inactive",
   });
-  console.log("inactive", data);
+  // const { onChange, pagination } = usePagination();
+  // const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  // const { data, isLoading } = useFetchActiveandInactiveApplicant({
+  //   pagination,
+  //   search: debouncedSearchTerm,
+  //   status: "inactive",
+  // });
+  console.log("search term", searchTerm);
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -57,11 +69,8 @@ export const InactiveApplications = () => {
             employee.id === item.assigned_user_id
         );
         const lastComment =
-        item.applicationcomment && item.applicationcomment.length > 0
-          ? item.applicationcomment[item.applicationcomment.length - 1]
-          : undefined;
-        const reasons = lastComment ? lastComment.comment[0] : "-";
-      
+          item.applicationcomment?.[item.applicationcomment.length - 1];
+
         return {
           key: item.id,
           sn: index + 1,
@@ -71,7 +80,10 @@ export const InactiveApplications = () => {
           programType: getProgramName(item.programtype_id) || "-",
           numberOfDependents: item.no_of_dependents,
           assignedTo: assignedEmployee ? assignedEmployee.name : "-",
-          reasons: reasons,
+          reasons: lastComment
+            ? lastComment.comment.charAt(0).toUpperCase() +
+              lastComment.comment.slice(1)
+            : "-",
           investmentRoute: getInvestmentName(item.investmentroute_id) || "-",
         };
       });
@@ -153,7 +165,7 @@ export const InactiveApplications = () => {
       title: "Reason",
       dataIndex: "reasons",
       key: "9",
-      render: (_, val) => <p>{ val.reasons}</p>,
+      render: (_, val) => <p>{val.reasons}</p>,
     },
     {
       title: "Action",
@@ -278,6 +290,8 @@ export const InactiveApplications = () => {
         className="bg-white rounded-md shadow border mt-8"
         scroll={{ x: 600 }}
         loading={isLoading}
+        // onChange={onChange}
+        // pagination={{ ...pagination, total: data?.total }}
         rowSelection={{
           type: "checkbox",
           onChange: (

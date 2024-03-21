@@ -22,10 +22,10 @@ const handlePatchData =  async (props: { milestone_id: number; id:number }) => {
   const response = await axios.patch(url, body, config);
   return response;
 };
-export const useMoveToNextStage = (id:number) => {
+export const useMoveToNextStage = () => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation(handlePatchData);
-  const patchData = (milestone_id: number) => {
+  const patchData = (id:number,milestone_id: number, ) => {
     mutate(
       {
         milestone_id,

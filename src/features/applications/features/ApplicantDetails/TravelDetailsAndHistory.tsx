@@ -25,13 +25,14 @@ export const TravelDetailsAndHistory: React.FC<IDataResponseProps> = ({
           (item) =>
             item.subsection_name === subsectionName && (
               <Form.Item
+                name={item.schema_name}
+                label={item.form_question}
                 key={item.id}
-                name={item.question.schema_name}
-                label={item.question.form_question}
+                className="w-full"
               >
                 {renderDetailsInput(
-                  item.question.input_type,
-                  item.question.options
+                  item.input_type,
+                  // item.question.options
                 )}
               </Form.Item>
             )

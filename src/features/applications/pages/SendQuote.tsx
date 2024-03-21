@@ -15,6 +15,7 @@ import { AntiguaDonationQuoteTable } from "../features/Quotes/Quotes Table/Antig
 import { AntiguaSingleEstateQuoteTable } from "../features/Quotes/Quotes Table/AntiguaSingleEstateQuoteTable";
 import { AntiguaJointQuoteTable } from "../features/Quotes/Quotes Table/AntiguaJointQuoteTable";
 import { END_POINT } from "src/config/environment";
+// import { useGetSingleApplicant } from "../hooks/Application hooks/useGetSingleApplicant";
 
 const today = new Date();
 const dayOfMonth = today.getDate();
@@ -67,9 +68,14 @@ export const thStyle: React.CSSProperties = {
   fontSize: "1.1rem",
 };
 
+export const tdPayment: React.CSSProperties = {
+  border: "1px solid black",
+  padding: "8px",
+};
 export const tdStyle: React.CSSProperties = {
   border: "1px solid black",
   padding: "8px",
+  fontStyle: "italic",
   //   textAlign: "left",
 };
 
@@ -129,19 +135,17 @@ export const SendQuote = () => {
   }
 
   const handleDownload = (id: number) => {
-    // Create a new anchor element
     const anchor = document.createElement("a");
-    // Set the href attribute to the download URL
+
     anchor.href = `${END_POINT.BASE_URL}/admin/download-quote/${id}`;
-    // Set the target attribute to open in a new tab
+
     anchor.target = "_blank";
-    // Add some attributes to force download behavior
+
     anchor.setAttribute("download", "filename");
-    // Append the anchor element to the body
+
     document.body.appendChild(anchor);
-    // Programmatically trigger a click event on the anchor element
+
     anchor.click();
-    // Remove the anchor element from the body after clicking
     document.body.removeChild(anchor);
   };
 
@@ -179,6 +183,30 @@ export const SendQuote = () => {
           <p>Quote No: </p>
         </div>
         {renderGenerateQuote}
+        {/* {data?.investmentroute_id === 1 && (
+          <GrenadaQuoteTable id={id as unknown as number} />
+        )}
+        {data?.investmentroute_id === 2 && (
+          <GrenadaEstateQuoteTable id={id as unknown as number} />
+        )}
+        {data?.investmentroute_id === 3 && (
+          <StLuciaQuoteTable id={id as unknown as number} />
+        )}
+        {data?.investmentroute_id === 4 && (
+          <DomincaQuoteTable id={id as unknown as number} />
+        )}
+        {data?.investmentroute_id === 5 && (
+          <StKittQuoteTable id={id as unknown as number} />
+        )}
+        {data?.investmentroute_id === 6 && (
+          <AntiguaDonationQuoteTable id={id as unknown as number} />
+        )}
+        {data?.investmentroute_id === 7 && (
+          <AntiguaSingleEstateQuoteTable id={id as unknown as number} />
+        )}
+        {data?.investmentroute_id === 8 && (
+          <AntiguaJointQuoteTable id={id as unknown as number} />
+        )} */}
       </div>
       <img
         src="https://optiva-backend.techmur.com/assets/optivaAddr.png"

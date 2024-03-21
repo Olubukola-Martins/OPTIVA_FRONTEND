@@ -1,13 +1,14 @@
 import { Modal, Form, Button } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { FormFileInput } from "src/features/settings/features/authorizedPersons/components/FormFileInput";
-import { IModalProps } from "./OutstandingDocuments";
+
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import useUploadFile from "src/features/payment/hooks/useUploadFile";
 import { openNotification } from "src/utils/notification";
 import { END_POINT } from "src/config/environment";
 import { useQueryClient } from "react-query";
 import { UploadOutlined } from "@ant-design/icons";
+import { IModalProps } from "./OutstandingDocuments";
 
 export const UploadProofofPaymentModal = (props: IModalProps) => {
   const { fileData, fileMutate, fileUploading } = useUploadFile();
