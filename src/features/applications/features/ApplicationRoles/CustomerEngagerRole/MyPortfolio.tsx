@@ -8,7 +8,7 @@ import {
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
-import { SubmitApplicationModal } from "../../Components/SubmitApplicationModal";
+import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";

@@ -15,12 +15,12 @@ import { useGetProgramType } from "src/features/settings/features/program-types/
 import { useFetchActiveandInactiveApplicant } from "../../../hooks/Application hooks/useFetchActiveandInactiveApplicant";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
 import { useMarkApplicantAsComplete } from "../../../hooks/Application hooks/useMarkApplicantAsComplete";
-import { ApplicationAssignmentModal } from "../../Components/ApplicationAssignmentModal";
+import { ApplicationAssignmentModal } from "../../components/ApplicationAssignmentModal";
 // import { AssignToModal } from "../../Components/AssignToModal";
 // import { useDebounce } from "src/hooks/useDebounce";
 // import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
-import { AssignToModal } from "../../Components/AssignToModal";
+import { AssignToModal } from "../../components/AssignToModal";
 
 export type DataSourceItem = {
   key: React.Key;

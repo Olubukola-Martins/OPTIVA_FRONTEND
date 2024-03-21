@@ -6,7 +6,7 @@ import {
   DataSourceItem,
   capitalizeName,
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
-import { AssignToModal } from "../../Components/AssignToModal";
+import { AssignToModal } from "../../components/AssignToModal";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
 import { useQueryClient } from "react-query";
@@ -16,7 +16,7 @@ import { openNotification } from "src/utils/notification";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
 import { SignOut } from "src/components/layout/SignOut";
 import { useMoveToNextStage } from "src/features/applications/hooks/Application hooks/useMoveToNextStage";
-import { SendToRoleHead } from "../../Components/SendToRoleHead";
+import { SendToRoleHead } from "../../components/SendToRoleHead";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";

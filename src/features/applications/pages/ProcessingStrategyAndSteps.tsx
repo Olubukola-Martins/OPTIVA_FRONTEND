@@ -1,6 +1,6 @@
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { ProcessingStrategyandStepsTab } from "../features/Components/ProcessingStrategyandStepsTab";
+import { ProcessingStrategyandStepsTab } from "../features/components/ProcessingStrategyandStepsTab";
 
 const ProcessingStrategyAndSteps = () => {
   return (
