@@ -53,7 +53,7 @@ interface IProps {
 
 }
 
-const QuotesGenTable = ({ allData, dataLoading,pagination,onChange }: IProps) => {
+const QuotesGenTable = ({ allData, dataLoading,onChange }: IProps) => {
   const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
   const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>();

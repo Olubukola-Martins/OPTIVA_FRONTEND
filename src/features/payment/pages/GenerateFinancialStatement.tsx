@@ -333,7 +333,7 @@ const GenerateFinancialStatement = () => {
         title="Generate Financial Statement"
         linkBack={appRoute.paymentDetails(Number(id) as number).path}
       />
-      <Spin spinning={finStatementLoading}>
+      <Spin spinning={finStatementLoading || sendingFinStatement}>
         {finStatementData?.data && (
           <GenerateTemplate
             title="FINANCIAL STATEMENT"
