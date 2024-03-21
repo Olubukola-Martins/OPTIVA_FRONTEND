@@ -8,7 +8,7 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGet
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { useEffect } from "react";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
-import { renderDetailsInput } from "./AcademicHistory";
+import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   const { id } = useParams();
@@ -28,22 +28,20 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
     if (data && data.length > 0) {
       const initialValues: Record<string, any> = {};
       data.forEach((item) => {
-        initialValues[item.question.schema_name] = item.response;
+        initialValues[item.schema_name] = item.response || null;
       });
       form.setFieldsValue(initialValues);
     }
   }, [data]);
 
-  const handleSubmit = (val: any) => {
+ 
+  const handleSubmit = (values: any) => {
     const payload = {
-      application_id: id as unknown as number,
-      responses:
-        data?.map((item) => ({
-          question_id: item.question_id,
-          response: Array.isArray(val[item.question.schema_name])
-            ? val[item.question.schema_name]
-            : [val[item.question.schema_name]],
-        })) || [],
+      application_id: Number(id),
+      responses: data?.map((item) => ({
+        question_id: item.id,
+        response: Array.isArray(values[item.schema_name]) ? values[item.schema_name] : [values[item.schema_name]],
+      })) || [],
     };
     mutate(payload, {
       onError: (error: any) => {
@@ -69,32 +67,19 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
     <>
       <Skeleton active loading={isLoading}>
         {data?.length !== 0 ? (
-          <Form
-            onFinish={handleSubmit}
-            form={form}
-            layout="vertical"
-            requiredMark={false}
-          >
+          <Form onFinish={handleSubmit} form={form} layout="vertical" requiredMark={false}>
             {data?.map((item) => (
               <Form.Item
+                name={item.schema_name}
+                label={item.form_question}
                 key={item.id}
-                name={item.question.schema_name}
-                label={item.question.form_question}
+                className="w-full"
               >
-                {renderDetailsInput(
-                  item.question.input_type,
-                  item.question.options
-                )}
+                {renderInput(item.input_type, )}
               </Form.Item>
             ))}
-
             <div className="flex justify-between items-center gap-5">
-              <AppButton
-                label="Prev"
-                type="button"
-                handleClick={() => onPrev && onPrev()}
-                variant="transparent"
-              />
+              <AppButton label="Prev" type="button" handleClick={onPrev} variant="transparent" />
               <AppButton label="Save" type="submit" isLoading={postLoading} />
             </div>
           </Form>

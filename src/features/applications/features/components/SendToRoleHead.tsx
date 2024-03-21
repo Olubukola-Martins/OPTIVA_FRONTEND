@@ -1,5 +1,4 @@
 import React from "react";
-import { IModalProps } from "./OutstandingDocuments";
 import { Form, Modal } from "antd";
 import { AppButton } from "src/components/button/AppButton";
 import { FormDepartmentInput } from "src/features/settings/features/department/components/FormDepartmentInput";
@@ -7,6 +6,7 @@ import { useSendToRoleHead } from "../../hooks/Application hooks/useSendToRoleHe
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useQueryClient } from "react-query";
+import { IModalProps } from "./OutstandingDocuments";
 
 export const SendToRoleHead: React.FC<IModalProps> = ({
   onCancel,

@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
   const { data } = useFetchUserProfile();
-  const [selectedFilter, setSelectedFilter] = useState<string>('3');
+  const [searchTerm, setSearchTerm] = useState<string>("");
  
   const tabItems: {
     label: string;
@@ -15,7 +15,7 @@ export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
   }[] = [
     {
       label: "All Applicants",
-      children: <AllDMSApplicants selectedFilter={selectedFilter}/>,
+      children: <AllDMSApplicants searchTerm={searchTerm} />,
       key: "AllApplicants",
     },
   ];
@@ -29,6 +29,8 @@ export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
             <Input.Search
               placeholder="Search"
               className="md:flex hidden w-[250px]"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
             />
             {data?.roles.id === 1 && (
               <Select
@@ -72,11 +74,11 @@ export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
-              onChange={(value) => setSelectedFilter(value)}
+              // onChange={(value) => setSelectedFilter(value)}
               options={[
                 { value: "1", label: "Collated Document Applicant" },
                 { value: "2", label: "Uncollated Document Applicant" },
-                { value: "3", label: "All Applicant Documents" },
+                // { value: "3", label: "All Applicant Documents" },
               ]}
             />
           </div>

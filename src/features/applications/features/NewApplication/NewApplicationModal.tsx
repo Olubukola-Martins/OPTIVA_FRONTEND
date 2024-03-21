@@ -16,6 +16,7 @@ import {
 import { openNotification } from "src/utils/notification";
 import { useCreateApplication } from "../../hooks/Application hooks/useCreateApplication";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
+import { useGetInvestmentByCountry } from "src/features/settings/features/authorizedPersons/hooks/useGetInvestmentByCountry";
 
 interface INewApplicationProps {
   open: boolean;
@@ -34,9 +35,18 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
   const { data: branchData } = useFetchCurrentBranch();
   const queryClient = useQueryClient();
   const { setSharedData } = useGlobalContext();
-
+  console.log(investmentData);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [selectedCountry, setSelectedCountry] = useState<number | undefined>();
+
+  const {
+    data: investmentByCountryData,
+    isLoading: investmentByCountryLoading,
+  } = useGetInvestmentByCountry({
+    id: selectedCountry as unknown as number,
+  });
+
   const handleSubmit = (val: any) => {
     mutate(
       { branch_id: branchData?.id, ...val },
@@ -68,6 +78,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
       }
     );
   };
+
   return (
     <>
       <Modal open={open} onCancel={handleClose} footer={null}>
@@ -81,7 +92,11 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
                 Which country passport/residency is applicant applying for?
               </h2>
               <Form.Item rules={generalValidationRules} name="country_id">
-                <Select>
+                <Select
+                  onChange={(value: number) => {
+                    setSelectedCountry(value);
+                  }}
+                >
                   {countryData?.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
                       {item.country_name}
@@ -112,14 +127,24 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
                 rules={generalValidationRules}
                 name="investmentroute_id"
               >
-                <Select>
+                <Select loading={investmentByCountryLoading}>
+                  {investmentData && selectedCountry !== undefined
+                    ? investmentByCountryData?.map((item) => (
+                        <Select.Option value={item.id} key={item.id}>
+                          {item.investment_name}
+                        </Select.Option>
+                      ))
+                    : null}
+                </Select>
+              </Form.Item>
+
+              {/* <Select>
                   {investmentData?.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
                       {item.investment_name}
                     </Select.Option>
                   ))}
-                </Select>
-              </Form.Item>
+                </Select> */}
             </div>
             <div>
               <h2 className="py-1">Number of dependents</h2>

@@ -1,11 +1,14 @@
 import { Form, Tabs } from "antd";
 import { ProcessingSteps } from "./ProcessingSteps";
 import { ProcessingStrategy } from "./ProcessingStrategy";
-import { useState } from "react";
-import { useCreateProcessingStrategy } from "../hooks/Application hooks/useCreateProcessingStrategy";
+import { useEffect, useState } from "react";
+import { useCreateProcessingStrategy } from "../../hooks/Application hooks/useCreateProcessingStrategy";
 import { useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
-import { QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS } from "../hooks/Application hooks/useGetProcessingStrategy";
+import {
+  QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS,
+  useGetProcessingStrategy,
+} from "../../hooks/Application hooks/useGetProcessingStrategy";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 
@@ -16,6 +19,8 @@ export const ProcessingStrategyandStepsTab = () => {
   const { mutate, isLoading } = useCreateProcessingStrategy();
   const queryClient = useQueryClient();
 
+  const { data, } = useGetProcessingStrategy(id as unknown as number);
+  console.log(data, 'straget')
   const handleSubmit = (val: any) => {
     mutate(
       {
@@ -49,6 +54,15 @@ export const ProcessingStrategyandStepsTab = () => {
       }
     );
   };
+
+  useEffect(() => {
+    if (data) {
+      form.setFieldsValue({
+        processingStrategy: data.strategy, 
+        processingSteps: data.steps, 
+      });
+    }
+  }, [data, form]);
 
   const tabItems: {
     label: string;

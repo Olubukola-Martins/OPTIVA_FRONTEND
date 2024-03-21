@@ -2,7 +2,6 @@ import { Form, Modal, Select } from "antd";
 import React, { useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
-import { IModalProps } from "./OutstandingDocuments";
 import { useFetchRoles } from "src/features/settings/features/rolesAndPermissions/hooks/useFetchRoles";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 import { employeesProps } from "src/features/settings/features/employees/types";
@@ -10,6 +9,7 @@ import { useAssignApplicant } from "../../hooks/Application hooks/useAssignAppli
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
+import { IModalProps } from "./OutstandingDocuments";
 
 export const AssignToModal: React.FC<IModalProps> = ({
   onCancel,

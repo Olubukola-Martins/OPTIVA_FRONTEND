@@ -8,18 +8,20 @@ import {
   thStyle,
   colOneStyle,
   tdStyle,
+  tdPayment,
 } from "src/features/applications/pages/SendQuote";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Skeleton } from "antd";
 
 export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
-  const { data } = useGetSingleQuote<IGrenadaEstateQuote>({
+  const { data, isLoading } = useGetSingleQuote<IGrenadaEstateQuote>({
     id: id as unknown as number,
   });
   const applicantInfo = data?.Applicant_info;
   const applicantQuote = data?.Applicant_info.grenada_estate_quote;
 
   return (
-    <div>
+    <Skeleton active loading={isLoading}>
       <div>
         <h1 className="text-lg font-semibold pb-2">
           {applicantInfo?.full_name}{" "}
@@ -56,145 +58,86 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
 
           {/* ROW 2 */}
           <tr>
-            <td rowSpan={20} style={colOneStyle} colSpan={2}>
+            <td rowSpan={27} style={colOneStyle} colSpan={2}>
               Grenada Real Estate Quote
             </td>
-            <td style={tdStyle} colSpan={3}>
+            <td style={tdPayment} colSpan={3}>
               Payment for processing & various fees. <br />
               The payment is as follows:
             </td>
           </tr>
-          {/* ROW 3 */}
-          <tr>
-            <td style={tdStyle}>Country Fee Due Now</td>
-            <td style={tdStyle}>
-              {applicantQuote?.country_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
-          </tr>
 
-          {/* ROW 4 */}
+          {/*  */}
           <tr>
             <td style={tdStyle} colSpan={2}>
-              Country Fee Due On Approval
+              Grenada Real Estate Investment
             </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.country_fee_due_on_approval}
-            </td>
+            <td style={tdStyle}>${applicantQuote?.grenadaRealEstateTotal}</td>
           </tr>
 
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-
-          {/* ROW 5 */}
+          {/* */}
           <tr>
             <td colSpan={2} style={tdStyle}>
-              Government Application Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.govt_application_fee}</td>
-          </tr>
-
-          {/* ROW 6 */}
-          <tr>
-            <td colSpan={2} style={tdStyle}>
-              Government Due Diligence Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.govt_due_diligence_fee}</td>
-          </tr>
-
-          {/* ROW 7 */}
-          <tr>
-            <td colSpan={2} style={tdStyle}>
-              Goverment Fee
+              Grenada Gov't Fee
             </td>
             <td style={tdStyle}>${applicantQuote?.govt_fee}</td>
           </tr>
 
-          {/* ROW 8 */}
+          {/*  */}
           <tr>
             <td colSpan={2} style={tdStyle}>
-              Government Processing Fee
+              Grenada Gov't Application Fee
+            </td>
+            <td style={tdStyle}>${applicantQuote?.govt_application_fee}</td>
+          </tr>
+
+          {/* */}
+          <tr>
+            <td colSpan={2} style={tdStyle}>
+              Grenada Gov't Due Diligence Fee
+            </td>
+            <td style={tdStyle}>${applicantQuote?.govt_due_diligence_fee}</td>
+          </tr>
+
+          {/*  */}
+          <tr>
+            <td colSpan={2} style={tdStyle}>
+              Grenada Gov't Processing Fee
             </td>
             <td style={tdStyle}>${applicantQuote?.govt_processing_fee}</td>
           </tr>
-
+          {/* {} */}
           <tr>
             <td colSpan={2} style={tdStyle}>
-              Government Passport, Oath and Allegiance Fee
+              Grenada Gov't Passport, Oath & Allegiance Fee
             </td>
             <td style={tdStyle}>
               ${applicantQuote?.govt_passport_oath_and_allegiance_fee}
             </td>
           </tr>
 
-          {/* EMPTY ROW */}
+          {/*  */}
           <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+            <td style={tdStyle} colSpan={2}>
+              Grenada Legal & Advisory Fee
             </td>
-          </tr>
-          {/* ROW 12 */}
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Grenada Bank Fee
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.grenada_bank_fee}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Grenada Legal and Advisory Fee
-            </td>
-            <td style={tdStyle} className="font-bold">
+            <td style={tdStyle}>
               ${applicantQuote?.grenada_legal_and_advisory_fee}
             </td>
           </tr>
 
+          {/* */}
           <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Grenada Local Agent Fee
+            <td
+              style={tdStyle}
+              colSpan={2}
+              className="text-right font-bold not-italic"
+            >
+              Grenada Total Quote
             </td>
             <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.grenada_local_agent_fee}
+              ${applicantQuote?.program_grand_total}
             </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Grenada Total
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.grenadaRealEstateTotal}
-            </td>
-          </tr>
-
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-          {/* ROW 9 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Local Processing Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.localProcessingFee}</td>
-          </tr>
-
-          {/* ROW 10 */}
-          <tr>
-            <td style={tdStyle}>Local Processing Fee Due Now</td>
-            <td style={tdStyle}>
-              {applicantQuote?.local_processing_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle}>${applicantQuote?.localProcessingFeeDueNow}</td>
           </tr>
 
           {/* BLUE ROW */}
@@ -204,88 +147,175 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
               style={tdStyle}
               className="bg-[#012168] text-[#012168]"
             >
-              -
+              .
             </td>
+          </tr>
+          {/*  */}
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Local Processing Fee
+            </td>
+            <td style={tdStyle}>${applicantQuote?.localProcessingFee}</td>
           </tr>
 
           {/* EMPTY ROW */}
           <tr>
             <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+              .
             </td>
           </tr>
 
-          {/* ROW 13 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Total Due After Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.programTotalDueAfterApproval}
-            </td>
-          </tr>
-
-          {/* ROW 14 */}
+          {/* BLUE ROW */}
           <tr>
             <td
+              colSpan={3}
               style={tdStyle}
+              className="bg-[#012168] text-[#012168]"
+            >
+              .
+            </td>
+          </tr>
+
+          {/* ROW 12 */}
+          <tr>
+            <td style={tdPayment} colSpan={3} className="font-bold not-italic">
+              Payment Plan
+            </td>
+            {/* <td style={tdStyle} className="font-bold">
+              ${applicantQuote?.grenada_bank_fee}
+            </td> */}
+          </tr>
+
+          <tr>
+            <td style={tdStyle}>Grenada Total Due Now</td>
+            <td style={tdStyle}>
+              {applicantQuote?.country_fee_due_now_percentage}%
+            </td>
+            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
+          </tr>
+
+          {/*  */}
+          <tr>
+            <td style={tdStyle}>Local Processing Fee Due Now</td>
+            <td style={tdStyle}>
+              {applicantQuote?.local_processing_fee_due_now_percentage}%
+            </td>
+            <td style={tdStyle}>${applicantQuote?.localProcessingFeeDueNow}</td>
+          </tr>
+
+          {/*  */}
+          <tr>
+            <td
+              style={tdPayment}
               colSpan={2}
               className="text-[#EC5252] font-bold text-right"
             >
-              Program Total Due Now
+              Total Due Now
             </td>
             <td style={tdStyle} className="text-[#EC5252] font-bold">
               ${applicantQuote?.programTotalDueNow}
             </td>
           </tr>
 
-          {/* ROW 15 */}
+          {/*  */}
           <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Grand Total
+            <td style={tdStyle} colSpan={2} className="text-right">
+              Balance Due On Citizenship Approval
             </td>
-            <td style={tdStyle}>${applicantQuote?.program_grand_total}</td>
+            <td style={tdStyle}>
+              ${applicantQuote?.total_due_on_citizenship_approval}
+            </td>
           </tr>
+          {/* ROW 13 */}
+          {/* <tr>
+            <td style={tdStyle} colSpan={2}>
+              Program Total Due After Approval
+            </td>
+            <td style={tdStyle}>
+              ${applicantQuote?.programTotalDueAfterApproval}
+            </td>
+          </tr> */}
+          {/* ROW 3 */}
+          {/* <tr>
+            <td style={tdStyle}>Country Fee Due Now</td>
+            <td style={tdStyle}>
+              {applicantQuote?.country_fee_due_now_percentage}%
+            </td>
+            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
+          </tr> */}
+
+          {/* ROW 4 */}
+          {/* <tr>
+            <td style={tdStyle} colSpan={2}>
+              Country Fee Due On Approval
+            </td>
+            <td style={tdStyle}>
+              ${applicantQuote?.country_fee_due_on_approval}
+            </td>
+          </tr> */}
 
           {/* EMPTY ROW */}
-          <tr>
+          {/* <tr>
             <td colSpan={3} style={tdStyle} className="bg-white text-white">
               -
             </td>
-          </tr>
+          </tr> */}
+          {/* ROW 12 */}
+          {/* <tr>
+            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
+              Grenada Bank Fee
+            </td>
+            <td style={tdStyle} className="font-bold">
+              ${applicantQuote?.grenada_bank_fee}
+            </td>
+          </tr> */}
+
+          {/* <tr>
+            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
+              Grenada Local Agent Fee
+            </td>
+            <td style={tdStyle} className="font-bold">
+              ${applicantQuote?.grenada_local_agent_fee}
+            </td>
+          </tr> */}
+
+          {/* EMPTY ROW */}
+          {/* <tr>
+            <td colSpan={3} style={tdStyle} className="bg-white text-white">
+              -
+            </td>
+          </tr> */}
+
+          {/* EMPTY ROW */}
+          {/* <tr>
+            <td colSpan={3} style={tdStyle} className="bg-white text-white">
+              -
+            </td>
+          </tr> */}
           {/* ROW 17 */}
-          <tr>
+          {/* <tr>
             <td style={tdStyle} colSpan={2}>
               Real Estate Investment Fee
             </td>
             <td style={tdStyle}>
               ${applicantQuote?.real_estate_investment_fee}
             </td>
-          </tr>
+          </tr> */}
           {/* EMPTY ROW */}
-          <tr>
+          {/* <tr>
             <td colSpan={3} style={tdStyle} className="bg-white text-white">
               -
             </td>
-          </tr>
-          {/* ROW 17 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due On Citizenship Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.total_due_on_citizenship_approval}
-            </td>
-          </tr>
+          </tr> */}
 
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due Now
+          {/* EMPTY ROW */}
+          {/* <tr>
+            <td colSpan={3} style={tdStyle} className="bg-white text-white">
+              -
             </td>
-            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
-          </tr>
+          </tr> */}
         </table>
       </div>
-    </div>
+    </Skeleton>
   );
 };

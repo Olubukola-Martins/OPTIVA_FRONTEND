@@ -89,13 +89,13 @@ export const GenerateStLuciaQuote = () => {
               <InputNumber className="w-full" />
             </Form.Item>
 
-            <Form.Item
+            {/* <Form.Item
               label="Number of additional dependents (if there's a spouse, maximum of 2)"
               name="number_of_add_depn_if_spouse_max_two"
               rules={generalValidationRules}
             >
               <InputNumber className="w-full" />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item
               label="Number of additional dependents (if there's a spouse)"

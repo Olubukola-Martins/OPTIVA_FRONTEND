@@ -10,7 +10,7 @@ export const QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS =
 const getData = async (props: {
   token: string;
   id: number;
-}): Promise<IGetProcessingStrategy[]> => {
+}): Promise<IGetProcessingStrategy> => {
   const url = `${END_POINT.BASE_URL}/admin/application/${props.id}/strategy`;
   const config = {
     headers: {
@@ -20,10 +20,10 @@ const getData = async (props: {
   };
 
   const res = await axios.get(url, config);
-  const data = res.data.data;
+  const item = res.data.data;
+  const data: IGetProcessingStrategy = { ...item };
   return data;
 };
-
 export const useGetProcessingStrategy = (id: number) => {
   const { token } = useGetUserInfo();
   const queryData = useQuery(

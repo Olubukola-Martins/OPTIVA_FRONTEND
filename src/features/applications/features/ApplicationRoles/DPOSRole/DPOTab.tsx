@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // import { AllDPOApplicants } from "./AllDPOApplicants";
 import { DPOPortfolio } from "./DPOPortfolio";
 import { Tabs, Input, Select } from "antd";
@@ -6,20 +6,17 @@ import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
-  const {data}=useFetchUserProfile()
+  const { data } = useFetchUserProfile()
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const tabItems: {
     label: string;
     children: React.ReactNode;
     key: string;
   }[] = [
-    // {
-    //   label: "All Applicants",
-    //   children: <AllDPOApplicants />,
-    //   key: "AllApplicants",
-    // },
+   
     {
       label: "All Applicants",
-      children: <DPOPortfolio />,
+      children: <DPOPortfolio searchTerm={searchTerm} />,
       key: "MyPortfolio",
     },
   ];
@@ -33,6 +30,8 @@ export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
             <Input.Search
               placeholder="Search"
               className="md:flex hidden w-[250px]"
+              onSearch={(val) => setSearchTerm(val)}
+              onChange={(e) => e.target.value === "" && setSearchTerm("")}
             />
            {data?.roles.id === 1 && (
               <Select

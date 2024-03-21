@@ -15,24 +15,34 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "src/features/applications/hooks/Appl
 import { openNotification } from "src/utils/notification";
 import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Application hooks/useMarkApplicantAsComplete";
 import { SignOut } from "src/components/layout/SignOut";
-// import { useMoveToNextStage } from "src/features/applications/hooks/Application hooks/useMoveToNextStage";
+import { useMoveToNextStage } from "src/features/applications/hooks/Application hooks/useMoveToNextStage";
 import { SendToRoleHead } from "../../components/SendToRoleHead";
+import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
 
-export const ServiceManagerPortfolio = () => {
-  const { data, isLoading } = useFetchApplicantsByRole();
+export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
+  searchTerm,
+}) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+  const { data, isLoading } = useFetchApplicantsByRole({
+    pagination,
+    search: debouncedSearchTerm,
+  });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
   const [applicantId, setApplicantId] = useState<number>();
-  // const [milestoneId, setMilestoneId] = useState<number>();
+  const [milestoneId, setMilestoneId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
   const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
   const [openRoleModal, setOpenRoleModal] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
-  // const { patchData} = useMoveToNextStage(applicantId as unknown as number);
+  const { patchData } = useMoveToNextStage();
   useEffect(() => {
     if (data) {
-      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
+      const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
         return {
           key: item.id,
           sn: index + 1,
@@ -101,10 +111,13 @@ export const ServiceManagerPortfolio = () => {
     );
   };
 
-  // const moveApplicantToNextStage = () => {
-  //   // patchMutate({ id: applicantId as unknown as number, milestone_id: milestoneId as number});
-  //   patchData(milestoneId as unknown as number);
-  // };
+  const moveApplicantToNextStage = () => {
+    // patchMutate({ id: applicantId as unknown as number, milestone_id: milestoneId as number});
+    patchData(
+      applicantId as unknown as number,
+      milestoneId as unknown as number
+    );
+  };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -286,21 +299,23 @@ export const ServiceManagerPortfolio = () => {
                 <Menu.Item key="8" onClick={() => setOpenLogout(true)}>
                   Login as User
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="9"
                   onClick={() => {
+                    setApplicantId(val.key as unknown as number);
+                    console.log("applicant id", applicantId);
                     setMilestoneId(val.milestoneId as unknown as number);
                   }}
                 >
                   <Popconfirm
-                    title="Mark as completed"
-                    description={`Are you sure to complete ${val.applicantName}'s application?`}
+                    title="Move to Next Stage"
+                    description={`Are you sure to move ${val.applicantName}' to the next stage?`}
                     onConfirm={moveApplicantToNextStage}
                     okType="default"
                   >
                     Move to Next Stage
                   </Popconfirm>
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item
                   key="10"
                   onClick={() => {
@@ -349,6 +364,8 @@ export const ServiceManagerPortfolio = () => {
         loading={isLoading}
         scroll={{ x: 700 }}
         className="bg-white rounded-md shadow border mt-2"
+        pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
       />
 
       {applicantId && (

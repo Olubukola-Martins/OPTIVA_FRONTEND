@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Skeleton } from "antd";
 import { useGetSingleQuote } from "src/features/applications/hooks/Quotes hooks/useGetSingleQuote";
 import {
   todaysDate,
@@ -13,14 +14,14 @@ export interface IGetQuoteProps {
   id: number | undefined;
 }
 export const DomincaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
-  const { data } = useGetSingleQuote<IGetDominicaQuote>({
+  const { data, isLoading } = useGetSingleQuote<IGetDominicaQuote>({
     id: id as unknown as number,
   });
 
   const applicantInfo = data?.Applicant_info;
   const applicantQuote = data?.Applicant_info.dominica_donation_quote;
   return (
-    <div>
+    <Skeleton active loading={isLoading}>
       <div>
         <h1 className="text-lg font-semibold pb-2">
           {applicantInfo?.full_name}{" "}
@@ -238,6 +239,6 @@ export const DomincaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
           </tr>
         </table>
       </div>
-    </div>
+    </Skeleton>
   );
 };
