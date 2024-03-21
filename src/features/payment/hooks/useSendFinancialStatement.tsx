@@ -24,10 +24,8 @@ const getData = async (props: { itemId: number; urlEndPoint: string }) => {
 
 export const useSendFinancialStatement = ({
     itemId,
-    onSuccessAction,
   }: {
     itemId: number;
-    onSuccessAction?: any;
   }) => {
     const queryData = useQuery(
       [QUERY_KEY_FINANCIAL_STATEMENT, itemId],
@@ -54,8 +52,6 @@ export const useSendFinancialStatement = ({
             description: "Financial statement sent succesfully",
             duration: 5,
           });
-  
-          onSuccessAction;
         },
       }
     );

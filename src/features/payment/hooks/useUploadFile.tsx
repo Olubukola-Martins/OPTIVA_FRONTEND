@@ -30,8 +30,6 @@ const useUploadFile = () => {
     fileUploadSuccess,
     fileUploading,
   };
-  // const uploadPaymentProof = async (itemId: string, file: File) => { }
-  //   return <div>useUploadPaymentProof</div>;
 };
 
 export default useUploadFile;
