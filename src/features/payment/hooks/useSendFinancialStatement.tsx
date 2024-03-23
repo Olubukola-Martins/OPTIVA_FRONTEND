@@ -1,9 +1,11 @@
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FINANCIAL_STATEMENT } from "./useGenerate";
+import { appRoute } from "src/config/routeMgt/routePaths";
+import { useNavigate } from "react-router-dom";
 
 const getData = async (props: { itemId: number; urlEndPoint: string }) => {
     const url = `${props.urlEndPoint}/${props.itemId}`;
@@ -27,6 +29,7 @@ export const useSendFinancialStatement = ({
   }: {
     itemId: number;
   }) => {
+    const navigate = useNavigate();
     const queryData = useQuery(
       [QUERY_KEY_FINANCIAL_STATEMENT, itemId],
       () => {
@@ -52,6 +55,7 @@ export const useSendFinancialStatement = ({
             description: "Financial statement sent succesfully",
             duration: 5,
           });
+          navigate(appRoute.paymentDetails(itemId as number).path)
         },
       }
     );

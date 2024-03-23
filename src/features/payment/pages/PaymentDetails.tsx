@@ -148,10 +148,20 @@ const PaymentDetails = () => {
   const {
     data: finStatementData,
     isLoading: finStatementLoading,
-  }: IQueryDataType<IGenFinancialState> = generateFinancialStatement({
+    refetch:refetchFinStatement
+  }: {
+    data: IGenFinancialState | undefined;
+    isLoading: boolean;
+    refetch: <TPageData>(
+      options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+    ) => Promise<QueryObserverResult<any, unknown>>;
+  } = generateFinancialStatement({
     itemId: paymentsId,
     // itemId: itemId as number,
   });
+  // : IQueryDataType<IGenFinancialState>
+
+
 
   // Fetch all employees
   const { data: allEmployees, isLoading: allEmployeesLoading } =
@@ -207,8 +217,9 @@ const PaymentDetails = () => {
           setIsModalOpen(false);
           modalForm.resetFields();
           setFileList([]);
+          if (paymentDetailsData?.data.length === 1)refetchFinStatement();
           queryClient.refetchQueries([
-            QUERY_KEY_ALLPAYMENT_DETAILS,QUERY_KEY_PAYMENTS,QUERY_KEY_FINANCIAL_STATEMENT,
+            QUERY_KEY_ALLPAYMENT_DETAILS,
             itemId as number,
           ]);
         },
@@ -808,7 +819,7 @@ const PaymentDetails = () => {
                 {/* addonBefore={prefixSelector} */}
                 <p className="pb-2">Phone Number</p>
                 <Input
-                  value={selectedApplication.application.applicant.id}
+                  value={selectedApplication.application.applicant.phone_number}
                   disabled
                   allowClear
                   className="p-2.5"
