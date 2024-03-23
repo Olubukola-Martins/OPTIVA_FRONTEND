@@ -45,6 +45,7 @@ import {
 } from "./Payments";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import {
+  QUERY_KEY_FINANCIAL_STATEMENT,
   generateFinancialStatement,
   viewProofOfPayment,
 } from "../hooks/useGenerate";
@@ -117,9 +118,6 @@ const PaymentDetails = () => {
   const { Text } = Typography;
   const { id } = useParams();
   const paymentsId = Number(id);
-  // const [searchTerm, setSearchTerm] = useState<string>("");
-  // const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-  // const [itemId, setItemId] = useState<number>();
   const [preSelectedFile, setPreSelectedFile] = useState<string>();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   // const {paymentsData} = useContext(AllPaymentsContext);
@@ -143,6 +141,7 @@ const PaymentDetails = () => {
   const { fileData, fileUploading, fileMutate } = useUploadFile();
   const [fileDataUrl, setFileDataUrl] = useState<string>();
   console.log(fileDataUrl,indexEdited )
+
   const { data: paymentProofData, isLoading: paymentProofLoading } =
     viewProofOfPayment({ paymentDetailId: currentDetailIdForProof as number });
   // Fetch Financial Statement
@@ -208,8 +207,8 @@ const PaymentDetails = () => {
           setIsModalOpen(false);
           modalForm.resetFields();
           setFileList([]);
-          queryClient.invalidateQueries([
-            QUERY_KEY_ALLPAYMENT_DETAILS,
+          queryClient.refetchQueries([
+            QUERY_KEY_ALLPAYMENT_DETAILS,QUERY_KEY_PAYMENTS,QUERY_KEY_FINANCIAL_STATEMENT,
             itemId as number,
           ]);
         },
@@ -323,7 +322,7 @@ const PaymentDetails = () => {
   }, [allPaymentsData, allPaymentsLoading, selectedApplication, paymentsId]);
 
   useEffect(() => {
-    if (paymentDetailsData?.data && allRatesData && allEmployeesData) {
+    if (paymentDetailsData?.data && allRatesData ) {
       const allPaymentDetails = paymentDetailsData.data.map((paymentDetail) => {
         const {
           id,
@@ -341,9 +340,9 @@ const PaymentDetails = () => {
         // const currentRate = allRatesData.find(
         //   (rate: { id: number }) => rate.id === +fx_rate
         // );
-        const currentPaidByEmployee = allEmployeesData.find(
-          (employee: { id: number }) => employee.id === paid_by
-        );
+        // const currentPaidByEmployee = allEmployeesData.find(
+        //   (employee: { id: number }) => employee.id === paid_by
+        // );
         return {
           key: id,
           balanceDue: (
@@ -384,7 +383,8 @@ const PaymentDetails = () => {
           paidBy: (
             <Form.Item name={`${id}paidBy`} initialValue={paid_by}>
               <Text>
-                {allEmployeesData && paid_by && currentPaidByEmployee?.name}
+                {/* {allEmployeesData && paid_by && currentPaidByEmployee?.name} */}
+                { paid_by }
               </Text>
             </Form.Item>
           ),
@@ -483,7 +483,7 @@ const PaymentDetails = () => {
         {
           key: 1,
           item: "Total to be paid",
-          amount: (+outstanding_payment - +amount_paid).toLocaleString(
+          amount: (+outstanding_payment + +amount_paid).toLocaleString(
             "en-US",
             {
               style: "currency",
@@ -990,6 +990,7 @@ const PaymentDetails = () => {
             type="button"
             label="Generate Financial Statement"
             containerStyle="px-4 py-3.5 text-base"
+            isDisabled={paymentDetailsData?.data.length === 0}
             handleClick={() =>
               navigate(appRoute.financialStatement(Number(id) as number).path)
             }
