@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { generateFinancialStatement } from "../hooks/useGenerate";
 import { useEffect, useState } from "react";
 import {
-  // GenFinStatementDatum,
   IAllPaymentDetails,
   IGenFinancialState,
 } from "src/features/meetings/types/types";
@@ -17,6 +16,7 @@ import {
   paymentDetailsURL,
 } from "./PaymentDetails";
 import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleItem";
+import { useSendFinancialStatement } from "../hooks/useSendFinancialStatement";
 
 type DataSource = {
   key: React.Key;
@@ -45,42 +45,6 @@ const headColumnSecondTable: ColumnsType<DataSource> = [
     ],
   },
 ];
-// const dataSourceFirst: DataSource[] = [
-//   {
-//     key: 1,
-//     item: "Total Grenada Real Estate Fee",
-//     amount: `330,000 USD`,
-//   },
-//   {
-//     key: 2,
-//     item: "Total Local Processing Fee",
-//     amount: `12,500 USD`,
-//   },
-//   {
-//     key: 3,
-//     item: "Total Program Fee",
-//     amount: `342,500 USD`,
-//   },
-// ];
-
-// const dataSourceSecond: DataSource[] = [
-//   {
-//     key: 1,
-//     item: "Total to be paid",
-//     amount: `342,500 USD`,
-//   },
-//   {
-//     key: 2,
-//     item: "Total Amount paid",
-//     amount: `110,500 USD`,
-//   },
-//   {
-//     key: 3,
-//     item: "Balance Outstanding",
-//     amount: `232,500 USD`,
-//   },
-// ];
-
 // third table
 interface Item {
   key: number;
@@ -127,6 +91,7 @@ const GenerateFinancialStatement = () => {
   const [itemId, setItemId] = useState<number>();
   const [dataSourceFirst, setDataSourceFirst] = useState<DataSource[]>();
   const [dataSourceSecond, setDataSourceSecond] = useState<DataSource[]>();
+  const [sendFinStatementKey, setSendFinStatementKey] = useState<number | undefined>();
   const [dataSourceThird, setDataSourceThird] = useState<Item[]>();
   const [totalNGNList, setTotalNGNList] = useState<{ payments: number }[]>([
     { payments: 0 },
@@ -151,7 +116,10 @@ const GenerateFinancialStatement = () => {
       queryKey: QUERY_KEY_ALLPAYMENT_DETAILS,
       urlEndPoint: paymentDetailsURL,
     });
-
+    const { isLoading: sendingFinStatement } = useSendFinancialStatement({
+      itemId: sendFinStatementKey as number,
+    });
+  
   useEffect(() => {
     if (id) {
       setItemId(+id);
@@ -238,7 +206,6 @@ const GenerateFinancialStatement = () => {
           narration,
           fx_rate,
           id,
-          // paid_by,
           naira_payment,
           dollar_payment,
           outstanding_payment,
@@ -365,7 +332,7 @@ const GenerateFinancialStatement = () => {
         title="Generate Financial Statement"
         linkBack={appRoute.paymentDetails(Number(id) as number).path}
       />
-      <Spin spinning={finStatementLoading}>
+      <Spin spinning={finStatementLoading || sendingFinStatement}>
         {finStatementData?.data && (
           <GenerateTemplate
             title="FINANCIAL STATEMENT"
@@ -379,6 +346,7 @@ const GenerateFinancialStatement = () => {
             }
             date_created={formatDate(finStatementData.data[0].created_at)}
             reciepientPhone="090123450000"
+            handleSend={()=>{setSendFinStatementKey(itemId as number)}}
           >
             <>
               <div className="flex flex-col md:flex-row gap-2 lg:gap-10 w-full pt-4">

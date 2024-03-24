@@ -1,6 +1,8 @@
 import logo from "src/assets/logoSvg.svg";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { AppButton } from "src/components/button/AppButton";
+import { useNavigate } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 interface IPropsGenerateTemplate {
   title: string;
@@ -13,6 +15,7 @@ interface IPropsGenerateTemplate {
   showInvoiceParagraph?: boolean;
   children: React.ReactNode;
   handleDownload?: () => void;
+  handleSend?: () => void;
 }
 
 const GenerateTemplate = ({
@@ -26,7 +29,10 @@ const GenerateTemplate = ({
   showInvoiceParagraph,
   date_created,
   handleDownload,
+  handleSend,
 }: IPropsGenerateTemplate) => {
+
+  const navigate = useNavigate();
   return (
     <div className="border-2 rounded-md border-gray-100 mt-10 mb-16 pb-16 pt-7 px-4 flex flex-col gap-10 w-full">
       <div className="flex flex-row w-full h-fit gap-0">
@@ -174,13 +180,14 @@ const GenerateTemplate = ({
 
       {/* buttons */}
       <div className="place-self-end pt-6 flex flex-row gap-7">
-        <AppButton label="Cancel" type="button" variant="transparent" />
+        <AppButton label="Cancel" type="button" variant="transparent" handleClick={()=>{navigate(appRoute.payments)}}/>
         <AppButton
           label="Download"
           type="button"
           handleClick={handleDownload}
+          containerStyle={`${handleDownload ? "" : "hidden"}`}
         />
-        <AppButton label="Send" type="submit" />
+        <AppButton label="Send" type="submit" handleClick={handleSend} containerStyle={`${handleSend ? "" : "hidden"}`}/>
       </div>
     </div>
   );

@@ -39,7 +39,7 @@ export const MeetingContext = React.createContext<{
   ): void {
     throw new Error("Function not implemented.");
   },
-  newfetch: () => {},
+  newfetch: ()=>{},
 });
 
 
@@ -90,17 +90,10 @@ const Meetings = () => {
       }
     );
   };
-  // const [editing, setEditing] = useState<boolean>(false);
-  //   const handleSetEditing = (state: boolean) => {
-  //     setEditing(state);
-  // };
   const [events, setEvents] = useState<any>([]);
 
   useEffect(() => {
-    console.log("editLoadingInParent", editLoading);
-    // if (!editLoading) { refetch(); };
     if (userEvents && userEvents.data) {
-    console.log("editLoadingInParent", editLoading);
       const userEventsData = userEvents.data;
       const userEventsList: IEvent[] = userEventsData.map(
         (event: ISingleMeeting) => {
@@ -175,9 +168,6 @@ const Meetings = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-    // const handleCancelEdit = () => {
-    //   setIsEditModalVisible(false);
-    // };
 
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {

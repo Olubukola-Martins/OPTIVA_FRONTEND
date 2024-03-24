@@ -17,6 +17,7 @@ import {
 } from "src/features/meetings/types/types";
 import { END_POINT } from "src/config/environment";
 import React from "react";
+import { usePagination } from "src/hooks/usePagination";
 
 export interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
@@ -47,11 +48,15 @@ const Payments = () => {
   const OutstandingPaymentUrl = `${END_POINT.BASE_URL}/admin/outstanding-payments`;
   const invoicesUrl = `${END_POINT.BASE_URL}/admin/invoice`;
 
+  const { pagination, onChange } = usePagination();
+
+
   // Payments list data
   const {
     data: allPaymentsData,
     isLoading: allPaymentsLoading,
   }: IQueryDataType<IAllPayments> = useFetchAllItems({
+    pagination,
     queryKey: QUERY_KEY_PAYMENTS,
     urlEndPoint: paymentsUrl,
   });
@@ -60,6 +65,7 @@ const Payments = () => {
     data: allGenQuotesData,
     isLoading: allGenQuotesLoading,
   }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
+    pagination,
     queryKey: QUERY_KEY_QUOTES,
     urlEndPoint: quotesUrl,
   });
@@ -68,6 +74,7 @@ const Payments = () => {
     data: allOutPaymentData,
     isLoading: allOutPaymentLoading,
   }: IQueryDataType<IAllOutstandingPayments> = useFetchAllItems({
+    pagination,
     queryKey: QUERY_KEY_OUTSTANDING_PAYMENTS,
     urlEndPoint: OutstandingPaymentUrl,
   });
@@ -76,6 +83,7 @@ const Payments = () => {
     data: allInvoices,
     isLoading: allInvoicesLoading,
   }: IQueryDataType<IAllInvoices> = useFetchAllItems({
+    pagination,
     queryKey: QUERY_KEY_INVOICES,
     urlEndPoint: invoicesUrl,
   });
@@ -295,24 +303,35 @@ const Payments = () => {
           <PaymentsListTable
             allData={allPaymentsData}
             dataLoading={allPaymentsLoading}
+            pagination={pagination}
+            onChange={onChange}
           />
         )}
         {currentTable === "Quotes Generated" && (
           <QuotesGenTable
             allData={allGenQuotesData}
             dataLoading={allGenQuotesLoading}
+            pagination={pagination}
+            onChange={onChange}
+
           />
         )}
         {currentTable === "Invoices Generated" && (
           <InvoiceGenTable
             allData={allInvoices}
             dataLoading={allInvoicesLoading}
+            pagination={pagination}
+            onChange={onChange}
+
           />
         )}
         {currentTable === "Outstanding Payments" && (
           <OutstandingPaymentsTable
             allData={allOutPaymentData}
             dataLoading={allOutPaymentLoading}
+            pagination={pagination}
+            onChange={onChange}
+
           />
         )}
       </>

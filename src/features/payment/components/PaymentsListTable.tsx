@@ -1,5 +1,5 @@
 import { Dropdown, Input, InputNumber, Menu, Form, Modal, Select } from "antd";
-import Table, { ColumnsType } from "antd/es/table";
+import Table, { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -36,9 +36,11 @@ type DataSourceItem = {
 interface IProps {
   allData: IAllPayments | undefined;
   dataLoading: boolean;
+  pagination: TablePaginationConfig;
+  onChange: (pagination: TablePaginationConfig) => void;
 }
 
-const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
+const PaymentsListTable = ({ allData, dataLoading,pagination,onChange }: IProps) => {
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
   // const [applicationId, setApplicationId] = useState<number>();
   const { moveToMasterList, moveToMasterLoading } =
@@ -49,6 +51,7 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
   const [currentApplicationId, setCurrentApplicationId] = useState<number>();
   const { generateInvoice, generateInvoiceLoading } = useGenerateInvoice();
   const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
+
 
   // Handle generate invoice
   const handleGenerateInvoice = (values: {
@@ -74,7 +77,6 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
         : values.paymentsNGN / values.fxRate.value,
       fx_rate: values.fxRate.label,
     };
-        console.log("newData", newData);
 
     generateInvoice(newData, currentApplicationId as number);
     setIsModalOpen(false);
@@ -140,11 +142,6 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
       dataIndex: "lastUpdated",
       key: "9",
     },
-    // {
-    //   title: "Updated By",
-    //   dataIndex: "updatedBy",
-    //   key: "10",
-    // },
 
     {
       title: "Action",
@@ -267,13 +264,6 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
       : modalForm.setFieldValue("paymentsUSD", null);
   }, [paymentCurrency]);
 
-  // useEffect(() => {
-  //   if (paymentCurrency === "enterUSD") {
-  //     modalForm.setFieldValue("paymentsNGN", null);
-  //   } else {
-  //     modalForm.setFieldValue("paymentsUSD", null);
-  //   }
-  // }, [paymentCurrency, modalForm]);
 
   return (
     <>
@@ -285,6 +275,8 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
         columns={columns}
         dataSource={dataSource}
         scroll={{ x: 900 }}
+        pagination={{ ...pagination, total: allData?.meta.total }}
+        onChange={onChange}
         className="border-gray-100 border-t-0 border-2 rounded-b-md"
         loading={dataLoading || moveToMasterLoading}
       />
@@ -297,7 +289,6 @@ const PaymentsListTable = ({ allData, dataLoading }: IProps) => {
           setIsModalOpen(false);
         }}
       >
-        {/* make everything compulsory */}
         <Form
           name="generateInvoice"
           form={modalForm}

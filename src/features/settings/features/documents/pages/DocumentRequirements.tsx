@@ -1,5 +1,5 @@
 import { PageIntro } from "src/components/PageIntro";
-import { Icon } from "@iconify/react";
+// import { Icon } from "@iconify/react";
 import { AppButton } from "src/components/button/AppButton";
 import { useEffect, useState } from "react";
 import { Select, Dropdown, Menu, Tabs, Tag } from "antd";
@@ -8,7 +8,7 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import { DownOutlined } from "@ant-design/icons";
 import Table, { ColumnsType } from "antd/es/table";
 import Search from "antd/es/input/Search";
-import ImportModal from "src/features/settings/components/ImportModal";
+// import ImportModal from "src/features/settings/components/ImportModal";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import {
   QueryObserverResult,
@@ -60,7 +60,6 @@ const DocumentRequirements = () => {
     queryKey,
   });
 
-  // const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
   const [docType, setDocType] = useState("required");
   const [currentId, setCurrentId] = useState<number>();
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -68,13 +67,13 @@ const DocumentRequirements = () => {
   const [hideDeleteBtn, setHideDeleteBtn] = useState<boolean>(true);
   const [dataRequiredDoc, setDataRecuiredDoc] = useState<DataType[]>([]);
   const [dataSupportDoc, setDataSupportDoc] = useState<DataType[]>([]);
-  const [openImportModal, setOpenImportModal] = useState(false);
-  const showImportModal = () => {
-    setOpenImportModal(true);
-  };
-  const handleImportCancel = () => {
-    setOpenImportModal(false);
-  };
+  // const [openImportModal, setOpenImportModal] = useState(false);
+  // const showImportModal = () => {
+  //   setOpenImportModal(true);
+  // };
+  // const handleImportCancel = () => {
+  //   setOpenImportModal(false);
+  // };
   const { editDocumentRequirement, isLoading: editLoading } =
     useUpdateDocumentRequirement();
   const { addDocumentRequirement, postDocLoading } =
@@ -433,11 +432,11 @@ const DocumentRequirements = () => {
         }}
       />
 
-      <ImportModal
+      {/* <ImportModal
         heading="Document(s)"
         open={openImportModal}
         handleClose={handleImportCancel}
-      />
+      /> */}
       {/* New Document Modal */}
       <AddDocument
         open={openNewDocumentModal}
@@ -463,7 +462,7 @@ const DocumentRequirements = () => {
           linkBack={appRoute.settings}
         />
         <div className="flex items-center gap-3 justify-between">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Icon
               icon="uil:file-import"
               className="text-3xl cursor-pointer hover:text-primary"
@@ -473,7 +472,7 @@ const DocumentRequirements = () => {
               icon="mingcute:file-import-line"
               className="text-3xl cursor-pointer hover:text-primary"
             />
-          </div>
+          </div> */}
           <Dropdown.Button
             className="bg-secondary rounded-lg w-fit "
             arrow={true}

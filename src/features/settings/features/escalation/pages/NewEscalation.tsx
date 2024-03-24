@@ -8,7 +8,6 @@ import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { END_POINT } from "src/config/environment";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import SuccessModal from "src/features/settings/components/SuccessModal";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import useAddEscalation from "../hooks/useAddEscalation";
 import EscalationDateErrorModal from "../components/EscalationDateErrorModal";
@@ -22,7 +21,6 @@ interface DataRow {
   escalateAfter: JSX.Element;
 }
 const NewEscalation = () => {
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showDateErrorModal, setShowDateErrorModal] = useState(false);
     const { data: allRoles, isLoading: allRolesLoading } = useFetchAllItems({
       queryKey: "roles",
@@ -51,6 +49,7 @@ const NewEscalation = () => {
           onChange={(val: number) => {
             setCurrentEscalateTo(val);
             setCurrentKey(key);
+            form.resetFields([`${key}-employeeName`])
           }}
           options={allRoles?.data.map((role: { name: string; id: number }) => {
             return { label: role.name, value: role.id };
@@ -190,11 +189,11 @@ const NewEscalation = () => {
                 onSelect={() => {
                   setCurrentKey(currentKey);
                 }}
+          notFoundContent={"No employee available for this role"}
                 onClick={() => {
                   setCurrentKey(currentKey);
                 }}
                 options={
-                  // currentEscalateTo &&
                   form.getFieldValue(`${currentKey}-escalateTo`)
                     ? employeeData?.data
                         .filter(
@@ -208,14 +207,15 @@ const NewEscalation = () => {
                             value: employee.id,
                           };
                         })
-                    : employeeData?.data.map(
-                        (employee: { name: string; id: number }) => {
-                          return {
-                            label: employee.name,
-                            value: employee.id,
-                          };
-                        }
-                      )
+                    : []
+                    //  employeeData?.data.map(
+                    //     (employee: { name: string; id: number }) => {
+                    //       return {
+                    //         label: employee.name,
+                    //         value: employee.id,
+                    //       };
+                    //     }
+                    //   )
                 }
               />
             </Form.Item>
@@ -358,14 +358,14 @@ const NewEscalation = () => {
   };
   return (
     <>
-      <SuccessModal
+      {/* <SuccessModal
         open={showSuccessModal}
         description="Escalation Added Successfully"
         handleClose={() => {
           setShowSuccessModal(false);
         }}
         buttonLabel="Back"
-      />
+      /> */}
       <EscalationDateErrorModal
         open={showDateErrorModal}
         handleClose={() => {
@@ -460,7 +460,7 @@ const NewEscalation = () => {
               label="Cancel"
               handleClick={() => navigate(appRoute.escalation)}
             />
-            <AppButton type="submit" label="Save" handleClick={() => {}} />
+            <AppButton type="submit" label="Save"  />
           </div>
         </Form>
       </div>
