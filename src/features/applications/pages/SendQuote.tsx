@@ -207,7 +207,18 @@ export const SendQuote = () => {
         {data?.investmentroute_id === 8 && (
           <AntiguaJointQuoteTable id={id as unknown as number} />
         )} */}
+        <div className="mt-5 pt-5">
+          <p>
+            {" "}
+            You will be invoiced, via email, after acceptance of this quote.
+          </p>
+          <p>
+            If you have any questions concerning this quote, please feel free to
+            contact us directly via phone or email. Thank you for your business!
+          </p>
+        </div>
       </div>
+
       <img
         src="https://optiva-backend.techmur.com/assets/optivaAddr.png"
         className="my-4 py-5"

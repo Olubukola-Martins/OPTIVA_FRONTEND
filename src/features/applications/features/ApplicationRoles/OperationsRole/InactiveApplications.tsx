@@ -17,21 +17,19 @@ import { useGetInvestmentRoute } from "src/features/settings/features/investment
 // import { useDebounce } from "src/hooks/useDebounce";
 // import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
 
 export const InactiveApplications: React.FC<IPortfolioProps> = ({
   searchTerm,
 }) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
-    section: "inactive",
+    currentUrl: 'inactive',
+    pagination,
+    search: debouncedSearchTerm,
   });
-  // const { onChange, pagination } = usePagination();
-  // const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-  // const { data, isLoading } = useFetchActiveandInactiveApplicant({
-  //   pagination,
-  //   search: debouncedSearchTerm,
-  //   status: "inactive",
-  // });
-  console.log("search term", searchTerm);
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -62,7 +60,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
   };
   useEffect(() => {
     if (data && employeesData) {
-      const inActiveApplicant: DataSourceItem[] = data.map((item, index) => {
+      const inActiveApplicant: DataSourceItem[] = data.data.map((item, index) => {
         const assignedEmployee = employeesData.data.find(
           (employee) =>
             employee.user.roles.id === item.assigned_role_id &&
@@ -115,6 +113,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          form.resetFields()
           setOpenActiveModal(false);
         },
       }
@@ -258,6 +257,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
                 label="Cancel"
                 variant="transparent"
                 containerStyle="border border-blue"
+                handleClick={handleActiveCancel}
               />
               <AppButton label="Submit" type="submit" isLoading={postLoading} />
             </div>
@@ -290,8 +290,8 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
         className="bg-white rounded-md shadow border mt-8"
         scroll={{ x: 600 }}
         loading={isLoading}
-        // onChange={onChange}
-        // pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
+        pagination={{ ...pagination, total: data?.total }}
         rowSelection={{
           type: "checkbox",
           onChange: (

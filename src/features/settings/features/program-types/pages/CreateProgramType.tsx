@@ -19,6 +19,7 @@ import {
   textInputValidationRules,
   textInputValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
+import { useNavigate} from "react-router-dom";
 
 const CreateProgramType = () => {
   const [form] = Form.useForm();
@@ -31,7 +32,7 @@ const CreateProgramType = () => {
   const { data: milestoneData } = useGetMilestone();
   const { data: workflowData } = useGetWorkflow();
   const { data: countryData } = useGetCountry();
-  console.log('dependent', dependentData)
+  const navigate = useNavigate();
 
   // DEPENDENT OPTION
   const dependentOptions: SelectProps["options"] =
@@ -111,6 +112,7 @@ const CreateProgramType = () => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_PROGRAM_TYPE]);
           form.resetFields();
+          navigate(appRoute.countryMilestonesProgram)
         },
       }
     );

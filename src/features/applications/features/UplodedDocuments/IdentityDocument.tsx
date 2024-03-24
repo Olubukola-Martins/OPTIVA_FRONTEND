@@ -15,7 +15,6 @@ import {
 } from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { AppButton } from "src/components/button/AppButton";
@@ -27,7 +26,7 @@ import type { UploadProps, RcFile } from "antd/lib/upload/interface";
 import { createFileValidationRule } from "src/features/settings/features/authorizedPersons/types";
 import { TFileType } from "src/features/settings/features/authorizedPersons/components/AddAuthorizedPerson";
 import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
-// import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -67,10 +66,9 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const [docUrl, setDocUrl] = useState<string>();
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
-  // const { mutate } = useApproveorRejectDoc();
+  const { mutate } = useApproveorRejectDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
-  // const { data: userData } = useFetchUserProfile();
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -127,53 +125,53 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
     isLoading: updateApplicantDocLoading,
   } = useUpdateApplicantDoc();
 
-  // const approveDoc = () => {
-  //   mutate(
-  //     { approve: "accepted", document_id: docId as unknown as number },
-  //     {
-  //       onError: (error: any) => {
-  //         openNotification({
-  //           state: "error",
-  //           title: "Error Occurred",
-  //           description: error.response.data.message,
-  //           duration: 5,
-  //         });
-  //       },
-  //       onSuccess: (res: any) => {
-  //         openNotification({
-  //           state: "success",
-  //           title: "Success",
-  //           description: res.data.message,
-  //         });
-  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-  //       },
-  //     }
-  //   );
-  // };
+  const approveDoc = () => {
+    mutate(
+      { approve: "accepted", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
 
-  // const rejectDoc = () => {
-  //   mutate(
-  //     { decline: "declined", document_id: docId as unknown as number },
-  //     {
-  //       onError: (error: any) => {
-  //         openNotification({
-  //           state: "error",
-  //           title: "Error Occurred",
-  //           description: error.response.data.message,
-  //           duration: 5,
-  //         });
-  //       },
-  //       onSuccess: (res: any) => {
-  //         openNotification({
-  //           state: "success",
-  //           title: "Success",
-  //           description: res.data.message,
-  //         });
-  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-  //       },
-  //     }
-  //   );
-  // };
+  const rejectDoc = () => {
+    mutate(
+      { decline: "declined", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
 
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
@@ -187,10 +185,6 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
     fileList.forEach((file) => {
       fileUploadData.append("files[]", file as RcFile);
     });
-    // await uploadFile({ file: val.chooseFile[0].originFileObj });
-
-    // console.log("file data no path", fileData);
-    // console.log("file data", fileData?.data.path);
     console.log("form vals", val);
     console.log("id", docId);
     console.log("file", val.chooseFile[0].originFileObj);
@@ -288,7 +282,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                     View Document
                   </a>
                 </Menu.Item>
-                {/* {userData?.id === 3 && (
+                {/* {userData?.id === 3 && ( */}
                   <Menu.Item
                     key="2"
                     onClick={() => {
@@ -298,9 +292,9 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   >
                     Accept Document
                   </Menu.Item>
-                )}
+                {/* )} */}
 
-                {userData?.id === 3 && (
+                {/* {userData?.id === 3 && ( */}
                   <Menu.Item
                     key="3"
                     onClick={() => {
@@ -310,7 +304,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   >
                     Decline Document
                   </Menu.Item>
-                )} */}
+                {/* )} */}
                 <Menu.Item key="4">
                   {" "}
                   <Link
@@ -360,20 +354,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
         dataSource={dataArray}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
-      />
+        />
 
       <Modal open={importModal} onCancel={handleImportCancel} footer={null}>
         <div className="p-3">

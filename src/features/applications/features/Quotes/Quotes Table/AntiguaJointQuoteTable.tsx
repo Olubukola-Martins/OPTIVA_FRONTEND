@@ -6,6 +6,7 @@ import {
   thStyle,
   colOneStyle,
   tdStyle,
+  tdPayment,
 } from "src/features/applications/pages/SendQuote";
 import { IAntiguaJointRealEstate } from "src/features/applications/types/types";
 import { IGetQuoteProps } from "./DomincaQuoteTable";
@@ -46,7 +47,7 @@ export const AntiguaJointQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
         QUOTE FOR {applicantInfo?.quote.investment_route.toUpperCase()}
       </h2>
       <div>
-        <table style={tableStyle}>
+      <table style={tableStyle}>
           {/* ROW 1 */}
           <tr>
             <th style={thStyle}>Program</th>
@@ -59,7 +60,7 @@ export const AntiguaJointQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
           {/* ROW 2 */}
           <tr>
             <td rowSpan={20} style={colOneStyle} colSpan={2}>
-              Antigua & Barbacude Joint Estate Quote
+              Antigua & Barbacuda Joint Estate Quote
             </td>
             <td style={tdStyle} colSpan={3}>
               Payment for processing & various fees. <br />
@@ -68,43 +69,26 @@ export const AntiguaJointQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
           </tr>
           {/* ROW 3 */}
           <tr>
-            <td style={tdStyle}>Country Fee Due Now</td>
-            <td style={tdStyle}>
-              {applicantQuote?.country_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
-          </tr>
-          {/* ROW 4 */}
-          <tr>
             <td style={tdStyle} colSpan={2}>
-              Country Fee Due On Approval
+              Antigua & Barbacuda Rest Estate Investment Fee
             </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.country_fee_due_on_approval}
-            </td>
-          </tr>
-
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+            <td style={tdPayment}>
+              ${applicantQuote?.real_estate_investment_fee}
             </td>
           </tr>
 
-          {/* ROW 5 */}
           <tr>
             <td colSpan={2} style={tdStyle}>
-              Due Diligence Fee
+              Antigua & Barbacuda Gov't Due Diligence Fee
             </td>
-            <td style={tdStyle}>${applicantQuote?.due_diligence_fee}</td>
+            <td style={tdPayment}>${applicantQuote?.due_diligence_fee}</td>
           </tr>
-
           {/* ROW 6 */}
           <tr>
             <td colSpan={2} style={tdStyle}>
-              Government Passport, Oath and Allegiance Fee
+              Antigua & Barbacuda Gov't Passport, Oath and Allegiance Fee
             </td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               ${applicantQuote?.govt_passport_oath_and_allegiance_fee}
             </td>
           </tr>
@@ -112,56 +96,26 @@ export const AntiguaJointQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
           {/* ROW 7 */}
           <tr>
             <td colSpan={2} style={tdStyle}>
-              Goverment Processing Fee
+              Antigua & Barbacuda Gov't Processing Fee
             </td>
-            <td style={tdStyle}>${applicantQuote?.govt_processing_fee}</td>
+            <td style={tdPayment}>${applicantQuote?.govt_processing_fee}</td>
           </tr>
-
-          {/* EMPTY ROW */}
           <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+            <td style={tdStyle} colSpan={2} >
+              Antigua & Barbacuda Legal & Advisory Fee
             </td>
-          </tr>
-          {/* ROW 12 */}
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Legal and Advisory Fee
-            </td>
-            <td style={tdStyle} className="font-bold">
+            <td style={tdPayment} >
               ${applicantQuote?.legal_and_advisory_fee}
             </td>
           </tr>
-
           <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Local Processing Fee
+            <td style={tdStyle} className="font-bold text-right" colSpan={2}>
+              Antigua & Barbacuda Total Quote
             </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.local_processing_fee}
+            <td style={tdPayment} className="font-bold">
+              ${applicantQuote?.program_grand_total_due_now}
             </td>
           </tr>
-
-          <tr>
-            <td style={tdStyle} className="text-right font-bold ">
-              Local Processing Fee Due Now
-            </td>
-            <td style={tdStyle} className="font-bold">
-              {applicantQuote?.local_processing_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.local_processing_fee_due_now}
-            </td>
-          </tr>
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Local Processing Fee Due on Approval
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.local_processing_fee_due_on_approval}
-            </td>
-          </tr>
-
           {/* BLUE ROW */}
           <tr>
             <td
@@ -169,69 +123,74 @@ export const AntiguaJointQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
               style={tdStyle}
               className="bg-[#012168] text-[#012168]"
             >
-              -
+              .
             </td>
           </tr>
-
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Local Processing Fee
+            </td>
+            <td style={tdPayment}>
+              ${applicantQuote?.local_processing_fee}
+            </td>
+          </tr>
           {/* EMPTY ROW */}
           <tr>
             <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+              .
             </td>
           </tr>
-
-          {/* ROW 13 */}
+          {/* BLUE ROW */}
           <tr>
-            <td style={tdStyle} colSpan={2}>
-              Rest Estate Investment Fee
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.real_estate_investment_fee}
+            <td
+              colSpan={3}
+              style={tdStyle}
+              className="bg-[#012168] text-[#012168]"
+            >
+              .
             </td>
           </tr>
+          {/* BLUE ROW */}
+          <tr>
+            <td colSpan={3} style={tdPayment} className="font-bold">
+              Payment Plan
+            </td>
+          </tr>
+          <tr>
+            <td style={tdStyle}> Antigua & Barbacuda Total Due Now</td>
+            <td style={tdPayment}>
+              {applicantQuote?.country_fee_due_now_percentage}%
+            </td>
+            <td style={tdPayment}>${applicantQuote?.country_fee_due_now}</td>
+          </tr>
+          <tr>
+            <td style={tdStyle} >
+              Local Processing Fee Due Now
+            </td>
+            <td style={tdPayment} >
+              {applicantQuote?.local_processing_fee_due_now_percentage}%
+            </td>
+            <td style={tdPayment} >
+              ${applicantQuote?.local_processing_fee_due_now}
+            </td>
+          </tr>
+          <tr>
+            <td style={tdPayment} colSpan={2} className="text-[#EC5252] font-bold text-right">
+              Total Due Now
+            </td>
+            <td style={tdPayment} className="text-[#EC5252] font-bold">${applicantQuote?.total_due_now}</td>
+          </tr>
 
-          {/* ROW 17 */}
           <tr>
             <td style={tdStyle} colSpan={2}>
-              Total Due On Citizenship Approval
+              Balance Due On Citizenship Approval
             </td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               ${applicantQuote?.total_due_on_citizenship_approval}
             </td>
           </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due Now
-            </td>
-            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
-          </tr>
-
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-          {/* ROW 9 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Grand Total Due Now
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.program_grand_total_due_now}
-            </td>
-          </tr>
-
-          {/* ROW 10 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Grand Total Due on Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.program_grand_total_due_on_approval}
-            </td>
-          </tr>
+        
+          
         </table>
       </div>
     </Skeleton>

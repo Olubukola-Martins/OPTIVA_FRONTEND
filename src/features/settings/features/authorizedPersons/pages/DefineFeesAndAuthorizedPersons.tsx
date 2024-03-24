@@ -3,44 +3,21 @@ import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-import { Icon } from "@iconify/react";
 import { DefineFeesAndAuthorizedPersonsTab } from "../components/DefineFeesAndAuthorizedPersonsTab";
 import SetFx from "../assets/img/Fx.png";
 import Switch from "../assets/img/switch.png";
 import { Link } from "react-router-dom";
 import Success from "../assets/img/success.png";
-// import { ImportModal } from "src/components/modals/ImportModal";
-import { ExportModal } from "src/components/modals/ExportModal";
 import { DownOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { AddAuthorizedPerson } from "../components/AddAuthorizedPerson";
 import { usePostCurrency } from "../hooks/usePostCurrency";
-import {
-  useGetCurrency,
-} from "../hooks/useGetCurrency";
-import { UploadModal } from "src/components/modals/UploadModal";
+import { useGetCurrency } from "../hooks/useGetCurrency";
 
 const DefineFeesAndAuthorizedPersons = () => {
   const [form] = Form.useForm();
   const { data } = useGetCurrency();
   form.setFieldsValue({ ...data });
-  // Import Modal
-  const [openImportModal, setOpenImportModal] = useState(false);
-  const showImportModal = () => {
-    setOpenImportModal(true);
-  };
-  const handleImportCancel = () => {
-    setOpenImportModal(false);
-  };
-
-  // Upload Document
-  const [exportModal, setExportModal] = useState(false);
-  const showExportModal = () => {
-    setExportModal(true);
-  };
-  const handleExportCancel = () => {
-    setExportModal(false);
-  };
 
   // FX Modal
   const [openSetFxModal, setOpenSetFxModal] = useState(false);
@@ -58,6 +35,7 @@ const DefineFeesAndAuthorizedPersons = () => {
     putData({
       ...val,
     });
+    handleFxCancel()
   };
 
   // Authorized Person Modal
@@ -90,10 +68,10 @@ const DefineFeesAndAuthorizedPersons = () => {
     },
   ];
 
-  const menuProps = {
-    items,
-    onClick: () => {},
-  };
+  // const menuProps = {
+  //   items,
+  //   onClick: () => {},
+  // };
 
   return (
     <>
@@ -104,18 +82,6 @@ const DefineFeesAndAuthorizedPersons = () => {
           linkBack={appRoute.settings}
         />
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Icon
-              icon="uil:file-import"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showImportModal}
-            />
-            <Icon
-              icon="mingcute:file-import-line"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showExportModal}
-            />
-          </div>
           <div className="flex gap-4 items-center">
             <AppButton
               variant="transparent"
@@ -124,25 +90,27 @@ const DefineFeesAndAuthorizedPersons = () => {
             />
 
             <div className="w-1/2">
-              <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
-                Add New
+              <Dropdown.Button
+                className="bg-secondary rounded-lg w-fit "
+                arrow={true}
+                icon={
+                  <DownOutlined className="text-white font-medium hover:text-white" />
+                }
+                menu={{
+                  className: "text-white",
+                  color: "white",
+                  items,
+                }}
+              >
+                <span className="text-white font-medium hover:text-white">
+                  Add New
+                </span>
               </Dropdown.Button>
             </div>
           </div>
         </div>
       </div>
-      {/* Import Modal */}
-      <UploadModal
-        open={openImportModal}
-        onCancel={handleImportCancel}
-        header="Fee(s)"
-      />
-      {/* Export Modal */}
-      <ExportModal
-        open={exportModal}
-        onCancel={handleExportCancel}
-        header="Fee(s)"
-      />
+
       {/* FX Modal */}
       <Modal open={openSetFxModal} onCancel={handleFxCancel} footer={null}>
         <img src={SetFx} className="mx-auto" />

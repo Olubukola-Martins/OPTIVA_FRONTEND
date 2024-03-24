@@ -150,11 +150,7 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
     fileList.forEach((file) => {
       fileUploadData.append("files[]", file as RcFile);
     });
-    // await uploadFile({ file: val.chooseFile[0].originFileObj });
-
-    // console.log("file data no path", fileData);
-    // console.log("file data", fileData?.data.path);
-    console.log("form vals", val);
+      console.log("form vals", val);
     console.log("id", docId);
     console.log("file", val.chooseFile[0].originFileObj);
 
@@ -317,19 +313,8 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
         dataSource={dataArray}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
+        
+      
       />
 
       <Modal open={importModal} onCancel={handleImportCancel} footer={null}>

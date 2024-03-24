@@ -207,19 +207,7 @@ export const Reports: React.FC<IDocumentProps> = ({
         dataSource={dataArray}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
+       
       />
 
       <div className="flex justify-end gap-3 my-5 py-2">

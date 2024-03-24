@@ -6,6 +6,7 @@ import {
   thStyle,
   colOneStyle,
   tdStyle,
+  tdPayment,
 } from "src/features/applications/pages/SendQuote";
 import { IStKittQuote } from "src/features/applications/types/types";
 import { IGetQuoteProps } from "./DomincaQuoteTable";
@@ -55,7 +56,6 @@ export const StKittQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             </th>
             <th style={thStyle}>Amount</th>
           </tr>
-
           {/* ROW 2 */}
           <tr>
             <td rowSpan={26} style={colOneStyle} colSpan={2}>
@@ -66,135 +66,69 @@ export const StKittQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
               The payment is as follows:
             </td>
           </tr>
-          {/* ROW 3 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Application Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.application_fee}</td>
-          </tr>
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Bank Due Diligence Fee
-            </td>
-
-            <td style={tdStyle}>${applicantQuote?.bank_due_dil_fee}</td>
-          </tr>
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Courier and Bank Fee
-            </td>
-
-            <td style={tdStyle}>${applicantQuote?.courier_and_bank_fee}</td>
-          </tr>
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-          {/* ROW 4 */}
-          <tr>
-            <td style={tdStyle}>Country Fee Due Now</td>
-            <td style={tdStyle}>
-              {applicantQuote?.country_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
-          </tr>
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Country Fee Due On Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.country_fee_due_on_approval}
-            </td>
-          </tr>
-
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-
-          {/* ROW 5 */}
-          <tr>
-            <td colSpan={2} style={tdStyle}>
-              Due Diligence and Processing Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.due_dil_and_prc_fee}</td>
-          </tr>
-
           {/* ROW 6 */}
           <tr>
             <td colSpan={2} style={tdStyle}>
-              Government Contribution
+              St. Kitts & Nevis Gov't Contribution
             </td>
-            <td style={tdStyle}>${applicantQuote?.govt_contribution}</td>
+            <td style={tdPayment}>${applicantQuote?.govt_contribution}</td>
           </tr>
-
-          {/* EMPTY ROW */}
+          {/* ROW 3 */}
           <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+            <td style={tdStyle} colSpan={2}>
+              St. Kitts & Nevis Application Fee
             </td>
+            <td style={tdPayment}>${applicantQuote?.application_fee}</td>
           </tr>
-          {/* ROW 12 */}
+          {/* ROW 5 */}
           <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Legal Adivsory Fee
+            <td colSpan={2} style={tdStyle}>
+              St. Kitts & Nevis Gov't Due Diligence & Processing Fee
             </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.legal_advisory_fee}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Local Agent Fee VAT
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.local_agent_fee_vat}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Local Processing Fee
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.local_prc_fee}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} className="text-right font-bold ">
-              Local Processing Fee Due Now
-            </td>
-            <td style={tdStyle} className="font-bold">
-              {applicantQuote?.local_processing_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.local_prc_fee_due_now}
-            </td>
+            <td style={tdPayment}>${applicantQuote?.due_dil_and_prc_fee}</td>
           </tr>
           <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Local Processing Fee Due After Approval
+            <td style={tdStyle} colSpan={2}>
+              St. Kitts & Nevis Gov't Passport & Oath of Allegiance Fee
             </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.local_prc_due_after_approval}
+            <td style={tdPayment}>
+              ${applicantQuote?.passport_and_oath_of_allegiance_fee}
             </td>
           </tr>
           <tr>
             <td style={tdStyle} colSpan={2}>
-              Passport & Oath of Allegiance Fee
+              St. Kitts & Nevis Courier & Bank Transfer Fee
             </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.passport_and_oath_of_allegiance_fee}
+
+            <td style={tdPayment}>${applicantQuote?.courier_and_bank_fee}</td>
+          </tr>
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              St. Kitts & Nevis Bank Due Diligence Fee
+            </td>
+
+            <td style={tdPayment}>${applicantQuote?.bank_due_dil_fee}</td>
+          </tr>
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              St. Kitts & Nevis Local Agent VAT
+            </td>
+            <td style={tdPayment}>${applicantQuote?.local_agent_fee_vat}</td>
+          </tr>
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              St. Kitts & Nevis Legal & Adivsory Fee
+            </td>
+            <td style={tdPayment}>${applicantQuote?.legal_advisory_fee}</td>
+          </tr>
+          <tr>
+            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
+              St. Kitts & Nevis Total Quote
+            </td>
+            <td style={tdPayment} className="font-bold">
+              ${applicantQuote?.st_kitts_total}
             </td>
           </tr>
-
           {/* BLUE ROW */}
           <tr>
             <td
@@ -202,74 +136,73 @@ export const StKittQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
               style={tdStyle}
               className="bg-[#012168] text-[#012168]"
             >
-              -
+              .
             </td>
           </tr>
-
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Local Processing Fee
+            </td>
+            <td style={tdPayment} className="font-bold">
+              ${applicantQuote?.local_prc_fee}
+            </td>
+          </tr>
           {/* EMPTY ROW */}
           <tr>
             <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+              .
             </td>
           </tr>
-
-          {/* ROW 17 */}
+          {/* BLUE ROW */}
           <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due On Citizenship Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.total_due_on_citizenship_approval}
+            <td
+              colSpan={3}
+              style={tdStyle}
+              className="bg-[#012168] text-[#012168]"
+            >
+              .
             </td>
           </tr>
-
+          {/* EMPTY ROW */}
           <tr>
-            <td style={tdStyle} colSpan={2}>
+            <td colSpan={3} style={tdPayment} className="font-bold">
+              Payment Plan
+            </td>
+          </tr>
+          <tr>
+            <td style={tdStyle}> St. Kitts & Nevis Total Due Now</td>
+            <td style={tdPayment}>
+              {applicantQuote?.country_fee_due_now_percentage}%
+            </td>
+            <td style={tdPayment}>${applicantQuote?.country_fee_due_now}</td>
+          </tr>
+          <tr>
+            <td style={tdStyle}>Local Processing Fee Due Now</td>
+            <td style={tdPayment}>
+              {applicantQuote?.local_processing_fee_due_now_percentage}%
+            </td>
+            <td style={tdPayment}>${applicantQuote?.local_prc_fee_due_now}</td>
+          </tr>
+          {/* ROW 4 */}
+          <tr>
+            <td
+              style={tdStyle}
+              colSpan={2}
+              className="text-right font-bold text-[#ec5252]"
+            >
               Total Due Now
             </td>
-            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
-          </tr>
-
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+            <td style={tdPayment} className="font-bold text-[#ec5252]">
+              ${applicantQuote?.total_due_now}
             </td>
           </tr>
-
-          {/* ROW 9 */}
           <tr>
-            <td style={tdStyle} colSpan={2}>
-              {" "}
-              Program Grand Total
+            <td style={tdStyle} colSpan={2} className="text-right">
+              Balance Due On Citizenship Approval
             </td>
-            <td style={tdStyle}>${applicantQuote?.program_total}</td>
-          </tr>
-          {/* ROW 10 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              {" "}
-              Program Grand Total Due After Approval
+            <td style={tdPayment}>
+              ${applicantQuote?.total_due_on_citizenship_approval}
             </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.program_total_due_after_approval}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              {" "}
-              Program Total Due Now
-            </td>
-            <td style={tdStyle}>${applicantQuote?.program_total_due_now}</td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              {" "}
-              St. Kitts Total
-            </td>
-            <td style={tdStyle}>${applicantQuote?.st_kitts_total}</td>
           </tr>
         </table>
       </div>

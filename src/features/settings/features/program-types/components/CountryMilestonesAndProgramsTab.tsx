@@ -1,4 +1,4 @@
-import { Select, Tabs } from "antd";
+import {  Tabs } from "antd";
 import { Country } from "./Country";
 import { Milestones } from "./Milestones";
 import { ProgramTypes } from "./ProgramTypes";
@@ -26,9 +26,9 @@ export const CountryMilestonesAndProgramsTab = () => {
   return (
     <Tabs
       items={tabItems}
-      tabBarExtraContent={
-        <Select allowClear placeholder="Filter" className="md:flex hidden w-[200px]" />
-      }
+      // tabBarExtraContent={
+      //   <Select allowClear placeholder="Filter" className="md:flex hidden w-[200px]" />
+      // }
     />
   );
 };

@@ -1,8 +1,6 @@
 import { Form, InputNumber } from "antd";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 
-// govt ntf > 55 ??
-
 export const GrenadaDonation = () => {
   return (
     <div className="flex gap-8">
@@ -33,7 +31,7 @@ export const GrenadaDonation = () => {
           name="govt_ntf_application_fee"
           rules={generalValidationRules}
         >
-          <InputNumber className="w-full" />
+          <InputNumber className="w-full" prefix="$" />
         </Form.Item>
         <Form.Item
           label="Gov't Due Diligence Fee for Spouse"
@@ -137,7 +135,6 @@ export const GrenadaDonation = () => {
         >
           <InputNumber className="w-full" prefix="$" />
         </Form.Item>
-
         <Form.Item
           label="Grenada Bank Fees"
           name="grenada_bank_fees"

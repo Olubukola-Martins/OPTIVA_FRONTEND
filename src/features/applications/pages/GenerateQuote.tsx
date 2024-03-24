@@ -8,54 +8,41 @@ import { GenerateDominicaQuote } from "../features/Quotes/Generate Quotes/Genera
 import { GenerateStLuciaQuote } from "../features/Quotes/Generate Quotes/GenerateStLuciaQuote";
 import { useFetchApplicantsByRole } from "../hooks/Application hooks/useFetchApplicantsByRole";
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { Skeleton } from "antd";
 import { GenerateAntiguaSingleEstate } from "../features/Quotes/Generate Quotes/GenerateAntiguaSingleEstate";
 import { GenerateAntiguaJointEstateQuote } from "../features/Quotes/Generate Quotes/GenerateAntiguaJointEstateQuote";
 
 export const GenerateQuote = () => {
-  const { data, isLoading } = useFetchApplicantsByRole();
-  const { id } = useParams();
-  const [countryId, setCountryId] = useState<number>();
-  const [investmentId, setInvestmentId] = useState<number>();
-
-  useEffect(() => {
-    if (id) {
-      const renderItem = data?.data.find(
-        (item) => item.id === (+id as unknown as number)
-      );
-      if (renderItem) {
-        setCountryId(renderItem.country_id);
-        setInvestmentId(renderItem.investmentroute_id);
-      }
-    }
-  }, [data, id]);
+  const { isLoading } = useFetchApplicantsByRole();
+ 
+ const {countryId, investId}= useParams()
+  
 
   let renderGenerateQuote;
 
-  switch (`${countryId}-${investmentId}`) {
+  switch (`${countryId}-${investId}`) {
     case "1-1":
       renderGenerateQuote = <GenerateGrenadaDonation />;
       break;
-    case "1-2":
+    case "2-1":
       renderGenerateQuote = <GenerateGrenadaRealEstateQuote />;
       break;
-    case "2-5":
+    case "5-2":
       renderGenerateQuote = <GenerateStKittsQuote />;
       break;
-    case "3-2":
+    case "4-3":
       renderGenerateQuote = <GenerateDominicaQuote />;
       break;
-    case "4-3":
+    case "3-4":
       renderGenerateQuote = <GenerateStLuciaQuote />;
       break;
-    case "5-6":
+    case "6-5":
       renderGenerateQuote = <GenerateAntiguaDonationQuote />;
       break;
-    case "5-7":
+    case "7-5":
       renderGenerateQuote = <GenerateAntiguaSingleEstate />;
       break;
-    case "5-8":
+    case "8-5":
       renderGenerateQuote = <GenerateAntiguaJointEstateQuote />;
       break;
     default:

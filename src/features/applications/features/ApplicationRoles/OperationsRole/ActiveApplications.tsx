@@ -16,11 +16,10 @@ import { useFetchActiveandInactiveApplicant } from "../../../hooks/Application h
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
 import { useMarkApplicantAsComplete } from "../../../hooks/Application hooks/useMarkApplicantAsComplete";
 import { ApplicationAssignmentModal } from "../../components/ApplicationAssignmentModal";
-// import { AssignToModal } from "../../Components/AssignToModal";
-// import { useDebounce } from "src/hooks/useDebounce";
-// import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { AssignToModal } from "../../components/AssignToModal";
+import { useDebounce } from "src/hooks/useDebounce";
+import { usePagination } from "src/hooks/usePagination";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -59,16 +58,15 @@ export const capitalizeName = (name: string) => {
 export const ActiveApplications: React.FC<IPortfolioProps> = ({
   searchTerm,
 }) => {
+  const { onChange, pagination } = usePagination();
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
-    section: "active",
+    currentUrl: "active",
+    pagination,
+    search: debouncedSearchTerm,
   });
-  // const { onChange, pagination } = usePagination();
-  // const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-  // const { data, isLoading } = useFetchActiveandInactiveApplicant({
-  //   pagination,
-  //   search: debouncedSearchTerm,
-  // });
-  console.log("search term", searchTerm);
+
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -107,7 +105,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
   const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
   useEffect(() => {
     if (data && employeesData) {
-      const activeApplicant: DataSourceItem[] = data.map((item, index) => {
+      const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
         const assignedEmployee = employeesData.data.find(
           (employee) =>
             employee.user.roles.id === item.assigned_role_id &&
@@ -154,6 +152,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+          form.resetFields();
           handleInactiveCancel();
         },
       }
@@ -316,9 +315,9 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
                     Timeline Extensions
                   </Link>
                 </Menu.Item>
-                {/* <Menu.Item key="6" onClick={() => setOpenAssignmentModal(true)}>
+                <Menu.Item key="6" onClick={() => setOpenAssignmentModal(true)}>
                   View Application Assignment
-                </Menu.Item> */}
+                </Menu.Item>
                 <Menu.Item
                   key="7"
                   onClick={() => {
@@ -384,6 +383,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
                 label="Cancel"
                 variant="transparent"
                 containerStyle="border border-blue"
+                handleClick={handleInactiveCancel}
               />
               <AppButton label="Submit" type="submit" isLoading={postLoading} />
             </div>
@@ -410,8 +410,8 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         loading={isLoading}
-        // onChange={onChange}
-        // pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
+        pagination={{ ...pagination, total: data?.total }}
         rowSelection={{
           type: "checkbox",
           onChange: (

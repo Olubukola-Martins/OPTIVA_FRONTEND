@@ -34,14 +34,12 @@ const EditProgramType = () => {
   const { data: applicationData } = useGetApplicationTemplate();
   const { data: milestoneData, isSuccess: milestoneDataSucess } =
     useGetMilestone();
-  const { data: workflowData,  } =
-    useGetWorkflow();
+  const { data: workflowData } = useGetWorkflow();
   const { data: countryData, isSuccess: countryDataSuccess } = useGetCountry();
 
   const { putData, isLoading: putLoading } = useUpdateProgramType({
     queryKey: QUERY_KEY_FOR_PROGRAM_TYPE,
   });
-
 
   // APPLICANT OPTION
   const applicantOptions: SelectProps["options"] =
@@ -64,7 +62,7 @@ const EditProgramType = () => {
           (item) => item.id
         ),
         milestones: programData.milestones.map((item) => item.id),
-        selectWorkflow: programData.workflow.name,
+        selectWorkflow: programData.workflow_id,
         selectCountry: programData.countries.map((item) => item.id),
       });
     }
@@ -165,7 +163,6 @@ const EditProgramType = () => {
                     )}
                   </Select>
                 </Form.Item>
-
                 <Form.Item
                   name="milestones"
                   label="Milestones"
@@ -185,31 +182,7 @@ const EditProgramType = () => {
                     )}
                   </Select>
                 </Form.Item>
-                <Form.Item
-                  name="selectWorkflow"
-                  label="Select Workflow"
-                  rules={generalValidationRules}
-                >
-                  <Select placeholder="Select" allowClear>
-                    {workflowData?.map((item) => (
-                      <Select.Option key={item.id} value={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    ))}
 
-                    {/* {workflowDataSuccess ? (
-                      workflowData.map((item) => (
-                        <Select.Option key={item.id} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      ))
-                    ) : (
-                      <div className="flex justify-center items-center w-full">
-                        <Spin size="small" />
-                      </div>
-                    )} */}
-                  </Select>
-                </Form.Item>
                 <Form.Item
                   name="selectCountry"
                   label="Select Country"
@@ -228,6 +201,21 @@ const EditProgramType = () => {
                       </div>
                     )}
                   </Select>
+                </Form.Item>
+                <Form.Item name="selectWorkflow" label="Select Workflow">
+                  {/* <Select>
+                    {workflowData?.map((item) => (
+                      <Select.Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    ))}
+                  </Select> */}
+                  <Select
+                    options={workflowData?.map((item) => ({
+                      value: item.id,
+                      label: item.name,
+                    }))}
+                  />
                 </Form.Item>
               </div>
             </div>
