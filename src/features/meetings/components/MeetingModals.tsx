@@ -570,7 +570,7 @@ export const MeetingModalActions: React.FC<{
   return (
     <>
         <Modal open={open} onCancel={onCancel} footer={null}>
-          <Card size="small" className="my-3 border-0">
+          <Card size="small" className="my-3 border-0" title="Meeting Actions">
             <div className="p-1">
               <button onClick={() => handleMenuClick("viewDetails")}>
                 View Meeting Details
