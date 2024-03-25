@@ -19,7 +19,6 @@ const postData = async (props: ICreateApplicationResponse, section: string) => {
     ...props,
   };
   const response = await axios.post(url, data, config);
-  console.log('res', response)
   return response;
 };
 

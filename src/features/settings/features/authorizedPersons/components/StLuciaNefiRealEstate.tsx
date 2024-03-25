@@ -12,13 +12,13 @@ export const StLuciaNefiRealEstate = () => {
         >
           <InputNumber className="w-full" prefix="$" />
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           label="NEFI Contribution for Additional Dependents (if there's a spouse, maximum of 2)"
           name="nefiContributionAdditionalDependentSpouse"
           rules={generalValidationRules}
         >
           <InputNumber className="w-full" prefix="$" />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label="NEFI Contribution for Additional Dependents (if there's a spouse)"
           name="nefi_bution_for_add_depn"
@@ -98,7 +98,6 @@ export const StLuciaNefiRealEstate = () => {
         >
           <InputNumber className="w-full" prefix="$" />
         </Form.Item>
-
         <Form.Item
           label="Gov't Due Diligence for Spouse"
           name="govt_due_dil_fee_for_spouse"

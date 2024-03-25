@@ -22,6 +22,6 @@ const postData = async (props: IApproveOrRejectDoc) => {
   return response;
 };
 
-export const useApproveorRejectDoc = () => {
+export const useHandoverDoc = () => {
   return useMutation(postData);
 };

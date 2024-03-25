@@ -5,13 +5,13 @@ export const AntiguaBarbacudaDonationQuestions = () => {
   return (
     <div className="flex gap-8">
       <div className="w-1/2">
-        <Form.Item
+        {/* <Form.Item
           label="Contribution Fee for Applicants"
           name="bution_fee_for_applicants"
           rules={generalValidationRules}
         >
           <InputNumber className="w-full" prefix="$" />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           label={`Contribution Fee for Applicant Family \u22644`}
           name="bution_fee_for_applicants_ls_than_eq_to_four"

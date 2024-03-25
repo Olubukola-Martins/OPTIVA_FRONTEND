@@ -71,7 +71,7 @@ export const Fees = () => {
       key: "2",
     },
     {
-      title: "Program Name",
+      title: "Fee Name",
       dataIndex: "programName",
       key: "3",
     },
@@ -146,25 +146,13 @@ export const Fees = () => {
         dataSource={dataArray}
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
+       
       />
 
       {/* DELETE MODAL */}
       {feeId && (
         <DeleteModal
-          header="Delete Fee"
+          header="Fee"
           onCancel={handleDeleteModalCancel}
           open={isDeleteModalOpen}
           onDelete={() => removeData(feeId)}

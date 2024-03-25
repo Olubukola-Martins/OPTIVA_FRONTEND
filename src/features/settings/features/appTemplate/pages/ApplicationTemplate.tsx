@@ -1,4 +1,3 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { Dropdown, Menu, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import React, { useEffect, useState } from "react";
@@ -6,8 +5,6 @@ import { Link } from "react-router-dom";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
-// import { ImportModal } from "src/components/modals/ImportModal";
-import { ExportModal } from "src/components/modals/ExportModal";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import {
   QUERY_KEY_FOR_APPLICATION_TEMPLATE,
@@ -15,7 +12,6 @@ import {
 } from "../hooks/useGetApplicationTemplate";
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
 import { useDelete } from "src/hooks/useDelete";
-import { UploadModal } from "src/components/modals/UploadModal";
 
 interface DataSourceItem {
   key: React.Key;
@@ -50,6 +46,10 @@ const ApplicationTemplate = () => {
   }, [data]);
 
   const columns: ColumnsType<DataSourceItem> = [
+    {
+      title: "SN",
+      dataIndex: "sn",
+    },
     {
       title: "Template Name",
       dataIndex: "templateName",
@@ -103,24 +103,6 @@ const ApplicationTemplate = () => {
     },
   ];
 
-  // Import Modal
-  const [openImportModal, setOpenImportModal] = useState(false);
-  const showImportModal = () => {
-    setOpenImportModal(true);
-  };
-  const handleImportCancel = () => {
-    setOpenImportModal(false);
-  };
-
-  // Upload Document
-  const [exportModal, setExportModal] = useState(false);
-  const showExportModal = () => {
-    setExportModal(true);
-  };
-  const handleExportCancel = () => {
-    setExportModal(false);
-  };
-
   // Delete Modal
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const showDeleteModal = () => {
@@ -138,19 +120,8 @@ const ApplicationTemplate = () => {
           linkBack={appRoute.settings}
         />
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Icon
-              icon="uil:file-import"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showImportModal}
-            />
-            <Icon
-              icon="mingcute:file-import-line"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showExportModal}
-            />
-          </div>
+        <div >
+         
           <Link to={appRoute.newApplicationTemplate}>
             <AppButton
               label="Add New"
@@ -160,17 +131,7 @@ const ApplicationTemplate = () => {
         </div>
       </div>
       {/* Import Modal */}
-      <UploadModal
-        open={openImportModal}
-        onCancel={handleImportCancel}
-        header=" Application Template(s)"
-      />
-      {/* Export Modal */}
-      <ExportModal
-        open={exportModal}
-        onCancel={handleExportCancel}
-        header=" Application Template(s)"
-      />
+      
       {/* Delete Modal */}
       {templateId && (
         <DeleteModal
@@ -189,19 +150,7 @@ const ApplicationTemplate = () => {
         dataSource={dataArray}
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
+     
       />
     </>
   );

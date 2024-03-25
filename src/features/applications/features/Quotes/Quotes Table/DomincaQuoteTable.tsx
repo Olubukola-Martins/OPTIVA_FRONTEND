@@ -7,6 +7,7 @@ import {
   thStyle,
   colOneStyle,
   tdStyle,
+  tdPayment,
 } from "src/features/applications/pages/SendQuote";
 import { IGetDominicaQuote } from "src/features/applications/types/types";
 
@@ -69,103 +70,54 @@ export const DomincaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
 
           {/* ROW 3 */}
           <tr>
-            <td style={tdStyle}>Country Fee Due Now</td>
-            <td style={tdStyle}>
-              {applicantQuote?.country_fee_due_now_percentage}%
+            <td colSpan={2} style={tdStyle}>
+              Dominica Gov't Contribution
             </td>
-            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
+            <td style={tdPayment}>${applicantQuote?.govt_contribution_fee}</td>
+          </tr>
+          <tr>
+            <td colSpan={2} style={tdStyle}>
+              Dominica Gov't Processing Fee
+            </td>
+            <td style={tdPayment}>${applicantQuote?.govt_processing_fee}</td>
           </tr>
 
-          {/* ROW 4 */}
           <tr>
-            <td style={tdStyle} colSpan={2}>
-              Country Fee Due On Approval
+            <td colSpan={2} style={tdStyle}>
+              Dominica Gov't Due Diligence
             </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.country_fee_due_on_approval}
+            <td style={tdPayment}>${applicantQuote?.govt_due_diligence_fee}</td>
+          </tr>
+
+          <tr>
+            <td colSpan={2} style={tdStyle}>
+              Dominica Gov't Cert. of Neutralization Fee
+            </td>
+            <td style={tdPayment}>
+              ${applicantQuote?.govt_cert_neutralization_fee}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tdPayment} colSpan={2} className="text-right font-bold ">
+              Dominica Total Quote
+            </td>
+            <td style={tdPayment} className="font-bold">
+              ${applicantQuote?.dominica_total}
             </td>
           </tr>
 
           {/* ROW 12 */}
-          <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Dominica Total
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.dominica_total}
-            </td>
-          </tr>
 
           {/* ROW 5 */}
           <tr>
             <td colSpan={2} style={tdStyle}>
               Government Certified Neutralization Fee
             </td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               ${applicantQuote?.govt_cert_neutralization_fee}
             </td>
           </tr>
-
-          {/* ROW 6 */}
-          <tr>
-            <td colSpan={2} style={tdStyle}>
-              Government Contribution Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.govt_contribution_fee}</td>
-          </tr>
-
-          {/* ROW 7 */}
-          <tr>
-            <td colSpan={2} style={tdStyle}>
-              Goverment Due Diligence
-            </td>
-            <td style={tdStyle}>${applicantQuote?.govt_due_diligence_fee}</td>
-          </tr>
-
-          {/* ROW 8 */}
-          <tr>
-            <td colSpan={2} style={tdStyle}>
-              Government Processing Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.govt_processing_fee}</td>
-          </tr>
-
-          {/* EMPTY ROW */}
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-
-          {/* ROW 9 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Local Processing Fee
-            </td>
-            <td style={tdStyle}>${applicantQuote?.local_processing_fee}</td>
-          </tr>
-
-          {/* ROW 10 */}
-          <tr>
-            <td style={tdStyle}>Local Processing Fee Due Now</td>
-            <td style={tdStyle}>
-              {applicantQuote?.local_processing_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.local_processing_fee_due_now}
-            </td>
-          </tr>
-
-          {/* ROW 11 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Local Processing Fee After Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.local_processing_fee_after_approval}
-            </td>
-          </tr>
-
           {/* BLUE ROW */}
           <tr>
             <td
@@ -173,70 +125,76 @@ export const DomincaQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
               style={tdStyle}
               className="bg-[#012168] text-[#012168]"
             >
-              -
+              .
             </td>
           </tr>
-
+          <tr>
+            <td style={tdStyle} colSpan={2}>
+              Local Processing Fee
+            </td>
+            <td style={tdPayment}>${applicantQuote?.local_processing_fee}</td>
+          </tr>
           {/* EMPTY ROW */}
           <tr>
             <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
+              .
+            </td>
+          </tr>
+          {/* BLUE ROW */}
+          <tr>
+            <td
+              colSpan={3}
+              style={tdStyle}
+              className="bg-[#012168] text-[#012168]"
+            >
+              .
             </td>
           </tr>
 
-          {/* ROW 17 */}
+          <tr>
+            <td
+              colSpan={3}
+              style={tdPayment}
+              className="font-bold"
+              // className="bg-[#012168] text-[#012168]"
+            >
+              Payment Plan
+            </td>
+          </tr>
+          <tr>
+            <td style={tdStyle}>Dominica Total Due Now</td>
+            <td style={tdPayment}>
+              {applicantQuote?.country_fee_due_now_percentage}%
+            </td>
+            <td style={tdPayment}>${applicantQuote?.country_fee_due_now}</td>
+          </tr>
+
+          <tr>
+            <td style={tdStyle}>Local Processing Fee Due Now</td>
+            <td style={tdPayment}>
+              {applicantQuote?.local_processing_fee_due_now_percentage}%
+            </td>
+            <td style={tdPayment}>
+              ${applicantQuote?.local_processing_fee_due_now}
+            </td>
+          </tr>
+
+          <tr>
+            <td style={tdPayment} colSpan={2}  className="text-[#EC5252] font-bold text-right">
+             Total Due Now
+            </td>
+            <td style={tdPayment}  className="text-[#EC5252] font-bold">${applicantQuote?.total_due_now}</td>
+          </tr>
           <tr>
             <td style={tdStyle} colSpan={2}>
-              Total Due On Citizenship Approval
+              Balance Due On Citizenship Approval
             </td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               ${applicantQuote?.total_due_on_citizenship_approval}
             </td>
           </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Total Due Now
-            </td>
-            <td style={tdStyle}>${applicantQuote?.total_due_now}</td>
-          </tr>
-          <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr>
-          {/* ROW 13 */}
-          {/* EMPTY ROW */}
-          {/* ROW 14 */}
-          <tr>
-            <td
-              style={tdStyle}
-              colSpan={2}
-              className="text-[#EC5252] font-bold text-right"
-            >
-              Program Total Due Now
-            </td>
-            <td style={tdStyle} className="text-[#EC5252] font-bold">
-              ${applicantQuote?.program_total_due_now}
-            </td>
-          </tr>
-
-          {/* ROW 15 */}
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Total Due After Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.program_total_due_after_approval}
-            </td>
-          </tr>
-
-          <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Total
-            </td>
-            <td style={tdStyle}>${applicantQuote?.program_total}</td>
-          </tr>
+          {/* ROW 4 */}
+        
         </table>
       </div>
     </Skeleton>

@@ -9,8 +9,8 @@ import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const SendEmail = () => {
-  const { id, emailId } = useParams();
-  console.log(id);
+  const {  emailId } = useParams();
+
   let renderEmail;
 
   switch (emailId) {

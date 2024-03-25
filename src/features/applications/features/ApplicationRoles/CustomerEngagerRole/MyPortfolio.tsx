@@ -109,8 +109,11 @@ export const MyPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
                 <Menu.Item key="2">
                   <Link
                     to={
-                      appRoute.generate_quotes(val.key as unknown as number)
-                        .path
+                      appRoute.generate_quotes(
+                        val.key as unknown as number,
+                        val.countryId,
+                        val.investmentId
+                      ).path
                     }
                   >
                     Generate Quote

@@ -1,5 +1,4 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Dropdown, Menu,  } from "antd";
+import { Dropdown, Menu } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -7,8 +6,6 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 import { AddInvestment } from "../components/AddInvestment";
 import { useEffect, useState } from "react";
 import { DeleteModal } from "src/components/modals/DeleteModal";
-import { ImportModal } from "src/components/modals/ImportModal";
-import { ExportModal } from "src/components/modals/ExportModal";
 import {
   QUERY_KEY_FOR_INVESTMENT_ROUTE,
   useGetInvestmentRoute,
@@ -62,24 +59,6 @@ const InvestmentRoute = () => {
     setOpenDeleteModal(true);
   };
 
-
-  // Import Modal
-  const [openImportModal, setOpenImportModal] = useState(false);
-  const showImportModal = () => {
-    setOpenImportModal(true);
-  };
-  const handleImportCancel = () => {
-    setOpenImportModal(false);
-  };
-
-  // Upload Document
-  const [exportModal, setExportModal] = useState(false);
-  const showExportModal = () => {
-    setExportModal(true);
-  };
-  const handleExportCancel = () => {
-    setExportModal(false);
-  };
 
   const columns: ColumnsType<DataType> = [
     {
@@ -158,18 +137,6 @@ const InvestmentRoute = () => {
         />
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Icon
-              icon="uil:file-import"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showImportModal}
-            />
-            <Icon
-              icon="mingcute:file-import-line"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showExportModal}
-            />
-          </div>
           <AppButton label="Add New" handleClick={() => setAddInvRoute(true)} />
         </div>
       </div>
@@ -181,19 +148,6 @@ const InvestmentRoute = () => {
         dataSource={dataArray}
         scroll={{ x: 768 }}
         loading={isLoading}
-      />
-
-      {/* Import Modal */}
-      <ImportModal
-        header="Investment Routes"
-        onCancel={handleImportCancel}
-        open={openImportModal}
-      />
-      {/* Export Modal */}
-      <ExportModal
-        open={exportModal}
-        onCancel={handleExportCancel}
-        header="Investment Routes"
       />
 
       {/* Delete Modal */}

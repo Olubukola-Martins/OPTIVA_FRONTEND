@@ -1,4 +1,3 @@
-import { Icon } from "@iconify/react";
 import { useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { appRoute } from "src/config/routeMgt/routePaths";
@@ -6,8 +5,6 @@ import { CountryMilestonesAndProgramsTab } from "../components/CountryMilestones
 import { Dropdown } from "antd";
 import { Link } from "react-router-dom";
 import "../assets/style.css";
-import { ImportModal } from "src/components/modals/ImportModal";
-import { ExportModal } from "src/components/modals/ExportModal";
 
 import { AddCountryModal } from "../components/AddCountryModal";
 import { DownOutlined } from "@ant-design/icons";
@@ -33,17 +30,6 @@ const CountryMilestonesAndPrograms = () => {
     setOpenMilestoneModal(false);
   };
 
-  // Import Modal
-  const [openImportModal, setOpenImportModal] = useState(false);
-  const showImportModal = () => {
-    setOpenImportModal(true);
-  };
-  const handleImportCancel = () => {
-    setOpenImportModal(false);
-  };
-
-
-
   const items: MenuProps["items"] = [
     {
       label: "Country",
@@ -61,51 +47,42 @@ const CountryMilestonesAndPrograms = () => {
     },
   ];
 
-  const menuProps = {
-    items,
-    onClick: () => {},
-  };
+  // const menuProps = {
+  //   items,
+  //   onClick: () => {},
+  // };
 
   return (
     <>
-      <div className=" flex flex-col md:flex-row justify-between p-3">
-        <PageIntro
-          title="Country, Milestone & Program Type Configuration "
-          description="Create, View & edit assessment templates on the systemConfigure country, milestones & program types on the system"
-          linkBack={appRoute.settings}
-        />
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Icon
-              icon="uil:file-import"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showImportModal}
-            />
-            <Icon
-              icon="mingcute:file-import-line"
-              className="text-3xl cursor-pointer hover:text-primary"
-              // onClick={showExportModal}
-            />
-          </div>
+      <div className="flex justify-between items-center">
+        <div className="w-1/2">
+          <PageIntro
+            title="Country, Milestone & Program Type Configuration "
+            description="Configure country, milestones & program types on the system"
+            linkBack={appRoute.settings}
+          />
+        </div>
 
-          <Dropdown.Button menu={menuProps} icon={<DownOutlined />}>
-            Add New
+        <div className="w-1/2 flex justify-end">
+          <Dropdown.Button
+            className="bg-secondary rounded-lg w-fit "
+            arrow={true}
+            icon={
+              <DownOutlined className="text-white font-medium hover:text-white" />
+            }
+            menu={{
+              className: "text-white",
+              color: "white",
+              items,
+            }}
+          >
+            <span className="text-white font-medium hover:text-white">
+              Add New
+            </span>
           </Dropdown.Button>
         </div>
       </div>
       <CountryMilestonesAndProgramsTab />
-      {/* Import Modal */}
-      <ImportModal
-        open={openImportModal}
-        onCancel={handleImportCancel}
-        header="Country"
-      />
-      {/* Export Modal */}
-      <ExportModal
-        open={openImportModal}
-        onCancel={handleImportCancel}
-        header="Country"
-      />
 
       {/* ADD COUNTRY MODAL */}
       <AddCountryModal

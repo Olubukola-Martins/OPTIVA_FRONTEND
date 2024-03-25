@@ -1,11 +1,22 @@
-import { Button, Dropdown, Form, Menu, Modal, Table, Upload, UploadFile, UploadProps } from "antd";
+import {
+  Button,
+  Dropdown,
+  Form,
+  Menu,
+  Modal,
+  Popconfirm,
+  Table,
+  Upload,
+  UploadFile,
+  UploadProps,
+} from "antd";
 import { DataSourceItem, IDocumentProps } from "./IdentityDocument";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
-// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+import { useHandoverDoc } from "../../hooks/Documet hooks/useHandoverDoc";
 import {
   useGetApplicantDocumentCategory,
   QUERY_KEY_FOR_APPLICANT_DOCUMENT,
@@ -31,7 +42,7 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
 
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
-  // const { mutate } = useApproveorRejectDoc();
+  const { mutate } = useHandoverDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
   const {
@@ -53,8 +64,6 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
     },
     fileList,
   };
-
-
   useEffect(() => {
     if (data) {
       const identityDocument: DataSourceItem[] = data
@@ -90,55 +99,54 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
     }
   }, [data, filterValue]);
 
-  // const approveDoc = () => {
-  //   mutate(
-  //     { approve: "accepted", document_id: docId as unknown as number },
-  //     {
-  //       onError: (error: any) => {
-  //         openNotification({
-  //           state: "error",
-  //           title: "Error Occurred",
-  //           description: error.response.data.message,
-  //           duration: 5,
-  //         });
-  //       },
-  //       onSuccess: (res: any) => {
-  //         openNotification({
-  //           state: "success",
-  //           title: "Success",
-  //           description: res.data.message,
-  //         });
-  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-  //       },
-  //     }
-  //   );
-  // };
+  const approveDoc = () => {
+    mutate(
+      { approve: "accepted", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
 
-  // const rejectDoc = () => {
-  //   mutate(
-  //     { decline: "declined", document_id: docId as unknown as number },
-  //     {
-  //       onError: (error: any) => {
-  //         openNotification({
-  //           state: "error",
-  //           title: "Error Occurred",
-  //           description: error.response.data.message,
-  //           duration: 5,
-  //         });
-  //       },
-  //       onSuccess: (res: any) => {
-  //         openNotification({
-  //           state: "success",
-  //           title: "Success",
-  //           description: res.data.message,
-  //         });
-  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-  //       },
-  //     }
-  //   );
-  // };
-
-   const normFile = (e: any) => {
+  const rejectDoc = () => {
+    mutate(
+      { decline: "declined", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
+  const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
     }
@@ -150,10 +158,6 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
     fileList.forEach((file) => {
       fileUploadData.append("files[]", file as RcFile);
     });
-    // await uploadFile({ file: val.chooseFile[0].originFileObj });
-
-    // console.log("file data no path", fileData);
-    // console.log("file data", fileData?.data.path);
     console.log("form vals", val);
     console.log("id", docId);
     console.log("file", val.chooseFile[0].originFileObj);
@@ -301,6 +305,36 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
                 >
                   Replace
                 </Menu.Item>
+                <Menu.Item
+                  key="7"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Confirm handover"
+                    description={`Are you sure to confirm handover of this document?`}
+                    onConfirm={approveDoc}
+                    okType="default"
+                  >
+                    Confirm Handover by DMS
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="8"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Decline handover"
+                    description={`Are you sure to decline handover of this document?`}
+                    onConfirm={rejectDoc}
+                    okType="default"
+                  >
+                    Decline Handover by DMS
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -317,19 +351,6 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
         dataSource={dataArray}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
       />
 
       <Modal open={importModal} onCancel={handleImportCancel} footer={null}>
@@ -366,12 +387,15 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
           </svg>
         </div>
         <h1 className="p-4 font-bold text-center text-lg">Upload document</h1>
-        <Form layout="vertical" onFinish={updateApplicantDoc} requiredMark={false}>
+        <Form
+          layout="vertical"
+          onFinish={updateApplicantDoc}
+          requiredMark={false}
+        >
           <Form.Item
             name="chooseFile"
             label="Choose file to upload"
             rules={[createFileValidationRule(fileRuleOptions)]}
-            
             getValueFromEvent={normFile}
           >
             <Upload {...props} maxCount={1}>
@@ -382,7 +406,7 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
             [Only png, jpeg and pdf formats are supported]
           </p>
           <p className="text-center">Maximum upload file size is 5 MB.</p>
-         
+
           <div className="flex items-center justify-center gap-4 p-4 mt-2">
             <AppButton
               label="Cancel"
@@ -400,7 +424,6 @@ export const FianancialAsset: React.FC<IDocumentProps> = ({
           </div>
         </Form>
       </Modal>
-
 
       <div className="flex justify-end gap-3 my-5 py-2">
         <AppButton

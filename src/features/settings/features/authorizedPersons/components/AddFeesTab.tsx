@@ -14,6 +14,8 @@ import { usePostAntiguaSingleRealEstate } from "../hooks/usePostAntiguaSingleRea
 import { usePostAntiguaJointEstate } from "../hooks/usePostAntiguaJointEstate";
 import { usePostStKittsNevis } from "../hooks/usePostStKittsNevis";
 import { usePostStLucia } from "../hooks/usePostStLucia";
+import { useNavigate } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 const AddFeesTab = () => {
   const [investmentId, setInvestmentId] = useState<number>();
@@ -42,7 +44,7 @@ const AddFeesTab = () => {
   const { mutate: mutateStKittsNevis, isLoading: stKittsNevisLoading } =
     usePostStKittsNevis();
   const { mutate: mutateStLucia, isLoading: stLuciaLoading } = usePostStLucia();
-
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
@@ -91,6 +93,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -118,7 +121,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
-              // setInvestmentId(undefined);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -146,7 +149,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
-              // setInvestmentId(undefined);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -174,7 +177,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
-              // setInvestmentId(undefined);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -202,7 +205,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
-              // setInvestmentId(undefined);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -230,7 +233,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
-              // setInvestmentId(undefined);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -258,7 +261,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
-              // setInvestmentId(undefined);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -286,7 +289,7 @@ const AddFeesTab = () => {
               });
               form.resetFields();
               queryClient.invalidateQueries([QUERY_KEY_FOR_FEES]);
-              // setInvestmentId(undefined);
+              navigate(appRoute.defineFeesAndAuthorizedPersons)
             },
           }
         );
@@ -341,32 +344,7 @@ const AddFeesTab = () => {
       </Form>
     </>
 
-    // <Form
-    //   layout="vertical"
-    //   onFinish={handleSubmit}
-    //   requiredMark={false}
-    //   form={form}
-    // >
-    //   <Tabs items={tabItems} />
-
-    // <div className="flex items-center justify-end gap-4 mt-5">
-    //   <AppButton label="Cancel" type="reset" variant="transparent" />
-    //   <AppButton
-    //     label="Save"
-    //     type="submit"
-    //     isLoading={
-    //       grenadaRealEstateLoading ||
-    //       grenadaDonationLoading ||
-    //       dominicaDonationLoading ||
-    //       antiguaBarbacudaLoading ||
-    //       antiguaSingleReaLEstateLoading ||
-    //       antiguaJointEstateLoading ||
-    //       stKittsNevisLoading ||
-    //       stLuciaLoading
-    //     }
-    //   />
-    // </div>
-    // </Form>
+    
   );
 };
 
