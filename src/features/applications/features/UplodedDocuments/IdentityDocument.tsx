@@ -7,6 +7,7 @@ import {
   Button,
   Upload,
   UploadFile,
+  Popconfirm,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 import {
@@ -26,7 +27,7 @@ import type { UploadProps, RcFile } from "antd/lib/upload/interface";
 import { createFileValidationRule } from "src/features/settings/features/authorizedPersons/types";
 import { TFileType } from "src/features/settings/features/authorizedPersons/components/AddAuthorizedPerson";
 import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
-import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+import { useHandoverDoc } from "../../hooks/Documet hooks/useHandoverDoc";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -66,7 +67,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const [docUrl, setDocUrl] = useState<string>();
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
-  const { mutate } = useApproveorRejectDoc();
+  const { mutate } = useHandoverDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
 
@@ -271,6 +272,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
             trigger={["click"]}
             overlay={
               <Menu>
+                {/* DR cant see any of these actions, on handover */}
                 <Menu.Item
                   key="1"
                   onClick={() => {
@@ -283,27 +285,27 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   </a>
                 </Menu.Item>
                 {/* {userData?.id === 3 && ( */}
-                  <Menu.Item
-                    key="2"
-                    onClick={() => {
-                      setDocId(val.key as unknown as number);
-                      approveDoc();
-                    }}
-                  >
-                    Accept Document
-                  </Menu.Item>
+                <Menu.Item
+                  key="2"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                    approveDoc();
+                  }}
+                >
+                  Accept Document
+                </Menu.Item>
                 {/* )} */}
 
                 {/* {userData?.id === 3 && ( */}
-                  <Menu.Item
-                    key="3"
-                    onClick={() => {
-                      setDocId(val.key as unknown as number);
-                      rejectDoc();
-                    }}
-                  >
-                    Decline Document
-                  </Menu.Item>
+                <Menu.Item
+                  key="3"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                    rejectDoc();
+                  }}
+                >
+                  Decline Document
+                </Menu.Item>
                 {/* )} */}
                 <Menu.Item key="4">
                   {" "}
@@ -338,6 +340,36 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                 >
                   Replace
                 </Menu.Item>
+                <Menu.Item
+                  key="7"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Confirm handover"
+                    description={`Are you sure to confirm handover of this document?`}
+                    onConfirm={approveDoc}
+                    okType="default"
+                  >
+                    Confirm Handover by DMS
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="8"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Decline handover"
+                    description={`Are you sure to decline handover of this document?`}
+                    onConfirm={rejectDoc}
+                    okType="default"
+                  >
+                    Decline Handover by DMS
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -354,7 +386,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
         dataSource={dataArray}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
-        />
+      />
 
       <Modal open={importModal} onCancel={handleImportCancel} footer={null}>
         <div className="p-3">
