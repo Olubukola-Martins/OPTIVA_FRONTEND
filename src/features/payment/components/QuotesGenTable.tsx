@@ -125,7 +125,7 @@ const QuotesGenTable = ({ allData, dataLoading,onChange }: IProps) => {
     {
       key: "2",
       title: "Applicant ID",
-      dataIndex: "applicantID",
+      dataIndex: "applicantUniqueID",
     },
     {
       title: "Applicant Name",
