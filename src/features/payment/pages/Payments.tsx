@@ -247,6 +247,8 @@ const Payments = () => {
             <Form.Item name="filterAmount" label="Filter Amount">
               <InputNumber addonAfter="$" />
             </Form.Item>
+              
+            <Form.Item name="startToEndDate" label="Start To End Date"><RangePicker  /></Form.Item>
             <AppButton
               type="submit"
               label="Apply Filter"
@@ -305,10 +307,6 @@ const Payments = () => {
                 type="button"
                 handleClick={() => setIsModalOpen(true)}
               />
-            </div>
-            <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
-              <RangePicker style={{ width: 300 }} />
-              {/* <AppButton label="View All" /> */}
             </div>
           </div>
         </div>

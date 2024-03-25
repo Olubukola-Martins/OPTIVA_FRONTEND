@@ -13,6 +13,7 @@ const getData = async (props: {
   // };
   pagination?:TablePaginationConfig;
   search?: string;
+  otherParams?:{ [key: string]: any }
 }): Promise<any> => {
   const url = `${props.urlEndPoint}`;
   const config = {
@@ -24,6 +25,7 @@ const getData = async (props: {
       name: props.search,
       page: props.pagination?.current,
       limit: props.pagination?.pageSize,
+      ...props.otherParams
     },
   };
 
@@ -37,17 +39,18 @@ const getData = async (props: {
 
 export const useFetchAllItems = ({
   queryKey,
-  urlEndPoint,pagination, search,
+  urlEndPoint,pagination, search,otherParams
 }: {
   queryKey: string;
   urlEndPoint: string;
   pagination?: TablePaginationConfig; 
   search?:string,
+  otherParams?:{ [key: string]: any }
 }) => {
   const { token } = useGetUserInfo();
   const queryData = useQuery(
     [queryKey,pagination, search,],
-    () => getData({ token, urlEndPoint,pagination, search }),
+    () => getData({ token, urlEndPoint,pagination, search , ...otherParams}),
     {
       onError: (error: any) => {
         openNotification({
