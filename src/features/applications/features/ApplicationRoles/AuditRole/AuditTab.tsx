@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AuditPortfolio } from "./AuditPortfolio";
 import { Input, Select, Tabs } from "antd";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+// import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
 export interface IRoleTabProps {
   onRoleSelect: (role: number) => void;
@@ -72,6 +73,8 @@ export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
                     label: `Customer Engager's  List`,
                   },
                 ]}
+              //   onChange={(value) => onRoleSelect(value, roleOptions.find(option => option.value === value)?.label || "")}
+              // options={roleOptions}
               />
             )}
 

@@ -58,6 +58,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     );
     return investment && investment.investment_name;
   };
+  console.log('total for pagination', data?.data)
   useEffect(() => {
     if (data && employeesData) {
       const inActiveApplicant: DataSourceItem[] = data.data.map((item, index) => {

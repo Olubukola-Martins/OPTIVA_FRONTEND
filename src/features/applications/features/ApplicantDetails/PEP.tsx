@@ -22,16 +22,17 @@ export const PEP: React.FC<IApplicationFormResponseProps> = ({
           (item) =>
             item.subsection_name === subsectionName && (
               <Form.Item
-                name={item.schema_name}
-                label={item.form_question}
-                key={item.id}
-                className="w-full"
-              >
-                {renderDetailsInput(
-                  item.input_type,
-                  // item.question.options
-                )}
-              </Form.Item>
+              key={item.id}
+              name={item.question.schema_name}
+              label={item.question.form_question}
+            >
+              {renderDetailsInput(
+                item.question.input_type,
+                item.question.options,
+                // item.section_one_response,
+                // (value) => handleSelectChange(item.form_question, value)
+              )}
+            </Form.Item>
             )
         )
       ) : (

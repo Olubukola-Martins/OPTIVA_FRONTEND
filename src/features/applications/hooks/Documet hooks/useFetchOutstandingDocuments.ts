@@ -3,13 +3,12 @@ import { useQuery } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
 import { IOutstandingDoc } from "../../types/types";
-import { IAcceptProps } from "../Application hooks/useFetchTimelineExtensions";
 import { QUERY_KEY_FOR_APPLICANT_DOCUMENT } from "./useGetApplicantDocumentCategory";
 
-const getData = async (props: { id: number }): Promise<IOutstandingDoc[]> => {
+const getData = async (id:number): Promise<IOutstandingDoc[]> => {
   const token = useGetToken();
 
-  const url = `${END_POINT.BASE_URL}/admin/fetch-applicant-document/${props.id}`;
+  const url = `${END_POINT.BASE_URL}/admin/fetch-applicant-document/${id}`;
   const config = {
     headers: {
       Accept: "application/json",
@@ -18,14 +17,15 @@ const getData = async (props: { id: number }): Promise<IOutstandingDoc[]> => {
   };
 
   const res = await axios.get(url, config);
+  console.log('res', res)
   const data: IOutstandingDoc[] = res.data.data;
   return data;
 };
 
-export const useFetchOutstandingDocuments = ({ id }: IAcceptProps) => {
+export const useFetchOutstandingDocuments = (id:number) => {
   const queryData = useQuery(
     [QUERY_KEY_FOR_APPLICANT_DOCUMENT],
-    () => getData({ id }),
+    () => getData(id),
     {
       onError: () => {},
       onSuccess: () => {},

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { ApplicationsTab } from "../../ApplicantDetails/ApplicationsTab";
 import { AuditTab } from "../AuditRole/AuditTab";
 import { CEApplicantTab } from "../CustomerEngagerRole/CEApplicantTab";
 import { DMSTab } from "../DMSRole/DMSTab";
 import { DPOTab } from "../DPOSRole/DPOTab";
 import { DRTab } from "../DRRole/DRTab";
 import { ServiceManagerTab } from "../ServiceManager/ServiceManagerTab";
+import { ApplicationsTab } from "./ApplicationsTab";
 
 export const OperationsApplicationPage = () => {
   const [selectedRole, setSelectedRole] = useState<number>(8);

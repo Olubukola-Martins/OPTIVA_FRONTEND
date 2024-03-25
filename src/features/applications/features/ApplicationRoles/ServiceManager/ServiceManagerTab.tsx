@@ -3,6 +3,7 @@ import { ServiceManagerPortfolio } from "./ServiceManagerPortfolio";
 import { Input, Select, Tabs } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+// import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
 export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
   onRoleSelect,
@@ -74,6 +75,8 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
                     label: `Customer Engager's  List`,
                   },
                 ]}
+              //   onChange={(value) => onRoleSelect(value, roleOptions.find(option => option.value === value)?.label || "")}
+              // options={roleOptions}
               />
             )}
             <Select
