@@ -45,7 +45,6 @@ import {
 } from "./Payments";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import {
-  QUERY_KEY_FINANCIAL_STATEMENT,
   generateFinancialStatement,
   viewProofOfPayment,
 } from "../hooks/useGenerate";

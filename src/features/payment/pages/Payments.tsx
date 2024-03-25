@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, InputNumber, Modal, Select } from "antd";
+import { DatePicker, Form,  InputNumber, Modal, Select } from "antd";
 import Search from "antd/es/input/Search";
 import { useEffect, useRef, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
@@ -54,7 +54,7 @@ const Payments = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
 
-  const searchInputRef = useRef<Input>(null);
+  const searchInputRef = useRef(null);
 
   // Payments list data
   const {
@@ -274,7 +274,7 @@ const Payments = () => {
                     break;
                   case 1:
                     setCurrentTable("Quotes Generated");
-                searchInputRef.current.input.value = "" 
+                // searchInputRef.current.input.value = "" 
 
                     break;
                   case 2:
@@ -287,7 +287,7 @@ const Payments = () => {
                     setCurrentTable("Payments List");
                 }
                 // if (searchInputRef.current){ searchInputRef.current.input.value = "" }
-                searchInputRef.current.input.value = "" 
+                // searchInputRef.current.input.value = "" 
               }}
             />
           ))}
