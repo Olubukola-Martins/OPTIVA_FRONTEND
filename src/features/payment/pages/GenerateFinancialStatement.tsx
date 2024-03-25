@@ -169,7 +169,7 @@ const GenerateFinancialStatement = () => {
         {
           key: 1,
           item: "Total to be paid",
-          amount: (+outstanding_payment - +amount_paid).toLocaleString(
+          amount: (+outstanding_payment + +amount_paid).toLocaleString(
             "en-US",
             {
               style: "currency",
@@ -208,7 +208,7 @@ const GenerateFinancialStatement = () => {
           id,
           naira_payment,
           dollar_payment,
-          outstanding_payment,
+          outstanding_payment,paid_by
         } = detail;
         return {
           key: id,
@@ -224,8 +224,7 @@ const GenerateFinancialStatement = () => {
             </div>
           ),
           fxRate: fx_rate,
-          // paidBy: paid_by,
-          paidBy: "James Brown",
+          paidBy: paid_by,
           paymentsUSD: (
             <div className="text-green-600">
               {(+dollar_payment).toLocaleString("en-US", {
@@ -239,7 +238,7 @@ const GenerateFinancialStatement = () => {
             <div className="text-red-500">
               {(+outstanding_payment).toLocaleString("en-US", {
                 style: "currency",
-                currency: "NGN",
+                currency: "USD",
                 maximumFractionDigits: 2,
               })}
             </div>
@@ -258,7 +257,7 @@ const GenerateFinancialStatement = () => {
       });
       setTotalUSDList(paymentsUSD);
     }
-  }, [paymentDetailsData, paymentDetailsLoading]);
+  }, [paymentDetailsData, paymentDetailsLoading, finStatementData,finStatementLoading]);
 
   useEffect(() => {}, [
     dataSourceFirst,
@@ -332,7 +331,7 @@ const GenerateFinancialStatement = () => {
         title="Generate Financial Statement"
         linkBack={appRoute.paymentDetails(Number(id) as number).path}
       />
-      <Spin spinning={finStatementLoading || sendingFinStatement}>
+      <Spin  spinning={finStatementLoading ||  sendingFinStatement}>
         {finStatementData?.data && (
           <GenerateTemplate
             title="FINANCIAL STATEMENT"

@@ -315,19 +315,7 @@ const TimelineExtensions = () => {
           dataSource={dataArray}
           scroll={{ x: 600 }}
           loading={isLoading}
-          rowSelection={{
-            type: "checkbox",
-            onChange: (
-              selectedRowKeys: React.Key[],
-              selectedRows: DataSourceItem[]
-            ) => {
-              console.log(
-                `selectedRowKeys: ${selectedRowKeys}`,
-                "selectedRows: ",
-                selectedRows
-              );
-            },
-          }}
+         
         />
       </div>
     </>

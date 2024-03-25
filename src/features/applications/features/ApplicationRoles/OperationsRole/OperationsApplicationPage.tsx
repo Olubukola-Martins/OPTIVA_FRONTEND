@@ -8,7 +8,6 @@ import { DRTab } from "../DRRole/DRTab";
 import { ServiceManagerTab } from "../ServiceManager/ServiceManagerTab";
 
 export const OperationsApplicationPage = () => {
-  // change roles
   const [selectedRole, setSelectedRole] = useState<number>(8);
 
   const handleRoleChange = (role: number) => {

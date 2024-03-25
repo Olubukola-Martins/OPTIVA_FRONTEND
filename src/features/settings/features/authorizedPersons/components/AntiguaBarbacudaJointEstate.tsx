@@ -2,7 +2,6 @@ import { InputNumber, Form } from "antd";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const AntiguaBarbacudaJointEstate = () => {
-  // bution fee
   return (
     <div className="flex gap-8">
       <div className="w-1/2">

@@ -35,7 +35,6 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
   const { data: branchData } = useFetchCurrentBranch();
   const queryClient = useQueryClient();
   const { setSharedData } = useGlobalContext();
-  console.log(investmentData);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const navigate = useNavigate();
   const [selectedCountry, setSelectedCountry] = useState<number | undefined>();
@@ -85,7 +84,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
         <Form layout="vertical" onFinish={handleSubmit} form={form}>
           <div>
             <h1 className="p-4 font-bold text-center text-lg">
-              Select Country/Program Type
+              New Application
             </h1>
             <div>
               <h2 className="py-1">

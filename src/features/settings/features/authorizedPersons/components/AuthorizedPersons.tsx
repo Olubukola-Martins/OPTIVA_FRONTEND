@@ -133,14 +133,7 @@ const {removeData}=  useDelete({
         dataSource={dataArray}
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
-        rowSelection={{
-          type: "checkbox",
-          selectedRowKeys,
-          onChange: (keys: React.Key[], rows: DataSourceItem[]) => {
-            setSelectedRowKeys(keys);
-            console.log("selectedRowKeys:", keys, "selectedRows:", rows);
-          },
-        }}
+       
       />
 
       {/* DELETE MODAL */}

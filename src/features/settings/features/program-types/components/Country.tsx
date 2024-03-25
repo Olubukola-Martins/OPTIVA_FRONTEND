@@ -123,19 +123,7 @@ const {removeData}=  useDelete({queryKey: QUERY_KEY_FOR_COUNTRY, EndPointUrl:"ad
           dataSource={dataArray}
           className="bg-white rounded-md shadow border mt-2"
           scroll={{ x: 600 }}
-          rowSelection={{
-            type: "checkbox",
-            onChange: (
-              selectedRowKeys: React.Key[],
-              selectedRows: DataSourceItem[]
-            ) => {
-              console.log(
-                `selectedRowKeys: ${selectedRowKeys}`,
-                "selectedRows: ",
-                selectedRows
-              );
-            },
-          }}
+         
         />
 
       {/* Country MODAL */}

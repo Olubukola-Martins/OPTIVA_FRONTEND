@@ -1,4 +1,4 @@
-import { Select, Tabs, TabsProps } from "antd";
+import { Tabs, TabsProps } from "antd";
 import { Fees } from "./Fees";
 import { AuthorizedPersons } from "./AuthorizedPersons";
 
@@ -18,13 +18,13 @@ export const DefineFeesAndAuthorizedPersonsTab = () => {
   return (
     <Tabs
       items={tabItems}
-      tabBarExtraContent={
-        <Select
-          allowClear
-          placeholder="Filter"
-          className="md:flex hidden w-[200px]"
-        />
-      }
+      // tabBarExtraContent={
+      //   <Select
+      //     allowClear
+      //     placeholder="Filter"
+      //     className="md:flex hidden w-[200px]"
+      //   />
+      // }
     />
   );
 };

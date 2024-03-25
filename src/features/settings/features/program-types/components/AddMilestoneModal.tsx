@@ -166,7 +166,7 @@ export const AddMilestoneModal = ({
           </div>
 
           <div>
-            <h2 className="p-1">What is the duration of the process?</h2>
+            <h2 className="p-1">What is the duration of the process (in days)?</h2>
             <Form.Item
               name="duration"
               rules={
@@ -196,7 +196,7 @@ export const AddMilestoneModal = ({
                         <Form.Item
                           {...field}
                           name={[field.name, "newDuration"]}
-                          label="What is the duration of the process?"
+                          label="What is the duration of the process (in days)?"
                           rules={
                             milestoneId
                               ? generalValidationRules

@@ -129,22 +129,3 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
   );
 };
 
-
-// const { mutate, isLoading } = useUploadProofofPayment();
-  // const { fileData, fileMutate, fileUploading } = useUploadFile();
-  // const queryClient = useQueryClient();
-  // const [form] = Form.useForm();
-  // const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false);
-  // const handleSubmit = async (val: any) => {
-  //   console.log("form values", val);
-  //   console.log("file data", fileData);
-  //   setIsUploadingFile(true);
-
-  //  await fileMutate({
-  //     newData: val.uploadFile,
-  //     url: `${END_POINT.BASE_URL}/admin/upload-file`,
-  //   });
-  //   setIsUploadingFile(false);
-
-  //   mutate({})
-  // };

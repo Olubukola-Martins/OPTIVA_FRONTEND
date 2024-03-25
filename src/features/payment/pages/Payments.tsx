@@ -1,6 +1,6 @@
-import { DatePicker, Form, InputNumber, Modal, Select } from "antd";
+import { DatePicker, Form,  InputNumber, Modal, Select } from "antd";
 import Search from "antd/es/input/Search";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
@@ -18,6 +18,7 @@ import {
 import { END_POINT } from "src/config/environment";
 import React from "react";
 import { usePagination } from "src/hooks/usePagination";
+import { useDebounce } from "src/hooks/useDebounce";
 
 export interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
@@ -47,15 +48,20 @@ const Payments = () => {
   const quotesUrl = `${END_POINT.BASE_URL}/admin/quotes`;
   const OutstandingPaymentUrl = `${END_POINT.BASE_URL}/admin/outstanding-payments`;
   const invoicesUrl = `${END_POINT.BASE_URL}/admin/invoice`;
+  const [currentTable, setCurrentTable] = useState("Payments List");
 
   const { pagination, onChange } = usePagination();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
 
+  const searchInputRef = useRef(null);
 
   // Payments list data
   const {
     data: allPaymentsData,
     isLoading: allPaymentsLoading,
   }: IQueryDataType<IAllPayments> = useFetchAllItems({
+    search:currentTable === "Payments List" ? debouncedSearchTerm : '',
     pagination,
     queryKey: QUERY_KEY_PAYMENTS,
     urlEndPoint: paymentsUrl,
@@ -65,6 +71,7 @@ const Payments = () => {
     data: allGenQuotesData,
     isLoading: allGenQuotesLoading,
   }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
+    search:currentTable === "Quotes Generated" ? debouncedSearchTerm : '',
     pagination,
     queryKey: QUERY_KEY_QUOTES,
     urlEndPoint: quotesUrl,
@@ -74,6 +81,7 @@ const Payments = () => {
     data: allOutPaymentData,
     isLoading: allOutPaymentLoading,
   }: IQueryDataType<IAllOutstandingPayments> = useFetchAllItems({
+    search:currentTable === "Outstanding Payments" ? debouncedSearchTerm : '',
     pagination,
     queryKey: QUERY_KEY_OUTSTANDING_PAYMENTS,
     urlEndPoint: OutstandingPaymentUrl,
@@ -83,6 +91,7 @@ const Payments = () => {
     data: allInvoices,
     isLoading: allInvoicesLoading,
   }: IQueryDataType<IAllInvoices> = useFetchAllItems({
+    search:currentTable === "Invoices Generated" ? debouncedSearchTerm : '',
     pagination,
     queryKey: QUERY_KEY_INVOICES,
     urlEndPoint: invoicesUrl,
@@ -92,7 +101,6 @@ const Payments = () => {
     allPaymentsData
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentTable, setCurrentTable] = useState("Payments List");
   const [modalForm] = Form.useForm();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const { RangePicker } = DatePicker;
@@ -266,6 +274,8 @@ const Payments = () => {
                     break;
                   case 1:
                     setCurrentTable("Quotes Generated");
+                // searchInputRef.current.input.value = "" 
+
                     break;
                   case 2:
                     setCurrentTable("Invoices Generated");
@@ -276,6 +286,8 @@ const Payments = () => {
                   default:
                     setCurrentTable("Payments List");
                 }
+                // if (searchInputRef.current){ searchInputRef.current.input.value = "" }
+                // searchInputRef.current.input.value = "" 
               }}
             />
           ))}
@@ -285,7 +297,9 @@ const Payments = () => {
 
           <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
             <div className="flex flex-row items-center gap-x-2">
-              <Search placeholder="Search" allowClear style={{ width: 150 }} />
+              <Search placeholder="Search" ref={searchInputRef} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
+            onChange={(e) => e.target.value === "" && setSearchTerm("")}
+ />
               <AppButton
                 label="Filter"
                 type="button"

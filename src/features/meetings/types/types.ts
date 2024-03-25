@@ -159,12 +159,16 @@ interface Links {
   prev?: any;
   next?: any;
 }
+
+
+
 export interface PaymentsDatum {
   id: number;
   application_id: number;
   quote_id: number;
   amount_paid: string;
   outstanding_payment: string;
+  branch_id: number;
   is_confirmed: boolean;
   created_at: string;
   updated_at: string;
@@ -194,6 +198,10 @@ interface Application {
   no_of_dependents: number;
   created_at: string;
   updated_at: string;
+  is_submitted: boolean;
+  is_authorized: number;
+  is_completed: number;
+  added_by: string;
   applicant: Applicant;
   country: Country;
   investmentroute: Investmentroute;
@@ -232,10 +240,14 @@ interface Applicant {
   full_name: string;
   applicant_unique_id: string;
   email_address: string;
+  phone_number: string;
   amount_paid: string;
   user_id?: any;
   created_at: string;
   updated_at: string;
+  uploaded: string;
+  verified: string;
+  validated: string;
 }
 
 // Quotes
@@ -333,7 +345,7 @@ export interface PaymentDetailDatum {
   date_paid: string;
   narration: string;
   proof_of_payment_file?: any;
-  paid_by: number;
+  paid_by: string;
   updated_by: Updatedby;
   created_at: string;
   updated_at: string;

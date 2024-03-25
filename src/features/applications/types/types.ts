@@ -1377,3 +1377,9 @@ export interface IUploadMultipleFiles {
   file: string;
 }
 
+// AUDIT APPROVAL
+export interface IAuditApproveOrRejectDoc {
+  approved?: string;
+  document_id: number;
+  rejected?:string
+}

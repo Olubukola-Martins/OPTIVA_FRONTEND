@@ -1,15 +1,15 @@
-import { Dropdown, Menu, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { DataSourceItem, IDocumentProps } from "./IdentityDocument";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  // QUERY_KEY_FOR_APPLICANT_DOCUMENT,
+  QUERY_KEY_FOR_APPLICANT_DOCUMENT,
   useGetApplicantDocumentCategory,
 } from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
-// import { useQueryClient } from "react-query";
-// import { openNotification } from "src/utils/notification";
-// import { useApproveorRejectDoc } from "../../hooks/Documet hooks/useApproveorRejectDoc";
+import { useQueryClient } from "react-query";
+import { openNotification } from "src/utils/notification";
+import { useHandoverDoc } from "../../hooks/Documet hooks/useHandoverDoc";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
 
@@ -22,9 +22,9 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
 
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [docUrl, setDocUrl] = useState<string>();
-  // const [docId, setDocId] = useState<number>();
-  // const queryClient = useQueryClient();
-  // const { mutate } = useApproveorRejectDoc();
+  const [docId, setDocId] = useState<number>();
+  const queryClient = useQueryClient();
+  const { mutate } = useHandoverDoc();
 
   useEffect(() => {
     if (data) {
@@ -59,56 +59,55 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
         });
       setDataArray(identityDocument);
     }
-    // refetch()
   }, [data, filterValue]);
 
-  // const approveDoc = () => {
-  //   mutate(
-  //     { approve: "accepted", document_id: docId as unknown as number },
-  //     {
-  //       onError: (error: any) => {
-  //         openNotification({
-  //           state: "error",
-  //           title: "Error Occurred",
-  //           description: error.response.data.message,
-  //           duration: 5,
-  //         });
-  //       },
-  //       onSuccess: (res: any) => {
-  //         openNotification({
-  //           state: "success",
-  //           title: "Success",
-  //           description: res.data.message,
-  //         });
-  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-  //       },
-  //     }
-  //   );
-  // };
+  const approveDoc = () => {
+    mutate(
+      { approve: "accepted", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
 
-  // const rejectDoc = () => {
-  //   mutate(
-  //     { decline: "declined", document_id: docId as unknown as number },
-  //     {
-  //       onError: (error: any) => {
-  //         openNotification({
-  //           state: "error",
-  //           title: "Error Occurred",
-  //           description: error.response.data.message,
-  //           duration: 5,
-  //         });
-  //       },
-  //       onSuccess: (res: any) => {
-  //         openNotification({
-  //           state: "success",
-  //           title: "Success",
-  //           description: res.data.message,
-  //         });
-  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-  //       },
-  //     }
-  //   );
-  // };
+  const rejectDoc = () => {
+    mutate(
+      { decline: "declined", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
 
   const columns: ColumnsType<DataSourceItem> = [
     {
@@ -191,6 +190,36 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 </Menu.Item>
                 <Menu.Item key="5">Download</Menu.Item>
                 <Menu.Item key="6">Replace</Menu.Item>
+                <Menu.Item
+                  key="7"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Confirm handover"
+                    description={`Are you sure to confirm handover of this document?`}
+                    onConfirm={approveDoc}
+                    okType="default"
+                  >
+                    Confirm Handover by DMS
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="8"
+                  onClick={() => {
+                    setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Decline handover"
+                    description={`Are you sure to decline handover of this document?`}
+                    onConfirm={rejectDoc}
+                    okType="default"
+                  >
+                    Decline Handover by DMS
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -208,19 +237,6 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
         dataSource={dataArray}
         loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
-        rowSelection={{
-          type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
-        }}
       />
 
       <div className="flex justify-end gap-3 my-5 py-2">

@@ -86,9 +86,9 @@ export const appRoute = {
     format: `/applications/applicant_documents_comments/:id`,
     path: `/applications/applicant_documents_comments/${id}`,
   }),
-  generate_quotes: (id?: number) => ({
-    format: `/applications/generate_quotes/:id`,
-    path: `/applications/generate_quotes/${id}`,
+  generate_quotes: (id?: number, investId?:number, countryId?:number) => ({
+    format: `/applications/generate_quotes/:id/:countryId/:investId`,
+    path: `/applications/generate_quotes/${id}/${countryId}/${investId}`,
   }),
 
   // Reports

@@ -72,7 +72,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td style={tdStyle} colSpan={2}>
               Grenada Real Estate Investment
             </td>
-            <td style={tdStyle}>${applicantQuote?.grenadaRealEstateTotal}</td>
+            <td style={tdPayment}>${applicantQuote?.grenadaRealEstateTotal}</td>
           </tr>
 
           {/* */}
@@ -80,7 +80,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td colSpan={2} style={tdStyle}>
               Grenada Gov't Fee
             </td>
-            <td style={tdStyle}>${applicantQuote?.govt_fee}</td>
+            <td style={tdPayment}>${applicantQuote?.govt_fee}</td>
           </tr>
 
           {/*  */}
@@ -88,7 +88,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td colSpan={2} style={tdStyle}>
               Grenada Gov't Application Fee
             </td>
-            <td style={tdStyle}>${applicantQuote?.govt_application_fee}</td>
+            <td style={tdPayment}>${applicantQuote?.govt_application_fee}</td>
           </tr>
 
           {/* */}
@@ -96,7 +96,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td colSpan={2} style={tdStyle}>
               Grenada Gov't Due Diligence Fee
             </td>
-            <td style={tdStyle}>${applicantQuote?.govt_due_diligence_fee}</td>
+            <td style={tdPayment}>${applicantQuote?.govt_due_diligence_fee}</td>
           </tr>
 
           {/*  */}
@@ -104,14 +104,14 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td colSpan={2} style={tdStyle}>
               Grenada Gov't Processing Fee
             </td>
-            <td style={tdStyle}>${applicantQuote?.govt_processing_fee}</td>
+            <td style={tdPayment}>${applicantQuote?.govt_processing_fee}</td>
           </tr>
           {/* {} */}
           <tr>
             <td colSpan={2} style={tdStyle}>
               Grenada Gov't Passport, Oath & Allegiance Fee
             </td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               ${applicantQuote?.govt_passport_oath_and_allegiance_fee}
             </td>
           </tr>
@@ -121,7 +121,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td style={tdStyle} colSpan={2}>
               Grenada Legal & Advisory Fee
             </td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               ${applicantQuote?.grenada_legal_and_advisory_fee}
             </td>
           </tr>
@@ -135,7 +135,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             >
               Grenada Total Quote
             </td>
-            <td style={tdStyle} className="font-bold">
+            <td style={tdPayment} className="font-bold">
               ${applicantQuote?.program_grand_total}
             </td>
           </tr>
@@ -155,7 +155,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td style={tdStyle} colSpan={2}>
               Local Processing Fee
             </td>
-            <td style={tdStyle}>${applicantQuote?.localProcessingFee}</td>
+            <td style={tdPayment}>${applicantQuote?.localProcessingFee}</td>
           </tr>
 
           {/* EMPTY ROW */}
@@ -178,29 +178,27 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
 
           {/* ROW 12 */}
           <tr>
-            <td style={tdPayment} colSpan={3} className="font-bold not-italic">
+            <td style={tdPayment} colSpan={3} className="font-bold">
               Payment Plan
             </td>
-            {/* <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.grenada_bank_fee}
-            </td> */}
+           
           </tr>
 
           <tr>
             <td style={tdStyle}>Grenada Total Due Now</td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               {applicantQuote?.country_fee_due_now_percentage}%
             </td>
-            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
+            <td style={tdPayment}>${applicantQuote?.country_fee_due_now}</td>
           </tr>
 
           {/*  */}
           <tr>
             <td style={tdStyle}>Local Processing Fee Due Now</td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               {applicantQuote?.local_processing_fee_due_now_percentage}%
             </td>
-            <td style={tdStyle}>${applicantQuote?.localProcessingFeeDueNow}</td>
+            <td style={tdPayment}>${applicantQuote?.localProcessingFeeDueNow}</td>
           </tr>
 
           {/*  */}
@@ -212,7 +210,7 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             >
               Total Due Now
             </td>
-            <td style={tdStyle} className="text-[#EC5252] font-bold">
+            <td style={tdPayment} className="text-[#EC5252] font-bold">
               ${applicantQuote?.programTotalDueNow}
             </td>
           </tr>
@@ -222,98 +220,11 @@ export const GrenadaEstateQuoteTable: React.FC<IGetQuoteProps> = ({ id }) => {
             <td style={tdStyle} colSpan={2} className="text-right">
               Balance Due On Citizenship Approval
             </td>
-            <td style={tdStyle}>
+            <td style={tdPayment}>
               ${applicantQuote?.total_due_on_citizenship_approval}
             </td>
           </tr>
-          {/* ROW 13 */}
-          {/* <tr>
-            <td style={tdStyle} colSpan={2}>
-              Program Total Due After Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.programTotalDueAfterApproval}
-            </td>
-          </tr> */}
-          {/* ROW 3 */}
-          {/* <tr>
-            <td style={tdStyle}>Country Fee Due Now</td>
-            <td style={tdStyle}>
-              {applicantQuote?.country_fee_due_now_percentage}%
-            </td>
-            <td style={tdStyle}>${applicantQuote?.country_fee_due_now}</td>
-          </tr> */}
-
-          {/* ROW 4 */}
-          {/* <tr>
-            <td style={tdStyle} colSpan={2}>
-              Country Fee Due On Approval
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.country_fee_due_on_approval}
-            </td>
-          </tr> */}
-
-          {/* EMPTY ROW */}
-          {/* <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr> */}
-          {/* ROW 12 */}
-          {/* <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Grenada Bank Fee
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.grenada_bank_fee}
-            </td>
-          </tr> */}
-
-          {/* <tr>
-            <td style={tdStyle} colSpan={2} className="text-right font-bold ">
-              Grenada Local Agent Fee
-            </td>
-            <td style={tdStyle} className="font-bold">
-              ${applicantQuote?.grenada_local_agent_fee}
-            </td>
-          </tr> */}
-
-          {/* EMPTY ROW */}
-          {/* <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr> */}
-
-          {/* EMPTY ROW */}
-          {/* <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr> */}
-          {/* ROW 17 */}
-          {/* <tr>
-            <td style={tdStyle} colSpan={2}>
-              Real Estate Investment Fee
-            </td>
-            <td style={tdStyle}>
-              ${applicantQuote?.real_estate_investment_fee}
-            </td>
-          </tr> */}
-          {/* EMPTY ROW */}
-          {/* <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr> */}
-
-          {/* EMPTY ROW */}
-          {/* <tr>
-            <td colSpan={3} style={tdStyle} className="bg-white text-white">
-              -
-            </td>
-          </tr> */}
+         
         </table>
       </div>
     </Skeleton>

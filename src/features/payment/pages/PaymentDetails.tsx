@@ -117,9 +117,6 @@ const PaymentDetails = () => {
   const { Text } = Typography;
   const { id } = useParams();
   const paymentsId = Number(id);
-  // const [searchTerm, setSearchTerm] = useState<string>("");
-  // const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-  // const [itemId, setItemId] = useState<number>();
   const [preSelectedFile, setPreSelectedFile] = useState<string>();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   // const {paymentsData} = useContext(AllPaymentsContext);
@@ -143,16 +140,27 @@ const PaymentDetails = () => {
   const { fileData, fileUploading, fileMutate } = useUploadFile();
   const [fileDataUrl, setFileDataUrl] = useState<string>();
   console.log(fileDataUrl,indexEdited )
+
   const { data: paymentProofData, isLoading: paymentProofLoading } =
     viewProofOfPayment({ paymentDetailId: currentDetailIdForProof as number });
   // Fetch Financial Statement
   const {
     data: finStatementData,
     isLoading: finStatementLoading,
-  }: IQueryDataType<IGenFinancialState> = generateFinancialStatement({
+    refetch:refetchFinStatement
+  }: {
+    data: IGenFinancialState | undefined;
+    isLoading: boolean;
+    refetch: <TPageData>(
+      options?: (RefetchOptions & RefetchQueryFilters<TPageData>) | undefined
+    ) => Promise<QueryObserverResult<any, unknown>>;
+  } = generateFinancialStatement({
     itemId: paymentsId,
     // itemId: itemId as number,
   });
+  // : IQueryDataType<IGenFinancialState>
+
+
 
   // Fetch all employees
   const { data: allEmployees, isLoading: allEmployeesLoading } =
@@ -208,7 +216,8 @@ const PaymentDetails = () => {
           setIsModalOpen(false);
           modalForm.resetFields();
           setFileList([]);
-          queryClient.invalidateQueries([
+          if (paymentDetailsData?.data.length === 1)refetchFinStatement();
+          queryClient.refetchQueries([
             QUERY_KEY_ALLPAYMENT_DETAILS,
             itemId as number,
           ]);
@@ -323,7 +332,7 @@ const PaymentDetails = () => {
   }, [allPaymentsData, allPaymentsLoading, selectedApplication, paymentsId]);
 
   useEffect(() => {
-    if (paymentDetailsData?.data && allRatesData && allEmployeesData) {
+    if (paymentDetailsData?.data && allRatesData ) {
       const allPaymentDetails = paymentDetailsData.data.map((paymentDetail) => {
         const {
           id,
@@ -341,9 +350,9 @@ const PaymentDetails = () => {
         // const currentRate = allRatesData.find(
         //   (rate: { id: number }) => rate.id === +fx_rate
         // );
-        const currentPaidByEmployee = allEmployeesData.find(
-          (employee: { id: number }) => employee.id === paid_by
-        );
+        // const currentPaidByEmployee = allEmployeesData.find(
+        //   (employee: { id: number }) => employee.id === paid_by
+        // );
         return {
           key: id,
           balanceDue: (
@@ -384,7 +393,8 @@ const PaymentDetails = () => {
           paidBy: (
             <Form.Item name={`${id}paidBy`} initialValue={paid_by}>
               <Text>
-                {allEmployeesData && paid_by && currentPaidByEmployee?.name}
+                {/* {allEmployeesData && paid_by && currentPaidByEmployee?.name} */}
+                { paid_by }
               </Text>
             </Form.Item>
           ),
@@ -483,7 +493,7 @@ const PaymentDetails = () => {
         {
           key: 1,
           item: "Total to be paid",
-          amount: (+outstanding_payment - +amount_paid).toLocaleString(
+          amount: (+outstanding_payment + +amount_paid).toLocaleString(
             "en-US",
             {
               style: "currency",
@@ -808,7 +818,7 @@ const PaymentDetails = () => {
                 {/* addonBefore={prefixSelector} */}
                 <p className="pb-2">Phone Number</p>
                 <Input
-                  value={selectedApplication.application.applicant.id}
+                  value={selectedApplication.application.applicant.phone_number}
                   disabled
                   allowClear
                   className="p-2.5"
@@ -990,6 +1000,7 @@ const PaymentDetails = () => {
             type="button"
             label="Generate Financial Statement"
             containerStyle="px-4 py-3.5 text-base"
+            isDisabled={paymentDetailsData?.data.length === 0}
             handleClick={() =>
               navigate(appRoute.financialStatement(Number(id) as number).path)
             }
