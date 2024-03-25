@@ -13,10 +13,7 @@ export const OutstandingDocuments: React.FC<IModalProps> = ({
   open,
   applicantId,
 }) => {
-  const { data } = useFetchOutstandingDocuments({
-    id: applicantId as unknown as number,
-  });
-
+  const { data } = useFetchOutstandingDocuments(applicantId as number);
   return (
     <>
       <Modal open={open} onCancel={onCancel} footer={null}>
@@ -26,7 +23,12 @@ export const OutstandingDocuments: React.FC<IModalProps> = ({
         {data && data?.length > 0 ? (
           data?.map((item) => (
             <div>
-              <p>{item.name}</p>
+              <h3 className="font-semibold text-base">
+                {" "}
+                The outstanding documents for this applicant is as follows:
+              </h3>
+
+              <p className="flex items-center gap-3"><i className="ri-check-line"></i>{item.name}</p>
             </div>
           ))
         ) : (
@@ -42,34 +44,6 @@ export const OutstandingDocuments: React.FC<IModalProps> = ({
           />
           {/* <AppButton label="Save" type="submit" /> */}
         </div>
-        {/* <Form form={form} onFinish={handleSubmit} layout="vertical">
-          <h1 className="p-4 font-bold text-center text-lg">
-            Select Outstanding Document 
-          </h1>
-          <Form.Item
-            name="outstandingDoc"
-            label="Select Document(s)"
-            rules={generalValidationRules}
-          >
-            <Select mode="multiple">
-              {data?.map((item) => (
-                <Select.Option key={item.id} value={item.id}>
-                  {item.name}
-                </Select.Option>
-              ))}
-            </Select>
-
-           </Form.Item>
-
-          <div className="flex items-center justify-center gap-5">
-            <AppButton
-              label="Cancel"
-              type="reset"
-              variant="transparent"
-            />
-            <AppButton label="Save" type="submit" />
-          </div>
-        </Form> */}
       </Modal>
     </>
   );

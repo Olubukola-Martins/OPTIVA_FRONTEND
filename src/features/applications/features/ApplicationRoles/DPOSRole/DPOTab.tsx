@@ -4,6 +4,7 @@ import { DPOPortfolio } from "./DPOPortfolio";
 import { Tabs, Input, Select } from "antd";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
+// import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
 export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
   const { data } = useFetchUserProfile()
@@ -69,6 +70,8 @@ export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
                     label: `Customer Engager's  List`,
                   },
                 ]}
+              //   onChange={(value) => onRoleSelect(value, roleOptions.find(option => option.value === value)?.label || "")}
+              // options={roleOptions}
               />
             )}
           </div>

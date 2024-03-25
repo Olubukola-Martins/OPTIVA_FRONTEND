@@ -28,6 +28,7 @@ import { createFileValidationRule } from "src/features/settings/features/authori
 import { TFileType } from "src/features/settings/features/authorizedPersons/components/AddAuthorizedPerson";
 import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
 import { useHandoverDoc } from "../../hooks/Documet hooks/useHandoverDoc";
+import { useAuditApproveOrRejectDoc } from "../../hooks/Documet hooks/useAuditApproveOrRejectDoc";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -70,6 +71,54 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const { mutate } = useHandoverDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
+  const { mutate:auditMutate}=useAuditApproveOrRejectDoc()
+
+  const auditApprove = () => {
+    auditMutate(
+      { approved: "approved", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
+  const auditReject = () => {
+    auditMutate(
+      { rejected: "rejected", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
 
   const props: UploadProps = {
     onRemove: (file) => {
@@ -285,26 +334,35 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   </a>
                 </Menu.Item>
                 {/* {userData?.id === 3 && ( */}
-                <Menu.Item
+               <Menu.Item
                   key="2"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
-                    approveDoc();
                   }}
                 >
-                  Accept Document
+                  <Popconfirm
+                    title="Approve document"
+                    description={`Are you sure to accept this document?`}
+                    onConfirm={auditApprove}
+                    okType="default"
+                  >
+                    Accept Document
+                  </Popconfirm>
                 </Menu.Item>
-                {/* )} */}
-
-                {/* {userData?.id === 3 && ( */}
                 <Menu.Item
                   key="3"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
-                    rejectDoc();
                   }}
                 >
-                  Decline Document
+                  <Popconfirm
+                    title="Decline document"
+                    description={`Are you sure to decline this document?`}
+                    onConfirm={auditReject}
+                    okType="default"
+                  >
+                    Decline Document
+                  </Popconfirm>
                 </Menu.Item>
                 {/* )} */}
                 <Menu.Item key="4">

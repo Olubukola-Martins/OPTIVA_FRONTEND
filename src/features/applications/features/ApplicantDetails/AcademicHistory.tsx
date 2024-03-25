@@ -75,12 +75,12 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
               // </Form.Item>
               <Form.Item
                 key={item.id}
-                name={item.form_question}
-                label={item.form_question}
+                name={item.question.schema_name}
+                label={item.question.form_question}
               >
                 {renderDetailsInput(
-                  item.input_type,
-                  item.options,
+                  item.question.input_type,
+                  item.question.options,
                   // item.section_one_response,
                   // (value) => handleSelectChange(item.form_question, value)
                 )}

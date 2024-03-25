@@ -12,6 +12,7 @@ import { openNotification } from "src/utils/notification";
 import { useHandoverDoc } from "../../hooks/Documet hooks/useHandoverDoc";
 import { AppButton } from "src/components/button/AppButton";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import { useAuditApproveOrRejectDoc } from "../../hooks/Documet hooks/useAuditApproveOrRejectDoc";
 
 export const TravelHistory: React.FC<IDocumentProps> = ({
   filterValue,
@@ -25,7 +26,8 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
   const [docId, setDocId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate } = useHandoverDoc();
-
+  const { mutate: auditMutate } = useAuditApproveOrRejectDoc()
+  
   useEffect(() => {
     if (data) {
       const identityDocument: DataSourceItem[] = data
@@ -108,7 +110,52 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
       }
     );
   };
-
+  const auditApprove = () => {
+    auditMutate(
+      { approved: "approved", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
+  const auditReject = () => {
+    auditMutate(
+      { rejected: "rejected", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -159,24 +206,36 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                     View Document
                   </a>{" "}
                 </Menu.Item>
-                {/* <Menu.Item
+                <Menu.Item
                   key="2"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
-                    approveDoc();
                   }}
                 >
-                  Accept Document
+                  <Popconfirm
+                    title="Approve document"
+                    description={`Are you sure to accept this document?`}
+                    onConfirm={auditApprove}
+                    okType="default"
+                  >
+                    Accept Document
+                  </Popconfirm>
                 </Menu.Item>
                 <Menu.Item
                   key="3"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
-                    rejectDoc();
                   }}
                 >
-                  Decline Document
-                </Menu.Item> */}
+                  <Popconfirm
+                    title="Decline document"
+                    description={`Are you sure to decline this document?`}
+                    onConfirm={auditReject}
+                    okType="default"
+                  >
+                    Decline Document
+                  </Popconfirm>
+                </Menu.Item>
                 <Menu.Item key="4">
                   <Link
                     to={

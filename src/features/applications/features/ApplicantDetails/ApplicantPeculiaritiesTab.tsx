@@ -71,7 +71,7 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
       const initialValues: Record<string, any> = {};
       data.forEach((item) => {
         if (item.subsection_name === tabItems[currentTab].subsectionName) {
-          initialValues[item.schema_name] = item.response;
+          initialValues[item.question.schema_name] = item.response;
         }
       });
       form.setFieldsValue(initialValues);

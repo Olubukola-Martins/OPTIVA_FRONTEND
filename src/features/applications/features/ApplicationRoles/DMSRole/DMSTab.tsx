@@ -3,6 +3,7 @@ import { AllDMSApplicants } from "./AllDMSApplicants";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 import { useState } from "react";
+// import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
 export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
   const { data } = useFetchUserProfile();
@@ -68,6 +69,8 @@ export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
                     label: `Customer Engager's  List`,
                   },
                 ]}
+              //   onChange={(value) => onRoleSelect(value, roleOptions.find(option => option.value === value)?.label || "")}
+              // options={roleOptions}
               />
             )}
             <Select

@@ -40,26 +40,34 @@ interface Response {
   response: string[];
   subsection_name?: string;
 }
-// 
+//
 
 //GET APPLICATION RESPONSE
 export interface IGetApplicationResponse {
   id: number;
+  question_id: number;
+  application_id: number;
+  section_name: string;
+  subsection_name: string;
+  response: any[];
+  created_at: string;
+  updated_at: string;
+  question: Question;
+}
+
+interface Question {
+  id: number;
   template_id?: any;
   form_question: string;
   input_type: string;
-  options?: any[]
+  options?: any;
   is_required: number;
   section_name: string;
-  subsection_name?: string;
+  subsection_name: string;
   schema_name: string;
   created_at: string;
   updated_at: string;
-  question_id: number;
-  application_id: number;
-  response: string;
 }
-
 // UPDATE APPLICATION STATUS
 export interface IApplicationStatus {
   id: number;
@@ -157,16 +165,24 @@ export interface ICreateDocComment {
   applicant_document_id: number;
   content: string;
 }
+// interface IGetProcessingStrategy {
+//   [key: string]: {
+//     strategy: string;
+//     steps: string;
+//   };
+// }
 
 // GET PROCESSING STRATEGY
 export interface IGetProcessingStrategy {
-  id: number;
-  strategy: string;
-  steps: string;
-  application_id: number;
-  user_id: number;
-  created_at: string;
-  updated_at: string;
+  [key: string]: {
+    id: number;
+    strategy: string;
+    steps: string;
+    application_id: number;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+  }
 }
 
 // CREATE PROCESSING STRATEGY

@@ -8,7 +8,8 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGet
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { useEffect } from "react";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
-import { renderInput } from "../NewApplication/NewApplicantBrief";
+// import { renderInput } from "../NewApplication/NewApplicantBrief";
+import { renderDetailsInput } from "./AcademicHistory";
 
 export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   const { id } = useParams();
@@ -28,11 +29,12 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
     if (data && data.length > 0) {
       const initialValues: Record<string, any> = {};
       data.forEach((item) => {
-        initialValues[item.schema_name] = item.response || null;
+        initialValues[item.question.schema_name] = item.response || null;
       });
       form.setFieldsValue(initialValues);
     }
-  }, [data]);
+  }, [data, form]);
+  
 
  
   const handleSubmit = (values: any) => {
@@ -40,7 +42,7 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
       application_id: Number(id),
       responses: data?.map((item) => ({
         question_id: item.id,
-        response: Array.isArray(values[item.schema_name]) ? values[item.schema_name] : [values[item.schema_name]],
+        response: Array.isArray(values[item.question.schema_name]) ? values[item.question.schema_name] : [values[item.question.schema_name]],
       })) || [],
     };
     mutate(payload, {
@@ -68,14 +70,14 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
       <Skeleton active loading={isLoading}>
         {data?.length !== 0 ? (
           <Form onFinish={handleSubmit} form={form} layout="vertical" requiredMark={false}>
-            {data?.map((item) => (
+           {data?.map((item) => (
               <Form.Item
-                name={item.schema_name}
-                label={item.form_question}
-                key={item.id}
+                name={item.question.schema_name}
+                label={item.question.form_question}
+                key={item.question_id}
                 className="w-full"
               >
-                {renderInput(item.input_type, )}
+                {renderDetailsInput(item.question.input_type, item.question.options )}
               </Form.Item>
             ))}
             <div className="flex justify-between items-center gap-5">
