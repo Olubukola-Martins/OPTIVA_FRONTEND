@@ -138,7 +138,7 @@ window.open(link, "_blank");
                           "en-US",
                           {
                             style: "currency",
-                            currency: "NGN",
+                            currency: "USD",
                             maximumFractionDigits: 2,
                           }
                         )}
