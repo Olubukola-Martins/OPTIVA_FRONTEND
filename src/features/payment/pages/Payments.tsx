@@ -129,13 +129,13 @@ const Payments = () => {
     "Total payments Made",
     "Total Quotes Generated",
     "Total Invoices Generated",
-    "Outstanding Payment",
+    "Outstanding Payments",
   ];
   const cardCounts: number[] = [
-    allPaymentsData?.data.length as number,
-    allGenQuotesData?.data.length as number,
-    allInvoices?.data.length as number,
-    allOutPaymentData?.data.length as number,
+    allPaymentsData?.meta.total as number,
+    allGenQuotesData?.data.total as number,
+    allInvoices?.meta.total as number,
+    allOutPaymentData?.meta.total as number,
   ];
 
   useEffect(() => {
@@ -154,7 +154,7 @@ const Payments = () => {
     <AllPaymentsContext.Provider value={{ paymentsData, setPaymentsData }}>
       <>
         <Modal
-          title="Filter"
+          title={`Filter ${currentTable}`}
           footer={null}
           open={isModalOpen}
           onCancel={() => setIsModalOpen(false)}
@@ -244,7 +244,7 @@ const Payments = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item name="filterAmount" label="Filter Amount">
+            <Form.Item className={`${currentTable === "Quotes Generated" || currentTable === "Invoices Generated" ? "hidden" : ""}`} name="filterAmount" label="Filter Amount">
               <InputNumber addonAfter="$" />
             </Form.Item>
               
@@ -299,9 +299,11 @@ const Payments = () => {
 
           <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
             <div className="flex flex-row items-center gap-x-2">
-              <Search placeholder="Search" ref={searchInputRef} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
-            onChange={(e) => e.target.value === "" && setSearchTerm("")}
- />
+              {/* <Search placeholder="Search" ref={searchInputRef} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
+            onChange={(e) => setSearchTerm(e.target.value)} /> */}
+               <Search placeholder="Search" ref={searchInputRef} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
+            onChange={(e) => e.target.value === "" && setSearchTerm("")} 
+ /> 
               <AppButton
                 label="Filter"
                 type="button"

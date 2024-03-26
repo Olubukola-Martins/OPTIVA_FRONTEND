@@ -58,7 +58,6 @@ export const OnboardingEmail = () => {
   const { data: applicantData } = useGetSingleApplicant({
     id: id as unknown as number,
   });
-
   const handleSendEmail = () => {
     mutate(
       {

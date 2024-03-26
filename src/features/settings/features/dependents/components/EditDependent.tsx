@@ -13,7 +13,6 @@ import {
 } from "src/features/settings/types/settingsType";
 import useUpdateEligibleDependents from "../hooks/useUpdateEligibleDependents";
 import { useEffect } from "react";
-import { useQueryClient } from "react-query";
 
 interface IEditDepOrops extends IdentifierProps {
   itemId: number;
@@ -34,7 +33,6 @@ export const EditDependent = ({
     // isSuccess,
     isLoading: editLoading,
   } = useUpdateEligibleDependents();
-  const queryClient = useQueryClient();
 
   editing(editLoading)
 
