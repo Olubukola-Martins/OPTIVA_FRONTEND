@@ -28,7 +28,7 @@ const useUpdateEligibleDependents = () => {
             description: response.data.message,
             state: "success",
           });
-          queryClient.invalidateQueries([QUERY_KEY_ELIGIBLE_DEPENDENTS, id]);
+          queryClient.refetchQueries([QUERY_KEY_ELIGIBLE_DEPENDENTS]);
         },
       }
     );
