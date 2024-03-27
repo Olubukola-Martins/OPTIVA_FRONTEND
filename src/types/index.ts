@@ -57,13 +57,14 @@ export interface paginationAndFilterProps {
   pagination?: {
     pageSize?: number;
     current?: number;
+    subsection_name?:string
   };
   search?: string;
   currentUrl?: string;
   country_id?: number[]
   program_id?: number[]
   status?: string
-  subsection_name?:string
+
 }
 
 export interface searchValueProps {

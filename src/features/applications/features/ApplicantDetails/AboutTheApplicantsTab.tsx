@@ -9,9 +9,8 @@ import { EmploymentDetails } from "./EmploymentDetails";
 import { BusinessIncomeAndNetwork } from "./BusinessIncomeAndNetwork";
 import { AcademicHistory } from "./AcademicHistory";
 import { TravelDetailsAndHistory } from "./TravelDetailsAndHistory";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
@@ -26,10 +25,10 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
 }) => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { id } = useParams();
-  const { data } = useGetApplicationResponse({
-    id: id as unknown as number,
-    section: "sectiontworesponse",
-  });
+  // const { data } = useGetApplicationResponse({
+  //   id: id as unknown as number,
+  //   section: "sectiontworesponse",
+  // });
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { mutate, isLoading } =
@@ -73,17 +72,17 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
     });
   };
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      const initialValues: Record<string, any> = {};
-      data.forEach((item) => {
-        if (item.subsection_name === tabItems[currentTab].subsectionName) {
-          initialValues[item.question.schema_name] = item.response;
-        }
-      });
-      form.setFieldsValue(initialValues);
-    }
-  }, [data, currentTab]);
+  // useEffect(() => {
+  //   if (data && data.length > 0) {
+  //     const initialValues: Record<string, any> = {};
+  //     data.forEach((item) => {
+  //       if (item.subsection_name === tabItems[currentTab].subsectionName) {
+  //         initialValues[item.question.schema_name] = item.response;
+  //       }
+  //     });
+  //     form.setFieldsValue(initialValues);
+  //   }
+  // }, [data, currentTab]);
   const tabItems: {
     label: string;
     children: React.ReactNode;
@@ -98,6 +97,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
         <PersonalDetails
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           subsectionName="personalDetails"
+          form={form}
         />
       ),
     },

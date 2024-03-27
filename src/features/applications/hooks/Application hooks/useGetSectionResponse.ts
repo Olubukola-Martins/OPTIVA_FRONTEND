@@ -9,7 +9,7 @@ import { useGetToken } from "src/hooks/useGetToken";
 const getData = async (props: paginationAndFilterProps): Promise<{ data: IGetApplicationResponse[]; total: number }> => {
     const token = useGetToken();
 
-    const { subsection_name, currentUrl } = props;
+    const {  currentUrl, pagination } = props;
     const url = `${END_POINT.BASE_URL}/admin/application/${currentUrl}`;
     const config = {
       headers: {
@@ -17,12 +17,14 @@ const getData = async (props: paginationAndFilterProps): Promise<{ data: IGetApp
         Authorization: `Bearer ${token}`,
       },
       params: {
-        subsection_name
+          subsection_name:pagination?.subsection_name,
+          page: pagination?.current,
+          limit: pagination?.pageSize,
       }
     };
   
     const res = await axios.get(url, config);
-    const data: IGetApplicationResponse[] = res.data.data.data.map((item: IGetApplicationResponse) => ({
+    const data: IGetApplicationResponse[] = res.data.data.map((item: IGetApplicationResponse) => ({
       ...item,
     }));
 
@@ -35,12 +37,12 @@ const getData = async (props: paginationAndFilterProps): Promise<{ data: IGetApp
 };
 
 export const useGetSectionResponse = ({
-    subsection_name,
+    pagination,
     currentUrl,
   }: paginationAndFilterProps = {}) => {
     const queryData = useQuery(
-      [QUERY_KEY_FOR_APPLICATIONS, subsection_name, currentUrl],
-      () => getData({ subsection_name, currentUrl }),
+      [QUERY_KEY_FOR_APPLICATIONS, pagination, currentUrl],
+      () => getData({ pagination, currentUrl }),
       {
         onError: () => {},
         onSuccess: () => {},

@@ -8,8 +8,9 @@ import {
   Tooltip,
 } from "antd";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
+import { useEffect } from "react";
+import { useGetSectionResponse } from "../../hooks/Application hooks/useGetSectionResponse";
 
 export const renderDetailsInput = (inputType: string, options?: any[]) => {
   if (inputType === "textarea") {
@@ -50,29 +51,34 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
   subsectionName,
   onPrevTabItem,
+  form
 }) => {
   const { id } = useParams();
-  const { data } = useGetApplicationResponse({
-    id: id as unknown as number,
-    section: "sectiontworesponse",
+
+  const { data: sectionTwoData } = useGetSectionResponse({
+    pagination: {
+      subsection_name: subsectionName,
+    },
+    currentUrl: `${id as unknown as number}/sectiontworesponse`,
   });
 
+  useEffect(() => {
+    if (sectionTwoData?.data && sectionTwoData.data.length > 0) {
+      const initialValues: Record<string, any> = {};
+      sectionTwoData.data.forEach(item => {
+        initialValues[item.question.schema_name] = item.response;
+      });
+      form?.setFieldsValue(initialValues);
+    }
+  }, [sectionTwoData]);
+  
+  
   return (
     <>
-      {data?.length ? (
-        data.map(
+      {sectionTwoData?.data?.length ? (
+       sectionTwoData.data.map(
           (item) =>
             item.subsection_name === subsectionName && (
-              // <Form.Item
-              //   key={item.id}
-              //   name={item.question.schema_name}
-              //   label={item.question.form_question}
-              // >
-              //   {renderDetailsInput(
-              //     item.question.input_type,
-              //     item.question.options
-              //   )}
-              // </Form.Item>
               <Form.Item
                 key={item.id}
                 name={item.question.schema_name}
@@ -80,9 +86,8 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
               >
                 {renderDetailsInput(
                   item.question.input_type,
-                  item.question.options,
-                  // item.section_one_response,
-                  // (value) => handleSelectChange(item.form_question, value)
+                  item.question.options
+                 
                 )}
               </Form.Item>
             )
