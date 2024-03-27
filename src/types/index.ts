@@ -63,7 +63,7 @@ export interface paginationAndFilterProps {
   country_id?: number[]
   program_id?: number[]
   status?: string
-  
+  subsection_name?:string
 }
 
 export interface searchValueProps {
