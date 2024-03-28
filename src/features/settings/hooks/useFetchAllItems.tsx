@@ -7,10 +7,6 @@ import { TablePaginationConfig } from "antd";
 const getData = async (props: {
   token: string;
   urlEndPoint: string;
-  // pagination?: {
-  //   pageSize?: number;
-  //   current?: number;
-  // };
   pagination?:TablePaginationConfig;
   search?: string;
   otherParams?:{ [key: string]: any }
@@ -31,9 +27,6 @@ const getData = async (props: {
 
   const res = await axios.get(url, config);
     const item: any = res.data;
-  //  const total= res.data.meta.total
-
-  // return {item,total};
   return item;
 };
 
@@ -48,9 +41,11 @@ export const useFetchAllItems = ({
   otherParams?:{ [key: string]: any }
 }) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery(
-    [queryKey,pagination, search,],
-    () => getData({ token, urlEndPoint,pagination, search , ...otherParams}),
+  const otherParamValues = otherParams ? Object.values(otherParams) : [];
+    const queryData = useQuery(
+
+    [queryKey,pagination,...otherParamValues, search],
+    () => getData({ token, urlEndPoint,pagination, search , otherParams}),
     {
       onError: (error: any) => {
         openNotification({
@@ -61,6 +56,7 @@ export const useFetchAllItems = ({
         });
       },
       onSuccess: () => {
+
       },
     }
   );

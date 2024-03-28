@@ -1,6 +1,6 @@
-import { DatePicker, Form,    InputNumber, Modal, Select } from "antd";
+import { DatePicker, Form,    InputNumber, Modal,  } from "antd";
 import Search from "antd/es/input/Search";
-import { useEffect,  useState } from "react";
+import {   useMemo,  useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
@@ -45,11 +45,13 @@ export const QUERY_KEY_PAYMENTS = "AllPayments";
 export const QUERY_KEY_QUOTES = "AllQuotes";
 export const QUERY_KEY_OUTSTANDING_PAYMENTS = "AllOutstandingPayment";
 export const QUERY_KEY_INVOICES = "Invoices";
+export const QUERY_KEY_PAYMENT_DASHBOARD = "payment-dashboard";
 
 const Payments = () => {
   const quotesUrl = `${END_POINT.BASE_URL}/admin/quotes`;
   const OutstandingPaymentUrl = `${END_POINT.BASE_URL}/admin/outstanding-payments`;
   const invoicesUrl = `${END_POINT.BASE_URL}/admin/invoice`;
+  const paymentDashboardUrl = `${END_POINT.BASE_URL}/admin/payment-dashboard`
   const [currentTable, setCurrentTable] = useState("Payments List");
   const [searchValue, setSearchValue] = useState('');
   const { pagination, onChange } = usePagination();
@@ -61,6 +63,7 @@ const Payments = () => {
   
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
 
+  const {data:paymentDashboardData,isLoading:payDashboardLoading} = useFetchAllItems({queryKey:QUERY_KEY_PAYMENT_DASHBOARD, urlEndPoint: paymentDashboardUrl})
 
   // Payments list data
   const {
@@ -68,7 +71,8 @@ const Payments = () => {
     isLoading: allPaymentsLoading,
   }: IQueryDataType<IAllPayments> = useFetchAllItems({
     search:currentTable === "Payments List" ? debouncedSearchTerm : '',
-    pagination,otherParams:undefined,
+    pagination,
+    otherParams:currentTable === "Payments List" ? filterValues : undefined,
     queryKey: QUERY_KEY_PAYMENTS,
     urlEndPoint: paymentsUrl,
   });
@@ -79,6 +83,7 @@ const Payments = () => {
   }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
     search:currentTable === "Quotes Generated" ? debouncedSearchTerm : '',
     pagination,
+    otherParams:currentTable === "Quotes Generated" ? filterValues :undefined,
     queryKey: QUERY_KEY_QUOTES,
     urlEndPoint: quotesUrl,
   });
@@ -88,6 +93,7 @@ const Payments = () => {
     isLoading: allOutPaymentLoading,
   }: IQueryDataType<IAllOutstandingPayments> = useFetchAllItems({
     search:currentTable === "Outstanding Payments" ? debouncedSearchTerm : '',
+    otherParams:currentTable === "Outstanding Payments" ? filterValues :undefined,
     pagination,
     queryKey: QUERY_KEY_OUTSTANDING_PAYMENTS,
     urlEndPoint: OutstandingPaymentUrl,
@@ -98,6 +104,7 @@ const Payments = () => {
     isLoading: allInvoicesLoading,
   }: IQueryDataType<IAllInvoices> = useFetchAllItems({
     search:currentTable === "Invoices Generated" ? debouncedSearchTerm : '',
+    otherParams:currentTable === "Invoices Generated" ? filterValues :undefined,
     pagination,
     queryKey: QUERY_KEY_INVOICES,
     urlEndPoint: invoicesUrl,
@@ -110,12 +117,16 @@ const Payments = () => {
   const [modalForm] = Form.useForm();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const { RangePicker } = DatePicker;
-  const handleFilter = (values:{country_id:number,investment_route_id:number,amount_paid:number,startToEndDate:any}) => {
-    console.log("values",values)
-    console.log("type Of start to end date Range", typeof values.startToEndDate)
-    // start_date , end_date
-    // end_time: dayjs(end_time).format("YYYY-MM-DD"),
-    // start_time: dayjs(start_time).format("YYYY-MM-DD"),
+  const handleFilter = (values:{country_id:number,investment_route_id:number,amount_paid:number,startToEndDate?:Array<any>}) => {
+    const {amount_paid,country_id,investment_route_id,startToEndDate} = values;
+
+    // checks if it is either outstanding payments or payments list table
+    if (currentTable.includes('Payments')) {
+      const value = {amount_paid,country_id,investment_route_id,start_date:startToEndDate && startToEndDate[0].format("YYYY-MM-DD"),end_date:startToEndDate && startToEndDate[1].format("YYYY-MM-DD")}
+      setFilterValues(value)
+    } else {const value = {country_id,investment_route_id,start_date:startToEndDate && startToEndDate[0].format("YYYY-MM-DD"),end_date:startToEndDate && startToEndDate[1].format("YYYY-MM-DD")}
+  setFilterValues(value)
+  }  
 
     setIsModalOpen(false);
     modalForm.resetFields();
@@ -143,24 +154,20 @@ const Payments = () => {
     "Total Invoices Generated",
     "Outstanding Payments",
   ];
-  const cardCounts: number[] = [
-    allPaymentsData?.meta.total as number,
-    allGenQuotesData?.data.total as number,
-    allInvoices?.meta.total as number,
-    allOutPaymentData?.meta.total as number,
-  ];
 
-  useEffect(() => {
-    setPaymentsData(allPaymentsData);
-  }, [
-    paymentsData,
-    allPaymentsData,
-    allPaymentsLoading,
-    allGenQuotesData,
-    allGenQuotesLoading,
-    allOutPaymentLoading,
-    allOutPaymentData,
-  ]);
+
+  const cardCounts = useMemo(() => {
+    if (payDashboardLoading) {
+      return [undefined, undefined, undefined, undefined];
+    }
+    return [
+      paymentDashboardData?.totalPayment,
+      paymentDashboardData?.totalQuote,
+      paymentDashboardData?.totalInvoice,
+      paymentDashboardData?.totalOutstandingPayment,
+    ];
+  }, [paymentDashboardData, payDashboardLoading]);
+
 
   return (
     <AllPaymentsContext.Provider value={{ paymentsData, setPaymentsData }}>
@@ -169,7 +176,7 @@ const Payments = () => {
           title={`Filter ${currentTable}`}
           footer={null}
           open={isModalOpen}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={() => {setIsModalOpen(false); modalForm.resetFields();}}
         >
           {/* make everything compulsory */}
           <Form
@@ -179,6 +186,7 @@ const Payments = () => {
             className="pt-8 px-4"
             onValuesChange={handleFilterValuesChange}
             onFinish={handleFilter}
+            
           >
 
             <FormItemCountry name="country_id" label="Filter by Country"  />
@@ -209,8 +217,9 @@ const Payments = () => {
               title={cardTitles[i]}
               count={cardCounts[i]}
               handleClick={() => {
-                 setSearchTerm('')
+                 setSearchTerm('');
                  setSearchValue('');
+                 setFilterValues(undefined)
                  setTimeout(() => {
                   switch (i) {
                     case 0:
