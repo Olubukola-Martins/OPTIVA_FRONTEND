@@ -24,7 +24,6 @@ export const ApplicantBrief: React.FC<IApplicantDetailsProps> = ({ onNext }) => 
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const { mutate, isLoading: postLoading } = useCreateApplicationResponse("sectiononeresponse");
-console.log('section 1 data', data)
 
 useEffect(() => {
   if (data && data.length > 0) {

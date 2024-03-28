@@ -1,22 +1,25 @@
-import { Skeleton, Form, Empty, Tooltip } from "antd";
+import { Skeleton, Form, Empty, Tooltip, FormInstance } from "antd";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "./NewApplicantBrief";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+
 
 export interface IApplicationFormResponseProps {
   onNextTabItem?: () => void;
   onPrevTabItem?: () => void;
   subsectionName: string;
+  form? :FormInstance
 }
 
 export const NewImmigrationAndCourtProceedings: React.FC<
   IApplicationFormResponseProps
-> = ({ onNextTabItem, subsectionName }) => {
+> = ({ onNextTabItem, subsectionName, }) => {
   const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-three",
   });
+
 
   return (
     <>

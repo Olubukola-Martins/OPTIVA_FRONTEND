@@ -14,8 +14,6 @@ import { useFetchEmployees } from "src/features/settings/features/employees/hook
 import { useFetchActiveandInactiveApplicant } from "../../../hooks/Application hooks/useFetchActiveandInactiveApplicant";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/Application hooks/useGetApplication";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
-// import { useDebounce } from "src/hooks/useDebounce";
-// import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
@@ -30,6 +28,8 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     pagination,
     search: debouncedSearchTerm,
   });
+  console.log('search term', searchTerm)
+  
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -37,7 +37,6 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     currentUrl: "active-employees",
   });
   const { data: investmentData } = useGetInvestmentRoute();
-
   const [form] = Form.useForm();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
   const queryClient = useQueryClient();
@@ -58,7 +57,6 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     );
     return investment && investment.investment_name;
   };
-  console.log('total for pagination', data?.data)
   useEffect(() => {
     if (data && employeesData) {
       const inActiveApplicant: DataSourceItem[] = data.data.map((item, index) => {

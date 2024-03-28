@@ -1,9 +1,9 @@
 import { Form, Tabs } from "antd";
 import { ImmigrationAndCourtProceedings } from "./ImmigrationAndCourtProceedings";
 import { CriminalHistory } from "./CriminalHistory";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
+// import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
@@ -18,10 +18,10 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
 }) => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { id } = useParams();
-  const { data } = useGetApplicationResponse({
-    id: id as unknown as number,
-    section: "sectionthreeresponse",
-  });
+  // const { data } = useGetApplicationResponse({
+  //   id: id as unknown as number,
+  //   section: "sectionthreeresponse",
+  // });
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateApplicationResponse(
@@ -66,17 +66,17 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
     });
   };
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      const initialValues: Record<string, any> = {};
-      data.forEach((item) => {
-        if (item.subsection_name === tabItems[currentTab].subsectionName) {
-          initialValues[item.question.schema_name] = item.response;
-        }
-      });
-      form.setFieldsValue(initialValues);
-    }
-  }, [data, currentTab]);
+  // useEffect(() => {
+  //   if (data && data.length > 0) {
+  //     const initialValues: Record<string, any> = {};
+  //     data.forEach((item) => {
+  //       if (item.subsection_name === tabItems[currentTab].subsectionName) {
+  //         initialValues[item.question.schema_name] = item.response;
+  //       }
+  //     });
+  //     form.setFieldsValue(initialValues);
+  //   }
+  // }, [data, currentTab]);
 
   const tabItems: {
     label: string;
@@ -89,6 +89,7 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
         <ImmigrationAndCourtProceedings
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           subsectionName="immigrationCourtProcedings"
+          form={form}
         />
       ),
       subsectionName: "immigrationCourtProcedings",
@@ -100,6 +101,7 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
         <CriminalHistory
           onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="criminalHistory"
+          form={form}
         />
       ),
       label: "Criminal History",
