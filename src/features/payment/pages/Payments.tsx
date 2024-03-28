@@ -1,6 +1,6 @@
-import { DatePicker, Form,  InputNumber, Modal, Select } from "antd";
+import { DatePicker, Form,    InputNumber, Modal, Select } from "antd";
 import Search from "antd/es/input/Search";
-import { useEffect, useRef, useState } from "react";
+import { useEffect,  useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
@@ -19,6 +19,7 @@ import { END_POINT } from "src/config/environment";
 import React from "react";
 import { usePagination } from "src/hooks/usePagination";
 import { useDebounce } from "src/hooks/useDebounce";
+import FormItemCountry from "../components/FormItemCountry";
 
 export interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
@@ -49,12 +50,16 @@ const Payments = () => {
   const OutstandingPaymentUrl = `${END_POINT.BASE_URL}/admin/outstanding-payments`;
   const invoicesUrl = `${END_POINT.BASE_URL}/admin/invoice`;
   const [currentTable, setCurrentTable] = useState("Payments List");
-
+  const [searchValue, setSearchValue] = useState('');
   const { pagination, onChange } = usePagination();
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filterValues, setFilterValues] = useState<{
+    [key: string]: any;
+} | undefined>();
+
+  
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
 
-  const searchInputRef = useRef(null);
 
   // Payments list data
   const {
@@ -62,7 +67,7 @@ const Payments = () => {
     isLoading: allPaymentsLoading,
   }: IQueryDataType<IAllPayments> = useFetchAllItems({
     search:currentTable === "Payments List" ? debouncedSearchTerm : '',
-    pagination,
+    pagination,otherParams:undefined,
     queryKey: QUERY_KEY_PAYMENTS,
     urlEndPoint: paymentsUrl,
   });
@@ -104,7 +109,10 @@ const Payments = () => {
   const [modalForm] = Form.useForm();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const { RangePicker } = DatePicker;
-  const handleFilter = () => {
+  const handleFilter = (values:{country_id:number,investment_route_id:number,amount_paid:number,startToEndDate:any}) => {
+    console.log("values",values)
+    console.log("type Of start to end date Range", typeof values.startToEndDate)
+    // start_date , end_date
     setIsModalOpen(false);
     modalForm.resetFields();
   };
@@ -168,44 +176,9 @@ const Payments = () => {
             onValuesChange={handleFilterValuesChange}
             onFinish={handleFilter}
           >
-            <Form.Item label="Filter by Columns" name="filterColumns">
+            {/* <Form.Item label="Filter by Country" name="country_id">
               <Select
-                mode="multiple"
-                options={[
-                  {
-                    value: "Applicant ID",
-                    label: "Applicant ID",
-                  },
-                  {
-                    value: "Applicant Name",
-                    label: "Applicant Name",
-                  },
-                  {
-                    value: "Country",
-                    label: "Country",
-                  },
-                  {
-                    value: "Investment Route",
-                    label: "Investment Route",
-                  },
-                  {
-                    value: "Number of Dependents",
-                    label: "Number of Dependents",
-                  },
-                  {
-                    value: "Date Created",
-                    label: "Date Created",
-                  },
-                  {
-                    value: "Created By",
-                    label: "Created By",
-                  },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item label="Filter by Country" name="filterCountry">
-              <Select
-                mode="multiple"
+                // mode="multiple"
                 options={[
                   {
                     value: "Antigua & Barbuda",
@@ -229,10 +202,12 @@ const Payments = () => {
                   },
                 ]}
               />
-            </Form.Item>
+            </Form.Item> */}
+
+            <FormItemCountry name="country_id" label="Filter by Country"  />
             <Form.Item
               label="Filter by Investment Route"
-              name="filterInvestmentRoute"
+              name="investment_route_id"
             >
               <Select
                 mode="multiple"
@@ -244,7 +219,7 @@ const Payments = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item className={`${currentTable === "Quotes Generated" || currentTable === "Invoices Generated" ? "hidden" : ""}`} name="filterAmount" label="Filter Amount">
+            <Form.Item className={`${currentTable === "Quotes Generated" || currentTable === "Invoices Generated" ? "hidden" : ""}`} name="amount_paid" label="Filter Amount">
               <InputNumber addonAfter="$" />
             </Form.Item>
               
@@ -270,27 +245,26 @@ const Payments = () => {
               title={cardTitles[i]}
               count={cardCounts[i]}
               handleClick={() => {
-                switch (i) {
-                  case 0:
-                    setCurrentTable("Payments List");
-                    break;
-                  case 1:
-                    setCurrentTable("Quotes Generated");
-                // searchInputRef.current.input.value = "" 
-
-                    break;
-                  case 2:
-                    setCurrentTable("Invoices Generated");
-                    break;
-                  case 3:
-                    setCurrentTable("Outstanding Payments");
-                    break;
-                  default:
-                    setCurrentTable("Payments List");
-                }
-                // if (searchInputRef.current){ searchInputRef.current.input.value = "" }
-                // searchInputRef.current.input.value = "" 
-              }}
+                 setSearchTerm('')
+                 setSearchValue('');
+                 setTimeout(() => {
+                  switch (i) {
+                    case 0:
+                      setCurrentTable("Payments List");
+                      break;
+                    case 1:
+                      setCurrentTable("Quotes Generated");
+                      break;
+                    case 2:
+                      setCurrentTable("Invoices Generated");
+                      break;
+                    case 3:
+                      setCurrentTable("Outstanding Payments");
+                      break;
+                    default:
+                      setCurrentTable("Payments List");
+                  }
+                }, 0);              }}
             />
           ))}
         </div>
@@ -299,15 +273,13 @@ const Payments = () => {
 
           <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
             <div className="flex flex-row items-center gap-x-2">
-              {/* <Search placeholder="Search" ref={searchInputRef} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
-            onChange={(e) => setSearchTerm(e.target.value)} /> */}
-               <Search placeholder="Search" ref={searchInputRef} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
-            onChange={(e) => e.target.value === "" && setSearchTerm("")} 
+               <Search placeholder="Search Name" value={searchValue} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
+            onChange={(e) => {e.target.value === "" && setSearchTerm(""); setSearchValue(e.target.value)}} 
  /> 
               <AppButton
                 label="Filter"
                 type="button"
-                handleClick={() => setIsModalOpen(true)}
+                handleClick={() => {setIsModalOpen(true); }}
               />
             </div>
           </div>

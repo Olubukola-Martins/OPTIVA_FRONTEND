@@ -37,12 +37,7 @@ const FxRatesFormInput = ({
  const {data,isLoading} = useGetCurrency();
   useEffect(() => {
     if (data) {
-      // console.log("fxDta",data)
-      // console.log("rate",rate)
-      // const rate = data[0];
-
       const {
-        // id,
         source_currency,
         source_currency_amount,
         target_currency,
