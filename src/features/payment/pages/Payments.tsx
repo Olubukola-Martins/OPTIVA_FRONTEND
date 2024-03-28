@@ -20,6 +20,7 @@ import React from "react";
 import { usePagination } from "src/hooks/usePagination";
 import { useDebounce } from "src/hooks/useDebounce";
 import FormItemCountry from "../components/FormItemCountry";
+import FormItemInvestRoute from "../components/FormItemInvestRoute";
 
 export interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
@@ -113,6 +114,9 @@ const Payments = () => {
     console.log("values",values)
     console.log("type Of start to end date Range", typeof values.startToEndDate)
     // start_date , end_date
+    // end_time: dayjs(end_time).format("YYYY-MM-DD"),
+    // start_time: dayjs(start_time).format("YYYY-MM-DD"),
+
     setIsModalOpen(false);
     modalForm.resetFields();
   };
@@ -176,49 +180,9 @@ const Payments = () => {
             onValuesChange={handleFilterValuesChange}
             onFinish={handleFilter}
           >
-            {/* <Form.Item label="Filter by Country" name="country_id">
-              <Select
-                // mode="multiple"
-                options={[
-                  {
-                    value: "Antigua & Barbuda",
-                    label: "Antigua & Barbuda",
-                  },
-                  {
-                    value: "Dominica",
-                    label: "Dominica",
-                  },
-                  {
-                    value: "Grenada",
-                    label: "Grenada",
-                  },
-                  {
-                    value: "St. Kitts & Levis",
-                    label: "St. Kitts & Levis",
-                  },
-                  {
-                    value: "St. Lucia",
-                    label: "St. Lucia",
-                  },
-                ]}
-              />
-            </Form.Item> */}
 
             <FormItemCountry name="country_id" label="Filter by Country"  />
-            <Form.Item
-              label="Filter by Investment Route"
-              name="investment_route_id"
-            >
-              <Select
-                mode="multiple"
-                options={[
-                  {
-                    value: "CBI",
-                    label: "CBI",
-                  },
-                ]}
-              />
-            </Form.Item>
+            <FormItemInvestRoute name="investment_route_id" label="Filter by Investment Route"/>
             <Form.Item className={`${currentTable === "Quotes Generated" || currentTable === "Invoices Generated" ? "hidden" : ""}`} name="amount_paid" label="Filter Amount">
               <InputNumber addonAfter="$" />
             </Form.Item>

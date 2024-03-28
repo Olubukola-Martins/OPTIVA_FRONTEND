@@ -1,6 +1,6 @@
 import { Form, Select } from "antd";
 import { useEffect, useState } from "react";
-import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
+import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
 import { generalValidationRules, generalValidationRulesOpt } from "src/utils/formHelpers/validations";
 
 interface IProps {
@@ -13,7 +13,7 @@ interface IProps {
   }
   
 
-const FormItemCountry = ({
+const FormItemInvestRoute = ({
     multiple,
     extraStyles,
     label,
@@ -21,18 +21,18 @@ const FormItemCountry = ({
     hideLabel,
     optionalField=true,
   }: IProps) => {
-    const [allCountriesData, setAllCountriesData] = useState<{
+    const [allInvestRouteData, setAllInvestRouteData] = useState<{
         value: number;
         label: string;
       }[]>();
 
-const {data,isLoading} = useGetCountry();
+const {data,isLoading} = useGetInvestmentRoute();
 
       useEffect(() => {
         if (data) {
-            const value = data.map(({ id, country_name }) => ({value:id,label:country_name}));
+            const value = data.map(({ id, investment_name }) => ({value:id,label:investment_name}));
     
-          setAllCountriesData(value );
+          setAllInvestRouteData(value );
         }
       }, [data, isLoading]);
     
@@ -40,8 +40,8 @@ const {data,isLoading} = useGetCountry();
   return (
     <Form.Item
     className={`${extraStyles}`}
-    name={name ? name : "country"}
-    label={label ? label : "Select Country"}
+    name={name ? name : "investmentRoute"}
+    label={label ? label : "Investment Route"}
     noStyle={hideLabel}
     rules={
       optionalField ? generalValidationRulesOpt : generalValidationRules
@@ -49,7 +49,7 @@ const {data,isLoading} = useGetCountry();
 >
     <Select           
           mode={multiple ? "multiple" : undefined}
-          options={allCountriesData}
+          options={allInvestRouteData}
           loading={isLoading}
 >
     </Select>
@@ -58,4 +58,5 @@ const {data,isLoading} = useGetCountry();
   )
 }
 
-export default FormItemCountry
+
+export default FormItemInvestRoute
