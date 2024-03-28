@@ -46,7 +46,7 @@ export const AddDocument = ({
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title={`Add New ${docType} Document`}
+      title={`Add new ${docType} document`}
       style={{ top: 10 }}
     >
       <Form

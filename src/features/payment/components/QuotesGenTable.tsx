@@ -53,7 +53,7 @@ interface IProps {
 
 }
 
-const QuotesGenTable = ({ allData, dataLoading,onChange }: IProps) => {
+const QuotesGenTable = ({ allData, dataLoading,onChange,pagination }: IProps) => {
   const [paymentCurrency, setPaymentCurrency] = useState<string>("enterUSD");
   const [dataSource, setDataSource] = useState<DataSourceItem[]>([]);
   const [sendQuoteKey, setSendQuoteKey] = useState<number | undefined>();
@@ -225,7 +225,7 @@ const QuotesGenTable = ({ allData, dataLoading,onChange }: IProps) => {
   useEffect(() => {
     if (allData) {
       const mainData = allData.data;
-      const data = mainData.map((quote: IGeneratedQuoteDatum, i) => {
+      const data = mainData.data.map((quote: IGeneratedQuoteDatum, i) => {
         const {
           applicant_unique_id,
           id,
@@ -274,7 +274,7 @@ const QuotesGenTable = ({ allData, dataLoading,onChange }: IProps) => {
           }}
           columns={columns}
           dataSource={dataSource}
-          // pagination={{ ...pagination, total: allData?. }}
+          pagination={{ ...pagination, total: allData?.data.total }}
           onChange={onChange}  
           scroll={{ x: 900 }}
           className="border-gray-100 border-t-0 border-2 rounded-b-md"
