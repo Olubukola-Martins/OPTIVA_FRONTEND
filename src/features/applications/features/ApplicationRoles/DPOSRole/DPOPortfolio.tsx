@@ -138,7 +138,7 @@ export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },

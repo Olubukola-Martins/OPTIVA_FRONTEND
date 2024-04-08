@@ -1,4 +1,4 @@
-import { Empty, Form, Skeleton } from "antd";
+import { Form, Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
@@ -10,6 +10,8 @@ import { useEffect } from "react";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
 // import { renderInput } from "../NewApplication/NewApplicantBrief";
 import { renderDetailsInput } from "./AcademicHistory";
+import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
+import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   const { id } = useParams();
@@ -25,6 +27,12 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   );
   const [form] = Form.useForm();
 
+  const { data: sectionFourData, isLoading: sectionFourLoading } =
+  useGetSingleQuestion({
+    id: 1,
+    endpointUrl: "section-four",
+  });
+  
   useEffect(() => {
     if (data && data.length > 0) {
       const initialValues: Record<string, any> = {};
@@ -37,12 +45,15 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
   
 
  
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (val: any) => {
     const payload = {
       application_id: Number(id),
-      responses: data?.map((item) => ({
-        question_id: item.id,
-        response: Array.isArray(values[item.question.schema_name]) ? values[item.question.schema_name] : [values[item.question.schema_name]],
+      responses:
+      data?.map((item) => ({
+        question_id: item.question_id,
+        response: Array.isArray(val[item.question.schema_name])
+          ? val[item.question.schema_name]
+          : [val[item.question.schema_name]],
       })) || [],
     };
     mutate(payload, {
@@ -67,7 +78,7 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
 
   return (
     <>
-      <Skeleton active loading={isLoading}>
+      <Skeleton active loading={isLoading || sectionFourLoading}>
         {data?.length !== 0 ? (
           <Form onFinish={handleSubmit} form={form} layout="vertical" requiredMark={false}>
            {data?.map((item) => (
@@ -86,7 +97,46 @@ export const Others: React.FC<IApplicantDetailsProps> = ({ onPrev }) => {
             </div>
           </Form>
         ) : (
-          <Empty />
+          <Form
+          onFinish={handleSubmit}
+          form={form}
+          layout="vertical"
+          requiredMark={false}
+        >
+          {sectionFourData?.map((item) => (
+            <div className="w-full">
+              <Form.Item
+                name={item.schema_name}
+                // rules={generalValidationRules}
+                label={
+                  item.form_question.charAt(0).toUpperCase() +
+                  item.form_question.slice(1)
+                }
+                key={item.id}
+                className="w-full"
+              >
+                {renderInput(item.input_type, item.options)}
+              </Form.Item>
+            </div>
+          ))}
+          {/* {!isSuccess && ( */}
+            <div className="flex justify-end items-center gap-5">
+              <AppButton
+                label="Cancel"
+                type="reset"
+                variant="transparent"
+                // isDisabled={isSuccess}
+              />
+              <AppButton
+                label="Save"
+                type="submit"
+                isLoading={postLoading}
+                // isDisabled={isSuccess}
+                // containerStyle={isSuccess ? "cursor-not-allowed" : ""}
+              />
+            </div>
+          {/* )} */}
+        </Form>
         )}
       </Skeleton>
     </>

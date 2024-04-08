@@ -6,7 +6,7 @@ import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile
 // import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
 export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
-  onRoleSelect,
+  onRoleSelect, selectedRole
 }) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -45,6 +45,7 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
                 placeholder="Role"
                 className="md:flex hidden w-[250px]"
                 onChange={onRoleSelect}
+                value={selectedRole}
                 options={[
                   {
                     value: 1,

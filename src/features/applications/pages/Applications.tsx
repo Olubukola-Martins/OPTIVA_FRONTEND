@@ -35,6 +35,7 @@ const Applications = () => {
   const handleExportCancel = () => {
     setExportModal(false);
   };
+  
 
   return (
     <>

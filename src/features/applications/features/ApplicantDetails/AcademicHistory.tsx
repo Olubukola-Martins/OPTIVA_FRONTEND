@@ -1,16 +1,18 @@
 import {
   Checkbox,
-  Empty,
   Form,
   Input,
   InputNumber,
   Select,
+  Skeleton,
   Tooltip,
 } from "antd";
 import { useParams } from "react-router-dom";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
 import { useEffect } from "react";
 import { useGetSectionResponse } from "../../hooks/Application hooks/useGetSectionResponse";
+import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
+import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export const renderDetailsInput = (inputType: string, options?: any[]) => {
   if (inputType === "textarea") {
@@ -62,6 +64,11 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
     currentUrl: `${id as unknown as number}/sectiontworesponse`,
   });
 
+  const { data: sectionTwoQuestions, isLoading } = useGetSingleQuestion({
+    id: 1,
+    endpointUrl: "section-two",
+  });
+console.log('dection 2', sectionTwoData)
   useEffect(() => {
     if (sectionTwoData?.data && sectionTwoData.data.length > 0) {
       const initialValues: Record<string, any> = {};
@@ -75,7 +82,7 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
   
   return (
     <>
-      {sectionTwoData?.data?.length ? (
+      {sectionTwoData?.data?.length? (
        sectionTwoData.data.map(
           (item) =>
             item.subsection_name === subsectionName && (
@@ -93,7 +100,28 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
             )
         )
       ) : (
-        <Empty />
+        <Skeleton active loading={isLoading}>
+          {sectionTwoQuestions?.map(
+            (item) =>
+              item.subsection_name === subsectionName && (
+                <div className="w-full" key={item.id}>
+                  <Form.Item
+                    id={item.id as unknown as string}
+                    name={item.schema_name}
+                    // rules={generalValidationRules}
+                    label={
+                      item.form_question.charAt(0).toUpperCase() +
+                      item.form_question.slice(1)
+                    }
+                    key={item.id}
+                    className="w-full"
+                  >
+                    {renderInput(item.input_type, item.options)}
+                  </Form.Item>
+                </div>
+              )
+          )}
+        </Skeleton>
       )}
 
       <div className="flex justify-between  my-5 py-2">

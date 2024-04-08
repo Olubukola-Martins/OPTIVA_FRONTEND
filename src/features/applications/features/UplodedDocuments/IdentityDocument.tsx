@@ -71,7 +71,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const { mutate } = useHandoverDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
-  const { mutate:auditMutate}=useAuditApproveOrRejectDoc()
+  const { mutate: auditMutate } = useAuditApproveOrRejectDoc();
 
   const auditApprove = () => {
     auditMutate(
@@ -334,7 +334,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   </a>
                 </Menu.Item>
                 {/* {userData?.id === 3 && ( */}
-               <Menu.Item
+                <Menu.Item
                   key="2"
                   onClick={() => {
                     setDocId(val.key as unknown as number);
@@ -426,6 +426,36 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                     okType="default"
                   >
                     Decline Handover by DMS
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="9"
+                  onClick={() => {
+                    // setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Accept document"
+                    description={`Are you sure to accept this document?`}
+                    onConfirm={rejectDoc}
+                    okType="default"
+                  >
+                    Accept document (internal reviewer)
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="10"
+                  onClick={() => {
+                    // setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Decline document"
+                    description={`Are you sure to decline this document?`}
+                    onConfirm={rejectDoc}
+                    okType="default"
+                  >
+                   Decline document (internal reviewer)
                   </Popconfirm>
                 </Menu.Item>
               </Menu>

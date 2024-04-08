@@ -1,8 +1,6 @@
 import {
   Checkbox,
   DatePicker,
-  // DatePicker,
-  Empty,
   Form,
   Input,
   InputNumber,
@@ -17,7 +15,10 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGet
 import { useQueryClient } from "react-query";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
 // import { generalValidationRules } from "src/utils/formHelpers/validations";
-import React from "react";
+import React, { useEffect } from "react";
+import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
+import { useParams } from "react-router-dom";
+import { renderDetailsInput } from "../ApplicantDetails/AcademicHistory";
 
 export interface IProps {
   onNext: () => void;
@@ -52,28 +53,54 @@ export const renderInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "number_input") {
     return <InputNumber className="w-1/2" />;
   } else if (inputType === "date_input") {
-    return <DatePicker className="w-1/2" format="YYYY-MM-DD"/>;
+    return <DatePicker className="w-1/2" format="YYYY-MM-DD" />;
   }
 };
 
 export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
   const { sharedData } = useGlobalContext();
-  const { data, isLoading } = useGetSingleQuestion({
+  const { id } = useParams();
+  const queryClient = useQueryClient();
+  const [form] = Form.useForm();
 
+  const { data, isLoading } = useGetSingleQuestion({
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-one",
   });
+
   const {
     mutate,
     isLoading: postLoading,
     isSuccess,
   } = useCreateApplicationResponse("sectiononeresponse");
-  const queryClient = useQueryClient();
 
-  const [form] = Form.useForm();
+  const {
+    data: sectionOneResponse,
+    isLoading: sectionOneLoading,
+    isSuccess: sectionOneSuccess,
+  } = useGetApplicationResponse({
+    id: id as unknown as number,
+    section: "sectiononeresponse",
+  });
+
+  useEffect(() => {
+    if (
+      sectionOneResponse &&
+      sectionOneResponse.length > 0 &&
+      sectionOneSuccess
+    ) {
+      const initialValues: Record<string, any> = {};
+      sectionOneResponse.forEach((item) => {
+        initialValues[item.question.schema_name] = item.response;
+      });
+      form.setFieldsValue(initialValues);
+      console.log("iniyial vals", initialValues);
+      console.log("set vals", form.setFieldsValue(initialValues));
+    }
+  }, [sectionOneResponse]);
+
   const handleSubmit = (val: any) => {
-    const applicationId = sharedData.applicantId as unknown as number;
-
+    const applicationId = sharedData.applicantId as number;
     const payload = {
       application_id: applicationId,
       responses:
@@ -84,7 +111,18 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
             : [val[item.schema_name]],
         })) || [],
     };
-    mutate(payload, {
+  
+    const putPayload = {
+      application_id: id as unknown as number,
+      responses:
+        data?.map((item) => ({
+          question_id: item.id,
+          response: Array.isArray(val[item.schema_name])
+            ? val[item.schema_name]
+            : [val[item.schema_name]],
+        })) || [],
+    };
+    const notifs = {
       onError: (error: any) => {
         openNotification({
           state: "error",
@@ -102,15 +140,49 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
         onNext();
       },
-    });
+    };
+
+    if (id) {
+      mutate(putPayload, notifs);
+    } else {
+      mutate(payload, notifs);
+    }
   };
 
   return (
     <>
-      {data?.length === 0 ? (
-        <Empty />
-      ) : (
-        <Skeleton active loading={isLoading}>
+      <Skeleton active loading={isLoading || sectionOneLoading}>
+        {sectionOneResponse?.length !== 0 ? (
+          <Form
+            onFinish={handleSubmit}
+            form={form}
+            layout="vertical"
+            requiredMark={false}
+          >
+            {sectionOneResponse?.map((item) => (
+              <Form.Item
+                name={item.question.schema_name}
+                label={item.question.form_question}
+                key={item.question_id}
+                className="w-full"
+              >
+                {renderDetailsInput(
+                  item.question.input_type,
+                  item.question.options
+                )}
+              </Form.Item>
+            ))}
+            <div className="flex justify-between items-center gap-5">
+              <AppButton
+                label="Next"
+                type="button"
+                handleClick={onNext}
+                variant="transparent"
+              />
+              <AppButton label="Save" type="submit" isLoading={postLoading} />
+            </div>
+          </Form>
+        ) : (
           <Form
             onFinish={handleSubmit}
             form={form}
@@ -151,8 +223,8 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
               </div>
             )}
           </Form>
-        </Skeleton>
-      )}
+        )}
+      </Skeleton>
     </>
   );
 };

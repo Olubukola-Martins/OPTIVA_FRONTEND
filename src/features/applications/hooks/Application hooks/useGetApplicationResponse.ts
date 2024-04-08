@@ -20,6 +20,7 @@ const getData = async (props: IDataProps) => {
 
   const res = await axios.get(url, config);
   const item = res.data.data;
+  console.log('item res', item)
   const data: IGetApplicationResponse[] = item;
   return data;
 };

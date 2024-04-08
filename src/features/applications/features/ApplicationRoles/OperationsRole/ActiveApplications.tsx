@@ -60,7 +60,6 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
 }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
     currentUrl: "active",
     pagination,
@@ -236,7 +235,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -276,9 +275,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
                 </Menu.Item>
                 <Menu.Item key="2">
                   <Link
-                    to={
-                      appRoute.applicant_details(val.key as unknown as number)
-                        .path
+                    to={     appRoute.applicant_details(val.key as unknown as number).path
                     }
                   >
                     View Applicant Details
@@ -410,8 +407,8 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         loading={isLoading}
-        onChange={onChange}
         pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         rowSelection={{
           type: "checkbox",
           onChange: (

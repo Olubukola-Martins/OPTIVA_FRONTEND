@@ -28,7 +28,6 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     pagination,
     search: debouncedSearchTerm,
   });
-  console.log('search term', searchTerm)
   
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
@@ -58,7 +57,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     return investment && investment.investment_name;
   };
   useEffect(() => {
-    if (data && employeesData) {
+    if (data?.data && employeesData) {
       const inActiveApplicant: DataSourceItem[] = data.data.map((item, index) => {
         const assignedEmployee = employeesData.data.find(
           (employee) =>
@@ -145,7 +144,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -177,9 +176,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
                 <Menu.Item key="1">
                   <Link
                     to={
-                      appRoute.applicant_details(val.key as unknown as number)
-                        .path
-                    }
+                      appRoute.new_application(val.key as number).path}
                   >
                     View Applicant Details
                   </Link>
@@ -289,8 +286,8 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
         className="bg-white rounded-md shadow border mt-8"
         scroll={{ x: 600 }}
         loading={isLoading}
-        onChange={onChange}
         pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         rowSelection={{
           type: "checkbox",
           onChange: (

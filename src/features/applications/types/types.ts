@@ -29,27 +29,34 @@ export interface IApplications {
   updated_at: string;
 }
 
+
 // POST APPLICATION RESPONSE
 export interface ICreateApplicationResponse {
   application_id: number;
   responses: Response[];
 }
 
-interface Response {
+export interface Response {
+  schema_name?: any;
   question_id: number;
-  response: string[];
+  response: any[];
   subsection_name?: string;
 }
 //
 
 //GET APPLICATION RESPONSE
-export interface IGetApplicationResponse {
+// export interface IGetApplicationResponse {
+//   template_id: number | null;
+//   data: Datum[];
+// }
+
+export interface IGetApplicationResponse{
   id: number;
   question_id: number;
   application_id: number;
   section_name: string;
-  subsection_name: string;
-  response: any[];
+  subsection_name?: any;
+  response: (number | string)[];
   created_at: string;
   updated_at: string;
   question: Question;
@@ -57,16 +64,17 @@ export interface IGetApplicationResponse {
 
 interface Question {
   id: number;
-  template_id?: any;
+  template_id?: number | null;
   form_question: string;
   input_type: string;
-  options?: any;
+  options?: string[];
   is_required: number;
   section_name: string;
-  subsection_name: string;
+  subsection_name?: string;
   schema_name: string;
   created_at: string;
   updated_at: string;
+  is_default: boolean;
 }
 // UPDATE APPLICATION STATUS
 export interface IApplicationStatus {

@@ -25,32 +25,45 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
 }) => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { id } = useParams();
-  // const { data } = useGetApplicationResponse({
-  //   id: id as unknown as number,
-  //   section: "sectiontworesponse",
-  // });
+
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { mutate, isLoading } =
     useCreateApplicationResponse("sectiontworesponse");
 
-  const handleTabSubmit = (responses: any) => {
+  const handleTabSubmit = (responses: any[]) => {
     const applicationData: ICreateApplicationResponse = {
       application_id: id as unknown as number,
-      responses: Array.isArray(responses)
-        ? responses.map(
+      responses:  responses.map(
             (response: {
-              question_id: number;
+              id: number;
               schema_name: any;
               subsection_name: string;
             }) => ({
-              question_id: response.question_id,
+              question_id: response.id,
               response: [form.getFieldValue(response.schema_name)],
               subsection_name: response.subsection_name,
             })
           )
-        : [],
+        // : [],
     };
+
+    // const applicationData: ICreateApplicationResponse = {
+    //   application_id: id as unknown as number,
+    //   responses: Array.isArray(responses)
+    //     ? responses.map(
+    //         (response: {
+    //           question_id: number;
+    //           schema_name: any;
+    //           subsection_name: string;
+    //         }) => ({
+    //           question_id: response.question_id,
+    //           response: [form.getFieldValue(response.schema_name)],
+    //           subsection_name: response.subsection_name,
+    //         })
+    //       )
+    //     : [],
+    // };
 
     mutate(applicationData, {
       onError: (error: any) => {
@@ -109,6 +122,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="contactDetails"
+          form={form}
         />
       ),
       subsectionName: "contactDetails",
@@ -122,6 +136,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="marriageDetails"
+          form={form}
         />
       ),
     },
@@ -134,6 +149,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="childrenDetails"
+          form={form}
         />
       ),
     },
@@ -146,6 +162,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="otherDependentsDetails"
+          form={form}
         />
       ),
     },
@@ -158,6 +175,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="PEP"
+          form={form}
         />
       ),
     },
@@ -170,6 +188,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="employmentDetails"
+          form={form}
         />
       ),
     },
@@ -182,6 +201,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="businessIncomeNetworth"
+          form={form}
         />
       ),
     },
@@ -194,6 +214,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           onPrevTabItem={() => setCurrentTab(currentTab - 1)}
           subsectionName="academicHistory"
+          form={form}
         />
       ),
     },
@@ -205,6 +226,7 @@ export const AboutTheApplicantsTab: React.FC<IApplicantDetailsProps> = ({
         <TravelDetailsAndHistory
           subsectionName="travelDetails"
           onPrev={() => setCurrentTab(currentTab - 1)}
+          form={form}
         />
       ),
     },

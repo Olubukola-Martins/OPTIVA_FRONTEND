@@ -7,7 +7,7 @@ import { IInvestmentRoute } from "../types";
 import { QUERY_KEY_FOR_INVESTMENT_ROUTE } from "./useGetInvestmentRoute";
 
 export interface IDataProps extends IUserToken {
-  id: number;
+  id: number | null;
   section?:string
 }
 

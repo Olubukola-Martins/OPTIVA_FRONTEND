@@ -4,39 +4,12 @@ import { InactiveApplications } from "./InactiveApplications";
 import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useState } from "react";
 
-export const roleOptions = [
-  {
-    value: 1,
-    label: `DR's List`,
-  },
-  {
-    value: 2,
-    label: `DPO's List`,
-  },
-  {
-    value: 3,
-    label: `DMS's List`,
-  },
-  {
-    value: 4,
-    label: `Audit's List`,
-  },
-  {
-    value: 5,
-    label: `Operations  List`,
-  },
-  {
-    value: 6,
-    label: `Service Manager's  List`,
-  },
-  {
-    value: 7,
-    label: `Customer Engager's  List`,
-  },
-];
 
-export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+
+export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
+
+  
 
   const tabItems: {
     label: string;
@@ -76,6 +49,7 @@ export const ApplicationsTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
               onChange={onRoleSelect}
               // onChange={(role, label) => onRoleSelect(role, label)}
               // value={selectedRoleLabel}
+              value={selectedRole}
               options={[
                 {
                   value: 1,

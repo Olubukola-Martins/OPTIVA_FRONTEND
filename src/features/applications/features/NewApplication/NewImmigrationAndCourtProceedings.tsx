@@ -13,7 +13,7 @@ export interface IApplicationFormResponseProps {
 
 export const NewImmigrationAndCourtProceedings: React.FC<
   IApplicationFormResponseProps
-> = ({ onNextTabItem, subsectionName, }) => {
+> = ({ onNextTabItem, subsectionName }) => {
   const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
     id: sharedData.templateId as unknown as number,

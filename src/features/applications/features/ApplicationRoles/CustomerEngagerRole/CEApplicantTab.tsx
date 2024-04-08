@@ -5,7 +5,7 @@ import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 // import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
-export const CEApplicantTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+export const CEApplicantTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
   
@@ -40,6 +40,7 @@ export const CEApplicantTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
                 placeholder="Role"
                 className="md:flex hidden w-[250px]"
                 onChange={onRoleSelect}
+                value={selectedRole}
                 options={[
                   {
                     value: 1,

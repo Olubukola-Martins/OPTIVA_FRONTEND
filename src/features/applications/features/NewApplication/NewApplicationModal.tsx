@@ -67,7 +67,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
           queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
           form.resetFields();
           setFormSubmitted(true);
-          navigate(appRoute.new_application);
+          navigate(appRoute.new_application().path);
           setSharedData((prevData: any) => ({
             ...prevData,
             applicantId: res.data.data.applicant.application_id,
@@ -120,7 +120,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
             </div>
             <div>
               <h2 className="py-1">
-                Which investment route is the applicant interested in?
+                Which route name is the applicant interested in?
               </h2>
               <Form.Item
                 rules={generalValidationRules}
@@ -181,7 +181,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
                 containerStyle="border border-secondary text-secondary"
               />
               {formSubmitted ? (
-                <Link to={appRoute.new_application}>Next</Link>
+                <Link to={appRoute.new_application().path}>Next</Link>
               ) : (
                 <AppButton label="Next" type="submit" isLoading={isLoading} />
               )}

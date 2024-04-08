@@ -1,9 +1,11 @@
-import { Tooltip, Form, Empty } from "antd";
+import { Tooltip, Form,  Skeleton } from "antd";
 import { useParams } from "react-router-dom";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
 import { renderDetailsInput } from "./AcademicHistory";
 import { useGetSectionResponse } from "../../hooks/Application hooks/useGetSectionResponse";
 import { useEffect } from "react";
+import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
+import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export const ChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
@@ -19,7 +21,10 @@ export const ChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
     },
     currentUrl: `${id as unknown as number}/sectiontworesponse`,
   });
-
+  const { data: sectionTwoQuestions, isLoading } = useGetSingleQuestion({
+    id: 1,
+    endpointUrl: "section-two",
+  });
   useEffect(() => {
     if (sectionTwoData?.data && sectionTwoData.data.length > 0) {
       const initialValues: Record<string, any> = {};
@@ -51,7 +56,28 @@ export const ChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
             )
         )
       ) : (
-        <Empty />
+        <Skeleton active loading={isLoading}>
+        {sectionTwoQuestions?.map(
+          (item) =>
+            item.subsection_name === subsectionName && (
+              <div className="w-full" key={item.id}>
+                <Form.Item
+                  id={item.id as unknown as string}
+                  name={item.schema_name}
+                  // rules={generalValidationRules}
+                  label={
+                    item.form_question.charAt(0).toUpperCase() +
+                    item.form_question.slice(1)
+                  }
+                  key={item.id}
+                  className="w-full"
+                >
+                  {renderInput(item.input_type, item.options)}
+                </Form.Item>
+              </div>
+            )
+        )}
+      </Skeleton>
       )}
    
 

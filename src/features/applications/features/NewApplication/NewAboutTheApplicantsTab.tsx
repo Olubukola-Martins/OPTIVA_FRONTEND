@@ -83,6 +83,7 @@ export const NewAboutTheApplicantsTab: React.FC<IProps> = ({ onNext }) => {
         <NewPersonalDetails
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           subsectionName="personalDetails"
+          
         />
       ),
     },

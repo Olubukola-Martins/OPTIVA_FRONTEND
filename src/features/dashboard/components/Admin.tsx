@@ -9,6 +9,7 @@ import { appRoute } from "src/config/routeMgt/routePaths";
 export const Admin = () => {
   const { data } = useGetAdminDashboardCounts();
   const count = data?.administrator;
+  console.log('master list', data)
   return (
     <>
       <Banner title="" />

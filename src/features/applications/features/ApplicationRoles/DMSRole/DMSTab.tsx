@@ -5,7 +5,7 @@ import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile
 import { useState } from "react";
 // import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
-export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
  
@@ -36,6 +36,7 @@ export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
             {data?.roles.id === 1 && (
               <Select
                 allowClear
+                value={selectedRole}
                 placeholder="Role"
                 className="md:flex hidden w-[250px]"
                 onChange={onRoleSelect}

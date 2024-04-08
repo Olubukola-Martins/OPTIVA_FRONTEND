@@ -1,9 +1,8 @@
 import { Form, Tabs } from "antd";
 import { ImmigrationAndCourtProceedings } from "./ImmigrationAndCourtProceedings";
 import { CriminalHistory } from "./CriminalHistory";
-import {  useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-// import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
@@ -12,40 +11,32 @@ import { ICreateApplicationResponse } from "../../types/types";
 import { AppButton } from "src/components/button/AppButton";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
 
+
 export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
   onNext,
   onPrev,
 }) => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { id } = useParams();
-  // const { data } = useGetApplicationResponse({
-  //   id: id as unknown as number,
-  //   section: "sectionthreeresponse",
-  // });
+
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateApplicationResponse(
     "sectionthreeresponse"
   );
 
-  const handleTabSubmit = (responses: any) => {
+  const handleTabSubmit = (responses: ICreateApplicationResponse['responses']) => {
     const applicationData: ICreateApplicationResponse = {
       application_id: id as unknown as number,
-      responses: Array.isArray(responses)
-        ? responses.map(
-            (response: {
-              question_id: number;
-              schema_name: any;
-              subsection_name: string;
-            }) => ({
-              question_id: response.question_id,
-              response: [form.getFieldValue(response.schema_name)],
-              subsection_name: response.subsection_name,
-            })
-          )
-        : [],
+      responses: responses.map((response) => ({
+        question_id: response.question_id,
+        response: [form.getFieldValue(response.schema_name)],
+        subsection_name: response.subsection_name,
+      })),
+          
+    
     };
-
+    console.log('responses', applicationData)
     mutate(applicationData, {
       onError: (error: any) => {
         openNotification({
@@ -65,18 +56,6 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
       },
     });
   };
-
-  // useEffect(() => {
-  //   if (data && data.length > 0) {
-  //     const initialValues: Record<string, any> = {};
-  //     data.forEach((item) => {
-  //       if (item.subsection_name === tabItems[currentTab].subsectionName) {
-  //         initialValues[item.question.schema_name] = item.response;
-  //       }
-  //     });
-  //     form.setFieldsValue(initialValues);
-  //   }
-  // }, [data, currentTab]);
 
   const tabItems: {
     label: string;

@@ -146,7 +146,7 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -279,9 +279,7 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
                 <Menu.Item key="6">
                   <Link
                     to={
-                      appRoute.applicant_details(val.key as unknown as number)
-                        .path
-                    }
+                      appRoute.new_application(val.key as unknown as number).path}
                   >
                     View Applicant Details
                   </Link>

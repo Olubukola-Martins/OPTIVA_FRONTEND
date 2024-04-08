@@ -6,9 +6,10 @@ import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile
 
 export interface IRoleTabProps {
   onRoleSelect: (role: number) => void;
+  selectedRole?: number
 }
 
-export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
   
@@ -43,6 +44,7 @@ export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
                 placeholder="Role"
                 className="md:flex hidden w-[250px]"
                 onChange={onRoleSelect}
+                value={selectedRole}
                 options={[
                   {
                     value: 1,

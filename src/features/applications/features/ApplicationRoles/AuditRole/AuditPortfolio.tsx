@@ -127,7 +127,7 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -180,8 +180,7 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
                 <Menu.Item key="2">
                   <Link
                     to={
-                      appRoute.applicant_details(val.key as unknown as number)
-                        .path
+                      appRoute.new_application(val.key as unknown as number).path
                     }
                   >
                     View Applicant Details

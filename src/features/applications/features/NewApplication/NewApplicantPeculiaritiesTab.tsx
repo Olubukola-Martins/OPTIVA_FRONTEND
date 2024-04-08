@@ -8,11 +8,16 @@ import { ICreateApplicationResponse } from "../../types/types";
 import { useQueryClient } from "react-query";
 import { useState } from "react";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { IProps } from "./NewApplicantBrief";
+// import { IProps } from "./NewApplicantBrief";
+import { AppButton } from "src/components/button/AppButton";
+import { IApplicantDetailsProps } from "../ApplicantDetails/ApplicantBrief";
 
-export const NewApplicantPeculiaritiesTab: React.FC<IProps> = ({ onNext }) => {
+export const NewApplicantPeculiaritiesTab:React.FC<IApplicantDetailsProps> = ({
+  onNext,
+  onPrev,
+})=> {
   const queryClient = useQueryClient();
-  const { mutate, isLoading, isSuccess } = useCreateApplicationResponse(
+  const { mutate, isLoading, isSuccess} = useCreateApplicationResponse(
     "sectionthreeresponse"
   );
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -57,7 +62,7 @@ export const NewApplicantPeculiaritiesTab: React.FC<IProps> = ({ onNext }) => {
         if (currentTab < tabItems.length - 1) {
           setCurrentTab(currentTab + 1);
         }
-        onNext();
+       onNext && onNext();
       },
     });
   };
@@ -72,6 +77,7 @@ export const NewApplicantPeculiaritiesTab: React.FC<IProps> = ({ onNext }) => {
         <NewImmigrationAndCourtProceedings
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           subsectionName="immigrationCourtProcedings"
+          form={form}
         />
       ),
       subsectionName: "immigrationCourtProcedings",
@@ -81,11 +87,11 @@ export const NewApplicantPeculiaritiesTab: React.FC<IProps> = ({ onNext }) => {
     {
       children: (
         <NewCriminalHistory
-          onCollectResponses={handleTabSubmit}
-          subsectionName="criminalHistory"
-          isLoading={isLoading}
-          isSuccess={isSuccess}
-        />
+        onCollectResponses={handleTabSubmit}
+        subsectionName="criminalHistory"
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+      />
       ),
       label: "Criminal History",
       key: "Criminal History",
@@ -93,13 +99,16 @@ export const NewApplicantPeculiaritiesTab: React.FC<IProps> = ({ onNext }) => {
     },
   ];
 
+  const lastTab = currentTab === tabItems.length - 1;
+
   return (
     <>
-      <Form onFinish={() => handleTabSubmit} form={form} layout="vertical">
+       <Form form={form} layout="vertical" onFinish={handleTabSubmit}>
         <Tabs
+          tabBarStyle={{ maxWidth: "1200px" }}
           activeKey={currentTab.toString()}
           onChange={(key) => setCurrentTab(Number(key))}
-          tabBarGutter={50}
+          tabBarGutter={15}
         >
           {tabItems.map((tab, index) => (
             <Tabs.TabPane tab={tab.label} key={index.toString()}>
@@ -107,6 +116,54 @@ export const NewApplicantPeculiaritiesTab: React.FC<IProps> = ({ onNext }) => {
             </Tabs.TabPane>
           ))}
         </Tabs>
+
+        {lastTab && (
+          <div className="flex justify-between my-2">
+            <AppButton
+              label="Previous"
+              type="button"
+              variant="transparent"
+              handleClick={() => {
+                onPrev && onPrev();
+              }}
+            />
+            <div className="flex justify-end items-center gap-5">
+              <AppButton
+                label="Next"
+                type="button"
+                variant="transparent"
+                handleClick={() => {
+                  onNext && onNext();
+                }}
+              />
+              <AppButton
+                label="Save"
+                type="submit"
+                isLoading={isLoading}
+                // isDisabled={isSuccess}
+              />
+            </div>
+          </div>
+        )}
+        {!lastTab && (
+          <div className="flex justify-end items-center gap-5">
+            <AppButton
+              label="Prev"
+              type="button"
+              variant="transparent"
+              handleClick={() => {
+                onPrev && onPrev();
+              }}
+            />
+            <AppButton
+              label="Next"
+              type="button"
+              handleClick={() => {
+                onNext && onNext();
+              }}
+            />
+          </div>
+        )}
       </Form>
     </>
   );

@@ -59,7 +59,7 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title="Add Investment Route"
+      title="Add Route"
     >
       <Form
         layout="vertical"
@@ -70,7 +70,7 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
       >
         <Form.Item
           name="name"
-          label="Investment Name"
+          label="Route Name"
           rules={textInputValidationRules}
         >
           <Input placeholder="Enter..." />
