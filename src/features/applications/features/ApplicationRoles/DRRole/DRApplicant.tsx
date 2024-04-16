@@ -16,12 +16,13 @@ import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
-export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm, roleId }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    role_id:roleId
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useMarkApplicantAsComplete();

@@ -26,7 +26,6 @@ const Applications = () => {
     setOpenNewApplicationsModal(false);
   };
 
-
   // Upload Document
   const [exportModal, setExportModal] = useState(false);
   const showExportModal = () => {
@@ -35,7 +34,6 @@ const Applications = () => {
   const handleExportCancel = () => {
     setExportModal(false);
   };
-  
 
   return (
     <>
@@ -44,7 +42,7 @@ const Applications = () => {
         open={openNewApplicationsModal}
         handleClose={handleNewApplicationsCancel}
       />
-     
+
       {/* Export Modal */}
       <ExportModal
         header="Application(s)"
@@ -80,17 +78,22 @@ const Applications = () => {
         />
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            
             <Icon
               icon="mingcute:file-import-line"
               className="text-3xl cursor-pointer hover:text-primary"
               onClick={showExportModal}
             />
           </div>
-          <AppButton label="Add New" handleClick={showNewApplicationsModal} />
+          {data?.roles.id === 1 ||
+            (data?.roles.id === 9 && (
+              <AppButton
+                label="Add New"
+                handleClick={showNewApplicationsModal}
+              />
+            ))}
         </div>
       </div>
-      
+
       {data?.roles.id === 1 && <OperationsApplicationPage />}
       {data?.roles.id === 2 && <ServiceManagerTab onRoleSelect={() => {}} />}
       {data?.roles.id === 3 && <DMSTab onRoleSelect={() => {}} />}

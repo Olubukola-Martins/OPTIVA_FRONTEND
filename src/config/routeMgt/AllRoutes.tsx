@@ -42,7 +42,7 @@ import CompanyProfile from "src/features/settings/features/companyProfile/page/C
 import SettingsTemplate from "src/features/settings/features/contractsEmailTemplates/pages/SettingsTemplate";
 import EditProgramType from "src/features/settings/features/program-types/pages/EditProgramType";
 import EditFees from "src/features/settings/features/authorizedPersons/pages/EditFees";
-import ApplicationTemplateDetails from "src/features/settings/features/appTemplate/pages/ApplicationTemplateDetails";
+// import ApplicationTemplateDetails from "src/features/settings/features/appTemplate/pages/ApplicationTemplateDetails";
 import Workflow from "src/features/settings/features/workFlow/pages/Workflow";
 import AddWorkflow from "src/features/settings/features/workFlow/pages/AddWorkflow";
 import WorkflowDetails from "src/features/settings/features/workFlow/pages/WorkflowDetails";
@@ -123,13 +123,13 @@ const routesArray = [
     element: <ApplicationTemplate />,
   },
   {
-    path: appRoute.newApplicationTemplate,
+    path: appRoute.newApplicationTemplate().format,
     element: <NewApplicationTemplate />,
   },
-  {
-    path: appRoute.applicationTemplateDetails().format,
-    element: <ApplicationTemplateDetails />,
-  },
+  // {
+  //   path: appRoute.applicationTemplate().format,
+  //   element: <ApplicationTemplateDetails />,
+  // },
   {
     path: appRoute.countryMilestonesProgram,
     element: <CountryMilestonesAndPrograms />,

@@ -18,13 +18,13 @@ import { openNotification } from "src/utils/notification";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
 
-
-export const AllDMSApplicants: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const AllDMSApplicants: React.FC<IPortfolioProps> = ({ searchTerm,}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+  
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [applicantId, setApplicantId] = useState<number>();

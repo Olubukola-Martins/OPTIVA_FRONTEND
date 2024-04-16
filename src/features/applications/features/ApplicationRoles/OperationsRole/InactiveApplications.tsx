@@ -19,7 +19,7 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 
 export const InactiveApplications: React.FC<IPortfolioProps> = ({
-  searchTerm,
+  searchTerm, 
 }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
@@ -27,6 +27,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     currentUrl: 'inactive',
     pagination,
     search: debouncedSearchTerm,
+   
   });
   
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);

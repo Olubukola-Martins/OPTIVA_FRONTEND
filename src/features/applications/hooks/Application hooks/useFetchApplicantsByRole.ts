@@ -9,7 +9,7 @@ import { paginationAndFilterProps } from "src/types";
 const getData = async (
   props: paginationAndFilterProps
 ): Promise<{ data: IApplicantsByRole[]; total: number }> => {
-  const { pagination, search } = props;
+  const { pagination, search, role_id } = props;
   const token = useGetToken();
 
   const url = `${END_POINT.BASE_URL}/admin/application`;
@@ -22,13 +22,16 @@ const getData = async (
       name: search,
       page: pagination?.current,
       limit: pagination?.pageSize,
+      role_id: role_id,
     },
   };
   const res = await axios.get(url, config);
 
-  const data: IApplicantsByRole[] = res.data.data.map((item: IApplicantsByRole) => ({
-    ...item,
-  }));
+  const data: IApplicantsByRole[] = res.data.data.map(
+    (item: IApplicantsByRole) => ({
+      ...item,
+    })
+  );
 
   const ans = {
     data,

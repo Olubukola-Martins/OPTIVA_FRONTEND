@@ -56,7 +56,7 @@ export const capitalizeName = (name: string) => {
 };
 
 export const ActiveApplications: React.FC<IPortfolioProps> = ({
-  searchTerm,
+  searchTerm, 
 }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
@@ -64,6 +64,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
     currentUrl: "active",
     pagination,
     search: debouncedSearchTerm,
+
   });
 
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);

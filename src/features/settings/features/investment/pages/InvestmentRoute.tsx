@@ -21,6 +21,7 @@ interface DataType {
   country: string;
   dateCreated: string;
   lastModified: string;
+  // program:string
 }
 
 const InvestmentRoute = () => {
@@ -47,6 +48,7 @@ const InvestmentRoute = () => {
           dateCreated: formatDate(item.created_at),
           investmentName: item.investment_name,
           lastModified: formatDate(item.updated_at),
+          // program: item.
         };
       });
       setDataArray(investmentRoute);

@@ -38,10 +38,9 @@ const getData = async (props: IFee): Promise<ISingleQuestion[]> => {
 };
 export const useGetSingleQuestion = ({ id, endpointUrl }: IProps) => {
   const { token } = useGetUserInfo();
-  const queryData = useQuery([id, endpointUrl ], () => getData({ id, token, endpointUrl }), {
+  const queryData = useQuery([QUERY_KEY_FOR_SINGLE_APPLICATION_TEMPLATE,id, endpointUrl ], () => getData({ id, token, endpointUrl }), {
     onError: () => {},
     onSuccess: () => {},
-    // staleTime: 5,
   });
 
   return queryData;

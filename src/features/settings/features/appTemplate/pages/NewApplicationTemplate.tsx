@@ -5,9 +5,10 @@ import { AppTemplate } from "../components/NewApplicationTemplate/AppTemplate";
 import { useState } from "react";
 
 const NewApplicationTemplate = () => {
-  const [templateCreated, setTemplateCreated] = useState<boolean>(true);
+  const [templateCreated, setTemplateCreated] = useState<boolean>(false);
   const [resId, setResId] = useState<number>();
   
+
 
   return (
     <>

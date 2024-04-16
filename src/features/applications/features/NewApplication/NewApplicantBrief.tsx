@@ -23,6 +23,7 @@ import { renderDetailsInput } from "../ApplicantDetails/AcademicHistory";
 export interface IProps {
   onNext: () => void;
 }
+
 export const renderInput = (inputType: string, options?: any[]) => {
   if (inputType === "textarea") {
     return <Input.TextArea className="w-full" />;

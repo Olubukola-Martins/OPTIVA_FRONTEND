@@ -30,11 +30,11 @@ export const appRoute = {
   }),
   documentRequirements: `/settings/documentsRequirements`,
   applicationTemplate: `/settings/applicationTemplate`,
-  applicationTemplateDetails: (id?: number) => ({
-    format: `/settings/applicationTemplateDetails/:id`,
-    path: `/settings/applicationTemplateDetails/${id}`,
+  newApplicationTemplate: (id?: number) => ({
+    format: `/settings/applicationTemplate/:id`,
+    path: `/settings/applicationTemplate/${id}`,
   }),
-  newApplicationTemplate: `/settings/newApplicationTemplate`,
+  // newApplicationTemplate: `/settings/newApplicationTemplate`,
   countryMilestonesProgram: `/settings/countryMilestonesProgram`,
   createProgramType: `/settings/createProgramRoute`,
   defineFeesAndAuthorizedPersons: `/settings/defineFeesAndAuthorizedPersons`,
@@ -77,7 +77,7 @@ export const appRoute = {
     format: `/applications/comments/:id`,
     path: `/applications/comments/${id}`,
   }),
-  new_application: (id?:number) => ({
+  new_application: (id?: number) => ({
     format: `/settings/new_application/:id`,
     path: `/settings/new_application/${id}`,
   }),
@@ -89,7 +89,7 @@ export const appRoute = {
     format: `/applications/applicant_documents_comments/:id`,
     path: `/applications/applicant_documents_comments/${id}`,
   }),
-  generate_quotes: (id?: number, investId?:number, countryId?:number) => ({
+  generate_quotes: (id?: number, investId?: number, countryId?: number) => ({
     format: `/applications/generate_quotes/:id/:countryId/:investId`,
     path: `/applications/generate_quotes/${id}/${countryId}/${investId}`,
   }),
@@ -143,8 +143,8 @@ export const appRoute = {
     path: `/applications/${id}/attach_documents`,
   }),
 
-   // SEND GENERATED QUOTES
-   send_generated_quotes: (id?: number, investId?:number) => ({
+  // SEND GENERATED QUOTES
+  send_generated_quotes: (id?: number, investId?: number) => ({
     format: `/admin/send-quote/:id/:investId`,
     path: `/admin/send-quote/${id}/${investId}`,
   }),

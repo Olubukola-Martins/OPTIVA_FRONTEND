@@ -4,7 +4,6 @@ import { ApplicationTemplateDetailsTab } from "../components/ApplicationTemplate
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { useGetSingleQuestion } from "../hooks/useGetTemplateQuestion";
 import { useParams } from "react-router-dom";
-import { QUERY_KEY_FOR_FEES } from "../../authorizedPersons/hooks/useGetFees";
 import { Skeleton } from "antd";
 
 const ApplicationTemplateDetails = () => {
@@ -12,7 +11,6 @@ const ApplicationTemplateDetails = () => {
   const { isLoading } = useGetSingleQuestion({
     id: id as unknown as number,
     endpointUrl: "section-one",
-    queryKey: QUERY_KEY_FOR_FEES,
   });
   return (
     <>
