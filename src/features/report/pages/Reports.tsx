@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { DatePicker, Select } from "antd";
-import { useEffect, useState } from "react";
+import { DatePicker, Select, Spin } from "antd";
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import AdminActivity from "../components/AdminActivity";
 import CBIApplication from "../components/CBIApplication";
@@ -11,7 +11,9 @@ import DocumentReviewStatus from "../components/DocumentReviewStatus";
 import ApplicantTypeBreakdown from "../components/ApplicantTypeBreakdown";
 import ProcessingTimes from "../components/ProcessingTimes";
 import { Tooltip } from "antd";
-import { useGetUserInfo } from "src/hooks/useGetUserInfo";
+import { useDebounce } from "src/hooks/useDebounce";
+import { useFetchBranches } from "src/features/settings/features/branch/hooks/useFetchBranches";
+// import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 
 const reportOptions = [
   { label: "Admin Activity", value: "Admin Activity" },
@@ -28,6 +30,18 @@ const Reports = () => {
   const { RangePicker } = DatePicker;
   const [report, setReport] = useState<string>("Admin Activity");
   const [displayTable, setdisplayTable] = useState(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+
+  const { data:branchData, isLoading:isBranchLoading, isSuccess:isBranchSuccess } = useFetchBranches({
+    currentUrl: "active-branches",
+    search: debouncedSearchTerm,
+  });
+
+  const handleSearch = (val: string) => {
+    setSearchTerm(val);
+  };
+
   const [changeIcon, setChangeIcon] = useState<
     "icon-park:chart-line" | "tabler:table"
   >("icon-park:chart-line");
@@ -72,8 +86,8 @@ const Reports = () => {
     setSelectedReport(allReports[report]);
   }, [changeIcon]);
 
-  const { userInfo } = useGetUserInfo();
-  console.log("user",userInfo)
+  // const { userInfo } = useGetUserInfo();
+  // console.log("user",userInfo)
   return (
     <>
       <div className="flex flex-row justify-between">
@@ -126,14 +140,39 @@ const Reports = () => {
             </Tooltip>
           </div>
           <div className="flex flex-col lg:flex-row gap-2">
-            <Select
+            {/* <Select
               placeholder="Lagos Branch"
               style={{ width: 300, maxWidth: "80vw" }}
               options={[
                 { value: "LagosBranch", label: "Lagos Branch" },
                 { value: "AbujaBranch", label: "Abuja Branch" },
               ]}
-            />
+            /> */}
+            {/* <FormBranchInput Form={''}/> */}
+            <Select
+              placeholder="Select Branch"
+              style={{ width: 300, maxWidth: "80vw" }}
+        showSearch
+        allowClear
+        onClear={() => setSearchTerm("")}
+        onSearch={handleSearch}
+        defaultActiveFirstOption={false}
+        loading={isBranchLoading}
+        filterOption={false}
+      >
+        {isBranchSuccess ? (
+          branchData?.data.map((item: { id: Key | null | undefined; name: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }) => (
+            <Select.Option key={item.id} value={item.id}>
+              {item.name}
+            </Select.Option>
+          ))
+        ) : (
+          <div className="flex justify-center items-center w-full">
+            <Spin size="small" />
+          </div>
+        )}
+      </Select>
+
             <RangePicker
               style={{ width: 300, maxWidth: "80vw" }}
               popupStyle={{

@@ -159,12 +159,16 @@ interface Links {
   prev?: any;
   next?: any;
 }
+
+
+
 export interface PaymentsDatum {
   id: number;
   application_id: number;
   quote_id: number;
   amount_paid: string;
   outstanding_payment: string;
+  branch_id: number;
   is_confirmed: boolean;
   created_at: string;
   updated_at: string;
@@ -194,6 +198,10 @@ interface Application {
   no_of_dependents: number;
   created_at: string;
   updated_at: string;
+  is_submitted: boolean;
+  is_authorized: number;
+  is_completed: number;
+  added_by: string;
   applicant: Applicant;
   country: Country;
   investmentroute: Investmentroute;
@@ -232,15 +240,46 @@ interface Applicant {
   full_name: string;
   applicant_unique_id: string;
   email_address: string;
+  phone_number: string;
   amount_paid: string;
   user_id?: any;
   created_at: string;
   updated_at: string;
+  uploaded: string;
+  verified: string;
+  validated: string;
 }
 
 // Quotes
+
+
 export interface IAllGeneratedQuotes {
+  success: boolean;
+  data: IGenQuoteData;
+  message: string;
+  meta: any[];
+}
+
+interface IGenQuoteData {
+  current_page: number;
   data: IGeneratedQuoteDatum[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: Link[];
+  next_page_url: string;
+  path: string;
+  per_page: number;
+  prev_page_url?: any;
+  to: number;
+  total: number;
+}
+
+interface Link {
+  url?: string;
+  label: string;
+  active: boolean;
 }
 
 export interface IGeneratedQuoteDatum {
@@ -252,10 +291,20 @@ export interface IGeneratedQuoteDatum {
   investment_route: string;
   number_of_dependents: string;
   quotation_total: number;
+  country_investment_total: number;
+  local_prc_fee: number;
   quotation_status: number;
   generated_by: string;
   created_at: string;
   updated_at: string;
+  country_fee_due_now: number;
+  country_fee_due_on_approval: number;
+  country_fee_due_now_percentage: number;
+  local_processing_fee_due_now: number;
+  local_processing_fee_due_on_approval: number;
+  local_processing_fee_due_now_percentage: number;
+  total_due_now: number;
+  total_due_on_citizenship_approval: number;
   applicant: IAllGenQuoteApplicant;
 }
 
@@ -266,11 +315,92 @@ interface IAllGenQuoteApplicant {
   full_name: string;
   applicant_unique_id: string;
   email_address: string;
+  phone_number: string;
   amount_paid: string;
-  user_id?: any;
+  user_id?: number;
   created_at: string;
   updated_at: string;
+  uploaded: string;
+  verified: string;
+  validated: string;
   application: Application;
+}
+
+interface Application {
+  id: number;
+  country_id: number;
+  investmentroute_id: number;
+  programtype_id: number;
+  template_id: number;
+  milestone_id: number;
+  process_id: number;
+  branch_id: number;
+  assigned_user_id: number;
+  assigned_role_id: number;
+  process_deadline?: any;
+  status: string;
+  active: boolean;
+  is_quote_generated: number;
+  is_payment_proof_uploaded: boolean;
+  is_questions_submitted: boolean;
+  is_threshold_payment: boolean;
+  is_approved: boolean;
+  no_of_dependents: number;
+  created_at: string;
+  updated_at: string;
+  is_submitted: boolean;
+  is_authorized: number;
+  is_completed: number;
+  added_by: string;
+  documents: Document[];
+  country: Country;
+  investmentroute: Investmentroute;
+  programtype: Programtype;
+}
+
+interface Programtype {
+  id: number;
+  program_name: string;
+  program_link: string;
+  template_id: number;
+  workflow_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Investmentroute {
+  id: number;
+  investment_name: string;
+  country_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Country {
+  id: number;
+  country_name: string;
+  created_at?: any;
+  updated_at?: any;
+}
+
+interface Document {
+  id: number;
+  name: string;
+  applicants_id: number;
+  uploaded_by: number;
+  document_category_id: number;
+  document_requirement_id: number;
+  status: string;
+  handover_status: string;
+  path: string;
+  created_at: string;
+  updated_at: string;
+  audit_status: string;
+  internally_reviewed: string;
+  externally_reviewed: string;
+  is_completed: number;
+  application_id: number;
+  dependants: any[];
 }
 
 // Outstanding payments
@@ -333,7 +463,7 @@ export interface PaymentDetailDatum {
   date_paid: string;
   narration: string;
   proof_of_payment_file?: any;
-  paid_by: number;
+  paid_by: string;
   updated_by: Updatedby;
   created_at: string;
   updated_at: string;

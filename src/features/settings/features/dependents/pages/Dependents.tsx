@@ -43,9 +43,9 @@ const deleteEndpointUrl = "admin/eligible-dependant/";
 const queryKey = QUERY_KEY_ELIGIBLE_DEPENDENTS;
 
 const Dependents = () => {
-  // const [editSuccessful, setEditSuccessful] = useState(false);
   const [addNewD, setAddNewD] = useState(false);
   const [editNewD, setEditNewD] = useState(false);
+  const [editingDependent, setEditingDependent] = useState<boolean>(false);
   const [itemId, setItemId] = useState<number>();
   const [data, setData] = useState<DataType[] | []>([]);
   const [singleDependent, setSingleDependent] = useState<
@@ -72,6 +72,7 @@ const Dependents = () => {
   }: { data: ISingleEligibleDependent | undefined; isLoading: boolean } =
     useFetchDependent({ id: itemId as number });
 
+const handleEditingProgress = (editIsLoading: boolean ) => {setEditingDependent(editIsLoading)}
 
   useEffect(() => {
     if (allDependentsData?.data && Array.isArray(allDependentsData?.data)) {
@@ -83,14 +84,20 @@ const Dependents = () => {
         conditions: item.other_conditions.map((item) => item.other_condition),
       }));
       setData(newData);
+      console.log("editing",editingDependent)
     }
-  }, [allDependentsData, allDependentsLoading, data]);
+  }, [allDependentsData, allDependentsLoading,  editingDependent, allDependentsData?.data, singleDependentData,singleDependentLoading]);
 
   useEffect(() => {
     if (singleDependentData?.data && !Array.isArray(singleDependentData.data)) {
       setSingleDependent(singleDependentData.data);
     }
-  }, [itemId, singleDependentData, singleDependentLoading]);
+  }, [itemId, singleDependentData, singleDependentLoading, editingDependent]);
+
+  useEffect(() => {
+
+  }, [editingDependent,data,singleDependent])
+  
 
   const columns: ColumnsType<DataType> = [
     {
@@ -171,6 +178,7 @@ const Dependents = () => {
           itemId={itemId}
           singleDependent={singleDependent}
           singleDependentLoading={singleDependentLoading}
+          editing={handleEditingProgress}
         />
       )}
       <div className="flex justify-between flex-col md:flex-row  md:items-center">

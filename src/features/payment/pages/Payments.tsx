@@ -1,6 +1,6 @@
-import { DatePicker, Form, InputNumber, Modal, Select } from "antd";
+import { DatePicker, Form,    InputNumber, Modal,  } from "antd";
 import Search from "antd/es/input/Search";
-import { useEffect, useState } from "react";
+import {   useMemo,  useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
 import { SimpleCard } from "src/components/cards/SimpleCard";
@@ -18,6 +18,9 @@ import {
 import { END_POINT } from "src/config/environment";
 import React from "react";
 import { usePagination } from "src/hooks/usePagination";
+import { useDebounce } from "src/hooks/useDebounce";
+import FormItemCountry from "../components/FormItemCountry";
+import FormItemInvestRoute from "../components/FormItemInvestRoute";
 
 export interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
@@ -42,21 +45,34 @@ export const QUERY_KEY_PAYMENTS = "AllPayments";
 export const QUERY_KEY_QUOTES = "AllQuotes";
 export const QUERY_KEY_OUTSTANDING_PAYMENTS = "AllOutstandingPayment";
 export const QUERY_KEY_INVOICES = "Invoices";
+export const QUERY_KEY_PAYMENT_DASHBOARD = "payment-dashboard";
 
 const Payments = () => {
   const quotesUrl = `${END_POINT.BASE_URL}/admin/quotes`;
   const OutstandingPaymentUrl = `${END_POINT.BASE_URL}/admin/outstanding-payments`;
   const invoicesUrl = `${END_POINT.BASE_URL}/admin/invoice`;
-
+  const paymentDashboardUrl = `${END_POINT.BASE_URL}/admin/payment-dashboard`
+  const [currentTable, setCurrentTable] = useState("Payments List");
+  const [searchValue, setSearchValue] = useState('');
   const { pagination, onChange } = usePagination();
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filterValues, setFilterValues] = useState<{
+    [key: string]: any;
+} | undefined>();
 
+  
+  const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
+
+  const {data:paymentDashboardData,isLoading:payDashboardLoading} = useFetchAllItems({queryKey:QUERY_KEY_PAYMENT_DASHBOARD, urlEndPoint: paymentDashboardUrl})
 
   // Payments list data
   const {
     data: allPaymentsData,
     isLoading: allPaymentsLoading,
   }: IQueryDataType<IAllPayments> = useFetchAllItems({
+    search:currentTable === "Payments List" ? debouncedSearchTerm : '',
     pagination,
+    otherParams:currentTable === "Payments List" ? filterValues : undefined,
     queryKey: QUERY_KEY_PAYMENTS,
     urlEndPoint: paymentsUrl,
   });
@@ -65,7 +81,9 @@ const Payments = () => {
     data: allGenQuotesData,
     isLoading: allGenQuotesLoading,
   }: IQueryDataType<IAllGeneratedQuotes> = useFetchAllItems({
+    search:currentTable === "Quotes Generated" ? debouncedSearchTerm : '',
     pagination,
+    otherParams:currentTable === "Quotes Generated" ? filterValues :undefined,
     queryKey: QUERY_KEY_QUOTES,
     urlEndPoint: quotesUrl,
   });
@@ -74,6 +92,8 @@ const Payments = () => {
     data: allOutPaymentData,
     isLoading: allOutPaymentLoading,
   }: IQueryDataType<IAllOutstandingPayments> = useFetchAllItems({
+    search:currentTable === "Outstanding Payments" ? debouncedSearchTerm : '',
+    otherParams:currentTable === "Outstanding Payments" ? filterValues :undefined,
     pagination,
     queryKey: QUERY_KEY_OUTSTANDING_PAYMENTS,
     urlEndPoint: OutstandingPaymentUrl,
@@ -83,6 +103,8 @@ const Payments = () => {
     data: allInvoices,
     isLoading: allInvoicesLoading,
   }: IQueryDataType<IAllInvoices> = useFetchAllItems({
+    search:currentTable === "Invoices Generated" ? debouncedSearchTerm : '',
+    otherParams:currentTable === "Invoices Generated" ? filterValues :undefined,
     pagination,
     queryKey: QUERY_KEY_INVOICES,
     urlEndPoint: invoicesUrl,
@@ -92,11 +114,20 @@ const Payments = () => {
     allPaymentsData
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentTable, setCurrentTable] = useState("Payments List");
   const [modalForm] = Form.useForm();
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
   const { RangePicker } = DatePicker;
-  const handleFilter = () => {
+  const handleFilter = (values:{country_id:number,investment_route_id:number,amount_paid:number,startToEndDate?:Array<any>}) => {
+    const {amount_paid,country_id,investment_route_id,startToEndDate} = values;
+
+    // checks if it is either outstanding payments or payments list table
+    if (currentTable.includes('Payments')) {
+      const value = {amount_paid,country_id,investment_route_id,start_date:startToEndDate && startToEndDate[0].format("YYYY-MM-DD"),end_date:startToEndDate && startToEndDate[1].format("YYYY-MM-DD")}
+      setFilterValues(value)
+    } else {const value = {country_id,investment_route_id,start_date:startToEndDate && startToEndDate[0].format("YYYY-MM-DD"),end_date:startToEndDate && startToEndDate[1].format("YYYY-MM-DD")}
+  setFilterValues(value)
+  }  
+
     setIsModalOpen(false);
     modalForm.resetFields();
   };
@@ -121,35 +152,31 @@ const Payments = () => {
     "Total payments Made",
     "Total Quotes Generated",
     "Total Invoices Generated",
-    "Outstanding Payment",
-  ];
-  const cardCounts: number[] = [
-    allPaymentsData?.data.length as number,
-    allGenQuotesData?.data.length as number,
-    allInvoices?.data.length as number,
-    allOutPaymentData?.data.length as number,
+    "Outstanding Payments",
   ];
 
-  useEffect(() => {
-    setPaymentsData(allPaymentsData);
-  }, [
-    paymentsData,
-    allPaymentsData,
-    allPaymentsLoading,
-    allGenQuotesData,
-    allGenQuotesLoading,
-    allOutPaymentLoading,
-    allOutPaymentData,
-  ]);
+
+  const cardCounts = useMemo(() => {
+    if (payDashboardLoading) {
+      return [undefined, undefined, undefined, undefined];
+    }
+    return [
+      paymentDashboardData?.totalPayment,
+      paymentDashboardData?.totalQuote,
+      paymentDashboardData?.totalInvoice,
+      paymentDashboardData?.totalOutstandingPayment,
+    ];
+  }, [paymentDashboardData, payDashboardLoading]);
+
 
   return (
     <AllPaymentsContext.Provider value={{ paymentsData, setPaymentsData }}>
       <>
         <Modal
-          title="Filter"
+          title={`Filter ${currentTable}`}
           footer={null}
           open={isModalOpen}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={() => {setIsModalOpen(false); modalForm.resetFields();}}
         >
           {/* make everything compulsory */}
           <Form
@@ -159,86 +186,16 @@ const Payments = () => {
             className="pt-8 px-4"
             onValuesChange={handleFilterValuesChange}
             onFinish={handleFilter}
+            
           >
-            <Form.Item label="Filter by Columns" name="filterColumns">
-              <Select
-                mode="multiple"
-                options={[
-                  {
-                    value: "Applicant ID",
-                    label: "Applicant ID",
-                  },
-                  {
-                    value: "Applicant Name",
-                    label: "Applicant Name",
-                  },
-                  {
-                    value: "Country",
-                    label: "Country",
-                  },
-                  {
-                    value: "Investment Route",
-                    label: "Investment Route",
-                  },
-                  {
-                    value: "Number of Dependents",
-                    label: "Number of Dependents",
-                  },
-                  {
-                    value: "Date Created",
-                    label: "Date Created",
-                  },
-                  {
-                    value: "Created By",
-                    label: "Created By",
-                  },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item label="Filter by Country" name="filterCountry">
-              <Select
-                mode="multiple"
-                options={[
-                  {
-                    value: "Antigua & Barbuda",
-                    label: "Antigua & Barbuda",
-                  },
-                  {
-                    value: "Dominica",
-                    label: "Dominica",
-                  },
-                  {
-                    value: "Grenada",
-                    label: "Grenada",
-                  },
-                  {
-                    value: "St. Kitts & Levis",
-                    label: "St. Kitts & Levis",
-                  },
-                  {
-                    value: "St. Lucia",
-                    label: "St. Lucia",
-                  },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item
-              label="Filter by Investment Route"
-              name="filterInvestmentRoute"
-            >
-              <Select
-                mode="multiple"
-                options={[
-                  {
-                    value: "CBI",
-                    label: "CBI",
-                  },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name="filterAmount" label="Filter Amount">
+
+            <FormItemCountry name="country_id" label="Filter by Country"  />
+            <FormItemInvestRoute name="investment_route_id" label="Filter by Investment Route"/>
+            <Form.Item className={`${currentTable === "Quotes Generated" || currentTable === "Invoices Generated" ? "hidden" : ""}`} name="amount_paid" label="Filter Amount">
               <InputNumber addonAfter="$" />
             </Form.Item>
+              
+            <Form.Item name="startToEndDate" label="Start To End Date"><RangePicker  /></Form.Item>
             <AppButton
               type="submit"
               label="Apply Filter"
@@ -260,23 +217,27 @@ const Payments = () => {
               title={cardTitles[i]}
               count={cardCounts[i]}
               handleClick={() => {
-                switch (i) {
-                  case 0:
-                    setCurrentTable("Payments List");
-                    break;
-                  case 1:
-                    setCurrentTable("Quotes Generated");
-                    break;
-                  case 2:
-                    setCurrentTable("Invoices Generated");
-                    break;
-                  case 3:
-                    setCurrentTable("Outstanding Payments");
-                    break;
-                  default:
-                    setCurrentTable("Payments List");
-                }
-              }}
+                 setSearchTerm('');
+                 setSearchValue('');
+                 setFilterValues(undefined)
+                 setTimeout(() => {
+                  switch (i) {
+                    case 0:
+                      setCurrentTable("Payments List");
+                      break;
+                    case 1:
+                      setCurrentTable("Quotes Generated");
+                      break;
+                    case 2:
+                      setCurrentTable("Invoices Generated");
+                      break;
+                    case 3:
+                      setCurrentTable("Outstanding Payments");
+                      break;
+                    default:
+                      setCurrentTable("Payments List");
+                  }
+                }, 0);              }}
             />
           ))}
         </div>
@@ -285,16 +246,14 @@ const Payments = () => {
 
           <div className="my-3 ml-auto flex flex-col lg:flex-row items-start lg:items-center gap-2.5">
             <div className="flex flex-row items-center gap-x-2">
-              <Search placeholder="Search" allowClear style={{ width: 150 }} />
+               <Search placeholder="Search Name" value={searchValue} allowClear style={{ width: 150 }} onSearch={(val) => setSearchTerm(val)}
+            onChange={(e) => {e.target.value === "" && setSearchTerm(""); setSearchValue(e.target.value)}} 
+ /> 
               <AppButton
                 label="Filter"
                 type="button"
-                handleClick={() => setIsModalOpen(true)}
+                handleClick={() => {setIsModalOpen(true); }}
               />
-            </div>
-            <div className="flex sm:flex-row flex-col gap-2 items-center gap-x-8">
-              <RangePicker style={{ width: 300 }} />
-              {/* <AppButton label="View All" /> */}
             </div>
           </div>
         </div>

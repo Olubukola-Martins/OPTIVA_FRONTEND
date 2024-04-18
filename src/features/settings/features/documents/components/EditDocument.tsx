@@ -94,7 +94,7 @@ export const EditDocument = ({
       }}
       closeIcon
       footer={null}
-      title={`Edit ${docType} Document`}
+      title={`Edit ${docType} document`}
       style={{ top: 10 }}
     >
       <Form
