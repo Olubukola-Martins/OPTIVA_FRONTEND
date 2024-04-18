@@ -8,6 +8,7 @@ import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile
 export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   const tabItems: {
     label: string;
@@ -17,7 +18,7 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) =
     {
       label: "All Applicants",
       children: (
-        <DRApplicant searchTerm={searchTerm} roleId={selectedRole}/>
+        <DRApplicant searchTerm={searchTerm} roleId={selectedRole} status={ status} />
       ),
       key: "AllApplicants",
     },
@@ -79,14 +80,14 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) =
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
-              // onChange={handleFilterChange}
+              onChange={(val) => setStatus(val)}
               options={[
                 {
                   value: `pending`,
                   label: `Pending Handover`,
                 },
                 {
-                  value: `confirmed`,
+                  value: `accepted`,
                   label: `Confirmed Handover`,
                 },
                 {

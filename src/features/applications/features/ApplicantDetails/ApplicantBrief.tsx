@@ -1,4 +1,4 @@
-import {  Form, Skeleton } from "antd";
+import { Form, Skeleton } from "antd";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
@@ -19,7 +19,7 @@ export interface IApplicantDetailsProps {
 export const ApplicantBrief: React.FC<IApplicantDetailsProps> = ({
   onNext,
 }) => {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useGetApplicationResponse({
     id: id as unknown as number,
     section: "sectiononeresponse",
@@ -28,34 +28,32 @@ export const ApplicantBrief: React.FC<IApplicantDetailsProps> = ({
   const [form] = Form.useForm();
   const { mutate, isLoading: postLoading } =
     useCreateApplicationResponse("sectiononeresponse");
-  const { data: sectionOneData, isLoading: sectionOneLoading } =
-    useGetSingleQuestion({
-      id: 1,
-      endpointUrl: "section-one",
-    });
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data?.data && data.data.length > 0) {
       const initialValues: Record<string, any> = {};
-      data.forEach((item) => {
+      data.data.forEach((item) => {
         initialValues[item.question.schema_name] = item.response || null;
       });
-      console.log('initial vals', initialValues)
       form.setFieldsValue(initialValues);
     }
   }, [data, form]);
 
-  const handleSubmit = (val: any) => {
-    const applicationId = Number(id);
+  const { data: sectionOneQst, isLoading: sectionOneQstLoading } =
+    useGetSingleQuestion({
+      id: data?.template_id as unknown as number,
+      endpointUrl: "section-one",
+    });
 
+  const handleSubmit = (values: any) => {
     const payload = {
-      application_id: applicationId,
+      application_id: Number(id),
       responses:
-        data?.map((item) => ({
-          question_id: item.question_id,
-          response: Array.isArray(val[item.question.schema_name])
-            ? val[item.question.schema_name]
-            : [val[item.question.schema_name]],
+        data?.data.map((item) => ({
+          question_id: item.id,
+          response: Array.isArray(values[item.question.schema_name])
+            ? values[item.question.schema_name]
+            : [values[item.question.schema_name]],
         })) || [],
     };
     mutate(payload, {
@@ -78,82 +76,58 @@ export const ApplicantBrief: React.FC<IApplicantDetailsProps> = ({
     });
   };
 
-  console.log('data', data)
   return (
     <>
-      <Skeleton active loading={isLoading || sectionOneLoading}>
-        {data?.length !== 0 ? (
-          <Form
-            onFinish={handleSubmit}
-            form={form}
-            layout="vertical"
-            requiredMark={false}
-          >
-            {data?.map((item) => (
-              <Form.Item
-                name={item.question.schema_name}
-                label={item.question.form_question}
-                key={item.question_id}
-                className="w-full"
-              >
-                {renderDetailsInput(
-                  item.question.input_type,
-                  item.question.options
-                )}
-              </Form.Item>
-            ))}
-            <div className="flex justify-between items-center gap-5">
-              <AppButton
-                label="Next"
-                type="button"
-                handleClick={onNext}
-                variant="transparent"
-              />
-              <AppButton label="Save" type="submit" isLoading={postLoading} />
-            </div>
-          </Form>
-        ) : (
-          <Form
-            onFinish={handleSubmit}
-            form={form}
-            layout="vertical"
-            requiredMark={false}
-          >
-            {sectionOneData?.map((item) => (
-              <div className="w-full">
+      <Skeleton active loading={isLoading || sectionOneQstLoading}>
+        <Form
+          onFinish={handleSubmit}
+          form={form}
+          layout="vertical"
+          requiredMark={false}
+        >
+          {data?.data.length !== 0 ? (
+            <>
+              {data?.data.map((item) => (
+                <>
+                  <Form.Item
+                    name={item.question.schema_name}
+                    label={item.question.form_question}
+                    key={item.question_id}
+                    className="w-full"
+                  >
+                    {renderDetailsInput(
+                      item.question.input_type,
+                      item.question.options
+                    )}
+                  </Form.Item>
+                </>
+              ))}
+            </>
+          ) : (
+            <>
+              {sectionOneQst?.map((item) => (
                 <Form.Item
                   name={item.schema_name}
-                  // rules={generalValidationRules}
-                  label={
-                    item.form_question.charAt(0).toUpperCase() +
-                    item.form_question.slice(1)
-                  }
+                  label={item.form_question}
                   key={item.id}
-                  className="w-full"
                 >
                   {renderInput(item.input_type, item.options)}
                 </Form.Item>
-              </div>
-            ))}
-            {/* {!isSuccess && ( */}
-              <div className="flex justify-end items-center gap-5">
-                <AppButton
-                  label="Cancel"
-                  type="reset"
-                  variant="transparent"
-                  // isDisabled={isSuccess}
-                />
-                <AppButton
-                  label="Save"
-                  type="submit"
-                  isLoading={postLoading}
-                  // isDisabled={isSuccess}
-                  // containerStyle={isSuccess ? "cursor-not-allowed" : ""}
-                />
-              </div>
-            {/* )} */}
-          </Form>
-        )}
+              ))}
+            </>
+          )}
+
+          <div className="flex justify-between items-center gap-5">
+            <AppButton
+              label="Next"
+              type="button"
+              handleClick={onNext}
+              variant="transparent"
+            />
+            <AppButton label="Save" type="submit" isLoading={postLoading} />
+          </div>
+        </Form>
+       
       </Skeleton>
     </>
   );

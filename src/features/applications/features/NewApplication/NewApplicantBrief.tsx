@@ -15,16 +15,17 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGet
 import { useQueryClient } from "react-query";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
 // import { generalValidationRules } from "src/utils/formHelpers/validations";
-import React, { useEffect } from "react";
+import React, { useEffect, } from "react";
 import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useParams } from "react-router-dom";
 import { renderDetailsInput } from "../ApplicantDetails/AcademicHistory";
 
 export interface IProps {
   onNext: () => void;
+  
 }
 
-export const renderInput = (inputType: string, options?: any[]) => {
+export const renderInput = (inputType: string, options?: any[], ) => {
   if (inputType === "textarea") {
     return <Input.TextArea className="w-full" />;
   } else if (inputType === "text_input") {
@@ -32,7 +33,12 @@ export const renderInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "select") {
     return (
       <div className="w-1/2">
-        <Select className="w-1/2">
+        <Select
+          className="w-1/2"
+          // onChange={(value) => {
+          //   setVal(value)
+          // }}
+        >
           {options?.map((option, index) => (
             <Select.Option key={index} value={option}>
               {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -43,7 +49,7 @@ export const renderInput = (inputType: string, options?: any[]) => {
     );
   } else if (inputType === "check_box") {
     return (
-      <Checkbox.Group className="w-full">
+      <Checkbox.Group className="w-full" >
         {options?.map((option, index) => (
           <Checkbox key={index} value={option}>
             {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -57,6 +63,7 @@ export const renderInput = (inputType: string, options?: any[]) => {
     return <DatePicker className="w-1/2" format="YYYY-MM-DD" />;
   }
 };
+
 
 export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
   const { sharedData } = useGlobalContext();
@@ -86,12 +93,12 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
 
   useEffect(() => {
     if (
-      sectionOneResponse &&
-      sectionOneResponse.length > 0 &&
+      sectionOneResponse?.data &&
+      sectionOneResponse.data.length > 0 &&
       sectionOneSuccess
     ) {
       const initialValues: Record<string, any> = {};
-      sectionOneResponse.forEach((item) => {
+      sectionOneResponse.data.forEach((item) => {
         initialValues[item.question.schema_name] = item.response;
       });
       form.setFieldsValue(initialValues);
@@ -112,7 +119,7 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
             : [val[item.schema_name]],
         })) || [],
     };
-  
+
     const putPayload = {
       application_id: id as unknown as number,
       responses:
@@ -153,14 +160,14 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
   return (
     <>
       <Skeleton active loading={isLoading || sectionOneLoading}>
-        {sectionOneResponse?.length !== 0 ? (
+        {sectionOneResponse?.data.length !== 0 ? (
           <Form
             onFinish={handleSubmit}
             form={form}
             layout="vertical"
             requiredMark={false}
           >
-            {sectionOneResponse?.map((item) => (
+            {sectionOneResponse?.data.map((item) => (
               <Form.Item
                 name={item.question.schema_name}
                 label={item.question.form_question}

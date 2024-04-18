@@ -1,27 +1,36 @@
 import React, { useState } from "react";
 import { AuditPortfolio } from "./AuditPortfolio";
-import {  Input, Select, Tabs } from "antd";
+import { Input, Select, Tabs } from "antd";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 
 export interface IRoleTabProps {
   onRoleSelect: (role: number) => void;
-  selectedRole?: number
-
+  selectedRole?: number;
+  status?: string;
 }
 
-export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) => {
+export const AuditTab: React.FC<IRoleTabProps> = ({
+  onRoleSelect,
+  selectedRole,
+}) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
-  
+  const [status, setStatus] = useState<string>("");
+
   const tabItems: {
     label: string;
     children: React.ReactNode;
     key: string;
   }[] = [
-  
     {
       label: "All Applicants",
-      children: <AuditPortfolio searchTerm={searchTerm} roleId={ selectedRole} />,
+      children: (
+        <AuditPortfolio
+          searchTerm={searchTerm}
+          roleId={selectedRole}
+          status={status}
+        />
+      ),
       key: "MyPortfolio",
     },
   ];
@@ -75,26 +84,24 @@ export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }
                     label: "Customer Engager's List",
                   },
                 ]}
-             
               />
             )}
-
-            {/* <FormRolesInput Form={Form} showLabel={false} mode="" /> */}
             <Select
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
+              onChange={(val) => setStatus(val)}
               options={[
                 {
-                  value: `1`,
+                  value: "internal",
                   label: `Internal Review`,
                 },
                 {
-                  value: `2`,
+                  value: "external",
                   label: `External Review`,
                 },
                 {
-                  value: `3`,
+                  value: "submitted",
                   label: `Submitted to Partners`,
                 },
               ]}

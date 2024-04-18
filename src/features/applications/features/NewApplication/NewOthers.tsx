@@ -41,11 +41,11 @@ export const NewOthers = () => {
   useEffect(() => {
     if (
       sectionFourResponse &&
-      sectionFourResponse.length > 0 &&
+      sectionFourResponse.data.length > 0 &&
       sectionFourSuccess
     ) {
       const initialValues: Record<string, any> = {};
-      sectionFourResponse.forEach((item) => {
+      sectionFourResponse.data.forEach((item) => {
         initialValues[item.question.schema_name] = item.response;
       });
       form.setFieldsValue(initialValues);
@@ -107,14 +107,14 @@ export const NewOthers = () => {
   return (
     <>
       <Skeleton active loading={isLoading || sectionFourLoading}>
-        {sectionFourResponse?.length !== 0 ? (
+        {sectionFourResponse?.data.length !== 0 ? (
           <Form
             onFinish={handleSubmit}
             form={form}
             layout="vertical"
             requiredMark={false}
           >
-            {sectionFourResponse?.map((item) => (
+            {sectionFourResponse?.data.map((item) => (
               <Form.Item
                 name={item.question.schema_name}
                 label={item.question.form_question}

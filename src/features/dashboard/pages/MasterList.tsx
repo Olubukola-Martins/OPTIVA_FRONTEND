@@ -61,7 +61,7 @@ const MasterList = () => {
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                  <Link to={ appRoute.new_application(val.id).path}>
+                  <Link to={ appRoute.applicant_details(val.id).path}>
                     View Applicant Details
                   </Link>
                 </Menu.Item>

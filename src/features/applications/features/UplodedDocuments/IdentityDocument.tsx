@@ -29,6 +29,8 @@ import { TFileType } from "src/features/settings/features/authorizedPersons/comp
 import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
 import { useHandoverDoc } from "../../hooks/Documet hooks/useHandoverDoc";
 import { useAuditApproveOrRejectDoc } from "../../hooks/Documet hooks/useAuditApproveOrRejectDoc";
+import { useApproveOrRejectInternal } from "../../hooks/Documet hooks/useApproveOrRejectInternal";
+import { useApproveOrRejectExternal } from "../../hooks/Documet hooks/useApproveOrRejectExternal";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -72,6 +74,8 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
   const { mutate: auditMutate } = useAuditApproveOrRejectDoc();
+  const { mutate: internalMutate } = useApproveOrRejectInternal()
+  const { mutate: externalMutate } =useApproveOrRejectExternal()
 
   const auditApprove = () => {
     auditMutate(
@@ -98,6 +102,100 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
   };
   const auditReject = () => {
     auditMutate(
+      { rejected: "rejected", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
+
+  const internalApprove = () => {
+    internalMutate(
+      { approved: "approved", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
+  const internalReject = () => {
+    internalMutate(
+      { rejected: "rejected", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
+
+  const externalApprove = () => {
+    externalMutate(
+      { approved: "approved", document_id: docId as unknown as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+        },
+      }
+    );
+  };
+  const externalReject = () => {
+    externalMutate(
       { rejected: "rejected", document_id: docId as unknown as number },
       {
         onError: (error: any) => {
@@ -437,7 +535,7 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   <Popconfirm
                     title="Accept document"
                     description={`Are you sure to accept this document?`}
-                    onConfirm={rejectDoc}
+                    onConfirm={internalApprove}
                     okType="default"
                   >
                     Accept document (internal reviewer)
@@ -452,10 +550,40 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                   <Popconfirm
                     title="Decline document"
                     description={`Are you sure to decline this document?`}
-                    onConfirm={rejectDoc}
+                    onConfirm={internalReject}
                     okType="default"
                   >
                    Decline document (internal reviewer)
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="11"
+                  onClick={() => {
+                    // setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Accept document"
+                    description={`Are you sure to accept this document?`}
+                    onConfirm={externalApprove}
+                    okType="default"
+                  >
+                    Accept document (external reviewer)
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="12"
+                  onClick={() => {
+                    // setDocId(val.key as unknown as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Decline document"
+                    description={`Are you sure to decline this document?`}
+                    onConfirm={externalReject}
+                    okType="default"
+                  >
+                   Decline document (external reviewer)
                   </Popconfirm>
                 </Menu.Item>
               </Menu>

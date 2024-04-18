@@ -45,10 +45,10 @@ export interface Response {
 //
 
 //GET APPLICATION RESPONSE
-// export interface IGetApplicationResponse {
-//   template_id: number | null;
-//   data: Datum[];
-// }
+export interface IAppResponse {
+  template_id: number | null;
+  data: IGetApplicationResponse[];
+}
 
 export interface IGetApplicationResponse{
   id: number;
@@ -291,6 +291,7 @@ interface Dependant {
 export interface IApproveOrRejectDoc {
   approve?: string;
   decline?: string;
+  
   document_id: number;
 }
 

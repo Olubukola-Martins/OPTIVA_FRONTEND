@@ -32,6 +32,7 @@ interface Question {
   input_type: string;
   subsection_name?: string;
   options?: string[];
+  is_required:boolean
 }
 
 // GET TEMPLATE QUESTIONS

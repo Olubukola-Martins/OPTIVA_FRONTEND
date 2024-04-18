@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IGetApplicationResponse } from "../../types/types";
+import { IAppResponse,  } from "../../types/types";
 import { END_POINT } from "src/config/environment";
 import { useQuery } from "react-query";
 import {
@@ -20,9 +20,15 @@ const getData = async (props: IDataProps) => {
 
   const res = await axios.get(url, config);
   const item = res.data.data;
-  console.log('item res', item)
-  const data: IGetApplicationResponse[] = item;
+
+  const data: IAppResponse= item;
+  // const ans = {
+  //   // item,
+  //   data,
+  //   template_id: res.data.data.template_id,
+  // };
   return data;
+  // return ans
 };
 
 export const useGetApplicationResponse = ({

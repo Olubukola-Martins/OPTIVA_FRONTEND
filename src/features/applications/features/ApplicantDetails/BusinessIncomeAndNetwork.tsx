@@ -13,10 +13,9 @@ export const BusinessIncomeAndNetwork: React.FC<
   const { id } = useParams();
 
   const { data: sectionTwoData } = useGetSectionResponse({
-    pagination: {
+    
       subsection_name: subsectionName,
-    },
-    currentUrl: `${id as unknown as number}/sectiontworesponse`,
+        currentUrl: `${id as unknown as number}/sectiontworesponse`,
   });
 
   const { data: sectionTwoQuestions, isLoading } = useGetSingleQuestion({

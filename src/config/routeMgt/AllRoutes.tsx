@@ -109,7 +109,7 @@ const routesArray = [
     path: appRoute.applicant_documents_comments().format,
     element: <ApplicantDocumentComments />,
   },
-  { path: appRoute.new_application().format, element: <NewApplication /> },
+  { path: appRoute.new_application, element: <NewApplication /> },
   {
     path: appRoute.applicant_documents().format,
     element: <ApplicantDocument />,

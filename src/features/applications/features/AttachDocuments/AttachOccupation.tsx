@@ -108,6 +108,7 @@ export const AttachOccupation: React.FC<IDocumentProps> = ({
           description: err.response.data.message,
           duration: 8.0,
         });
+        setFileList([])
       },
       onSuccess: (res: any) => {
         console.log(res);
@@ -117,7 +118,7 @@ export const AttachOccupation: React.FC<IDocumentProps> = ({
           description: "Documents successfully uploaded",
           duration: 6.0,
         });
-        form.resetFields();
+        setFileList([])
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
       },
     });
@@ -164,7 +165,7 @@ export const AttachOccupation: React.FC<IDocumentProps> = ({
                     </p>
                     <p className="px-1">
                       Maximum upload size is {""}
-                      {Math.round(item.document_size / 1024)} MB
+                      {Math.round(item.document_size )} MB
                     </p>
                   </div>
                 )

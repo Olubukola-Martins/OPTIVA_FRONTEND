@@ -84,13 +84,24 @@ const Applications = () => {
               onClick={showExportModal}
             />
           </div>
-          {data?.roles.id === 1 ||
-            (data?.roles.id === 9 && (
+          <AppButton
+                label="Add New"
+                handleClick={showNewApplicationsModal}
+              />
+          {/* {data?.roles.id === 1 ||
+            (9 && (
               <AppButton
                 label="Add New"
                 handleClick={showNewApplicationsModal}
               />
-            ))}
+            ))} */}
+          {/* {data?.roles.id === 1 || 9 &&
+         
+              <AppButton
+                label="Add New"
+                handleClick={showNewApplicationsModal}
+              />
+            ))} */}
         </div>
       </div>
 

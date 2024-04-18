@@ -1,4 +1,4 @@
-import {  Form, Skeleton, Tooltip } from "antd";
+import { Form, Skeleton, Tooltip } from "antd";
 import { useParams } from "react-router-dom";
 
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
@@ -12,14 +12,13 @@ export const EmploymentDetails: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
   subsectionName,
   onPrevTabItem,
-  form
+  form,
 }) => {
   const { id } = useParams();
 
   const { data: sectionTwoData } = useGetSectionResponse({
-    pagination: {
-      subsection_name: subsectionName,
-    },
+    subsection_name: subsectionName,
+
     currentUrl: `${id as unknown as number}/sectiontworesponse`,
   });
 
@@ -31,18 +30,17 @@ export const EmploymentDetails: React.FC<IApplicationFormResponseProps> = ({
   useEffect(() => {
     if (sectionTwoData?.data && sectionTwoData.data.length > 0) {
       const initialValues: Record<string, any> = {};
-      sectionTwoData.data.forEach(item => {
+      sectionTwoData.data.forEach((item) => {
         initialValues[item.question.schema_name] = item.response;
       });
       form?.setFieldsValue(initialValues);
     }
   }, [sectionTwoData]);
-  
-  
+
   return (
     <>
       {sectionTwoData?.data?.length ? (
-       sectionTwoData.data.map(
+        sectionTwoData.data.map(
           (item) =>
             item.subsection_name === subsectionName && (
               <Form.Item
@@ -53,36 +51,34 @@ export const EmploymentDetails: React.FC<IApplicationFormResponseProps> = ({
                 {renderDetailsInput(
                   item.question.input_type,
                   item.question.options
-                 
                 )}
               </Form.Item>
             )
         )
       ) : (
         <Skeleton active loading={isLoading}>
-        {sectionTwoQuestions?.map(
-          (item) =>
-            item.subsection_name === subsectionName && (
-              <div className="w-full" key={item.id}>
-                <Form.Item
-                  id={item.id as unknown as string}
-                  name={item.schema_name}
-                  // rules={generalValidationRules}
-                  label={
-                    item.form_question.charAt(0).toUpperCase() +
-                    item.form_question.slice(1)
-                  }
-                  key={item.id}
-                  className="w-full"
-                >
-                  {renderInput(item.input_type, item.options)}
-                </Form.Item>
-              </div>
-            )
-        )}
-      </Skeleton>
+          {sectionTwoQuestions?.map(
+            (item) =>
+              item.subsection_name === subsectionName && (
+                <div className="w-full" key={item.id}>
+                  <Form.Item
+                    id={item.id as unknown as string}
+                    name={item.schema_name}
+                    // rules={generalValidationRules}
+                    label={
+                      item.form_question.charAt(0).toUpperCase() +
+                      item.form_question.slice(1)
+                    }
+                    key={item.id}
+                    className="w-full"
+                  >
+                    {renderInput(item.input_type, item.options)}
+                  </Form.Item>
+                </div>
+              )
+          )}
+        </Skeleton>
       )}
-     
 
       <div className="flex justify-between  my-5 py-2">
         <Tooltip title="Click to go to the previous section">

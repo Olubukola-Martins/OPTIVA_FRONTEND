@@ -22,9 +22,9 @@ export const renderDetailsInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "select") {
     return (
       <div className="w-1/2">
-        <Select className="w-1/2" >
-          {options?.map((option, ) => (
-            <Select.Option key={option.id} value={option} >
+        <Select className="w-1/2">
+          {options?.map((option) => (
+            <Select.Option key={option.id} value={option}>
               {option.charAt(0).toUpperCase() + option.slice(1)}
               {/* {option} */}
             </Select.Option>
@@ -53,14 +53,12 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
   subsectionName,
   onPrevTabItem,
-  form
+  form,
 }) => {
   const { id } = useParams();
 
   const { data: sectionTwoData } = useGetSectionResponse({
-    pagination: {
-      subsection_name: subsectionName,
-    },
+    subsection_name: subsectionName,
     currentUrl: `${id as unknown as number}/sectiontworesponse`,
   });
 
@@ -68,22 +66,21 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
     id: 1,
     endpointUrl: "section-two",
   });
-console.log('dection 2', sectionTwoData)
+  console.log("dection 2", sectionTwoData);
   useEffect(() => {
     if (sectionTwoData?.data && sectionTwoData.data.length > 0) {
       const initialValues: Record<string, any> = {};
-      sectionTwoData.data.forEach(item => {
+      sectionTwoData.data.forEach((item) => {
         initialValues[item.question.schema_name] = item.response;
       });
       form?.setFieldsValue(initialValues);
     }
   }, [sectionTwoData]);
-  
-  
+
   return (
     <>
-      {sectionTwoData?.data?.length? (
-       sectionTwoData.data.map(
+      {sectionTwoData?.data?.length ? (
+        sectionTwoData.data.map(
           (item) =>
             item.subsection_name === subsectionName && (
               <Form.Item
@@ -94,7 +91,6 @@ console.log('dection 2', sectionTwoData)
                 {renderDetailsInput(
                   item.question.input_type,
                   item.question.options
-                 
                 )}
               </Form.Item>
             )

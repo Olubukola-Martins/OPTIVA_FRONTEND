@@ -19,16 +19,22 @@ import { openNotification } from "src/utils/notification";
 
 export interface IPortfolioProps {
   searchTerm: string;
-  roleId?:number
+  roleId?: number;
+  status?: string;
 }
 
-export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, roleId}) => {
+export const AuditPortfolio: React.FC<IPortfolioProps> = ({
+  searchTerm,
+  roleId,
+  status,
+}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
-   role_id:roleId
+    role_id: roleId,
+    status: status,
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
@@ -182,7 +188,7 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, roleId})
                 <Menu.Item key="2">
                   <Link
                     to={
-                      appRoute.new_application(val.key as unknown as number)
+                      appRoute.applicant_details(val.key as unknown as number)
                         .path
                     }
                   >
@@ -244,7 +250,6 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, roleId})
       ),
     },
   ];
-
 
   return (
     <>

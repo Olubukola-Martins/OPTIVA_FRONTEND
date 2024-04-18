@@ -177,7 +177,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
                 <Menu.Item key="1">
                   <Link
                     to={
-                      appRoute.new_application(val.key as number).path}
+                      appRoute.applicant_details(val.key as number).path}
                   >
                     View Applicant Details
                   </Link>

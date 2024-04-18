@@ -9,7 +9,7 @@ import { paginationAndFilterProps } from "src/types";
 const getData = async (
   props: paginationAndFilterProps
 ): Promise<{ data: IApplicantsByRole[]; total: number }> => {
-  const { pagination, search, role_id } = props;
+  const { pagination, search, role_id, status } = props;
   const token = useGetToken();
 
   const url = `${END_POINT.BASE_URL}/admin/application`;
@@ -23,6 +23,7 @@ const getData = async (
       page: pagination?.current,
       limit: pagination?.pageSize,
       role_id: role_id,
+      status: status,
     },
   };
   const res = await axios.get(url, config);
@@ -44,10 +45,12 @@ const getData = async (
 export const useFetchApplicantsByRole = ({
   pagination,
   search,
+  role_id,
+  status,
 }: paginationAndFilterProps = {}) => {
   const queryData = useQuery(
-    [QUERY_KEY_FOR_APPLICATIONS, pagination, search],
-    () => getData({ pagination, search }),
+    [QUERY_KEY_FOR_APPLICATIONS, pagination, search, role_id, status],
+    () => getData({ pagination, search, role_id, status }),
     {
       onError: () => {},
       onSuccess: () => {},

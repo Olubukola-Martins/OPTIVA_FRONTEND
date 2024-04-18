@@ -281,7 +281,7 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
                 <Menu.Item key="6">
                   <Link
                     to={
-                      appRoute.new_application(val.key as unknown as number).path}
+                      appRoute.applicant_details(val.key as unknown as number).path}
                   >
                     View Applicant Details
                   </Link>

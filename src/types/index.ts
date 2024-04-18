@@ -57,7 +57,7 @@ export interface paginationAndFilterProps {
   pagination?: {
     pageSize?: number;
     current?: number;
-    subsection_name?: string;
+   
   };
   search?: string;
   currentUrl?: string;
@@ -65,6 +65,7 @@ export interface paginationAndFilterProps {
   program_id?: number[];
   status?: string;
   role_id?: number;
+  subsection_name?: string;
 }
 
 export interface searchValueProps {

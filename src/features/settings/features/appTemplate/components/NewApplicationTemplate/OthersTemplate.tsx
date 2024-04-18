@@ -25,7 +25,7 @@ export const OthersTemplate = ({
   const queryClient = useQueryClient();
 
   const { id } = useParams();
-  const { data: sectionFourData, isLoading: sectionFourLoading } =
+  const { data: sectionFourData,  } =
     useGetSingleQuestion({
       id: id as unknown as number,
       endpointUrl: "section-four",

@@ -26,17 +26,34 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
   );
 
   const handleTabSubmit = (responses: ICreateApplicationResponse['responses']) => {
-    const applicationData: ICreateApplicationResponse = {
-      application_id: id as unknown as number,
-      responses: responses.map((response) => ({
-        question_id: response.question_id,
-        response: [form.getFieldValue(response.schema_name)],
-        subsection_name: response.subsection_name,
-      })),
+    console.log('res three', responses)
+    // const applicationData: ICreateApplicationResponse = {
+    //   application_id: id as unknown as number,
+    //   responses: responses.map((response) => ({
+    //     question_id: response.question_id,
+    //     response: [form.getFieldValue(response.schema_name)],
+    //     subsection_name: response.subsection_name,
+    //   })),
           
     
+    // };
+    const responsesArray: ICreateApplicationResponse['responses'] = [];
+    for (const key in responses) {
+      if (Object.prototype.hasOwnProperty.call(responses, key)) {
+        responsesArray.push({
+          // schema_name: key,
+          question_id: responses[key].question_id,
+          response: [form.getFieldValue(responses[key].schema_name)],
+          subsection_name: responses[key].subsection_name,
+        });
+      }
+    }
+  
+    const applicationData: ICreateApplicationResponse = {
+      application_id: id as unknown as number,
+      responses: responsesArray,
     };
-    console.log('responses', applicationData)
+    
     mutate(applicationData, {
       onError: (error: any) => {
         openNotification({

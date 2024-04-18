@@ -31,7 +31,7 @@ export const ApplicantPeculiaritesTemplate = ({
   };
 
   const { id } = useParams();
-  const { data: sectionThreeData, isLoading: sectionTwoLoading } =
+  const { data: sectionThreeData, } =
     useGetSingleQuestion({
       id: id as unknown as number,
       endpointUrl: "section-three",

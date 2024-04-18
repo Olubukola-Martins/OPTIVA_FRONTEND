@@ -25,7 +25,7 @@ export const AppTemplate: React.FC<IAppTemplateProps> = ({
   const { mutate, isLoading, isSuccess } = usePostTemplateName();
   const queryClient = useQueryClient();
   const { id } = useParams();
-  const { data: tempDescData, isLoading: tempDescLaoding } =
+  const { data: tempDescData, } =
     useGetSingleApplicationTemplate({
       id: id as unknown as number,
     });

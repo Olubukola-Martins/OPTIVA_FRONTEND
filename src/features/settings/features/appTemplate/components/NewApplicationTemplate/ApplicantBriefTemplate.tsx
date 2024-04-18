@@ -39,7 +39,7 @@ export const ApplicantBriefTemplate = ({
   const queryClient = useQueryClient();
 
   const { id } = useParams();
-  const { data: sectionOneData, isLoading: sectionOneLoading } =
+  const { data: sectionOneData, } =
     useGetSingleQuestion({
       id: id as unknown as number,
       endpointUrl: "section-one",
@@ -86,6 +86,7 @@ export const ApplicantBriefTemplate = ({
           const baseQuestion = {
             form_question: question.question,
             input_type: question.inputType,
+            is_required: question.is_required
           };
 
           if (["select", "check_box"].includes(question.inputType)) {
