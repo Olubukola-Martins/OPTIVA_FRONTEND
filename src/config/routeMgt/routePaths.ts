@@ -77,7 +77,7 @@ export const appRoute = {
     format: `/applications/comments/:id`,
     path: `/applications/comments/${id}`,
   }),
-  new_application: `/ew_application`,
+  new_application: `/new_application`,
   // new_application: (id?: number) => ({
   //   format: `/settings/new_application/:id`,
   //   path: `/settings/new_application/${id}`,

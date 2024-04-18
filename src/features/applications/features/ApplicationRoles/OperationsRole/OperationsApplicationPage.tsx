@@ -14,45 +14,6 @@ export const OperationsApplicationPage = () => {
   const handleRoleChange = (role: number) => {
     setSelectedRole(role);
   };
-
-  // <Select
-  //               allowClear
-  //               placeholder="Role"
-  //               className="md:flex hidden w-[250px]"
-  //               onChange={onRoleSelect}
-  //               value={selectedRole}
-  //               options={[
-  //                 {
-  //                   value: 6,
-  //                   label: "DR's List",
-  //                 },
-  //                 {
-  //                   value: 4,
-  //                   label: "DPO's List",
-  //                 },
-  //                 {
-  //                   value: 3,
-  //                   label: "DMS's List",
-  //                 },
-  //                 {
-  //                   value: 5,
-  //                   label: "Audit's List",
-  //                 },
-  //                 {
-  //                   value: 1,
-  //                   label: "Operations List",
-  //                 },
-  //                 {
-  //                   value: 2,
-  //                   label: "Service Manager's List",
-  //                 },
-  //                 {
-  //                   value: 9,
-  //                   label: "Customer Engager's List",
-  //                 },
-  //               ]}
-             
-  //             />
   let renderApplications;
   switch (selectedRole) {
     case 6:
@@ -100,13 +61,13 @@ export const OperationsApplicationPage = () => {
       );
       break;
     // case "Customer Experience List":
-      renderApplications = (
-        <ApplicationsTab
-          onRoleSelect={handleRoleChange}
-          selectedRole={selectedRole}
-        />
-      );
-      break;
+      // renderApplications = (
+      //   <ApplicationsTab
+      //     onRoleSelect={handleRoleChange}
+      //     selectedRole={selectedRole}
+      //   />
+      // );
+      // break;
     default:
       renderApplications = (
         <ApplicationsTab

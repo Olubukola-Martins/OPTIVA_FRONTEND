@@ -21,7 +21,7 @@ const getData = async (
       Authorization: `Bearer ${token}`,
     },
     params: {
-      name: search,
+      q: search,
       page: pagination?.current,
       limit: pagination?.pageSize,
     },

@@ -1,4 +1,15 @@
-import { Button, Dropdown, Form, Menu, Modal, Popconfirm, Table, Upload, UploadFile, UploadProps } from "antd";
+import {
+  Button,
+  Dropdown,
+  Form,
+  Menu,
+  Modal,
+  Popconfirm,
+  Table,
+  Upload,
+  UploadFile,
+  UploadProps,
+} from "antd";
 import { DataSourceItem, IDocumentProps } from "./IdentityDocument";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
@@ -40,144 +51,56 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
   const { mutate: internalMutate } = useApproveOrRejectInternal();
   const { mutate: externalMutate } = useApproveOrRejectExternal();
 
-  const auditApprove = () => {
-    auditMutate(
-      { approved: "approved", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
+  const notifs = {
+    onError: (error: any) => {
+      openNotification({
+        state: "error",
+        title: "Error Occurred",
+        description: error.response.data.message,
+        duration: 5,
+      });
+    },
+    onSuccess: (res: any) => {
+      openNotification({
+        state: "success",
+        title: "Success",
+        description: res.data.message,
+      });
+      queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+    },
   };
+
+  const auditApprove = () => {
+    auditMutate({ approved: "approved", document_id: docId as number }, notifs);
+  };
+
   const auditReject = () => {
-    auditMutate(
-      { rejected: "rejected", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
+    auditMutate({ rejected: "rejected", document_id: docId as number }, notifs);
   };
 
   const internalApprove = () => {
     internalMutate(
-      { approved: "approved", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
+      { approved: "approved", document_id: docId as number },
+      notifs
     );
   };
   const internalReject = () => {
     internalMutate(
-      { rejected: "rejected", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
+      { rejected: "rejected", document_id: docId as number },
+      notifs
     );
   };
 
   const externalApprove = () => {
     externalMutate(
-      { approved: "approved", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
+      { approved: "approved", document_id: docId as number },
+      notifs
     );
   };
   const externalReject = () => {
     externalMutate(
-      { rejected: "rejected", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
+      { rejected: "rejected", document_id: docId as number },
+      notifs
     );
   };
 
@@ -237,51 +160,11 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
   } = useUpdateApplicantDoc();
 
   const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
+    mutate({ approve: "accepted", document_id: docId as number }, notifs);
   };
 
   const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
+    mutate({ decline: "declined", document_id: docId as number }, notifs);
   };
 
   const normFile = (e: any) => {
@@ -305,27 +188,9 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
         {
           _method: "PUT",
           file: val.chooseFile[0].originFileObj,
-          id: docId as unknown as number,
+          id: docId as number,
         },
-        {
-          onError: (error: any) => {
-            openNotification({
-              state: "error",
-              title: "Error Occurred",
-              description: error.response.data.message,
-              duration: 5,
-            });
-          },
-          onSuccess: (res: any) => {
-            openNotification({
-              state: "success",
-              title: "Success",
-              description: res.data.message,
-            });
-            queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-            setFileList([]);
-          },
-        }
+        notifs
       );
     }
   };
@@ -398,7 +263,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="2"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -413,7 +278,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="3"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -462,7 +327,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="7"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -477,7 +342,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="8"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -492,7 +357,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="9"
                   onClick={() => {
-                    // setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -507,7 +372,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="10"
                   onClick={() => {
-                    // setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -522,7 +387,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="11"
                   onClick={() => {
-                    // setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -537,7 +402,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="12"
                   onClick={() => {
-                    // setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -558,6 +423,7 @@ export const TravelHistory: React.FC<IDocumentProps> = ({
       ),
     },
   ];
+
   return (
     <>
       <Table

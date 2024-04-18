@@ -1,6 +1,7 @@
 import {
   Checkbox,
   DatePicker,
+  Empty,
   Form,
   Input,
   InputNumber,
@@ -15,14 +16,14 @@ import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGet
 import { useQueryClient } from "react-query";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
 // import { generalValidationRules } from "src/utils/formHelpers/validations";
-import React, { useEffect, } from "react";
-import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
-import { useParams } from "react-router-dom";
-import { renderDetailsInput } from "../ApplicantDetails/AcademicHistory";
+import React from "react";
+// import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
+// import { useParams } from "react-router-dom";
+// import { renderDetailsInput } from "../ApplicantDetails/AcademicHistory";
 
 export interface IProps {
   onNext: () => void;
-  
+
 }
 
 export const renderInput = (inputType: string, options?: any[], ) => {
@@ -64,51 +65,24 @@ export const renderInput = (inputType: string, options?: any[], ) => {
   }
 };
 
-
 export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
   const { sharedData } = useGlobalContext();
-  const { id } = useParams();
-  const queryClient = useQueryClient();
-  const [form] = Form.useForm();
-
   const { data, isLoading } = useGetSingleQuestion({
+
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-one",
   });
-
   const {
     mutate,
     isLoading: postLoading,
     isSuccess,
   } = useCreateApplicationResponse("sectiononeresponse");
+  const queryClient = useQueryClient();
 
-  const {
-    data: sectionOneResponse,
-    isLoading: sectionOneLoading,
-    isSuccess: sectionOneSuccess,
-  } = useGetApplicationResponse({
-    id: id as unknown as number,
-    section: "sectiononeresponse",
-  });
-
-  useEffect(() => {
-    if (
-      sectionOneResponse?.data &&
-      sectionOneResponse.data.length > 0 &&
-      sectionOneSuccess
-    ) {
-      const initialValues: Record<string, any> = {};
-      sectionOneResponse.data.forEach((item) => {
-        initialValues[item.question.schema_name] = item.response;
-      });
-      form.setFieldsValue(initialValues);
-      console.log("iniyial vals", initialValues);
-      console.log("set vals", form.setFieldsValue(initialValues));
-    }
-  }, [sectionOneResponse]);
-
+  const [form] = Form.useForm();
   const handleSubmit = (val: any) => {
-    const applicationId = sharedData.applicantId as number;
+    const applicationId = sharedData.applicantId as unknown as number;
+
     const payload = {
       application_id: applicationId,
       responses:
@@ -119,18 +93,7 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
             : [val[item.schema_name]],
         })) || [],
     };
-
-    const putPayload = {
-      application_id: id as unknown as number,
-      responses:
-        data?.map((item) => ({
-          question_id: item.id,
-          response: Array.isArray(val[item.schema_name])
-            ? val[item.schema_name]
-            : [val[item.schema_name]],
-        })) || [],
-    };
-    const notifs = {
+    mutate(payload, {
       onError: (error: any) => {
         openNotification({
           state: "error",
@@ -148,49 +111,15 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
         onNext();
       },
-    };
-
-    if (id) {
-      mutate(putPayload, notifs);
-    } else {
-      mutate(payload, notifs);
-    }
+    });
   };
 
   return (
     <>
-      <Skeleton active loading={isLoading || sectionOneLoading}>
-        {sectionOneResponse?.data.length !== 0 ? (
-          <Form
-            onFinish={handleSubmit}
-            form={form}
-            layout="vertical"
-            requiredMark={false}
-          >
-            {sectionOneResponse?.data.map((item) => (
-              <Form.Item
-                name={item.question.schema_name}
-                label={item.question.form_question}
-                key={item.question_id}
-                className="w-full"
-              >
-                {renderDetailsInput(
-                  item.question.input_type,
-                  item.question.options
-                )}
-              </Form.Item>
-            ))}
-            <div className="flex justify-between items-center gap-5">
-              <AppButton
-                label="Next"
-                type="button"
-                handleClick={onNext}
-                variant="transparent"
-              />
-              <AppButton label="Save" type="submit" isLoading={postLoading} />
-            </div>
-          </Form>
-        ) : (
+      {data?.length === 0 ? (
+        <Empty />
+      ) : (
+        <Skeleton active loading={isLoading}>
           <Form
             onFinish={handleSubmit}
             form={form}
@@ -231,8 +160,180 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
               </div>
             )}
           </Form>
-        )}
-      </Skeleton>
+        </Skeleton>
+      )}
     </>
   );
 };
+
+// export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
+//   const { sharedData } = useGlobalContext();
+//   const { id } = useParams();
+//   const queryClient = useQueryClient();
+//   const [form] = Form.useForm();
+
+//   const { data, isLoading } = useGetSingleQuestion({
+//     id: sharedData.templateId as unknown as number,
+//     endpointUrl: "section-one",
+//   });
+
+//   const {
+//     mutate,
+//     isLoading: postLoading,
+//     isSuccess,
+//   } = useCreateApplicationResponse("sectiononeresponse");
+
+//   const {
+//     data: sectionOneResponse,
+//     isLoading: sectionOneLoading,
+//     isSuccess: sectionOneSuccess,
+//   } = useGetApplicationResponse({
+//     id: id as unknown as number,
+//     section: "sectiononeresponse",
+//   });
+
+//   useEffect(() => {
+//     if (
+//       sectionOneResponse?.data &&
+//       sectionOneResponse.data.length > 0 &&
+//       sectionOneSuccess
+//     ) {
+//       const initialValues: Record<string, any> = {};
+//       sectionOneResponse.data.forEach((item) => {
+//         initialValues[item.question.schema_name] = item.response;
+//       });
+//       form.setFieldsValue(initialValues);
+//       console.log("iniyial vals", initialValues);
+//       console.log("set vals", form.setFieldsValue(initialValues));
+//     }
+//   }, [sectionOneResponse]);
+
+//   const handleSubmit = (val: any) => {
+//     const applicationId = sharedData.applicantId as number;
+//     const payload = {
+//       application_id: applicationId,
+//       responses:
+//         data?.map((item) => ({
+//           question_id: item.id,
+//           response: Array.isArray(val[item.schema_name])
+//             ? val[item.schema_name]
+//             : [val[item.schema_name]],
+//         })) || [],
+//     };
+
+//     const putPayload = {
+//       application_id: id as unknown as number,
+//       responses:
+//         data?.map((item) => ({
+//           question_id: item.id,
+//           response: Array.isArray(val[item.schema_name])
+//             ? val[item.schema_name]
+//             : [val[item.schema_name]],
+//         })) || [],
+//     };
+//     const notifs = {
+//       onError: (error: any) => {
+//         openNotification({
+//           state: "error",
+//           title: "Error Occurred",
+//           description: error.response.data.message,
+//           duration: 5,
+//         });
+//       },
+//       onSuccess: (res: any) => {
+//         openNotification({
+//           state: "success",
+//           title: "Success",
+//           description: res.data.message,
+//         });
+//         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+//         onNext();
+//       },
+//     };
+
+//     if (id) {
+//       mutate(putPayload, notifs);
+//     } else {
+//       mutate(payload, notifs);
+//     }
+//   };
+
+//   return (
+//     <>
+//       <Skeleton active loading={isLoading || sectionOneLoading}>
+//         {sectionOneResponse?.data.length !== 0 ? (
+//           <Form
+//             onFinish={handleSubmit}
+//             form={form}
+//             layout="vertical"
+//             requiredMark={false}
+//           >
+//             {sectionOneResponse?.data.map((item) => (
+//               <Form.Item
+//                 name={item.question.schema_name}
+//                 label={item.question.form_question}
+//                 key={item.question_id}
+//                 className="w-full"
+//               >
+//                 {renderDetailsInput(
+//                   item.question.input_type,
+//                   item.question.options
+//                 )}
+//               </Form.Item>
+//             ))}
+//             <div className="flex justify-between items-center gap-5">
+//               <AppButton
+//                 label="Next"
+//                 type="button"
+//                 handleClick={onNext}
+//                 variant="transparent"
+//               />
+//               <AppButton label="Save" type="submit" isLoading={postLoading} />
+//             </div>
+//           </Form>
+//         ) : (
+//           <Form
+//             onFinish={handleSubmit}
+//             form={form}
+//             layout="vertical"
+//             requiredMark={false}
+//           >
+//             {data?.map((item) => (
+//               <div className="w-full">
+//                 <Form.Item
+//                   name={item.schema_name}
+//                   // rules={generalValidationRules}
+//                   label={
+//                     item.form_question.charAt(0).toUpperCase() +
+//                     item.form_question.slice(1)
+//                   }
+//                   key={item.id}
+//                   className="w-full"
+//                 >
+//                   {renderInput(item.input_type, item.options)}
+//                 </Form.Item>
+//               </div>
+//             ))}
+//             {!isSuccess && (
+//               <div className="flex justify-end items-center gap-5">
+//                 <AppButton
+//                   label="Cancel"
+//                   type="reset"
+//                   variant="transparent"
+//                   // isDisabled={isSuccess}
+//                 />
+//                 <AppButton
+//                   label="Save"
+//                   type="submit"
+//                   isLoading={postLoading}
+//                   // isDisabled={isSuccess}
+//                   containerStyle={isSuccess ? "cursor-not-allowed" : ""}
+//                 />
+//               </div>
+//             )}
+//           </Form>
+//         )}
+//       </Skeleton>
+//     </>
+//   );
+// };
