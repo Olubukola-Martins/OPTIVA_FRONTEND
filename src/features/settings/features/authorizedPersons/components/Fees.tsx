@@ -76,7 +76,7 @@ export const Fees = () => {
       key: "3",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "4",
     },

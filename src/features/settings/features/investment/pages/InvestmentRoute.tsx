@@ -21,6 +21,7 @@ interface DataType {
   country: string;
   dateCreated: string;
   lastModified: string;
+  // program:string
 }
 
 const InvestmentRoute = () => {
@@ -47,6 +48,7 @@ const InvestmentRoute = () => {
           dateCreated: formatDate(item.created_at),
           investmentName: item.investment_name,
           lastModified: formatDate(item.updated_at),
+          // program: item.
         };
       });
       setDataArray(investmentRoute);
@@ -66,7 +68,7 @@ const InvestmentRoute = () => {
       dataIndex: "sn",
     },
     {
-      title: "Investment Name",
+      title: "Route Name",
       dataIndex: "investmentName",
     },
     {
@@ -131,8 +133,8 @@ const InvestmentRoute = () => {
       />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
-          title="Investment Routes"
-          description="Create, View & edit investment routes on the system"
+          title="Route Name"
+          description="Create, View & edit routes on the system"
           linkBack={appRoute.settings}
         />
 
@@ -154,8 +156,8 @@ const InvestmentRoute = () => {
       {id && (
         <DeleteModal
           open={openDeleteModal}
-          header="Investment Route"
-          text="investment route"
+          header="Route"
+          text="route"
           onCancel={() => setOpenDeleteModal(false)}
           onDelete={() => {
             removeData(id);

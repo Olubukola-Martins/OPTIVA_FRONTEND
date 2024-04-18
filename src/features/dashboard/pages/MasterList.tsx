@@ -40,7 +40,7 @@ const MasterList = () => {
       key: "program_type",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentroute",
       key: "investmentroute",
       // width: 35,
@@ -54,20 +54,20 @@ const MasterList = () => {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (_, val) => (
         <div>
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
                 <Menu.Item key="1">
-                  <Link to={appRoute.applicant_details().path}>
+                  <Link to={ appRoute.applicant_details(val.id).path}>
                     View Applicant Details
                   </Link>
                 </Menu.Item>
 
                 <Menu.Item key="2">
-                  <Link to={appRoute.applicant_documents().path}>
+                  <Link to={appRoute.applicant_documents(val.id).path}>
                     View Applicant Document
                   </Link>
                 </Menu.Item>

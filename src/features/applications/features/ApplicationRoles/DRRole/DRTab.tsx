@@ -5,9 +5,10 @@ import { IRoleTabProps } from "../AuditRole/AuditTab";
 import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile";
 // import { roleOptions } from "../OperationsRole/ApplicationsTab";
 
-export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   const tabItems: {
     label: string;
@@ -17,7 +18,7 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
     {
       label: "All Applicants",
       children: (
-        <DRApplicant searchTerm={searchTerm} />
+        <DRApplicant searchTerm={searchTerm} roleId={selectedRole} status={ status} />
       ),
       key: "AllApplicants",
     },
@@ -36,57 +37,57 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
               onChange={(e) => e.target.value === "" && setSearchTerm("")}
             />
             {data?.roles.id === 1 && (
-              <Select
-                allowClear
-                placeholder="Role"
-                className="md:flex hidden w-[250px]"
-                onChange={onRoleSelect}
-                options={[
-                  {
-                    value: 1,
-                    label: `DR's List`,
-                  },
-                  {
-                    value: 2,
-                    label: `DPO's List`,
-                  },
-                  {
-                    value: 3,
-                    label: `DMS's List`,
-                  },
-                  {
-                    value: 4,
-                    label: `Audit's List`,
-                  },
-                  {
-                    value: 5,
-                    label: `Operations  List`,
-                  },
-                  {
-                    value: 6,
-                    label: `Service Manager's  List`,
-                  },
-                  {
-                    value: 7,
-                    label: `Customer Engager's  List`,
-                  },
-                ]}
-              //   onChange={(value) => onRoleSelect(value, roleOptions.find(option => option.value === value)?.label || "")}
-              // options={roleOptions}
-              />
+             <Select
+             allowClear
+             placeholder="Role"
+             className="md:flex hidden w-[250px]"
+             onChange={onRoleSelect}
+             value={selectedRole}
+             options={[
+               {
+                 value: 6,
+                 label: "DR's List",
+               },
+               {
+                 value: 4,
+                 label: "DPO's List",
+               },
+               {
+                 value: 3,
+                 label: "DMS's List",
+               },
+               {
+                 value: 5,
+                 label: "Audit's List",
+               },
+               {
+                 value: 1,
+                 label: "Operations List",
+               },
+               {
+                 value: 2,
+                 label: "Service Manager's List",
+               },
+               {
+                 value: 9,
+                 label: "Customer Engager's List",
+               },
+             ]}
+          
+           />
             )}
             <Select
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
-              // onChange={handleFilterChange}
+              onChange={(val) => setStatus(val)}
               options={[
                 {
                   value: `pending`,
                   label: `Pending Handover`,
                 },
                 {
-                  value: `confirmed`,
+                  value: `accepted`,
                   label: `Confirmed Handover`,
                 },
                 {

@@ -1,5 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Dropdown,  Menu, Popconfirm, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
@@ -19,14 +19,22 @@ import { openNotification } from "src/utils/notification";
 
 export interface IPortfolioProps {
   searchTerm: string;
+  roleId?: number;
+  status?: string;
 }
 
-export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const AuditPortfolio: React.FC<IPortfolioProps> = ({
+  searchTerm,
+  roleId,
+  status,
+}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    role_id: roleId,
+    status: status,
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
@@ -127,7 +135,7 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -243,23 +251,8 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
     },
   ];
 
-  // const handleClose = () => {
-  //   setOpenSubmitModal(false);
-  // };
-
   return (
     <>
-      {/* <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">
-        <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row sm:items-start items-center sm:pl-5">
-          <Input.Search
-            placeholder="Search"
-            className=" w-52"
-            onSearch={(val) => setSearchTerm(val)}
-            onChange={(e) => e.target.value === "" && setSearchTerm("")}
-          />
-        </div>
-      </div> */}
-
       <Table
         columns={columns}
         dataSource={dataArray}

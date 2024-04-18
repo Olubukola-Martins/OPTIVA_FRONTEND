@@ -13,12 +13,13 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
-export const MyPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+  
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
@@ -73,7 +74,7 @@ export const MyPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -158,7 +159,6 @@ export const MyPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
         applicantId={applicantId as unknown as number}
         open={openSubmitModal}
         handleClose={handleClose}
-        // handleOpenImportModal={() => setOpenUploadModal(true)}
       />
     </>
   );

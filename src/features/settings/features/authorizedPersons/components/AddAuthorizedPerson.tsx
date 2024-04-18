@@ -147,6 +147,7 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
               description: err.response.data.message,
               duration: 8.0,
             });
+            setFileList([])
           },
           onSuccess: (res: any) => {
             openNotification({
@@ -155,7 +156,6 @@ export const AddAuthorizedPerson = ({ handleClose, open }: IdentifierProps) => {
               description: res.data.message,
               duration: 6.0,
             });
-            form.resetFields();
             queryClient.invalidateQueries([QUERY_KEY_FOR_AUTHORIZED_PERSON]);
          
             setFileList([])

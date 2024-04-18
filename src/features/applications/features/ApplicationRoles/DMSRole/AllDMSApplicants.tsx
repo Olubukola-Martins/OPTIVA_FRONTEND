@@ -17,14 +17,18 @@ import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 
-
-
-export const AllDMSApplicants: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const AllDMSApplicants: React.FC<IPortfolioProps> = ({
+  searchTerm,
+  roleId,
+  status,
+}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    role_id: roleId,
+    status: status,
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [applicantId, setApplicantId] = useState<number>();
@@ -131,7 +135,7 @@ export const AllDMSApplicants: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -251,7 +255,6 @@ export const AllDMSApplicants: React.FC<IPortfolioProps> = ({ searchTerm }) => {
         className="bg-white rounded-md shadow border mt-2"
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
-        
       />
     </>
   );

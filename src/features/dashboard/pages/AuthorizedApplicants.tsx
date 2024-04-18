@@ -8,14 +8,12 @@ import { useFetchAuthorizedApplicant } from "../hooks/useFetchAuthorizedApplican
 import { usePagination } from "src/hooks/usePagination";
 import { useState } from "react";
 import { useDebounce } from "src/hooks/useDebounce";
-import { useDashboardFilterValues } from "../hooks/useDashboardFilterValues";
 import { useApproveorRejectApplicant } from "src/features/applications/hooks/Application hooks/useApproveorRejectApplicant";
-// import { FilterDrawer } from "../components/FilterDrawer";
 
 const AuthorizedApplicants = () => {
   const { onChange, pagination } = usePagination();
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const { filterValues } = useDashboardFilterValues();
+  // const { filterValues } = useDashboardFilterValues();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchAuthorizedApplicant({
     pagination,
@@ -23,9 +21,7 @@ const AuthorizedApplicants = () => {
   });
   const { patchData } = useApproveorRejectApplicant("approve");
   const { patchData: rejectData } = useApproveorRejectApplicant("reject");
-  // const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-  console.log("filetr values", filterValues);
-
+  
   const approveApplicant = (id: number) => {
     patchData(id);
   };
@@ -62,7 +58,7 @@ const AuthorizedApplicants = () => {
       key: "program_type",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentroute",
       key: "investmentroute",
     },
@@ -140,14 +136,7 @@ const AuthorizedApplicants = () => {
             onSearch={(val) => setSearchTerm(val)}
             onChange={(e) => e.target.value === "" && setSearchTerm("")}
           />
-          {/* <Button
-            onClick={() => {
-              setDrawerOpen(true);
-
-            }}
-          >
-            Filter
-          </Button> */}
+          
         </div>
 
         <Table
@@ -161,15 +150,7 @@ const AuthorizedApplicants = () => {
           onChange={onChange}
         />
       </div>
-      {/* <FilterDrawer
-        handleClose={() => setDrawerOpen(false)}
-        isDrawerOpen={drawerOpen}
-      /> */}
-
-      {/* <FilterDrawer
-        handleClose={() => setDrawerOpen(false)}
-        isDrawerOpen={drawerOpen}
-      /> */}
+    
     </>
   );
 };

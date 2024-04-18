@@ -9,11 +9,11 @@ import { useQueryClient } from "react-query";
 import { createFileValidationRule } from "src/utils/formHelpers/validations";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICANT_DOCUMENT } from "../../hooks/Documet hooks/useGetApplicantDocumentCategory";
-import useUploadFile from "src/features/settings/features/authorizedPersons/hooks/useUploadFile";
 import { useUploadApplicantDoc } from "../../hooks/Documet hooks/useUploadApplicantDoc";
 import { AppButton } from "src/components/button/AppButton";
 import { fileRuleOptions } from "src/features/settings/features/authorizedPersons/types";
 import { IUploadMultipleFiles } from "../../types/types";
+import useUploadDocFile from "../../hooks/Documet hooks/useUploadDocFile";
 
 export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
   docId,
@@ -28,7 +28,7 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
   const documentType = queryParams.get("documentType");
   const { mutate, isLoading } = useUploadApplicantDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const { fileData, fileUploading, uploadFile } = useUploadFile();
+  const { fileData, fileUploading, uploadFile } = useUploadDocFile();
 
   const filteredData = data?.filter(
     (item) => item.document_type === documentType
@@ -84,7 +84,8 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
               document_requirement_id: docRequiredId as unknown as number,
               file: fileData?.data, // Use the uploaded file data
             };
-
+            console.log("file upload data", fileUploadData);
+            console.log('file data check', fileData)
             // Push the data object to the uploadData array
             uploadData.push(fileUploadData);
           }
@@ -92,6 +93,8 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
       }
     }
 
+    console.log("form vals", values);
+    console.log("uploaded data", uploadData);
     mutate(uploadData, {
       onError: (err: any) => {
         openNotification({
@@ -100,6 +103,7 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
           description: err.response.data.message,
           duration: 8.0,
         });
+        setFileList([]);
       },
       onSuccess: (res: any) => {
         console.log(res);
@@ -109,7 +113,7 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
           description: "Documents successfully uploaded",
           duration: 6.0,
         });
-        form.resetFields();
+        setFileList([]);
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
       },
     });
@@ -156,7 +160,7 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
                     </p>
                     <p className="px-1">
                       Maximum upload size is {""}
-                      {Math.round(item.document_size / 1024)} MB
+                      {Math.round(item.document_size)} MB
                     </p>
                   </div>
                 )
@@ -183,4 +187,3 @@ export const AttachIdentityDocument: React.FC<IDocumentProps> = ({
     </>
   );
 };
-

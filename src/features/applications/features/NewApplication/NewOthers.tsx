@@ -7,6 +7,10 @@ import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+// import { useParams } from "react-router-dom";
+// import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
+// import { renderDetailsInput } from "../ApplicantDetails/AcademicHistory";
+// import { useEffect } from "react";
 
 export const NewOthers = () => {
   const { sharedData } = useGlobalContext();

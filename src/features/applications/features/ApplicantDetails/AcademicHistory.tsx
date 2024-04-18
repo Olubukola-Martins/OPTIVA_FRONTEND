@@ -1,16 +1,18 @@
 import {
   Checkbox,
-  Empty,
   Form,
   Input,
   InputNumber,
   Select,
+  Skeleton,
   Tooltip,
 } from "antd";
 import { useParams } from "react-router-dom";
 import { IApplicationFormResponseProps } from "../NewApplication/NewImmigrationAndCourtProceedings";
 import { useEffect } from "react";
 import { useGetSectionResponse } from "../../hooks/Application hooks/useGetSectionResponse";
+import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
+import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export const renderDetailsInput = (inputType: string, options?: any[]) => {
   if (inputType === "textarea") {
@@ -20,9 +22,9 @@ export const renderDetailsInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "select") {
     return (
       <div className="w-1/2">
-        <Select className="w-1/2" >
-          {options?.map((option, ) => (
-            <Select.Option key={option.id} value={option} >
+        <Select className="w-1/2">
+          {options?.map((option) => (
+            <Select.Option key={option.id} value={option}>
               {option.charAt(0).toUpperCase() + option.slice(1)}
               {/* {option} */}
             </Select.Option>
@@ -51,32 +53,34 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
   subsectionName,
   onPrevTabItem,
-  form
+  form,
 }) => {
   const { id } = useParams();
 
   const { data: sectionTwoData } = useGetSectionResponse({
-    pagination: {
-      subsection_name: subsectionName,
-    },
+    subsection_name: subsectionName,
     currentUrl: `${id as unknown as number}/sectiontworesponse`,
   });
 
+  const { data: sectionTwoQuestions, isLoading } = useGetSingleQuestion({
+    id: 1,
+    endpointUrl: "section-two",
+  });
+  console.log("dection 2", sectionTwoData);
   useEffect(() => {
     if (sectionTwoData?.data && sectionTwoData.data.length > 0) {
       const initialValues: Record<string, any> = {};
-      sectionTwoData.data.forEach(item => {
+      sectionTwoData.data.forEach((item) => {
         initialValues[item.question.schema_name] = item.response;
       });
       form?.setFieldsValue(initialValues);
     }
   }, [sectionTwoData]);
-  
-  
+
   return (
     <>
       {sectionTwoData?.data?.length ? (
-       sectionTwoData.data.map(
+        sectionTwoData.data.map(
           (item) =>
             item.subsection_name === subsectionName && (
               <Form.Item
@@ -87,13 +91,33 @@ export const AcademicHistory: React.FC<IApplicationFormResponseProps> = ({
                 {renderDetailsInput(
                   item.question.input_type,
                   item.question.options
-                 
                 )}
               </Form.Item>
             )
         )
       ) : (
-        <Empty />
+        <Skeleton active loading={isLoading}>
+          {sectionTwoQuestions?.map(
+            (item) =>
+              item.subsection_name === subsectionName && (
+                <div className="w-full" key={item.id}>
+                  <Form.Item
+                    id={item.id as unknown as string}
+                    name={item.schema_name}
+                    // rules={generalValidationRules}
+                    label={
+                      item.form_question.charAt(0).toUpperCase() +
+                      item.form_question.slice(1)
+                    }
+                    key={item.id}
+                    className="w-full"
+                  >
+                    {renderInput(item.input_type, item.options)}
+                  </Form.Item>
+                </div>
+              )
+          )}
+        </Skeleton>
       )}
 
       <div className="flex justify-between  my-5 py-2">

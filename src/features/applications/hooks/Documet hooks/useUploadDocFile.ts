@@ -3,7 +3,8 @@ import { useQueryClient, useMutation } from "react-query";
 import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
 import { openNotification } from "src/utils/notification";
-import { QUERY_KEY_FOR_AUTHORIZED_PERSON } from "./useGetAuthorizedPersons";
+import { QUERY_KEY_FOR_APPLICANT_DOCUMENT } from "src/features/applications/hooks/Documet hooks/useGetApplicantDocumentCategory";
+// import { QUERY_KEY_FOR_APPLICANT_DOCUMENT } from "src/features/applications/hooks/Documet hooks/useGetApplicantDocumentCategory";
 
 export interface IPostProps  {
   newData: any;
@@ -25,7 +26,7 @@ export const postItemData = async ({ newData, url }: IPostProps) => {
   return response;
 };
  
-const useUploadFile = () => {
+const useUploadDocFile = () => {
   const queryClient = useQueryClient();
   const {
     mutate,
@@ -49,7 +50,7 @@ const useUploadFile = () => {
           });
         },
         onSuccess: () => {
-          queryClient.invalidateQueries([QUERY_KEY_FOR_AUTHORIZED_PERSON]);
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
         },
       }
     );
@@ -63,5 +64,5 @@ const useUploadFile = () => {
   //   return <div>useUploadPaymentProof</div>;
 };
  
-export default useUploadFile;
+export default useUploadDocFile;
  

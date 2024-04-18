@@ -92,7 +92,7 @@ export const AddFees = ({
             </Select>
           </Form.Item>
           <Form.Item
-            label="Investment Route"
+            label="Route Name"
             name="investment_route_id"
             rules={generalValidationRules}
           >

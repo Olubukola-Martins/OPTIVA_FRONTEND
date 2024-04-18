@@ -18,12 +18,13 @@ import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { OutstandingDocuments } from "../../components/OutstandingDocuments";
 
-export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm,}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    
   });
   const [openSupportingDocModal, setOpenSupportingDocModal] =
     useState<boolean>(false);
@@ -138,7 +139,7 @@ export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },

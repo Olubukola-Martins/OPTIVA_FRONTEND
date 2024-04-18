@@ -22,13 +22,14 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 
 export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
-  searchTerm,
+  searchTerm, roleId
 }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    role_id:roleId
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
@@ -40,6 +41,7 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
   const [openRoleModal, setOpenRoleModal] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
   const { patchData } = useMoveToNextStage();
+ 
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
@@ -146,7 +148,7 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
       key: "5",
     },
     {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
@@ -279,9 +281,7 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
                 <Menu.Item key="6">
                   <Link
                     to={
-                      appRoute.applicant_details(val.key as unknown as number)
-                        .path
-                    }
+                      appRoute.applicant_details(val.key as unknown as number).path}
                   >
                     View Applicant Details
                   </Link>

@@ -51,7 +51,7 @@ export const EditInvestment = ({
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title="Edit Investment Route"
+      title="Edit Route"
     >
       <Form
         layout="vertical"
@@ -62,7 +62,7 @@ export const EditInvestment = ({
       >
         <Form.Item
           name="name"
-          label="Investment Name"
+          label="Route Name"
           rules={textInputValidationRules}
         >
           <Input />

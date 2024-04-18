@@ -47,11 +47,6 @@ const CountryMilestonesAndPrograms = () => {
     },
   ];
 
-  // const menuProps = {
-  //   items,
-  //   onClick: () => {},
-  // };
-
   return (
     <>
       <div className="flex justify-between items-center">

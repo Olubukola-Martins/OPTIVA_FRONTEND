@@ -18,7 +18,8 @@ const postData = async (props: IUploadMultipleFiles[]) => {
     const data = {
       ...props,
     };
-    const response = await axios.post(url, data, config);
+  const response = await axios.post(url, data, config);
+  console.log('upload multiple', response)
     return response;
   };
 
