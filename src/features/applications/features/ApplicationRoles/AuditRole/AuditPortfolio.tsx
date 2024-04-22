@@ -168,23 +168,28 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item
-                  key="1"
-                  onClick={() => {
-                    setApplicantId(val.key as unknown as number);
-                    // setOpenAcceptConfirm(true);
-                  }}
-                >
-                  <Popconfirm
-                    title="Accept Applicant"
-                    description={`Are you sure to accept ${val.applicantName}'s application?`}
-                    onConfirm={() => acceptApplicant()}
-                    okType="default"
-                    // open={openAcceptConfirm}
+                {status === "internal" && (
+                  <Menu.Item
+                    key="1"
+                    onClick={() => {
+                      setApplicantId(val.key as unknown as number);
+                      // setOpenAcceptConfirm(true);
+                    }}
                   >
-                    Accept Applicant
-                  </Popconfirm>
-                </Menu.Item>
+                    <Popconfirm
+                      title="Accept Applicant"
+                      description={`Are you sure to accept ${val.applicantName}'s application?`}
+                      onConfirm={() => acceptApplicant()}
+                      okType="default"
+                      // open={openAcceptConfirm}
+                    >
+                      Accept Applicant
+                    </Popconfirm>
+                  </Menu.Item>
+                )}
+                {status === "external" && (
+                  <Menu.Item key="8">Reason for review</Menu.Item>
+                )}
                 <Menu.Item key="2">
                   <Link
                     to={
@@ -205,42 +210,75 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({
                     View Uploaded Documents
                   </Link>
                 </Menu.Item>
-                <Menu.Item
-                  key="4"
-                  onClick={() => {
-                    setApplicantId(val.key as unknown as number);
-                    // setOpenApproveConfirm(true);
-                  }}
-                >
-                  <Popconfirm
-                    title="Approve"
-                    description={`Are you sure to approve ${val.applicantName}'s application?`}
-                    onConfirm={approveApplicant}
-                    okType="default"
-                    // open={openApproveConfirm}
+                <Menu.Item key="9">
+                  <Link
+                    to={
+                      appRoute.timeline_extensions(val.key as unknown as number)
+                        .path
+                    }
                   >
-                    Approve
-                  </Popconfirm>
+                    Timeline Extensions
+                  </Link>
                 </Menu.Item>
+                {status === "internal" && (
+                  <Menu.Item
+                    key="4"
+                    onClick={() => {
+                      setApplicantId(val.key as unknown as number);
+                      // setOpenApproveConfirm(true);
+                    }}
+                  >
+                    <Popconfirm
+                      title="Approve"
+                      description={`Are you sure to approve ${val.applicantName}'s application?`}
+                      onConfirm={approveApplicant}
+                      okType="default"
+                      // open={openApproveConfirm}
+                    >
+                      Approve
+                    </Popconfirm>
+                  </Menu.Item>
+                )}
 
-                <Menu.Item
-                  key="5"
-                  onClick={() => {
-                    setApplicantId(val.key as unknown as number);
-                    // setOpenRejectConfirm(true)
-                  }}
-                >
-                  <Popconfirm
-                    title="Reject"
-                    description={`Are you sure to reject ${val.applicantName}'s application?`}
-                    onConfirm={rejectApplicant}
-                    okType="default"
-                    // open={openRejectConfirm}
+                {status === "internal" && (
+                  <Menu.Item
+                    key="5"
+                    onClick={() => {
+                      setApplicantId(val.key as unknown as number);
+                      // setOpenRejectConfirm(true)
+                    }}
                   >
-                    Reject
-                  </Popconfirm>
-                </Menu.Item>
-                <Menu.Item key="6">Submit to International Partners</Menu.Item>
+                    <Popconfirm
+                      title="Reject"
+                      description={`Are you sure to reject ${val.applicantName}'s application?`}
+                      onConfirm={rejectApplicant}
+                      okType="default"
+                      // open={openRejectConfirm}
+                    >
+                      Reject
+                    </Popconfirm>
+                  </Menu.Item>
+                )}
+
+                {status === "internal" && (
+                  <Menu.Item key="6">
+                    Submit to International Partners
+                  </Menu.Item>
+                ) }
+
+                {status === "external" && (
+                  <Menu.Item key="7">Mark as resolved</Menu.Item>
+                )}
+
+                {status === "submitted" && (
+                  <Menu.Item key="10">View softcopy passport</Menu.Item>
+                )}
+                {status === "submitted" && (
+                  <Menu.Item key="11">Submit softcopy passport</Menu.Item>
+                )}
+                {status === "submitted" && (
+                  <Menu.Item key="12">Mark as completed</Menu.Item>
+                )}
               </Menu>
             }
           >

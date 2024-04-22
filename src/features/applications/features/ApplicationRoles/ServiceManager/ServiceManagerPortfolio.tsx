@@ -22,26 +22,26 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 
 export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
-  searchTerm, roleId
+  searchTerm,
+  roleId,
 }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
-    role_id:roleId
+    role_id: roleId,
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
   const [applicantId, setApplicantId] = useState<number>();
-  const [milestoneId, setMilestoneId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate: completeApplicationMutate } = useMarkApplicantAsComplete();
   const [openAssignModal, setOpenAssignModal] = useState<boolean>(false);
   const [openRoleModal, setOpenRoleModal] = useState<boolean>(false);
   const [openLogout, setOpenLogout] = useState<boolean>(false);
-  const { patchData } = useMoveToNextStage();
- 
+  const { mutate: stageMutate } = useMoveToNextStage();
+
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
@@ -114,10 +114,26 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
   };
 
   const moveApplicantToNextStage = () => {
-    // patchMutate({ id: applicantId as unknown as number, milestone_id: milestoneId as number});
-    patchData(
-      applicantId as unknown as number,
-      milestoneId as unknown as number
+    stageMutate(
+      { application_id: applicantId as number },
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+        },
+      }
     );
   };
 
@@ -281,7 +297,9 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
                 <Menu.Item key="6">
                   <Link
                     to={
-                      appRoute.applicant_details(val.key as unknown as number).path}
+                      appRoute.applicant_details(val.key as unknown as number)
+                        .path
+                    }
                   >
                     View Applicant Details
                   </Link>
@@ -302,9 +320,7 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
                 <Menu.Item
                   key="9"
                   onClick={() => {
-                    setApplicantId(val.key as unknown as number);
-                    console.log("applicant id", applicantId);
-                    setMilestoneId(val.milestoneId as unknown as number);
+                    setApplicantId(val.key as number);
                   }}
                 >
                   <Popconfirm
