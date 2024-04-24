@@ -1,6 +1,6 @@
 import { Skeleton } from "antd";
 import { useGetSingleTemplate } from "src/features/settings/features/contractsEmailTemplates/hooks/useGetSingleTemplate";
-import { removeHtmlTags } from "./OnboardingEmail";
+import { optivaAddr, removeHtmlTags } from "./OnboardingEmail";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { openNotification } from "src/utils/notification";
@@ -67,11 +67,29 @@ export const PassportEmail = () => {
             />
           ))}
         </div>
-        <div className="w-full">
-          <img
-            src="https://optivateststorage.blob.core.windows.net/optiva/uploads/1713777209_Frame 1321314655.png"
-            className="my-4 py-5 w-full"
-          />
+        <div>
+          {optivaAddr}
+
+          {/* <div className="flex justify-center my-5 gap-10 items-center p-3">
+            <p className="flex justify-center">
+              <i className="ri-smartphone-line"> +234 1 330 3100</i>
+            </p>
+
+            <p className="flex">
+              <i className="ri-smartphone-line"> +234 811 570 5056</i>
+            </p>
+            <p className="flex">
+              <i className="ri-mail-line"></i>
+              <a href="mailto:Legal@OptivaCP.com">Legal@OptivaCP.com</a>
+            </p>
+            <p>
+              <i className="ri-global-line">
+                <a href="www.OPTIVACP.com" target="_blank">
+                  www.OPTIVACP.com
+                </a>
+              </i>
+            </p>
+          </div> */}
         </div>
 
         <div className="flex justify-end items-center gap-5 my-4 py-5">
