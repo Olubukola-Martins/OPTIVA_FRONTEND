@@ -49,9 +49,10 @@ export const PassportEmail = () => {
     <>
       <Skeleton active loading={isLoading}>
         <div className="bg-[url('https://optiva-backend.techmur.com/assets/watermark.png')]  bg-contain bg-center bg-no-repeat p-2 m-3 z-10">
-          <img src="https://optiva-backend.techmur.com/assets/optivaLogo.png" />
-          {/* <p className=" border-b-[#801d22]"/> */}
-          <div className="p-2 m-4 border-t border-t-[#801d22]">
+        <img src="https://optivateststorage.blob.core.windows.net/optiva/uploads/1713776055_new logo.png" className="object-contain p-3 h-32"/>
+          <img src="https://optivateststorage.blob.core.windows.net/optiva/uploads/1713776533_Group 1000001758.png" className="object-fill w-full"/>
+           {/* <p className=" border-b-[#801d22]"/> */}
+          <div className="p-2 m-4 ">
             <p className="mt-2">{todaysDate}</p>
             <p>{applicantData?.applicant_name} </p>
             <p>14th Floor, Churchgate Towers 2,</p>
@@ -68,7 +69,7 @@ export const PassportEmail = () => {
         </div>
         <div className="w-full">
           <img
-            src="https://optiva-backend.techmur.com/assets/optivaAddr.png"
+            src="https://optivateststorage.blob.core.windows.net/optiva/uploads/1713777209_Frame 1321314655.png"
             className="my-4 py-5 w-full"
           />
         </div>
