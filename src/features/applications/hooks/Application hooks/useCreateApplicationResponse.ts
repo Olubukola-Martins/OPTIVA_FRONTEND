@@ -27,9 +27,11 @@ const postData = async (
   };
   const requestType = id ? axios.put : axios.post;
   const response = await requestType(url, data, config);
+  console.log("api pst rqst");
+  console.log("api pst rqst", response);
   return response;
 };
-export const useCreateApplicationResponse =(section: string) => {
+export const useCreateApplicationResponse = (section: string) => {
   return useMutation((props: ICreateApplicationResponse, id?: number) =>
     postData(props, section, id)
   );

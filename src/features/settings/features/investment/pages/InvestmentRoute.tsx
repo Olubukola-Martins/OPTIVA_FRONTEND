@@ -13,6 +13,7 @@ import {
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
 import { EditInvestment } from "../components/EditInvestment";
 import { useDelete } from "src/hooks/useDelete";
+import { useGetProgramType } from "../../program-types/hooks/useGetProgramType";
 
 interface DataType {
   key: React.Key;
@@ -21,7 +22,7 @@ interface DataType {
   country: string;
   dateCreated: string;
   lastModified: string;
-  // program:string
+  program: string;
 }
 
 const InvestmentRoute = () => {
@@ -35,8 +36,13 @@ const InvestmentRoute = () => {
     EndPointUrl: "admin/investment-route/",
     queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
   });
-
+  const { data: programData } = useGetProgramType();
   const [editId, setEditId] = useState<number>();
+
+  const getProgramName = (id?: number) => {
+    const program = programData?.find((item) => item.id === id);
+    return program?.program_name || '-';
+  };
 
   useEffect(() => {
     if (data) {
@@ -48,7 +54,7 @@ const InvestmentRoute = () => {
           dateCreated: formatDate(item.created_at),
           investmentName: item.investment_name,
           lastModified: formatDate(item.updated_at),
-          // program: item.
+          program: getProgramName(item.programtype_id) ,
         };
       });
       setDataArray(investmentRoute);
@@ -60,7 +66,6 @@ const InvestmentRoute = () => {
   const showDeleteModal = () => {
     setOpenDeleteModal(true);
   };
-
 
   const columns: ColumnsType<DataType> = [
     {
@@ -74,6 +79,10 @@ const InvestmentRoute = () => {
     {
       title: "Country",
       dataIndex: "country",
+    },
+    {
+      title: "Program Type",
+      dataIndex: "program",
     },
     {
       title: "Date Created",

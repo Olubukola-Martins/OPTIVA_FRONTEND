@@ -188,7 +188,7 @@ export const OnboardingEmail = () => {
         <div>
           {optivaAddr}
 
-          <div className="flex justify-center my-5 gap-10 items-center p-3">
+          {/* <div className="flex justify-center my-5 gap-10 items-center p-3">
             <p className="flex justify-center">
               <i className="ri-smartphone-line"> +234 1 330 3100</i>
             </p>
@@ -207,7 +207,7 @@ export const OnboardingEmail = () => {
                 </a>
               </i>
             </p>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex justify-end items-center gap-5 my-4 py-5">

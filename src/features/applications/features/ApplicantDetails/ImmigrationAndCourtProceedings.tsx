@@ -17,14 +17,10 @@ export const ImmigrationAndCourtProceedings: React.FC<
     currentUrl: `${id as unknown as number}/sectionthreeresponse`,
   });
 
-  console.log("sub section name", subsectionName);
-  console.log("section 3 response", sectionThreeData);
-
   const { data: sectionThreeQuestions, isLoading } = useGetSingleQuestion({
     id: 1,
     endpointUrl: "section-three",
   });
-  console.log("section 3 questions", sectionThreeQuestions);
   useEffect(() => {
     if (sectionThreeData?.data && sectionThreeData.data.length > 0) {
       const initialValues: Record<string, any> = {};

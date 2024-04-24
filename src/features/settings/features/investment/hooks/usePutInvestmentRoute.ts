@@ -9,6 +9,7 @@ export interface IPutInvestment extends IUserToken {
   id: number;
   investment_name: string;
   country_id: number;
+  programtype_id:number
 }
 
 interface IPProps {
@@ -27,6 +28,7 @@ const handlePutData = async (props: IPutInvestment) => {
   const data: any = {
     investment_name: props.investment_name,
     country_id: props.country_id,
+    programtype_id:props.programtype_id
   };
 
   const response = await axios.put(url, data, config);
@@ -43,7 +45,8 @@ export const usePutInvestmentRoute = ({
   const putData = (
     id: number,
     investment_name: string,
-    country_id: number
+    country_id: number,
+    programtype_id:number
   ) => {
     mutate(
       {
@@ -51,6 +54,7 @@ export const usePutInvestmentRoute = ({
         id,
         country_id,
         investment_name,
+        programtype_id
       },
       {
         onError: (error: any) => {
