@@ -8,6 +8,7 @@ import {
 } from "src/utils/formHelpers/validations";
 import { useCreateEligibleDependents } from "../hooks/useCreateEligibleDependents";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import FormItemCountry from "src/features/payment/components/FormItemCountry";
 
 export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
   const { addEligibleDependents } = useCreateEligibleDependents();
@@ -35,6 +36,12 @@ export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
       title="Add Dependents"
     >
       <Form layout="vertical" className="mt-4" onFinish={handleNewDependent}>
+        <FormItemCountry
+          name="country_id"
+          label="Country"
+          optionalField={false}
+        />
+
         <Form.Item
           name="dependent"
           label="Dependent"
@@ -108,7 +115,7 @@ export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
           )}
         </Form.List>
 
-        <AppButton type="submit" label="Save"/>
+        <AppButton type="submit" label="Save" />
       </Form>
     </Modal>
   );

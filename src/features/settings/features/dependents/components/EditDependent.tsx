@@ -13,6 +13,7 @@ import {
 } from "src/features/settings/types/settingsType";
 import useUpdateEligibleDependents from "../hooks/useUpdateEligibleDependents";
 import { useEffect } from "react";
+import FormItemCountry from "src/features/payment/components/FormItemCountry";
 
 interface IEditDepOrops extends IdentifierProps {
   itemId: number;
@@ -93,6 +94,8 @@ useEffect(()=>{editing(editLoading)},[editLoading])
           className="mt-4"
           onFinish={handleEditDependent}
         >
+          <FormItemCountry name="country_id" label="Country" optionalField={false} />
+
           <>
             <Form.Item
               name="dependent"

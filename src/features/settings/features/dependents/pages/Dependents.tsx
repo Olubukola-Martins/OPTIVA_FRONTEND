@@ -1,5 +1,5 @@
 import { ColumnsType } from "antd/es/table";
-import { Dropdown, Menu, Table, Tag } from "antd/lib";
+import { Dropdown, Form, Menu, Modal, Table, Tag } from "antd/lib";
 import React, { useEffect, useState } from "react";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -25,6 +25,7 @@ import {
 import { useFetchDependent } from "../hooks/useFetchDependent";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import { useDelete } from "src/hooks/useDelete";
+import FormItemCountry from "src/features/payment/components/FormItemCountry";
 
 export interface DataType {
   key: React.Key;
@@ -45,12 +46,16 @@ const queryKey = QUERY_KEY_ELIGIBLE_DEPENDENTS;
 const Dependents = () => {
   const [addNewD, setAddNewD] = useState(false);
   const [editNewD, setEditNewD] = useState(false);
+  const [disabledFiltering, setDisabledFiltering] = useState(false);
   const [editingDependent, setEditingDependent] = useState<boolean>(false);
   const [itemId, setItemId] = useState<number>();
   const [data, setData] = useState<DataType[] | []>([]);
+  const [filterForm] = Form.useForm();
   const [singleDependent, setSingleDependent] = useState<
     AllEligiDependentsDatum | undefined
   >();
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
   // const { deleteData } = useDeleteItem({ deleteEndpointUrl, queryKey });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { removeData } = useDelete({
@@ -61,8 +66,7 @@ const Dependents = () => {
   const {
     data: allDependentsData,
     isLoading: allDependentsLoading,
-  }: 
-  IQueryDataType<IAllEligiDependentsResponse> = useFetchAllItems({
+  }: IQueryDataType<IAllEligiDependentsResponse> = useFetchAllItems({
     queryKey,
     urlEndPoint: eligibleDependentURL,
   });
@@ -72,7 +76,9 @@ const Dependents = () => {
   }: { data: ISingleEligibleDependent | undefined; isLoading: boolean } =
     useFetchDependent({ id: itemId as number });
 
-const handleEditingProgress = (editIsLoading: boolean ) => {setEditingDependent(editIsLoading)}
+  const handleEditingProgress = (editIsLoading: boolean) => {
+    setEditingDependent(editIsLoading);
+  };
 
   useEffect(() => {
     if (allDependentsData?.data && Array.isArray(allDependentsData?.data)) {
@@ -84,9 +90,16 @@ const handleEditingProgress = (editIsLoading: boolean ) => {setEditingDependent(
         conditions: item.other_conditions.map((item) => item.other_condition),
       }));
       setData(newData);
-      console.log("editing",editingDependent)
+      console.log("editing", editingDependent);
     }
-  }, [allDependentsData, allDependentsLoading,  editingDependent, allDependentsData?.data, singleDependentData,singleDependentLoading]);
+  }, [
+    allDependentsData,
+    allDependentsLoading,
+    editingDependent,
+    allDependentsData?.data,
+    singleDependentData,
+    singleDependentLoading,
+  ]);
 
   useEffect(() => {
     if (singleDependentData?.data && !Array.isArray(singleDependentData.data)) {
@@ -94,10 +107,7 @@ const handleEditingProgress = (editIsLoading: boolean ) => {setEditingDependent(
     }
   }, [itemId, singleDependentData, singleDependentLoading, editingDependent]);
 
-  useEffect(() => {
-
-  }, [editingDependent,data,singleDependent])
-  
+  useEffect(() => {}, [editingDependent, data, singleDependent]);
 
   const columns: ColumnsType<DataType> = [
     {
@@ -158,6 +168,39 @@ const handleEditingProgress = (editIsLoading: boolean ) => {setEditingDependent(
   ];
   return (
     <>
+      <Modal
+        title="Filter"
+        footer={null}
+        open={isFilterModalOpen}
+        onCancel={() => {
+          setIsFilterModalOpen(false);
+          filterForm.resetFields();
+        }}
+      >
+        <Form form={filterForm} layout="vertical">
+          <FormItemCountry
+            name="country_id"
+            label="Choose Country"
+            onChange={(val: number) => {
+              val ? setDisabledFiltering(false) : setDisabledFiltering(true);
+            }}
+          />
+          <div className="w-fit flex gap-4 ml-auto">
+            <AppButton
+              type="reset"
+              label="Clear Filter"
+              variant="transparent"
+              isDisabled={disabledFiltering}
+              handleClick={()=>{setIsFilterModalOpen(false)}}
+            />
+            <AppButton
+              type="submit"
+              label="Apply Filter"
+              isDisabled={disabledFiltering}
+            />
+          </div>
+        </Form>
+      </Modal>
       <AddDependent open={addNewD} handleClose={() => setAddNewD(false)} />
       <DeleteModal
         open={showDeleteModal}
@@ -168,7 +211,7 @@ const handleEditingProgress = (editIsLoading: boolean ) => {setEditingDependent(
         }}
         onDelete={() => {
           removeData(itemId as number);
-          setShowDeleteModal(false)
+          setShowDeleteModal(false);
         }}
       />
       {itemId && (
@@ -208,6 +251,16 @@ const handleEditingProgress = (editIsLoading: boolean ) => {setEditingDependent(
           <AppButton label="Add New" handleClick={() => setAddNewD(true)} />
         </div>
       </div>
+      <AppButton
+        label="Filter By Country"
+        type="button"
+        variant="transparent"
+        containerStyle={`float-right mb-4`}
+        handleClick={() => {
+          setIsFilterModalOpen(true);
+        }}
+      />
+
       <Table
         className="bg-white rounded-md shadow border mt-8"
         columns={columns}
