@@ -34,7 +34,8 @@ export const AddMilestoneModal = ({
     queryKey: QUERY_KEY_FOR_MILESTONE,
   });
 
-    useEffect(() => {
+  console.log("single milestone", singleMilestone);
+  useEffect(() => {
     if (singleMilestone) {
       const { milestone, timeline, processes } = singleMilestone;
       form.setFieldsValue({
@@ -68,16 +69,28 @@ export const AddMilestoneModal = ({
       newProcess: newProcess.filter((_: any, i: number) => i !== index),
     });
   };
-
   const handleMilestoneSubmit = (val: any) => {
     const milestoneTitle = val.milestone;
     const milestoneTimeline = val.timeline;
-    const processes =
+
+    const title = val.title;
+    const duration = val.duration;
+
+    const newProcesses =
       val.newProcess?.map((item: any) => ({
         title: item.newTitle,
         duration: item.newDuration,
         duration_type: "days",
       })) || [];
+
+    const processesWithMainFields = [
+      {
+        title: title,
+        duration: duration,
+        duration_type: "days",
+      },
+      ...newProcesses,
+    ];
 
     if (milestoneId) {
       putData(
@@ -85,14 +98,14 @@ export const AddMilestoneModal = ({
         milestoneTitle,
         milestoneTimeline,
         "days",
-        processes
+        processesWithMainFields
       );
       handleClose();
     } else {
       mutate(
         {
           milestone: milestoneTitle,
-          processes,
+          processes: processesWithMainFields, 
           timeline: milestoneTimeline,
           token,
           duration_type: "days",
@@ -101,8 +114,8 @@ export const AddMilestoneModal = ({
           onError: (error: any) => {
             openNotification({
               state: "error",
-              title: "Error Occured",
-              description: error.response?.data?.message || "Unknown error",
+              title: "Error Occurred",
+              description: error.response?.data?.message ,
               duration: 5,
             });
           },
@@ -115,6 +128,7 @@ export const AddMilestoneModal = ({
             queryClient.invalidateQueries([QUERY_KEY_FOR_MILESTONE]);
             form.resetFields();
             isSuccess && handleClose();
+            handleClose();
           },
         }
       );
@@ -166,7 +180,9 @@ export const AddMilestoneModal = ({
           </div>
 
           <div>
-            <h2 className="p-1">What is the duration of the process (in days)?</h2>
+            <h2 className="p-1">
+              What is the duration of the process (in days)?
+            </h2>
             <Form.Item
               name="duration"
               rules={
