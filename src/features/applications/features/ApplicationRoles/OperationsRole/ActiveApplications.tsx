@@ -20,6 +20,7 @@ import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { AssignToModal } from "../../components/AssignToModal";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
+import { END_POINT } from "src/config/environment";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -362,6 +363,32 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
     setOpenInactiveModal(false);
   };
 
+
+  // EXPORT BUTTON
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
   return (
     <>
       {/* INACTIVE MODAL */}
@@ -402,6 +429,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
       />
 
       {/* TABLE */}
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
@@ -412,18 +440,10 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
         onChange={onChange}
         rowSelection={{
           type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: 6",
-              selectedRows
-            );
-          },
+          onChange: handleRowSelectionChange,
         }}
       />
+
     </>
   );
 };

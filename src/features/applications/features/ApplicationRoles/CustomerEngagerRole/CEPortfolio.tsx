@@ -12,6 +12,8 @@ import { useFetchApplicantsByRole } from "src/features/applications/hooks/Applic
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 
 export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
   const { onChange, pagination } = usePagination();
@@ -143,17 +145,50 @@ export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
   //   setOpenSubmitModal(false);
   // };
 
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
+
   return (
     <>
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        scroll={{ x: 700 }}
-        loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        loading={isLoading}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
+        rowSelection={{
+          type: "checkbox",
+          onChange: handleRowSelectionChange,
+        }}
       />
+    
+  
+
 
       {/* <SubmitApplicationModal
         applicantId={applicantId as unknown as number}

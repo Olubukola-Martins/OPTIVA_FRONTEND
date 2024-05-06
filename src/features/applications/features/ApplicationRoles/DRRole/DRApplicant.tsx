@@ -15,15 +15,21 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 
-export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm, roleId, status }) => {
+export const DRApplicant: React.FC<IPortfolioProps> = ({
+  searchTerm,
+  roleId,
+  status,
+}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
     role_id: roleId,
-    status:status
+    status: status,
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useMarkApplicantAsComplete();
@@ -186,8 +192,34 @@ export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm, roleId, sta
     },
   ];
 
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
+
   return (
     <>
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
@@ -198,16 +230,7 @@ export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm, roleId, sta
         onChange={onChange}
         rowSelection={{
           type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
+          onChange: handleRowSelectionChange,
         }}
       />
     </>

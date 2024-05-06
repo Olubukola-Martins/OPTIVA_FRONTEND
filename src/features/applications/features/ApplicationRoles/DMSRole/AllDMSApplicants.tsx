@@ -16,6 +16,8 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 
 export const AllDMSApplicants: React.FC<IPortfolioProps> = ({
   searchTerm,
@@ -245,16 +247,46 @@ export const AllDMSApplicants: React.FC<IPortfolioProps> = ({
     },
   ];
 
+ const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
+
   return (
     <>
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        loading={isLoading}
-        scroll={{ x: 700 }}
         className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        loading={isLoading}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
+        rowSelection={{
+          type: "checkbox",
+          onChange: handleRowSelectionChange,
+        }}
       />
     </>
   );

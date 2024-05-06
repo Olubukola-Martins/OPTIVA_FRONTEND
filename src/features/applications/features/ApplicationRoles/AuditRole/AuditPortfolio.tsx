@@ -4,6 +4,8 @@ import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
@@ -288,17 +290,46 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({
       ),
     },
   ];
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
 
   return (
     <>
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        scroll={{ x: 700 }}
-        loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        loading={isLoading}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
+        rowSelection={{
+          type: "checkbox",
+          onChange: handleRowSelectionChange,
+        }}
       />
     </>
   );

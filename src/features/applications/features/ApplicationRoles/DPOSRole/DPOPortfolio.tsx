@@ -17,6 +17,8 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { OutstandingDocuments } from "../../components/OutstandingDocuments";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 
 export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm,}) => {
   const { onChange, pagination } = usePagination();
@@ -263,17 +265,49 @@ export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm,}) => {
     },
   ];
 
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
+
   return (
     <>
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        loading={isLoading}
-        scroll={{ x: 700 }}
         className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        loading={isLoading}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
+        rowSelection={{
+          type: "checkbox",
+          onChange: handleRowSelectionChange,
+        }}
       />
+  
+  
 
       <OutstandingDocuments
         open={openSupportingDocModal}

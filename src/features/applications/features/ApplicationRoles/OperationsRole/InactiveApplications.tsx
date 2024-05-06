@@ -17,6 +17,7 @@ import { useGetInvestmentRoute } from "src/features/settings/features/investment
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
+import { END_POINT } from "src/config/environment";
 
 export const InactiveApplications: React.FC<IPortfolioProps> = ({
   searchTerm, 
@@ -239,6 +240,32 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
   };
 
   const [comment, setComment] = useState<string>();
+
+  // EXPORT TABLE
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
   return (
     <>
       {/* INACTIVE MODAL */}
@@ -281,26 +308,18 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
         </div>
       </Modal>
       {/* TABLE */}
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        className="bg-white rounded-md shadow border mt-8"
+        className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         loading={isLoading}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
         rowSelection={{
           type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
+          onChange: handleRowSelectionChange,
         }}
       />
     </>
