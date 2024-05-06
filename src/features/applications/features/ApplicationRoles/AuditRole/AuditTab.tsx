@@ -23,7 +23,7 @@ export const AuditTab: React.FC<IRoleTabProps> = ({
     key: string;
   }[] = [
     {
-      label: "All Applicants",
+      label: "All Clients",
       children: (
         <AuditPortfolio
           searchTerm={searchTerm}

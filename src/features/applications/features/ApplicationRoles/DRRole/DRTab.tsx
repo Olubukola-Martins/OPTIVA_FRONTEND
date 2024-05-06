@@ -16,7 +16,7 @@ export const DRTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) =
     key: string;
   }[] = [
     {
-      label: "All Applicants",
+      label: "All Clients",
       children: (
         <DRApplicant searchTerm={searchTerm} roleId={selectedRole} status={ status} />
       ),

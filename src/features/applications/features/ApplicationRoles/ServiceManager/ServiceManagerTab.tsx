@@ -17,7 +17,7 @@ export const ServiceManagerTab: React.FC<IRoleTabProps> = ({
     key: string;
   }[] = [
     {
-      label: "All Applicants",
+      label: "All Clients",
       children: (
         <ServiceManagerPortfolio
           roleId={selectedRole}

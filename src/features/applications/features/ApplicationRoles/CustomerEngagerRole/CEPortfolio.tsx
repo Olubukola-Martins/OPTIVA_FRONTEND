@@ -8,7 +8,7 @@ import {
 } from "src/features/applications/features/ApplicationRoles/OperationsRole/ActiveApplications";
 import { useEffect, useState } from "react";
 import { useFetchApplicantsByRole } from "src/features/applications/hooks/Application hooks/useFetchApplicantsByRole";
-import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
+// import { SubmitApplicationModal } from "../../components/SubmitApplicationModal";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
@@ -22,8 +22,8 @@ export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
   
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
-  const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
-  const [applicantId, setApplicantId] = useState<number>();
+  // const [openSubmitModal, setOpenSubmitModal] = useState<boolean>(false);
+  // const [applicantId, setApplicantId] = useState<number>();
   useEffect(() => {
     if (data?.data) {
       const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
@@ -34,7 +34,7 @@ export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           milestone: item.milestone,
           addedBy: item.added_by,
           investmentRoute: item.investmentroute,
@@ -64,25 +64,25 @@ export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
-    {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
       title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: "Milestone",
       dataIndex: "milestone",
@@ -120,15 +120,15 @@ export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
                     Generate Quote
                   </Link>
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   key="3"
                   onClick={() => {
                     setApplicantId(val.key as unknown as number);
                     setOpenSubmitModal(true);
                   }}
                 >
-                  Submit
-                </Menu.Item>
+                  Submit Proof of Payment
+                </Menu.Item> */}
               </Menu>
             }
           >
@@ -139,9 +139,9 @@ export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
     },
   ];
 
-  const handleClose = () => {
-    setOpenSubmitModal(false);
-  };
+  // const handleClose = () => {
+  //   setOpenSubmitModal(false);
+  // };
 
   return (
     <>
@@ -155,11 +155,11 @@ export const CEPortfolio: React.FC<IPortfolioProps> = ({ searchTerm, }) => {
         onChange={onChange}
       />
 
-      <SubmitApplicationModal
+      {/* <SubmitApplicationModal
         applicantId={applicantId as unknown as number}
         open={openSubmitModal}
         handleClose={handleClose}
-      />
+      /> */}
     </>
   );
 };

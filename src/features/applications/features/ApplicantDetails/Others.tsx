@@ -9,9 +9,11 @@ import { useCreateApplicationResponse } from "../../hooks/Application hooks/useC
 import { useEffect } from "react";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
 // import { renderInput } from "../NewApplication/NewApplicantBrief";
-import { renderDetailsInput } from "./AcademicHistory";
+// import { renderDetailsInput } from "./AcademicHistory";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "../NewApplication/NewApplicantBrief";
+import { generalValidationRules, generalValidationRulesOpt } from "src/utils/formHelpers/validations";
+// import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export const Others: React.FC<IApplicantDetailsProps> = ({
   onPrev,
@@ -90,9 +92,14 @@ export const Others: React.FC<IApplicantDetailsProps> = ({
                     name={item.question.schema_name}
                     label={item.question.form_question}
                     key={item.question_id}
+                    rules={
+                      item.question.is_required === 1
+                        ? generalValidationRules
+                        : generalValidationRulesOpt
+                    }
                     className="w-full"
                   >
-                    {renderDetailsInput(
+                    {renderInput(
                       item.question.input_type,
                       item.question.options
                     )}
@@ -107,6 +114,11 @@ export const Others: React.FC<IApplicantDetailsProps> = ({
                   name={item.schema_name}
                   label={item.form_question}
                   key={item.id}
+                  rules={
+                    item.is_required === 1
+                      ? generalValidationRules
+                      : generalValidationRulesOpt
+                  }
                 >
                   {renderInput(item.input_type, item.options)}
                 </Form.Item>

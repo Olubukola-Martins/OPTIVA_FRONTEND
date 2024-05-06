@@ -75,7 +75,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
           applicantName: capitalizeName(item.applicant.full_name),
           country: getCountryName(item.country_id) || "-",
           programType: getProgramName(item.programtype_id) || "-",
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           assignedTo: assignedEmployee ? assignedEmployee.name : "-",
           reasons: lastComment
             ? lastComment.comment.charAt(0).toUpperCase() +
@@ -135,25 +135,25 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
-    {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
       title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: " Assigned To",
       dataIndex: "assignedTo",

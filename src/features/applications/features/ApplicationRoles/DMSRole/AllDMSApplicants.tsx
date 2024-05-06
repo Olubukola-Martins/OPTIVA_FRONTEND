@@ -46,7 +46,7 @@ export const AllDMSApplicants: React.FC<IPortfolioProps> = ({
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           applicationStage: item.process,
           documentsUploaded: item.uploaded,
           investmentRoute: item.investmentroute,
@@ -125,25 +125,25 @@ export const AllDMSApplicants: React.FC<IPortfolioProps> = ({
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
-    {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
       title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: "Application Stage",
       dataIndex: "applicationStage",

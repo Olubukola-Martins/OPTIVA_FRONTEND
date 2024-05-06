@@ -42,9 +42,17 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
   const [openLogout, setOpenLogout] = useState<boolean>(false);
   const { mutate: stageMutate } = useMoveToNextStage();
 
+  console.log("serve manager", data);
   useEffect(() => {
     if (data) {
       const activeApplicant: DataSourceItem[] = data.data.map((item, index) => {
+        const assignedToNames = item.user_assigned && item.user_assigned.length > 0
+        ? item.user_assigned
+          .filter((user) => user.role_id === 2)
+          .map((user) => user.name)
+          .join(", ")
+        : "-";
+
         return {
           key: item.id,
           sn: index + 1,
@@ -52,10 +60,11 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           investmentRoute: item.investmentroute,
           milestone: item.milestone,
           milestoneId: item.milestone_id,
+          assignedTo: assignedToNames,
         };
       });
 
@@ -137,6 +146,8 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
     );
   };
 
+  console.log("data", data);
+
   const columns: ColumnsType<DataSourceItem> = [
     {
       key: "1",
@@ -154,29 +165,34 @@ export const ServiceManagerPortfolio: React.FC<IPortfolioProps> = ({
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
-    {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
       title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: "Application Milestone",
       dataIndex: "milestone",
       key: "8",
+    },
+    {
+      title: "Service Manager Assigned To",
+      dataIndex: "assignedTo",
+      key: "9",
     },
     {
       title: "Action",

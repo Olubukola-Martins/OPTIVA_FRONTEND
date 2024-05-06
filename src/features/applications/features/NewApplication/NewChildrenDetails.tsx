@@ -3,7 +3,10 @@ import { useGetSingleQuestion } from "src/features/settings/features/appTemplate
 import { renderInput } from "./NewApplicantBrief";
 import { IApplicationFormResponseProps } from "./NewImmigrationAndCourtProceedings";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+import {
+  generalValidationRules,
+  generalValidationRulesOpt,
+} from "src/utils/formHelpers/validations";
 
 export const NewChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
@@ -28,7 +31,11 @@ export const NewChildrenDetails: React.FC<IApplicationFormResponseProps> = ({
               item.subsection_name === subsectionName && (
                 <div className="w-full" key={item.id}>
                   <Form.Item
-                    rules={generalValidationRules}
+                    rules={
+                      item.is_required === 1
+                        ? generalValidationRules
+                        : generalValidationRulesOpt
+                    }
                     name={item.schema_name}
                     label={
                       item.form_question.charAt(0).toUpperCase() +

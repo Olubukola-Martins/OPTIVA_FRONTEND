@@ -15,7 +15,7 @@ export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) 
     key: string;
   }[] = [
     {
-      label: "All Applicants",
+      label: "All Clients",
       children: <AllDMSApplicants searchTerm={searchTerm} status={ status} />,
       key: "AllApplicants",
     },
@@ -67,7 +67,7 @@ export const DMSTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) 
                },
                {
                  value: 9,
-                 label: "Customer Engager's List",
+                 label:"Customer Engager's List",
                },
              ]}
           

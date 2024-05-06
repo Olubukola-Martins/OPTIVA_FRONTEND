@@ -7,7 +7,6 @@ import { useQueryClient } from "react-query";
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
-// import { ICreateApplicationResponse, Response } from "../../types/types";
 import { AppButton } from "src/components/button/AppButton";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
 
