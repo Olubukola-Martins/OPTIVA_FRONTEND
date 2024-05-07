@@ -32,6 +32,7 @@ export interface DataType {
   dependent: string;
   ageBracket: string[];
   conditions: string[];
+  country: string;
 }
 interface IQueryDataType<TPageData> {
   data: TPageData | undefined;
@@ -88,6 +89,7 @@ const Dependents = () => {
         dependent: item.dependant,
         ageBracket: item.age_brackets.map((item) => item.age_bracket),
         conditions: item.other_conditions.map((item) => item.other_condition),
+        country: ""
       }));
       setData(newData);
       console.log("editing", editingDependent);
@@ -129,6 +131,14 @@ const Dependents = () => {
         return record.conditions.map((item) => <Tag key={item}>{item}</Tag>);
       },
     },
+    {
+      title: "Country",
+      dataIndex: "country",
+      // render(_, record) {
+      //   return record.conditions.map((item) => <Tag key={item}>{item}</Tag>);
+      // },
+    },
+
     {
       title: "Action",
       dataIndex: "action",
