@@ -8,9 +8,7 @@ import {
 } from "src/utils/formHelpers/validations";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { useForm } from "antd/es/form/Form";
-import {
-  AllEligiDependentsDatum,
-} from "src/features/settings/types/settingsType";
+import { AllEligiDependentsDatum } from "src/features/settings/types/settingsType";
 import useUpdateEligibleDependents from "../hooks/useUpdateEligibleDependents";
 import { useEffect } from "react";
 import FormItemCountry from "src/features/payment/components/FormItemCountry";
@@ -18,50 +16,68 @@ import FormItemCountry from "src/features/payment/components/FormItemCountry";
 interface IEditDepOrops extends IdentifierProps {
   itemId: number;
   singleDependent: AllEligiDependentsDatum | undefined;
-  singleDependentLoading:boolean;
-  editing:(loading:boolean)=>void
+  singleDependentLoading: boolean;
+  editing: (loading: boolean) => void;
 }
 
 export const EditDependent = ({
   handleClose,
   open,
   itemId,
-  singleDependent,singleDependentLoading,editing
+  singleDependent,
+  singleDependentLoading,
+  editing,
 }: IEditDepOrops) => {
-  const {
-    editEligibleDependents,
+  const { editEligibleDependents, isLoading: editLoading } =
+    useUpdateEligibleDependents();
 
-    // isSuccess,
-    isLoading: editLoading,
-  } = useUpdateEligibleDependents();
-
-  editing(editLoading)
+  editing(editLoading);
 
   const [editForm] = useForm();
 
-  const handleEditDependent = (values: { extraConditions: { value: any; }[]; dependent: any; age: any[]; conditions: any; }) => {
-    const extraConditions = values.extraConditions.map((item: { value: any; }) => ({
-      other_condition: item.value,
-    }));
-    editEligibleDependents(itemId, {
-      dependant: values.dependent,
-      age_dependants: values.age.map((item: any) => ({ age_bracket: item })),
-      dependant_conditions: values.conditions
-        ? [{ other_condition: values.conditions }, ...extraConditions]
-        : undefined,
-    });
-     handleClose();
+  const handleEditDependent = (values: {
+    country_id: number;
+    extraConditions: { value: any }[];
+    dependent: any;
+    age: any[];
+    conditions: any;
+  }) => {
+    const extraConditions = values.extraConditions.map(
+      (item: { value: any }) => ({
+        other_condition: item.value,
+      })
+    );
+    editEligibleDependents(
+      itemId,
+      {
+        dependant: values.dependent,
+        country_id: values.country_id,
+        age_dependants: values.age.map((item: any) => ({ age_bracket: item })),
+        dependant_conditions: values.conditions
+          ? [{ other_condition: values.conditions }, ...extraConditions]
+          : undefined,
+      },
+      undefined,
+      () => {
+        editForm.resetFields();
+      }
+    );
+    handleClose();
     // setData(singleDependentData?.data);
     // editForm.resetFields();
   };
-useEffect(()=>{editing(editLoading)},[editLoading])
+  useEffect(() => {
+    editing(editLoading);
+  }, [editLoading]);
 
   useEffect(() => {
     if (singleDependent && !Array.isArray(singleDependent)) {
       console.log("singleDependent", singleDependent);
-      const { age_brackets, other_conditions, dependant } = singleDependent;
+      const { age_brackets, other_conditions, dependant, country_id } =
+        singleDependent;
       editForm.setFieldsValue({
         dependent: dependant,
+        country_id,
         age: age_brackets?.map((item) => item.age_bracket),
         conditions:
           other_conditions?.length > 0
@@ -75,7 +91,7 @@ useEffect(()=>{editing(editLoading)},[editLoading])
             : [],
       });
     }
-  }, [singleDependent, singleDependentLoading]);
+  }, [singleDependent, singleDependentLoading,open]);
 
   return (
     <Modal
@@ -94,7 +110,11 @@ useEffect(()=>{editing(editLoading)},[editLoading])
           className="mt-4"
           onFinish={handleEditDependent}
         >
-          <FormItemCountry name="country_id" label="Country" optionalField={false} />
+          <FormItemCountry
+            name="country_id"
+            label="Country"
+            optionalField={false}
+          />
 
           <>
             <Form.Item

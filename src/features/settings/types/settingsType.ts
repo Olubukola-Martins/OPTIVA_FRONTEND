@@ -8,6 +8,7 @@ interface Agedependant {
 }
 export interface IDependentsBody {
   dependant: string;
+  country_id: number;
   age_dependants: Agedependant[];
   dependant_conditions: Dependantcondition[] | undefined;
 }
@@ -61,13 +62,23 @@ interface Links {
   next?: any;
 }
 
+
 export interface AllEligiDependentsDatum {
   id: number;
   dependant: string;
+  country_id: number;
   created_at: string;
   updated_at: string;
   age_brackets: AllEligiDependentsAgebracket[];
   other_conditions: AllEligiDependentsOthercondition[];
+  country: Country;
+}
+
+interface Country {
+  id: number;
+  country_name: string;
+  created_at: null;
+  updated_at: null;
 }
 
 interface AllEligiDependentsOthercondition {

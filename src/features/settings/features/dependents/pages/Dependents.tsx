@@ -89,7 +89,7 @@ const Dependents = () => {
         dependent: item.dependant,
         ageBracket: item.age_brackets.map((item) => item.age_bracket),
         conditions: item.other_conditions.map((item) => item.other_condition),
-        country: ""
+        country: item.country.country_name
       }));
       setData(newData);
       console.log("editing", editingDependent);
@@ -191,6 +191,8 @@ const Dependents = () => {
           <FormItemCountry
             name="country_id"
             label="Choose Country"
+            multiple={true}
+            allowClear={true}
             onChange={(val: number) => {
               val ? setDisabledFiltering(false) : setDisabledFiltering(true);
             }}

@@ -9,22 +9,37 @@ import {
 import { useCreateEligibleDependents } from "../hooks/useCreateEligibleDependents";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import FormItemCountry from "src/features/payment/components/FormItemCountry";
+import { useForm } from "antd/es/form/Form";
 
 export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
   const { addEligibleDependents } = useCreateEligibleDependents();
- 
-  const handleNewDependent = (values: { extraConditions: any[]; dependent: any; age: any[]; conditions: string; }) => {
-    console.log(values);
-    const extraConditions = values.extraConditions ? values.extraConditions.map(
-      (item) => ({other_condition:item.value})
-    ) : [];
+  const [modalForm] = useForm();
 
-      addEligibleDependents({
+  const handleNewDependent = (values: {
+    country_id: number;
+    extraConditions: any[];
+    dependent: any;
+    age: any[];
+    conditions: string;
+  }) => {
+    console.log(values);
+    const extraConditions = values.extraConditions
+      ? values.extraConditions.map((item) => ({ other_condition: item.value }))
+      : [];
+
+    addEligibleDependents(
+      {
         dependant: values.dependent,
+        country_id: values.country_id,
         age_dependants: values.age.map((item) => ({ age_bracket: item })),
-        dependant_conditions: values.conditions ? [
-          { other_condition: values.conditions }, ...extraConditions ] : undefined
-    });
+        dependant_conditions: values.conditions
+          ? [{ other_condition: values.conditions }, ...extraConditions]
+          : undefined,
+      },
+      () => {
+        modalForm.resetFields();
+      }
+    );
     handleClose();
   };
 
@@ -35,7 +50,12 @@ export const AddDependent = ({ handleClose, open }: IdentifierProps) => {
       footer={null}
       title="Add Dependents"
     >
-      <Form layout="vertical" className="mt-4" onFinish={handleNewDependent}>
+      <Form
+        layout="vertical"
+        className="mt-4"
+        onFinish={handleNewDependent}
+        form={modalForm}
+      >
         <FormItemCountry
           name="country_id"
           label="Country"

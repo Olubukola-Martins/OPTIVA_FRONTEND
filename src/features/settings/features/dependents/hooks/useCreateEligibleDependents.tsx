@@ -9,7 +9,10 @@ export const eligibleDependentURL = `${END_POINT.BASE_URL}/admin/eligible-depend
 export const useCreateEligibleDependents = () => {
   const queryClient = useQueryClient();
   const { mutate, isLoading, isSuccess } = useMutation(postItemData);
-  const addEligibleDependents = (newData: IDependentsBody) => {
+  const addEligibleDependents = (
+    newData: IDependentsBody,
+    onSuccess?: () => void
+  ) => {
     mutate(
       {
         url: eligibleDependentURL,
@@ -31,6 +34,7 @@ export const useCreateEligibleDependents = () => {
             description: response.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_ELIGIBLE_DEPENDENTS]);
+          onSuccess && onSuccess() ;
         },
       }
     );
