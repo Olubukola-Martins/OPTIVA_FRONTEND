@@ -26,6 +26,7 @@ import { useFetchDependent } from "../hooks/useFetchDependent";
 import { DeleteModal } from "src/components/modals/DeleteModal";
 import { useDelete } from "src/hooks/useDelete";
 import FormItemCountry from "src/features/payment/components/FormItemCountry";
+import { usePagination } from "src/hooks/usePagination";
 
 export interface DataType {
   key: React.Key;
@@ -47,10 +48,13 @@ const queryKey = QUERY_KEY_ELIGIBLE_DEPENDENTS;
 const Dependents = () => {
   const [addNewD, setAddNewD] = useState(false);
   const [editNewD, setEditNewD] = useState(false);
-  const [disabledFiltering, setDisabledFiltering] = useState(false);
   const [editingDependent, setEditingDependent] = useState<boolean>(false);
+  const [filterVal, setFilterVal] = useState<{ country_id?: number }>({
+    country_id: undefined,
+  });
   const [itemId, setItemId] = useState<number>();
   const [data, setData] = useState<DataType[] | []>([]);
+  const { pagination, onChange } = usePagination();
   const [filterForm] = Form.useForm();
   const [singleDependent, setSingleDependent] = useState<
     AllEligiDependentsDatum | undefined
@@ -70,6 +74,11 @@ const Dependents = () => {
   }: IQueryDataType<IAllEligiDependentsResponse> = useFetchAllItems({
     queryKey,
     urlEndPoint: eligibleDependentURL,
+    otherParams: filterVal,
+    pagination,
+    onSuccess: () => {
+      setIsFilterModalOpen(false);
+    },
   });
   const {
     data: singleDependentData,
@@ -81,6 +90,10 @@ const Dependents = () => {
     setEditingDependent(editIsLoading);
   };
 
+  const handleFilter = (val: { country_id: number }) => {
+    setFilterVal(val);
+  };
+
   useEffect(() => {
     if (allDependentsData?.data && Array.isArray(allDependentsData?.data)) {
       const responseData = allDependentsData.data;
@@ -89,10 +102,9 @@ const Dependents = () => {
         dependent: item.dependant,
         ageBracket: item.age_brackets.map((item) => item.age_bracket),
         conditions: item.other_conditions.map((item) => item.other_condition),
-        country: item.country.country_name
+        country: item.country.country_name,
       }));
       setData(newData);
-      console.log("editing", editingDependent);
     }
   }, [
     allDependentsData,
@@ -187,28 +199,17 @@ const Dependents = () => {
           filterForm.resetFields();
         }}
       >
-        <Form form={filterForm} layout="vertical">
+        <Form form={filterForm} layout="vertical" onFinish={handleFilter}>
           <FormItemCountry
             name="country_id"
             label="Choose Country"
-            multiple={true}
             allowClear={true}
-            onChange={(val: number) => {
-              val ? setDisabledFiltering(false) : setDisabledFiltering(true);
-            }}
           />
           <div className="w-fit flex gap-4 ml-auto">
             <AppButton
-              type="reset"
-              label="Clear Filter"
-              variant="transparent"
-              isDisabled={disabledFiltering}
-              handleClick={()=>{setIsFilterModalOpen(false)}}
-            />
-            <AppButton
               type="submit"
               label="Apply Filter"
-              isDisabled={disabledFiltering}
+              isLoading={filterVal.country_id ? allDependentsLoading : false}
             />
           </div>
         </Form>
@@ -264,12 +265,18 @@ const Dependents = () => {
         </div>
       </div>
       <AppButton
-        label="Filter By Country"
+        label={filterVal.country_id ? "Clear filter" : "Filter By Country"}
         type="button"
         variant="transparent"
         containerStyle={`float-right mb-4`}
+        isLoading={!filterVal.country_id ? allDependentsLoading : false}
         handleClick={() => {
-          setIsFilterModalOpen(true);
+          if (filterVal.country_id) {
+            setFilterVal({ country_id: undefined });
+            filterForm.resetFields();
+          } else {
+            setIsFilterModalOpen(true);
+          }
         }}
       />
 
@@ -279,6 +286,8 @@ const Dependents = () => {
         dataSource={data}
         scroll={{ x: 768 }}
         loading={allDependentsLoading}
+        pagination={pagination}
+        onChange={onChange}
       />
     </>
   );
