@@ -8,7 +8,12 @@ import {
 } from "../components/MeetingModals";
 import { IMeetingData } from "../components/MeetingModals";
 import { END_POINT } from "src/config/environment";
-import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useQueryClient } from "react-query";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+  useQueryClient,
+} from "react-query";
 import useAddMeeting from "../hooks/useAddMeeting";
 import { INewMeeting, ISingleMeeting } from "../types/types";
 import { openNotification } from "src/utils/notification";
@@ -39,10 +44,8 @@ export const MeetingContext = React.createContext<{
   ): void {
     throw new Error("Function not implemented.");
   },
-  newfetch: ()=>{},
+  newfetch: () => {},
 });
-
-
 
 const Meetings = () => {
   const [editLoading, setEditLoading] = useState(false);
@@ -53,15 +56,15 @@ const Meetings = () => {
   const {
     data: userEvents,
     isLoading: userEventsLoading,
-    isFetching: userEventsFetching, refetch
+    isFetching: userEventsFetching,
+    refetch,
   } = useFetchSingleItem({
     itemId: userInfo?.id,
     queryKey: QUERY_KEY_MEETINGS,
     urlEndPoint: `${meetingsURL}/user`,
   });
   const { mutate, isLoading: newMeetingLoading } = useAddMeeting();
-    const [newfetch, setNewFetch] = useState(refetch);
-
+  const [newfetch, setNewFetch] = useState(refetch);
 
   const addNewMeeting = (newData: INewMeeting) => {
     mutate(
@@ -106,9 +109,10 @@ const Meetings = () => {
             link,
             start_time,
             title,
-            organizer_id,status
+            organizer_id,
+            status,
           } = event;
-          
+
           // Splitting the date string to extract year, month, and day
           const [year, month, day] = date.split("-").map(Number);
           // Splitting the time string to extract hour and minute
@@ -152,13 +156,12 @@ const Meetings = () => {
       );
       setEvents(userEventsList);
     }
-  }, [ userEvents?.data, userInfo, userInfo?.id]);
+  }, [userEvents?.data, userInfo, userInfo?.id]);
 
   useEffect(() => {
     setNewFetch(refetch());
-  }, [editLoading])
-  
-  
+  }, [editLoading]);
+
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -166,7 +169,6 @@ const Meetings = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {
     console.log("data", meetingData);
@@ -195,7 +197,9 @@ const Meetings = () => {
 
   return (
     <>
-      <MeetingContext.Provider value={{ editLoading, setEditLoading , newfetch , setNewFetch}}>
+      <MeetingContext.Provider
+        value={{ editLoading, setEditLoading, newfetch, setNewFetch }}
+      >
         <Spin spinning={userEventsLoading || userEventsFetching} size="large">
           <div className="flex justify-between items-center py-4">
             <PageIntro
@@ -203,7 +207,10 @@ const Meetings = () => {
               title="Meetings"
               description="View  & Create New Bookings"
             />
-            <AppButton label="New Meeting" handleClick={showModal} />
+            <div className="flex gap-4">
+              <AppButton label="Meeting Category" variant="transparent" />
+              <AppButton label="New Meeting" handleClick={showModal} />
+            </div>
           </div>
           <Calendar events={events} />
           <NewMeetingModal
