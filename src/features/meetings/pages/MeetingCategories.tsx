@@ -1,10 +1,13 @@
-import { Dropdown, Menu, Modal, Table } from "antd";
+import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
+import { useForm } from "antd/es/form/Form";
+import TextArea from "antd/es/input/TextArea";
 import { TableProps } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 import { AppButton } from "src/components/button/AppButton";
 import { PageIntro } from "src/components/PageIntro";
 import { END_POINT } from "src/config/environment";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
+import { generalValidationRules } from "src/utils/formHelpers/validations";
 
 export const QUERY_KEY_MEETING_CATEGORIES = "MeetingCategories";
 export const meetingCategoriesUrl = `${END_POINT.BASE_URL}/admin/meeting-categories`;
@@ -12,6 +15,7 @@ export const meetingCategoriesUrl = `${END_POINT.BASE_URL}/admin/meeting-categor
 const MeetingCategories = () => {
   const [dataSource, setDataSource] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalForm] = useForm();
   const { data, isLoading } = useFetchAllItems({
     queryKey: QUERY_KEY_MEETING_CATEGORIES,
     urlEndPoint: meetingCategoriesUrl,
@@ -66,7 +70,20 @@ const MeetingCategories = () => {
         onCancel={() => {
           setShowModal(false);
         }}
-      ></Modal>
+      >
+        <Form layout="vertical" onFinish={() => {}} form={modalForm}>
+          <Form.Item label={"Category Name"} rules={generalValidationRules}>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item label={"Description"}>
+            <TextArea></TextArea>
+          </Form.Item>
+          <div className="flex justify-items-center mx-auto gap-4">
+            <AppButton variant="transparent" type="reset" />
+            <AppButton label="Save" />
+          </div>
+        </Form>
+      </Modal>
       <div className="flex justify-between items-center py-4">
         <PageIntro
           arrowBack={false}
