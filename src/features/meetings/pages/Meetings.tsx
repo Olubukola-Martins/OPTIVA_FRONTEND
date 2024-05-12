@@ -25,6 +25,7 @@ import { Spin } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { appRoute } from "src/config/routeMgt/routePaths";
+import { FormItemMeetingCategory } from "./MeetingCategories";
 
 export const QUERY_KEY_MEETINGS = "Meetings";
 export const meetingsURL = `${END_POINT.BASE_URL}/admin/meetings`;
@@ -203,7 +204,7 @@ const Meetings = () => {
         value={{ editLoading, setEditLoading, newfetch, setNewFetch }}
       >
         <Spin spinning={userEventsLoading || userEventsFetching} size="large">
-          <div className="flex justify-between items-center py-4">
+          <div className="flex justify-between items-center py-4 ">
             <PageIntro
               arrowBack={false}
               title="Meetings"
@@ -216,6 +217,11 @@ const Meetings = () => {
               <AppButton label="New Meeting" handleClick={showModal} />
             </div>
           </div>
+          <FormItemMeetingCategory
+            hideLabel={true}
+            placeholder="Filter by Category"
+            extraStyles="flex justify-items-end"
+          />
           <Calendar events={events} />
           <NewMeetingModal
             open={isModalVisible}
