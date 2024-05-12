@@ -23,6 +23,8 @@ import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleIt
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { Spin } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const QUERY_KEY_MEETINGS = "Meetings";
 export const meetingsURL = `${END_POINT.BASE_URL}/admin/meetings`;
@@ -208,7 +210,9 @@ const Meetings = () => {
               description="View  & Create New Bookings"
             />
             <div className="flex gap-4">
-              <AppButton label="Meeting Category" variant="transparent" />
+              <Link to={appRoute.meetingCategories}>
+                <AppButton label="Meeting Category" variant="transparent" />
+              </Link>
               <AppButton label="New Meeting" handleClick={showModal} />
             </div>
           </div>

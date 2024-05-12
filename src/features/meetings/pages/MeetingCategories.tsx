@@ -3,9 +3,11 @@ import { useForm } from "antd/es/form/Form";
 import TextArea from "antd/es/input/TextArea";
 import { TableProps } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import { PageIntro } from "src/components/PageIntro";
 import { END_POINT } from "src/config/environment";
+import { appRoute } from "src/config/routeMgt/routePaths";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import { generalValidationRules } from "src/utils/formHelpers/validations";
 
@@ -91,7 +93,9 @@ const MeetingCategories = () => {
           description="View  & Create New Meeting Category"
         />
         <div className="flex gap-4">
-          <AppButton label="Meetings" variant="transparent" />
+          <Link to={appRoute.meetings}>
+            <AppButton label="Meetings" variant="transparent" />
+          </Link>
           <AppButton
             label="New Category"
             handleClick={() => setShowModal(true)}
