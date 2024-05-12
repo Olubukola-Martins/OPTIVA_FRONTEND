@@ -1,6 +1,7 @@
 import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
 import { useForm } from "antd/es/form/Form";
 import TextArea from "antd/es/input/TextArea";
+import Select, { SelectProps } from "antd/lib/select";
 import { TableProps } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,19 +10,77 @@ import { PageIntro } from "src/components/PageIntro";
 import { END_POINT } from "src/config/environment";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
-import { generalValidationRules } from "src/utils/formHelpers/validations";
+import {
+  generalValidationRules,
+  generalValidationRulesOpt,
+} from "src/utils/formHelpers/validations";
+
+interface IFormItemCategoryProps extends SelectProps<any> {
+  multiple?: true;
+  extraStyles?: string;
+  name?: string;
+  label?: string;
+  hideLabel?: boolean;
+  optionalField?: boolean;
+}
 
 export const QUERY_KEY_MEETING_CATEGORIES = "MeetingCategories";
 export const meetingCategoriesUrl = `${END_POINT.BASE_URL}/admin/meeting-categories`;
+
+const { data, isLoading } = useFetchAllItems({
+  queryKey: QUERY_KEY_MEETING_CATEGORIES,
+  urlEndPoint: meetingCategoriesUrl,
+});
+
+export const FormItemMeetingCategory = ({
+  multiple,
+  extraStyles,
+  label,
+  name,
+  hideLabel,
+  optionalField = true,
+  ...restProps
+}: IFormItemCategoryProps) => {
+  const [allCategories, setAllCategories] = useState<
+    {
+      value: number;
+      label: string;
+    }[]
+  >();
+
+  useEffect(() => {
+    if (data) {
+      const value = data.map(({ id, category_name }: any) => ({
+        value: id,
+        label: category_name,
+      }));
+
+      setAllCategories(value);
+    }
+  }, [data, isLoading]);
+
+  return (
+    <Form.Item
+      className={`${extraStyles}`}
+      name={name ? name : "meeting_category"}
+      label={label ? label : "Select Meeting Category"}
+      noStyle={hideLabel}
+      rules={optionalField ? generalValidationRulesOpt : generalValidationRules}
+    >
+      <Select
+        mode={multiple ? "multiple" : undefined}
+        options={allCategories}
+        loading={isLoading}
+        {...restProps}
+      />
+    </Form.Item>
+  );
+};
 
 const MeetingCategories = () => {
   const [dataSource, setDataSource] = useState<any[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalForm] = useForm();
-  const { data, isLoading } = useFetchAllItems({
-    queryKey: QUERY_KEY_MEETING_CATEGORIES,
-    urlEndPoint: meetingCategoriesUrl,
-  });
   useEffect(() => {
     if (data) {
       setDataSource(data);
