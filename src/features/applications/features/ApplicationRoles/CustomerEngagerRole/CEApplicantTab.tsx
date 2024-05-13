@@ -15,7 +15,7 @@ export const CEApplicantTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selected
   }[] = [
  
     {
-      label: "All Applicants",
+      label: "All Prospects",
       children: <CEPortfolio searchTerm={searchTerm} />,
       key: "MyPortfolio",
     },

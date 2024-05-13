@@ -3,6 +3,7 @@ import { useGetSingleQuestion } from "src/features/settings/features/appTemplate
 import { renderInput } from "./NewApplicantBrief";
 import { IApplicationFormResponseProps } from "./NewImmigrationAndCourtProceedings";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { generalValidationRules, generalValidationRulesOpt } from "src/utils/formHelpers/validations";
 
 export const NewAcademicHistory: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
@@ -28,7 +29,7 @@ export const NewAcademicHistory: React.FC<IApplicationFormResponseProps> = ({
                   <Form.Item
                     id={item.id as unknown as string}
                     name={item.schema_name}
-                    // rules={generalValidationRules}
+                    rules={item.is_required === 1 ? generalValidationRules : generalValidationRulesOpt}
                     label={
                       item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)

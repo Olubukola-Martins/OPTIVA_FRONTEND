@@ -9,8 +9,7 @@ import { ApplicationsTab } from "./ApplicationsTab";
 
 export const OperationsApplicationPage = () => {
   const [selectedRole, setSelectedRole] = useState<number>(1);
-  // const [roleLabel, setSelectedRoleLabel]= useState<string>('Operations List')
-
+  
   const handleRoleChange = (role: number) => {
     setSelectedRole(role);
   };
@@ -60,14 +59,7 @@ export const OperationsApplicationPage = () => {
         />
       );
       break;
-    // case "Customer Experience List":
-      // renderApplications = (
-      //   <ApplicationsTab
-      //     onRoleSelect={handleRoleChange}
-      //     selectedRole={selectedRole}
-      //   />
-      // );
-      // break;
+
     default:
       renderApplications = (
         <ApplicationsTab

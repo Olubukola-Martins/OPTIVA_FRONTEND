@@ -25,11 +25,10 @@ export const OthersTemplate = ({
   const queryClient = useQueryClient();
 
   const { id } = useParams();
-  const { data: sectionFourData,  } =
-    useGetSingleQuestion({
-      id: id as unknown as number,
-      endpointUrl: "section-four",
-    });
+  const { data: sectionFourData } = useGetSingleQuestion({
+    id: id as unknown as number,
+    endpointUrl: "section-four",
+  });
   const { mutate, isLoading, isSuccess } =
     usePostSectionOneQuestion("section-four");
 
@@ -43,12 +42,14 @@ export const OthersTemplate = ({
   };
   useEffect(() => {
     if (sectionFourData) {
-      const initialValues = sectionFourData.map((question: ISingleQuestion) => ({
-        question: question.form_question || "",
-        inputType: question.input_type || "",
-        options: (question.options || []).join(", ") || "",
-        is_required: question.is_required === 1 ? true : false,
-      }));
+      const initialValues = sectionFourData.map(
+        (question: ISingleQuestion) => ({
+          question: question.form_question || "",
+          inputType: question.input_type || "",
+          options: (question.options || []).join(", ") || "",
+          is_required: question.is_required === 1 ? true : false,
+        })
+      );
       form.setFieldsValue({ questions: initialValues });
     }
   }, [sectionFourData, form]);
@@ -111,6 +112,8 @@ export const OthersTemplate = ({
       });
     }
   };
+
+  const isDefault = form.getFieldValue(["is_default"]);
   return (
     <Form
       name="dynamic_form_question"
@@ -215,12 +218,14 @@ export const OthersTemplate = ({
                   )}
                 </div>
 
-                <div className="flex justify-end my-4 w-[5%]">
-                  <i
-                    className="ri-delete-bin-line text-xl cursor-pointer"
-                    onClick={() => remove(name)}
-                  ></i>
-                </div>
+                {isDefault === false && (
+                  <div className="flex justify-end my-4 w-[5%]">
+                    <i
+                      className="ri-delete-bin-line text-xl cursor-pointer"
+                      onClick={() => remove(name)}
+                    ></i>
+                  </div>
+                )}
               </div>
             ))}
 

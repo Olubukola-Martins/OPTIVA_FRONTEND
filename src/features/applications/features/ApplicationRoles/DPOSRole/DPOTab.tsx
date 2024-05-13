@@ -16,7 +16,7 @@ export const DPOTab: React.FC<IRoleTabProps> = ({ onRoleSelect, selectedRole }) 
   }[] = [
    
     {
-      label: "All Applicants",
+      label: "All Clients",
       children: <DPOPortfolio searchTerm={searchTerm} />,
       key: "MyPortfolio",
     },

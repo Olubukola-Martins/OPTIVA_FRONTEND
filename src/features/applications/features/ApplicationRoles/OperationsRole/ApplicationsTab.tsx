@@ -16,14 +16,14 @@ export const ApplicationsTab: React.FC<IRoleTabProps> = ({
     key: string;
   }[] = [
     {
-      label: "Active Applications",
+      label: "Active Prospects",
       children: <ActiveApplications searchTerm={searchTerm} />,
-      key: "Active Applications",
+      key: "Active Prospects",
     },
     {
-      label: "Inactive Applications",
+      label: "Inactive Prospects",
       children: <InactiveApplications searchTerm={searchTerm} />,
-      key: "Inactive Applications",
+      key: "Inactive Prospects",
     },
   ];
 

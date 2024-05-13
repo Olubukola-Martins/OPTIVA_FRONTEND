@@ -16,6 +16,7 @@ import { useGetSingleQuestion } from "../../hooks/useGetTemplateQuestion";
 import { useUpdateQuestions } from "../../hooks/useUpdateQuestions";
 import { ISingleQuestion } from "../../types";
 
+
 export const AboutTheApplicantTemplate = ({
   templateCreated,
   resId,
@@ -31,11 +32,10 @@ export const AboutTheApplicantTemplate = ({
   };
 
   const { id } = useParams();
-  const { data: sectionTwoData,  } =
-    useGetSingleQuestion({
-      id: id as unknown as number,
-      endpointUrl: "section-one",
-    });
+  const { data: sectionTwoData } = useGetSingleQuestion({
+    id: id as unknown as number,
+    endpointUrl: "section-two",
+  });
 
   const { mutate, isLoading, isSuccess } =
     usePostSectionOneQuestion("section-two");
@@ -51,6 +51,7 @@ export const AboutTheApplicantTemplate = ({
         inputType: question.input_type || "",
         options: (question.options || []).join(", ") || "",
         is_required: question.is_required === 1 ? true : false,
+        subsection_name: question.subsection_name || "",
       }));
       form.setFieldsValue({ questions: initialValues });
     }
@@ -115,6 +116,8 @@ export const AboutTheApplicantTemplate = ({
     }
   };
 
+  const isDefault = form.getFieldValue(["is_default"]);
+
   return (
     <Form
       name="dynamic_form_question"
@@ -123,7 +126,6 @@ export const AboutTheApplicantTemplate = ({
       form={form}
       requiredMark={false}
       initialValues={initialValues}
-      
     >
       <Form.List name="questions">
         {(fields, { add, remove }) => (
@@ -268,13 +270,14 @@ export const AboutTheApplicantTemplate = ({
                     </div>
                   )}
                 </div>
-
-                <div className="flex justify-end my-4 w-[5%]">
-                  <i
-                    className="ri-delete-bin-line text-xl cursor-pointer"
-                    onClick={() => remove(name)}
-                  ></i>
-                </div>
+                {isDefault === false && (
+                  <div className="flex justify-end my-4 w-[5%]">
+                    <i
+                      className="ri-delete-bin-line text-xl cursor-pointer"
+                      onClick={() => remove(name)}
+                    ></i>
+                  </div>
+                )}
               </div>
             ))}
 

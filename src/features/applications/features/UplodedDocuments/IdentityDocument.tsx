@@ -337,6 +337,8 @@ export const IdentityDocument: React.FC<IDocumentProps> = ({
                       val.key as unknown as number
                     }`}
                     target="_blank"
+                    download={val.documentName}
+                    rel="noopener noreferrer"
                   >
                     Download
                   </a>

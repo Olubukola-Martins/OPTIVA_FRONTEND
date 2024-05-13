@@ -126,6 +126,9 @@ export const ApplicantBriefTemplate = ({
       });
     }
   };
+
+  const isDefault = form.getFieldValue(["is_default"]);
+
   return (
     <Form
       name="dynamic_form_question"
@@ -230,12 +233,14 @@ export const ApplicantBriefTemplate = ({
                   )}
                 </div>
 
-                <div className="flex justify-end my-4 w-[5%]">
-                  <i
-                    className="ri-delete-bin-line text-xl cursor-pointer"
-                    onClick={() => remove(name)}
-                  ></i>
-                </div>
+                {isDefault === false && (
+                  <div className="flex justify-end my-4 w-[5%]">
+                    <i
+                      className="ri-delete-bin-line text-xl cursor-pointer"
+                      onClick={() => remove(name)}
+                    ></i>
+                  </div>
+                )}
               </div>
             ))}
 

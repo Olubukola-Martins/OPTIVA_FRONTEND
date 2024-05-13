@@ -1,10 +1,12 @@
 import { Form, FormInstance, Skeleton, Tooltip } from "antd";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { renderDetailsInput } from "./AcademicHistory";
+// import { renderDetailsInput } from "./AcademicHistory";
 import { useGetSectionResponse } from "../../hooks/Application hooks/useGetSectionResponse";
 import { useGetSingleQuestion } from "src/features/settings/features/appTemplate/hooks/useGetTemplateQuestion";
 import { renderInput } from "../NewApplication/NewApplicantBrief";
+import { generalValidationRules, generalValidationRulesOpt } from "src/utils/formHelpers/validations";
+// import { renderInput } from "../NewApplication/NewApplicantBrief";
 
 export interface IDataResponseProps {
   subsectionName: string;
@@ -49,8 +51,13 @@ export const TravelDetailsAndHistory: React.FC<IDataResponseProps> = ({
                 key={item.id}
                 name={item.question.schema_name}
                 label={item.question.form_question}
+                rules={
+                  item.question.is_required === 1
+                    ? generalValidationRules
+                    : generalValidationRulesOpt
+                }
               >
-                {renderDetailsInput(
+                {renderInput(
                   item.question.input_type,
                   item.question.options
                 )}
@@ -64,9 +71,12 @@ export const TravelDetailsAndHistory: React.FC<IDataResponseProps> = ({
               item.subsection_name === subsectionName && (
                 <div className="w-full" key={item.id}>
                   <Form.Item
-                    id={item.id as unknown as string}
                     name={item.schema_name}
-                    // rules={generalValidationRules}
+                    rules={
+                      item.is_required === 1
+                        ? generalValidationRules
+                        : generalValidationRulesOpt
+                    }
                     label={
                       item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)
