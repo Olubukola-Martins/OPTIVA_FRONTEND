@@ -204,7 +204,7 @@ const Meetings = () => {
         value={{ editLoading, setEditLoading, newfetch, setNewFetch }}
       >
         <Spin spinning={userEventsLoading || userEventsFetching} size="large">
-          <div className="flex justify-between items-center py-4 ">
+          <div className="flex justify-between items-center py-4">
             <PageIntro
               arrowBack={false}
               title="Meetings"
@@ -217,11 +217,14 @@ const Meetings = () => {
               <AppButton label="New Meeting" handleClick={showModal} />
             </div>
           </div>
+          <div className="flex justify-end">
+
           <FormItemMeetingCategory
             hideLabel={true}
             placeholder="Filter by Category"
-            extraStyles="flex justify-items-end"
+            extraStyles="mb-4  "
           />
+          </div>
           <Calendar events={events} />
           <NewMeetingModal
             open={isModalVisible}

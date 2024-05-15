@@ -41,7 +41,6 @@ const {data,isLoading} = useGetCountry();
     
   return (
     <Form.Item
-      className={`${extraStyles}`}
       name={name ? name : "country"}
       label={label ? label : "Select Country"}
       noStyle={hideLabel}
@@ -51,6 +50,7 @@ const {data,isLoading} = useGetCountry();
         mode={multiple ? "multiple" : undefined}
         options={allCountriesData}
         loading={isLoading}
+        className={`${extraStyles}`}
         {...restProps}
       ></Select>
     </Form.Item>

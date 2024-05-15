@@ -1,8 +1,7 @@
-import { Dropdown, Form, Input, Menu, Modal, Table } from "antd";
+import { Dropdown, Form,  Menu, Table } from "antd";
 import { useForm } from "antd/es/form/Form";
-import TextArea from "antd/es/input/TextArea";
 import Select, { SelectProps } from "antd/lib/select";
-import { TableProps } from "antd/lib/table";
+import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
@@ -14,6 +13,7 @@ import {
   generalValidationRules,
   generalValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
+import { IMeetingCategoryData, IMeetingCategoryDatum } from "../types/types";
 
 interface IFormItemCategoryProps extends SelectProps<any> {
   multiple?: true;
@@ -24,13 +24,14 @@ interface IFormItemCategoryProps extends SelectProps<any> {
   optionalField?: boolean;
 }
 
+// interface ITableData {
+//   sn: number;
+//   categoryName: string;
+//   description: string;
+// }
+
 export const QUERY_KEY_MEETING_CATEGORIES = "MeetingCategories";
 export const meetingCategoriesUrl = `${END_POINT.BASE_URL}/admin/meeting-categories`;
-
-const { data, isLoading } = useFetchAllItems({
-  queryKey: QUERY_KEY_MEETING_CATEGORIES,
-  urlEndPoint: meetingCategoriesUrl,
-});
 
 export const FormItemMeetingCategory = ({
   multiple,
@@ -41,6 +42,15 @@ export const FormItemMeetingCategory = ({
   optionalField = true,
   ...restProps
 }: IFormItemCategoryProps) => {
+  const {
+    data,
+    isLoading,
+  }: { data: IMeetingCategoryData | undefined; isLoading: boolean } =
+    useFetchAllItems({
+      queryKey: QUERY_KEY_MEETING_CATEGORIES,
+      urlEndPoint: meetingCategoriesUrl,
+    });
+
   const [allCategories, setAllCategories] = useState<
     {
       value: number;
@@ -49,25 +59,27 @@ export const FormItemMeetingCategory = ({
   >();
 
   useEffect(() => {
-    if (data) {
-      const value = data.map(({ id, category_name }: any) => ({
-        value: id,
-        label: category_name,
-      }));
-
+    if (data?.data) {
+      const value = data.data.map((item) => {
+        const { id, name } = item;
+        return {
+          value: id,
+          label: name,
+        };
+      });
       setAllCategories(value);
     }
-  }, [data, isLoading]);
+  }, [data?.data, isLoading]);
 
   return (
     <Form.Item
-      className={`${extraStyles}`}
       name={name ? name : "meeting_category"}
       label={label ? label : "Select Meeting Category"}
       noStyle={hideLabel}
       rules={optionalField ? generalValidationRulesOpt : generalValidationRules}
     >
       <Select
+        className={`${extraStyles} `}
         mode={multiple ? "multiple" : undefined}
         options={allCategories}
         loading={isLoading}
@@ -78,16 +90,29 @@ export const FormItemMeetingCategory = ({
 };
 
 const MeetingCategories = () => {
-  const [dataSource, setDataSource] = useState<any[]>([]);
+  const [dataSource, setDataSource] = useState<any[] | []>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalForm] = useForm();
+  const {
+    data,
+    isLoading,
+  }: { data: IMeetingCategoryData | undefined; isLoading: boolean } =
+    useFetchAllItems({
+      queryKey: QUERY_KEY_MEETING_CATEGORIES,
+      urlEndPoint: meetingCategoriesUrl,
+    });
+
   useEffect(() => {
-    if (data) {
-      setDataSource(data);
+    if (data?.data) {
+      const tableData = data.data.map((item, index) => {
+        const { name, description } = item;
+        return { sn: index + 1, categoryName: name, description };
+      });
+      setDataSource(tableData);
     }
   }, [isLoading, data]);
 
-  const columns: TableProps<any>["columns"] = [
+  const columns: ColumnsType<IMeetingCategoryDatum> = [
     {
       title: "SN",
       dataIndex: "sn",
@@ -109,11 +134,16 @@ const MeetingCategories = () => {
       key: "action",
       render: () => {
         return (
-          <Dropdown trigger={["click"]}>
-            <Menu>
-              <Menu.Item>Edit</Menu.Item>
-              <Menu.Item>Delete</Menu.Item>
-            </Menu>
+          <Dropdown
+            trigger={["click"]}
+            overlay={
+              <Menu>
+                <Menu.Item key={"edit"}>Edit</Menu.Item>
+                <Menu.Item key={"delete"}>Delete</Menu.Item>
+              </Menu>
+            }
+          >
+            <i className="ri-more-2-fill text-lg cursor-pointer"></i>
           </Dropdown>
         );
       },
@@ -126,25 +156,6 @@ const MeetingCategories = () => {
 
   return (
     <>
-      <Modal
-        open={showModal}
-        onCancel={() => {
-          setShowModal(false);
-        }}
-      >
-        <Form layout="vertical" onFinish={() => {}} form={modalForm}>
-          <Form.Item label={"Category Name"} rules={generalValidationRules}>
-            <Input></Input>
-          </Form.Item>
-          <Form.Item label={"Description"}>
-            <TextArea></TextArea>
-          </Form.Item>
-          <div className="flex justify-items-center mx-auto gap-4">
-            <AppButton variant="transparent" type="reset" />
-            <AppButton label="Save" />
-          </div>
-        </Form>
-      </Modal>
       <div className="flex justify-between items-center py-4">
         <PageIntro
           arrowBack={false}
@@ -161,7 +172,7 @@ const MeetingCategories = () => {
           />
         </div>
       </div>
-      {table}
+      {table()}
     </>
   );
 };
