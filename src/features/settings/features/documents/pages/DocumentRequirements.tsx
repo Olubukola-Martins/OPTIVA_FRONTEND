@@ -403,7 +403,6 @@ const DocumentRequirements = () => {
     setNewDocumentModal(false);
   };
   const onMenuClick: MenuProps["onClick"] = (e) => {
-    console.log("click", e);
     if (e.key === "required") {
       showNewgDocumentModal();
       setDocType("required");

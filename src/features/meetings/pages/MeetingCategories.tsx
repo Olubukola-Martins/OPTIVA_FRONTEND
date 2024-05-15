@@ -1,5 +1,4 @@
-import { Dropdown, Form,  Menu, Table } from "antd";
-import { useForm } from "antd/es/form/Form";
+import { Dropdown, Form, Menu, Popconfirm, Table } from "antd";
 import Select, { SelectProps } from "antd/lib/select";
 import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
@@ -14,6 +13,8 @@ import {
   generalValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
 import { IMeetingCategoryData, IMeetingCategoryDatum } from "../types/types";
+import MeetingCategoryModal from "../components/MeetingCategoryModal";
+import { useDeleteItem } from "src/features/settings/hooks/useDeleteItem";
 
 interface IFormItemCategoryProps extends SelectProps<any> {
   multiple?: true;
@@ -23,12 +24,6 @@ interface IFormItemCategoryProps extends SelectProps<any> {
   hideLabel?: boolean;
   optionalField?: boolean;
 }
-
-// interface ITableData {
-//   sn: number;
-//   categoryName: string;
-//   description: string;
-// }
 
 export const QUERY_KEY_MEETING_CATEGORIES = "MeetingCategories";
 export const meetingCategoriesUrl = `${END_POINT.BASE_URL}/admin/meeting-categories`;
@@ -90,9 +85,21 @@ export const FormItemMeetingCategory = ({
 };
 
 const MeetingCategories = () => {
-  const [dataSource, setDataSource] = useState<any[] | []>([]);
+  const [categoryId, setCategoryId] = useState<number>(0);
+  const [isNewCategory, setIsNewCategory] = useState<boolean>(true);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const [currentCategoryRecord, setCurrentCategoryRecord] = useState<
+    IMeetingCategoryDatum | undefined
+  >(undefined);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [modalForm] = useForm();
+  const handleShowModal = (val: boolean) => {
+    setShowModal(val);
+  };
+  const { deleteData, deleteIsLoading } = useDeleteItem({
+    deleteEndpointUrl: meetingCategoriesUrl,
+    queryKey: QUERY_KEY_MEETING_CATEGORIES,
+  });
+
   const {
     data,
     isLoading,
@@ -102,26 +109,18 @@ const MeetingCategories = () => {
       urlEndPoint: meetingCategoriesUrl,
     });
 
-  useEffect(() => {
-    if (data?.data) {
-      const tableData = data.data.map((item, index) => {
-        const { name, description } = item;
-        return { sn: index + 1, categoryName: name, description };
-      });
-      setDataSource(tableData);
-    }
-  }, [isLoading, data]);
-
   const columns: ColumnsType<IMeetingCategoryDatum> = [
     {
       title: "SN",
       dataIndex: "sn",
       key: "sn",
+      render: (_, __, index) => index + 1,
     },
     {
       title: "Category Name",
       dataIndex: "categoryName",
       key: "categoryName",
+      render: (_, record) => record.name,
     },
     {
       title: "Description",
@@ -132,14 +131,40 @@ const MeetingCategories = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: () => {
+      render: (_, record) => {
         return (
           <Dropdown
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item key={"edit"}>Edit</Menu.Item>
-                <Menu.Item key={"delete"}>Delete</Menu.Item>
+                <Menu.Item
+                  key={"edit"}
+                  onClick={() => {
+                    setCurrentCategoryRecord(record);
+                    setCategoryId(record.id);
+                    setIsNewCategory(false);
+                    setShowModal(true);
+                  }}
+                >
+                  Edit
+                </Menu.Item>
+                <Menu.Item
+                  key={"delete"}
+                  onClick={() => {
+                    setCategoryId(record.id);
+                    setShowDeleteConfirm(true);
+                  }}
+                >
+                  <Popconfirm
+                    okButtonProps={{ loading: deleteIsLoading }}
+                    onConfirm={() => {
+                      deleteData(record.id);
+                    }}
+                    title={`Are you sure you would like to delete ${record.name}`}
+                  >
+                    Delete
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -151,11 +176,23 @@ const MeetingCategories = () => {
   ];
 
   const table = useCallback(() => {
-    return <Table dataSource={dataSource} columns={columns} />;
-  }, [dataSource]);
+    return (
+      <Table dataSource={data?.data} columns={columns} loading={isLoading} />
+    );
+  }, [data, isLoading]);
 
   return (
     <>
+      <MeetingCategoryModal
+        newCategory={isNewCategory}
+        isShowModal={showModal}
+        currentCategoryId={categoryId}
+        handleShowModal={handleShowModal}
+        currentCategoryData={currentCategoryRecord}
+        afterOpenChange={() => {
+          setCurrentCategoryRecord(undefined);
+        }}
+      />
       <div className="flex justify-between items-center py-4">
         <PageIntro
           arrowBack={false}
@@ -168,7 +205,10 @@ const MeetingCategories = () => {
           </Link>
           <AppButton
             label="New Category"
-            handleClick={() => setShowModal(true)}
+            handleClick={() => {
+              setShowModal(true);
+              setIsNewCategory(true);
+            }}
           />
         </div>
       </div>

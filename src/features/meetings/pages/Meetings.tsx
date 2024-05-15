@@ -174,7 +174,6 @@ const Meetings = () => {
   };
 
   const handleCreateMeeting = (meetingData: IMeetingData) => {
-    console.log("data", meetingData);
     const {
       attendees,
       date,
@@ -195,7 +194,6 @@ const Meetings = () => {
       link,
       location,
     });
-    // setIsModalVisible(false);
   };
 
   return (
