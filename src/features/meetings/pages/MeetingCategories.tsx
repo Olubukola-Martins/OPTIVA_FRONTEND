@@ -1,5 +1,6 @@
 import { Dropdown, Form, Menu, Popconfirm, Table } from "antd";
 import Select, { SelectProps } from "antd/lib/select";
+import { FormItemProps } from "antd/lib";
 import { ColumnsType } from "antd/lib/table";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -16,13 +17,17 @@ import { IMeetingCategoryData, IMeetingCategoryDatum } from "../types/types";
 import MeetingCategoryModal from "../components/MeetingCategoryModal";
 import { useDeleteItem } from "src/features/settings/hooks/useDeleteItem";
 
-interface IFormItemCategoryProps extends SelectProps<any> {
+// extends SelectProps<any>
+interface IFormItemCategoryProps {
   multiple?: true;
   extraStyles?: string;
   name?: string;
   label?: string;
   hideLabel?: boolean;
   optionalField?: boolean;
+  placeholder?: string;
+  formItemProps?: FormItemProps;
+  restSelectProps?: SelectProps<any>;
 }
 
 export const QUERY_KEY_MEETING_CATEGORIES = "MeetingCategories";
@@ -35,7 +40,9 @@ export const FormItemMeetingCategory = ({
   name,
   hideLabel,
   optionalField = true,
-  ...restProps
+  placeholder,
+  restSelectProps,
+  formItemProps,
 }: IFormItemCategoryProps) => {
   const {
     data,
@@ -72,13 +79,15 @@ export const FormItemMeetingCategory = ({
       label={label ? label : "Select Meeting Category"}
       noStyle={hideLabel}
       rules={optionalField ? generalValidationRulesOpt : generalValidationRules}
+      {...formItemProps}
     >
       <Select
-        className={`${extraStyles} `}
+        className={`${extraStyles}  `}
         mode={multiple ? "multiple" : undefined}
         options={allCategories}
         loading={isLoading}
-        {...restProps}
+        placeholder={`${placeholder ? placeholder : "select category"}`}
+        {...restSelectProps}
       />
     </Form.Item>
   );
