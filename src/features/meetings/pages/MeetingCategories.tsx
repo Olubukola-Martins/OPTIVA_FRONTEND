@@ -87,7 +87,6 @@ export const FormItemMeetingCategory = ({
 const MeetingCategories = () => {
   const [categoryId, setCategoryId] = useState<number>(0);
   const [isNewCategory, setIsNewCategory] = useState<boolean>(true);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
   const [currentCategoryRecord, setCurrentCategoryRecord] = useState<
     IMeetingCategoryDatum | undefined
   >(undefined);
@@ -152,7 +151,6 @@ const MeetingCategories = () => {
                   key={"delete"}
                   onClick={() => {
                     setCategoryId(record.id);
-                    setShowDeleteConfirm(true);
                   }}
                 >
                   <Popconfirm
