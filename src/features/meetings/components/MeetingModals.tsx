@@ -48,6 +48,7 @@ export interface IMeetingData {
   link?: string;
   location?: string;
   description: string;
+  category_id: number;
 }
 
 export const NewMeetingModal: React.FC<{
@@ -359,6 +360,7 @@ export const EditMeetingModal: React.FC<{
         title,
         link,
         location,
+        category_id,
       } = meetingData;
       editNewMeeting(
         {
@@ -370,6 +372,7 @@ export const EditMeetingModal: React.FC<{
           title,
           link,
           location,
+          category_id,
           _method: "PUT",
         },
         id

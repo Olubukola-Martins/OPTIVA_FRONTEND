@@ -25,6 +25,7 @@ export interface INewMeeting {
   link?: string;
   attendees: number[];
   _method?: string;
+  category_id:number
 }
 
 export interface IUserMeetingsData {
@@ -45,6 +46,7 @@ export interface ISingleMeeting {
   link?: any;
   organizer_id: number;
   status: number;
+  category_id:number
   created_at: string;
   updated_at: string;
   attendees: AttendeeData[];

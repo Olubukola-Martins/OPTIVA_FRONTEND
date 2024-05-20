@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar, IEvent } from "../components/Calendar";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -52,6 +52,8 @@ export const MeetingContext = React.createContext<{
 
 const Meetings = () => {
   const [editLoading, setEditLoading] = useState(false);
+  // const [url, setUrl] = useState<string>(`${meetingsURL}/user`);
+  const [filterValue, setFilterValue] = useState<number | undefined>(undefined);
   const queryClient = useQueryClient();
   const [newForm] = useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -64,7 +66,10 @@ const Meetings = () => {
   } = useFetchSingleItem({
     itemId: userInfo?.id,
     queryKey: QUERY_KEY_MEETINGS,
-    urlEndPoint: `${meetingsURL}/user`,
+    urlEndPoint: filterValue
+      ? `${meetingsURL}/category/${filterValue}`
+      : `${meetingsURL}/user`,
+    // url,
   });
   const { mutate, isLoading: newMeetingLoading } = useAddMeeting();
   const [newfetch, setNewFetch] = useState(refetch);
@@ -114,6 +119,7 @@ const Meetings = () => {
             title,
             organizer_id,
             status,
+            category_id,
           } = event;
 
           // Splitting the date string to extract year, month, and day
@@ -154,12 +160,21 @@ const Meetings = () => {
             attendees: allAttendees,
             organizer_id,
             status,
+            category_id,
           };
         }
       );
       setEvents(userEventsList);
     }
   }, [userEvents?.data, userInfo, userInfo?.id]);
+
+  useEffect(() => {
+    console.log("filterValue", filterValue)
+    refetch();
+    // filterValue
+    //   ? setUrl(`${meetingsURL}/category/${filterValue}`)
+    //   : setUrl(`${meetingsURL}/user`);
+  }, [filterValue]);
 
   useEffect(() => {
     setNewFetch(refetch());
@@ -183,6 +198,7 @@ const Meetings = () => {
       title,
       link,
       location,
+      category_id,
     } = meetingData;
     addNewMeeting({
       attendees: [...attendees, userInfo.id],
@@ -193,6 +209,7 @@ const Meetings = () => {
       title,
       link,
       location,
+      category_id,
     });
   };
 
@@ -216,12 +233,18 @@ const Meetings = () => {
             </div>
           </div>
           <div className="flex justify-end">
-
-          <FormItemMeetingCategory
-            hideLabel={true}
-            placeholder="Filter by Category"
-            extraStyles="mb-4  "
-          />
+            <FormItemMeetingCategory
+              hideLabel={true}
+              restSelectProps={{
+                allowClear: true,
+                onChange: (val) => {
+                  setFilterValue(val);
+                  
+                },
+              }}
+              placeholder="Filter by Category"
+              extraStyles="mb-4  "
+            />
           </div>
           <Calendar events={events} />
           <NewMeetingModal
