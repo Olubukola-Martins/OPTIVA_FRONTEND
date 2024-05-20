@@ -1,4 +1,4 @@
-import { Dropdown, Form, Input, Menu, Modal, Popconfirm, Table } from "antd";
+import { Dropdown, Form, Input, Menu, Modal,  Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import { useUpdateApplicationStatus } from "../../../hooks/Application hooks/use
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/Application hooks/useGetApplication";
 import { useQueryClient } from "react-query";
-import { useAcceptApplicant } from "../../../hooks/Application hooks/useAcceptApplicant";
+// import { useAcceptApplicant } from "../../../hooks/Application hooks/useAcceptApplicant";
 import { useFetchEmployees } from "src/features/settings/features/employees/hooks/useFetchEmployees";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { useGetProgramType } from "src/features/settings/features/program-types/hooks/useGetProgramType";
@@ -20,6 +20,7 @@ import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { AssignToModal } from "../../components/AssignToModal";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
+import { END_POINT } from "src/config/environment";
 
 export type DataSourceItem = {
   key: React.Key;
@@ -29,7 +30,7 @@ export type DataSourceItem = {
   country: string;
   programType: string;
   investmentRoute: string;
-  numberOfDependents: number;
+  numberOfDependents?: number;
   assignedTo?: string;
   milestone?: string;
   reasons?: string;
@@ -56,15 +57,15 @@ export const capitalizeName = (name: string) => {
 };
 
 export const ActiveApplications: React.FC<IPortfolioProps> = ({
-  searchTerm,
+  searchTerm, 
 }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
-
   const { data, isLoading } = useFetchActiveandInactiveApplicant({
     currentUrl: "active",
     pagination,
     search: debouncedSearchTerm,
+
   });
 
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
@@ -93,7 +94,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
   const [id, setId] = useState<number>();
   const queryClient = useQueryClient();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
-  const { mutate: acceptApplicantMutate } = useAcceptApplicant();
+  // const { mutate: acceptApplicantMutate } = useAcceptApplicant();
 
   const [form] = Form.useForm();
   const { data: employeesData } = useFetchEmployees({
@@ -119,7 +120,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
           applicantName: capitalizeName(item.applicant.full_name),
           country: getCountryName(item.country_id) || "-",
           programType: getProgramName(item.programtype_id) || "-",
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           assignedTo: assignedEmployee ? assignedEmployee.name : "-",
           investmentRoute: getInvestmentName(item.investmentroute_id) || "-",
         };
@@ -159,32 +160,32 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
     );
   };
 
-  const acceptApplicant = () => {
-    acceptApplicantMutate(
-      {
-        application_id: id as unknown as number,
-      },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-          setOpenInactiveModal(false);
-        },
-      }
-    );
-  };
+  // const acceptApplicant = () => {
+  //   acceptApplicantMutate(
+  //     {
+  //       application_id: id as unknown as number,
+  //     },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+  //         setOpenInactiveModal(false);
+  //       },
+  //     }
+  //   );
+  // };
 
   const markApplicationComplete = () => {
     completeApplicationMutate(
@@ -226,25 +227,25 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
-    {
-      title: "Investment Route",
+      title: "Program Route",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: " Assigned To",
       dataIndex: "assignedTo",
@@ -259,7 +260,7 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item
+                {/* <Menu.Item
                   key="1"
                   onClick={() => {
                     setId(val.key as unknown as number);
@@ -273,12 +274,10 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
                   >
                     Accept Applicant
                   </Popconfirm>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item key="2">
                   <Link
-                    to={
-                      appRoute.applicant_details(val.key as unknown as number)
-                        .path
+                    to={     appRoute.applicant_details(val.key as unknown as number).path
                     }
                   >
                     View Applicant Details
@@ -364,6 +363,32 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
     setOpenInactiveModal(false);
   };
 
+
+  // EXPORT BUTTON
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
   return (
     <>
       {/* INACTIVE MODAL */}
@@ -404,28 +429,21 @@ export const ActiveApplications: React.FC<IPortfolioProps> = ({
       />
 
       {/* TABLE */}
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
         className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         loading={isLoading}
-        onChange={onChange}
         pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         rowSelection={{
           type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: 6",
-              selectedRows
-            );
-          },
+          onChange: handleRowSelectionChange,
         }}
       />
+
     </>
   );
 };

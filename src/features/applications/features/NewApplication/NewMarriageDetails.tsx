@@ -3,6 +3,7 @@ import { useGetSingleQuestion } from "src/features/settings/features/appTemplate
 import { renderInput } from "./NewApplicantBrief";
 import { IApplicationFormResponseProps } from "./NewImmigrationAndCourtProceedings";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { generalValidationRules, generalValidationRulesOpt } from "src/utils/formHelpers/validations";
 
 export const NewMarriageDetails: React.FC<IApplicationFormResponseProps> = ({
   onNextTabItem,
@@ -28,6 +29,11 @@ export const NewMarriageDetails: React.FC<IApplicationFormResponseProps> = ({
                 <div className="w-full" key={item.id}>
                   <Form.Item
                     name={item.schema_name}
+                    rules={
+                      item.is_required === 1
+                        ? generalValidationRules
+                        : generalValidationRulesOpt
+                    }
                     label={
                       item.form_question.charAt(0).toUpperCase() +
                       item.form_question.slice(1)

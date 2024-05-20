@@ -13,6 +13,7 @@ import {
 import { formatDate } from "../../authorizedPersons/components/AuthorizedPersons";
 import { EditInvestment } from "../components/EditInvestment";
 import { useDelete } from "src/hooks/useDelete";
+import { useGetProgramType } from "../../program-types/hooks/useGetProgramType";
 
 interface DataType {
   key: React.Key;
@@ -21,6 +22,7 @@ interface DataType {
   country: string;
   dateCreated: string;
   lastModified: string;
+  program: string;
 }
 
 const InvestmentRoute = () => {
@@ -34,8 +36,13 @@ const InvestmentRoute = () => {
     EndPointUrl: "admin/investment-route/",
     queryKey: QUERY_KEY_FOR_INVESTMENT_ROUTE,
   });
-
+  const { data: programData } = useGetProgramType();
   const [editId, setEditId] = useState<number>();
+
+  const getProgramName = (id?: number) => {
+    const program = programData?.find((item) => item.id === id);
+    return program?.program_name || '-';
+  };
 
   useEffect(() => {
     if (data) {
@@ -47,6 +54,7 @@ const InvestmentRoute = () => {
           dateCreated: formatDate(item.created_at),
           investmentName: item.investment_name,
           lastModified: formatDate(item.updated_at),
+          program: getProgramName(item.programtype_id) ,
         };
       });
       setDataArray(investmentRoute);
@@ -59,19 +67,22 @@ const InvestmentRoute = () => {
     setOpenDeleteModal(true);
   };
 
-
   const columns: ColumnsType<DataType> = [
     {
       title: "SN",
       dataIndex: "sn",
     },
     {
-      title: "Investment Name",
+      title: "Route Name",
       dataIndex: "investmentName",
     },
     {
       title: "Country",
       dataIndex: "country",
+    },
+    {
+      title: "Program Type",
+      dataIndex: "program",
     },
     {
       title: "Date Created",
@@ -131,8 +142,8 @@ const InvestmentRoute = () => {
       />
       <div className="flex justify-between flex-col md:flex-row md:items-center">
         <PageIntro
-          title="Investment Routes"
-          description="Create, View & edit investment routes on the system"
+          title="Route Name"
+          description="Create, View & edit routes on the system"
           linkBack={appRoute.settings}
         />
 
@@ -154,8 +165,8 @@ const InvestmentRoute = () => {
       {id && (
         <DeleteModal
           open={openDeleteModal}
-          header="Investment Route"
-          text="investment route"
+          header="Route"
+          text="route"
           onCancel={() => setOpenDeleteModal(false)}
           onDelete={() => {
             removeData(id);

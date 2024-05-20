@@ -14,14 +14,13 @@ import { useFetchEmployees } from "src/features/settings/features/employees/hook
 import { useFetchActiveandInactiveApplicant } from "../../../hooks/Application hooks/useFetchActiveandInactiveApplicant";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../../hooks/Application hooks/useGetApplication";
 import { useGetInvestmentRoute } from "src/features/settings/features/investment/hooks/useGetInvestmentRoute";
-// import { useDebounce } from "src/hooks/useDebounce";
-// import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
+import { END_POINT } from "src/config/environment";
 
 export const InactiveApplications: React.FC<IPortfolioProps> = ({
-  searchTerm,
+  searchTerm, 
 }) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
@@ -29,7 +28,9 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     currentUrl: 'inactive',
     pagination,
     search: debouncedSearchTerm,
+   
   });
+  
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { data: countryData } = useGetCountry();
   const { data: programData } = useGetProgramType();
@@ -37,7 +38,6 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     currentUrl: "active-employees",
   });
   const { data: investmentData } = useGetInvestmentRoute();
-
   const [form] = Form.useForm();
   const { mutate, isLoading: postLoading } = useUpdateApplicationStatus();
   const queryClient = useQueryClient();
@@ -59,7 +59,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
     return investment && investment.investment_name;
   };
   useEffect(() => {
-    if (data && employeesData) {
+    if (data?.data && employeesData) {
       const inActiveApplicant: DataSourceItem[] = data.data.map((item, index) => {
         const assignedEmployee = employeesData.data.find(
           (employee) =>
@@ -76,7 +76,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
           applicantName: capitalizeName(item.applicant.full_name),
           country: getCountryName(item.country_id) || "-",
           programType: getProgramName(item.programtype_id) || "-",
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           assignedTo: assignedEmployee ? assignedEmployee.name : "-",
           reasons: lastComment
             ? lastComment.comment.charAt(0).toUpperCase() +
@@ -136,25 +136,25 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
-    {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: " Assigned To",
       dataIndex: "assignedTo",
@@ -178,9 +178,7 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
                 <Menu.Item key="1">
                   <Link
                     to={
-                      appRoute.applicant_details(val.key as unknown as number)
-                        .path
-                    }
+                      appRoute.applicant_details(val.key as number).path}
                   >
                     View Applicant Details
                   </Link>
@@ -242,6 +240,32 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
   };
 
   const [comment, setComment] = useState<string>();
+
+  // EXPORT TABLE
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
   return (
     <>
       {/* INACTIVE MODAL */}
@@ -284,26 +308,18 @@ export const InactiveApplications: React.FC<IPortfolioProps> = ({
         </div>
       </Modal>
       {/* TABLE */}
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        className="bg-white rounded-md shadow border mt-8"
+        className="bg-white rounded-md shadow border mt-2"
         scroll={{ x: 600 }}
         loading={isLoading}
-        onChange={onChange}
         pagination={{ ...pagination, total: data?.total }}
+        onChange={onChange}
         rowSelection={{
           type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
+          onChange: handleRowSelectionChange,
         }}
       />
     </>

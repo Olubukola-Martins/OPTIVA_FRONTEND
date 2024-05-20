@@ -4,6 +4,7 @@ export interface IInvestmentRoute {
   country_id: number;
   created_at: string;
   updated_at: string;
+  programtype_id?: number;
   country: ICountry;
 }
 

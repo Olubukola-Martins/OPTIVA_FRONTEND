@@ -18,20 +18,23 @@ interface IEditDepOrops extends IdentifierProps {
   itemId: number;
   singleDependent: AllEligiDependentsDatum | undefined;
   singleDependentLoading:boolean;
+  editing:(loading:boolean)=>void
 }
 
 export const EditDependent = ({
   handleClose,
   open,
   itemId,
-  singleDependent,singleDependentLoading
+  singleDependent,singleDependentLoading,editing
 }: IEditDepOrops) => {
   const {
     editEligibleDependents,
+
     // isSuccess,
     isLoading: editLoading,
   } = useUpdateEligibleDependents();
-  // const [data, setData] = useState(singleDependentData?.data);
+
+  editing(editLoading)
 
   const [editForm] = useForm();
 
@@ -50,77 +53,7 @@ export const EditDependent = ({
     // setData(singleDependentData?.data);
     // editForm.resetFields();
   };
-
-  // useEffect(() => {
-  //   // refetch()
-  //   if (
-  //     singleDependentData &&
-  //     singleDependentData.data &&
-  //     !Array.isArray(singleDependentData.data)
-  //   ) {
-  //     // setData(singleDependentData.data);
-  //     const { dependant, age_brackets, other_conditions } =
-  //       singleDependentData.data;
-  //     // as AllEligiDependentsDatum;
-  //     // singleDependentData.data;
-  //     editForm.setFieldsValue({
-  //       dependent: dependant,
-  //       age: age_brackets.map((item) => item.age_bracket),
-  //       conditions:
-  //         other_conditions.length > 0
-  //           ? other_conditions[0].other_condition
-  //           : undefined,
-  //       extraConditions:
-  //         other_conditions.length > 1
-  //           ? other_conditions
-  //               .filter((_, index) => index !== 0)
-  //               .map((item) => ({ value: item.other_condition }))
-  //           : [],
-  //     });
-  //   }
-  // }, [
-  //   singleDependentData,
-  //   itemId,
-  //   // refetch,
-  //   isLoading,
-  //   // singleDependentSuccess,
-  //   // data,
-  //   // editForm,
-
-  // ]);
-
-  // useEffect(() => {
-  //   refetchAllDependents();
-  // }, [editLoading]);
-
-  // useEffect(() => {
-  //   if (singleDependentData?.data && !Array.isArray(singleDependentData.data)) {
-  //     console.log("itemId", itemId);
-  //     console.log("data", singleDependentData.data);
-  //     const { dependant, age_brackets, other_conditions } =
-  //       singleDependentData.data;
-  //     editForm.setFieldsValue({
-  //       dependent: dependant,
-  //       age: age_brackets.map((item) => item.age_bracket),
-  //       conditions:
-  //         other_conditions.length > 0
-  //           ? other_conditions[0].other_condition
-  //           : undefined,
-  //       extraConditions:
-  //         other_conditions.length > 1
-  //           ? other_conditions
-  //               .filter((_, index) => index !== 0)
-  //               .map((item) => ({ value: item.other_condition }))
-  //           : [],
-  //     });
-  //   }
-  // }, [
-  //   singleDependentData,
-  //   itemId,
-  //   singleDependentData?.data,
-  //   editForm,
-  //   isLoading,
-  // ]);
+useEffect(()=>{editing(editLoading)},[editLoading])
 
   useEffect(() => {
     if (singleDependent && !Array.isArray(singleDependent)) {

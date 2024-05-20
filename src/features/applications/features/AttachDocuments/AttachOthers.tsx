@@ -104,6 +104,7 @@ export const AttachOthers: React.FC<IDocumentProps> = ({ docId, onPrev }) => {
           description: err.response.data.message,
           duration: 8.0,
         });
+        setFileList([])
       },
       onSuccess: (res: any) => {
         console.log(res);
@@ -113,7 +114,7 @@ export const AttachOthers: React.FC<IDocumentProps> = ({ docId, onPrev }) => {
           description: "Documents successfully uploaded",
           duration: 6.0,
         });
-        form.resetFields();
+        setFileList([])
         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
       },
     });

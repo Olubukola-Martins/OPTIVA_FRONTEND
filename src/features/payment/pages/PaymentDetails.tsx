@@ -45,6 +45,7 @@ import {
 } from "./Payments";
 import { useFetchAllItems } from "src/features/settings/hooks/useFetchAllItems";
 import {
+  QUERY_KEY_FINANCIAL_STATEMENT,
   generateFinancialStatement,
   viewProofOfPayment,
 } from "../hooks/useGenerate";
@@ -218,7 +219,7 @@ const PaymentDetails = () => {
           setFileList([]);
           if (paymentDetailsData?.data.length === 1)refetchFinStatement();
           queryClient.refetchQueries([
-            QUERY_KEY_ALLPAYMENT_DETAILS,
+            QUERY_KEY_ALLPAYMENT_DETAILS,QUERY_KEY_FINANCIAL_STATEMENT,
             itemId as number,
           ]);
         },

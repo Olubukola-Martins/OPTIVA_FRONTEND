@@ -32,6 +32,7 @@ interface Question {
   input_type: string;
   subsection_name?: string;
   options?: string[];
+  is_required:boolean
 }
 
 // GET TEMPLATE QUESTIONS
@@ -48,4 +49,12 @@ export interface ISingleQuestion {
   schema_name: string;
   created_at: string;
   updated_at: string;
+}
+
+// UPDATE QUESTIONS
+export interface IUpdateTemplateQuestion {
+  form_question: string;
+  input_type: string;
+  template_id: number;
+  is_required: boolean;
 }

@@ -16,15 +16,17 @@ import { useMarkApplicantAsComplete } from "src/features/applications/hooks/Appl
 import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
-// import { OutstandingDocuments } from "../../Components/OutstandingDocuments";
 import { OutstandingDocuments } from "../../components/OutstandingDocuments";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 
-export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm,}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    
   });
   const [openSupportingDocModal, setOpenSupportingDocModal] =
     useState<boolean>(false);
@@ -45,7 +47,7 @@ export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           applicationStage: item.process,
           addedBy: item.added_by,
           documentsUploaded: item.uploaded,
@@ -129,25 +131,25 @@ export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
-    {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: "Application Stage",
       dataIndex: "applicationStage",
@@ -263,17 +265,49 @@ export const DPOPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
     },
   ];
 
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
+
   return (
     <>
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        loading={isLoading}
-        scroll={{ x: 700 }}
         className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        loading={isLoading}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
+        rowSelection={{
+          type: "checkbox",
+          onChange: handleRowSelectionChange,
+        }}
       />
+  
+  
 
       <OutstandingDocuments
         open={openSupportingDocModal}

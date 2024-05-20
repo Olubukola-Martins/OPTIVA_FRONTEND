@@ -1,6 +1,5 @@
 import { Form, Input, InputNumber, Select } from "antd";
 import { useGetProgramType } from "../../program-types/hooks/useGetProgramType";
-// import { QUERY_KEY_FOR_COUNTRY } from "../../program-types/hooks/useGetCountry";
 import { useGetInvestmentRoute } from "../../investment/hooks/useGetInvestmentRoute";
 import { useState } from "react";
 import { useGetInvestmentByCountry } from "../hooks/useGetInvestmentByCountry";
@@ -30,7 +29,6 @@ export const AddFees = ({
   const [selectedCountry, setSelectedCountry] = useState<number | undefined>();
   const { data: countryByProgramData, isLoading: countryByProgramLoading } =
     useGetCountryByProgram({
-      // queryKey: QUERY_KEY_FOR_COUNTRY,
       id: selectedProgram as number,
     });
 
@@ -92,7 +90,7 @@ export const AddFees = ({
             </Select>
           </Form.Item>
           <Form.Item
-            label="Investment Route"
+            label="Route Name"
             name="investment_route_id"
             rules={generalValidationRules}
           >

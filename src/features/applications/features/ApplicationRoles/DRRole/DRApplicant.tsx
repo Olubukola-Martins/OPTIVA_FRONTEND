@@ -15,13 +15,21 @@ import { useDebounce } from "src/hooks/useDebounce";
 import { usePagination } from "src/hooks/usePagination";
 import { openNotification } from "src/utils/notification";
 import { IPortfolioProps } from "../AuditRole/AuditPortfolio";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 
-export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const DRApplicant: React.FC<IPortfolioProps> = ({
+  searchTerm,
+  roleId,
+  status,
+}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    role_id: roleId,
+    status: status,
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useMarkApplicantAsComplete();
@@ -38,7 +46,7 @@ export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm }) => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           applicationStage: item.process,
           documentsUploaded: item.uploaded,
           documentsSubmitted: "-",
@@ -97,25 +105,25 @@ export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
-    {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: "Application Stage",
       dataIndex: "applicationStage",
@@ -184,8 +192,34 @@ export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm }) => {
     },
   ];
 
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
+
   return (
     <>
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
@@ -196,16 +230,7 @@ export const DRApplicant: React.FC<IPortfolioProps> = ({ searchTerm }) => {
         onChange={onChange}
         rowSelection={{
           type: "checkbox",
-          onChange: (
-            selectedRowKeys: React.Key[],
-            selectedRows: DataSourceItem[]
-          ) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              "selectedRows: ",
-              selectedRows
-            );
-          },
+          onChange: handleRowSelectionChange,
         }}
       />
     </>

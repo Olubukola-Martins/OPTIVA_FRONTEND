@@ -462,17 +462,6 @@ const DocumentRequirements = () => {
           linkBack={appRoute.settings}
         />
         <div className="flex items-center gap-3 justify-between">
-          {/* <div className="flex items-center gap-2">
-            <Icon
-              icon="uil:file-import"
-              className="text-3xl cursor-pointer hover:text-primary"
-              onClick={showImportModal}
-            />
-            <Icon
-              icon="mingcute:file-import-line"
-              className="text-3xl cursor-pointer hover:text-primary"
-            />
-          </div> */}
           <Dropdown.Button
             className="bg-secondary rounded-lg w-fit "
             arrow={true}

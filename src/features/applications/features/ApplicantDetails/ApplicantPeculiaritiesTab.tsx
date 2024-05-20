@@ -1,14 +1,12 @@
 import { Form, Tabs } from "antd";
 import { ImmigrationAndCourtProceedings } from "./ImmigrationAndCourtProceedings";
 import { CriminalHistory } from "./CriminalHistory";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetApplicationResponse } from "../../hooks/Application hooks/useGetApplicationResponse";
 import { useQueryClient } from "react-query";
 import { useCreateApplicationResponse } from "../../hooks/Application hooks/useCreateApplicationResponse";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
-import { ICreateApplicationResponse } from "../../types/types";
 import { AppButton } from "src/components/button/AppButton";
 import { IApplicantDetailsProps } from "./ApplicantBrief";
 
@@ -18,65 +16,243 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
 }) => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const { id } = useParams();
-  const { data } = useGetApplicationResponse({
-    id: id as unknown as number,
-    section: "sectionthreeresponse",
-  });
+
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateApplicationResponse(
     "sectionthreeresponse"
   );
 
-  const handleTabSubmit = (responses: any) => {
-    const applicationData: ICreateApplicationResponse = {
-      application_id: id as unknown as number,
-      responses: Array.isArray(responses)
-        ? responses.map(
-            (response: {
-              question_id: number;
-              schema_name: any;
-              subsection_name: string;
-            }) => ({
-              question_id: response.question_id,
-              response: [form.getFieldValue(response.schema_name)],
-              subsection_name: response.subsection_name,
-            })
-          )
-        : [],
-    };
+  const handleTabSubmit = (val: any[]) => {
+    // const applicationData: ICreateApplicationResponse = {
+    //   application_id: applicationId,
+    //   responses: Array.isArray(responses)
+    //     ? responses.map(
+    //         (response: {
+    //           id: number;
+    //           schema_name: any;
+    //           subsection_name: string;
+    //         }) => ({
+    //           question_id: response.id,
+    //           response: [form.getFieldValue(response.schema_name)],
+    //           subsection_name: response.subsection_name,
+    //         })
+    //       )
+    //     : [],
+    // };
 
-    mutate(applicationData, {
-      onError: (error: any) => {
-        openNotification({
-          state: "error",
-          title: "Error Occurred",
-          description: error.response.data.message,
-          duration: 5,
-        });
+    // console.log('res three', responses)
+    // const applicationData:Response[] = {
+    //   responses: responses.map((response) => ({
+    //     question_id: response.question_id,
+    //     response: [form.getFieldValue(response.schema_name)],
+    //     subsection_name: response.subsection_name,
+    //   })),
+
+    // };
+    // const responsesArray: ICreateApplicationResponse['responses'] = [];
+    // // for (const key in responses) {
+    // //   if (Object.prototype.hasOwnProperty.call(responses, key)) {
+    // //     responsesArray.push({
+    // //       // schema_name: key,
+    // //       question_id: responses[key].question_id,
+    // //       response: [form.getFieldValue(responses[key].schema_name)],
+    // //       subsection_name: responses[key].subsection_name,
+    // //     });
+    // //   }
+    // // }
+    // for (const key in responses) {
+    //   if (Object.prototype.hasOwnProperty.call(responses, key)) {
+    //     const response = responses[key];
+    //     if (response && response.question_id) {
+    //       responsesArray.push({
+    //         question_id: response.question_id,
+    //         response: [form.getFieldValue(response.schema_name)],
+    //         subsection_name: response.subsection_name,
+    //       });
+    //     }
+    //   }
+    // }
+
+    // const applicationData: ICreateApplicationResponse = {
+    //   application_id: id as unknown as number,
+    //   responses: responsesArray,
+    // };
+    // console.log('application data', applicationData)
+    mutate(
+      {
+        application_id: id as unknown as number,
+        responses: val.map((item:any) => ({
+          question_id: item.question_id,
+          response: [form.getFieldValue(item.schema_name)],
+          subsection_name: item.subsection_name,
+        })),
       },
-      onSuccess: (res: any) => {
-        openNotification({
-          state: "success",
-          title: "Success",
-          description: res.data.data.message,
-        });
-        queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
-      },
-    });
+      {
+        onError: (error: any) => {
+          openNotification({
+            state: "error",
+            title: "Error Occurred",
+            description: error.response.data.message,
+            duration: 5,
+          });
+        },
+        onSuccess: (res: any) => {
+          openNotification({
+            state: "success",
+            title: "Success",
+            description: res.data.data.message,
+          });
+          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+        },
+      }
+    );
   };
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      const initialValues: Record<string, any> = {};
-      data.forEach((item) => {
-        if (item.subsection_name === tabItems[currentTab].subsectionName) {
-          initialValues[item.schema_name] = item.response;
-        }
-      });
-      form.setFieldsValue(initialValues);
-    }
-  }, [data, currentTab]);
+
+
+  // const handleTabSubmit = (responses: any) => {
+  //   const applicationId = id as unknown as number;
+  //   const applicationData: ICreateApplicationResponse = {
+  //     application_id: applicationId,
+  //     responses: Array.isArray(responses)
+  //       ? responses.map(
+  //           (response: {
+  //             id: number;
+  //             schema_name: any;
+  //             subsection_name: string;
+  //           }) => ({
+  //             question_id: response.id,
+  //             response: [form.getFieldValue(response.schema_name)],
+  //             subsection_name: response.subsection_name,
+  //           })
+  //         )
+  //       : [],
+  //   };
+  //   console.log('responses',  Array.isArray(responses)
+  //   ? responses.map(
+  //       (response: {
+  //         id: number;
+  //         schema_name: any;
+  //         subsection_name: string;
+  //       }) => ({
+  //         question_id: response.id,
+  //         response: [form.getFieldValue(response.schema_name)],
+  //         subsection_name: response.subsection_name,
+  //       })
+  //     )
+  //   : [],)
+    
+  //   console.log('responses 2', responses)
+  //   mutate(
+  //     {
+  //       application_id: id as unknown as number,
+  //       responses: Array.isArray(responses)
+  //         ? responses.map(
+  //             (response: {
+  //               id: number;
+  //               schema_name: any;
+  //               subsection_name: string;
+  //             }) => ({
+  //               question_id: response.id,
+  //               response: [form.getFieldValue(response.schema_name)],
+  //               subsection_name: response.subsection_name,
+  //             })
+  //           )
+  //         : [],
+        
+  //     },
+  //     {
+  //       onError: (error: any) => {
+  //         openNotification({
+  //           state: "error",
+  //           title: "Error Occurred",
+  //           description: error.response.data.message,
+  //           duration: 5,
+  //         });
+  //       },
+  //       onSuccess: (res: any) => {
+  //         openNotification({
+  //           state: "success",
+  //           title: "Success",
+  //           description: res.data.data.message,
+  //         });
+  //         queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+  //       },
+  //     }
+  //   );
+  // };
+
+
+  // const handleTabSubmit = () => {
+  //   const subsectionName = tabItems[currentTab].subsectionName; // Define subsectionName here
+  
+  //   // Retrieve form values
+  //   const values = form.getFieldsValue();
+    
+  //   // Construct the payload object
+  //   const responses: ICreateApplicationResponse = {
+  //     application_id: id as unknown as number, // Assuming id is defined in the scope
+  //     responses: Object.keys(values).map((key) => ({
+  //       question_id: key, // Assuming key is the question ID
+  //       schema_name: key, // Assuming key is the schema name
+  //       subsection_name: subsectionName, // Use the defined subsectionName
+  //       response: values[key], // Get the value for the current field
+  //     })),
+  //   };
+    
+  //   // Submit the form data
+  //   mutate(responses, {
+  //     onError: (error: any) => {
+  //       openNotification({
+  //         state: "error",
+  //         title: "Error Occurred",
+  //         description: error.response.data.message,
+  //         duration: 5,
+  //       });
+  //     },
+  //     onSuccess: (res: any) => {
+  //       openNotification({
+  //         state: "success",
+  //         title: "Success",
+  //         description: res.data.data.message,
+  //       });
+  //       queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+  //     },
+  //   });
+  // };
+  
+
+
+
+  
+  // const handleTabSubmit = (values: any) => {
+  // mutate({
+  //     application_id: id as unknown as number, responses: [{
+  //       question_id: values.question_id,
+  //       subsection_name: values.subsection_name,
+  //       response:[form.getFieldValue(values.schema_name)],
+  //   }]}, {
+  //     onError: (error: any) => {
+  //       console.log('err', error)
+  //       openNotification({
+  //         state: "error",
+  //         title: "Error Occurred",
+  //         description: error.response.data.message,
+  //         duration: 5,
+  //       });
+  //     },
+  //     onSuccess: (res: any) => {
+  //       console.log('form response api res', res)
+  //       openNotification({
+  //         state: "success",
+  //         title: "Success",
+  //         description: res.data.data.message,
+  //       });
+  //       queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICATIONS]);
+  //     },
+  //   });
+  // };
 
   const tabItems: {
     label: string;
@@ -89,6 +265,7 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
         <ImmigrationAndCourtProceedings
           onNextTabItem={() => setCurrentTab(currentTab + 1)}
           subsectionName="immigrationCourtProcedings"
+          form={form}
         />
       ),
       subsectionName: "immigrationCourtProcedings",
@@ -100,6 +277,7 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
         <CriminalHistory
           onPrev={() => setCurrentTab(currentTab - 1)}
           subsectionName="criminalHistory"
+          form={form}
         />
       ),
       label: "Criminal History",
@@ -112,7 +290,11 @@ export const ApplicantPeculiaritiesTab: React.FC<IApplicantDetailsProps> = ({
 
   return (
     <>
-      <Form form={form} layout="vertical" onFinish={handleTabSubmit}>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleTabSubmit}
+      >
         <Tabs
           tabBarStyle={{ maxWidth: "1200px" }}
           activeKey={currentTab.toString()}

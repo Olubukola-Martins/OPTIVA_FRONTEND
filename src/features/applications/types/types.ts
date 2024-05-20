@@ -29,37 +29,53 @@ export interface IApplications {
   updated_at: string;
 }
 
+
 // POST APPLICATION RESPONSE
 export interface ICreateApplicationResponse {
   application_id: number;
   responses: Response[];
 }
 
-interface Response {
+export interface Response {
+  schema_name?: any;
   question_id: number;
-  response: string[];
+  response: any[];
   subsection_name?: string;
 }
-// 
+//
 
 //GET APPLICATION RESPONSE
-export interface IGetApplicationResponse {
+export interface IAppResponse {
+  template_id: number | null;
+  data: IGetApplicationResponse[];
+}
+
+export interface IGetApplicationResponse{
   id: number;
-  template_id?: any;
+  question_id: number;
+  application_id: number;
+  section_name: string;
+  subsection_name?: any;
+  response: (number | string)[];
+  created_at: string;
+  updated_at: string;
+  question: Question;
+}
+
+interface Question {
+  id: number;
+  template_id?: number | null;
   form_question: string;
   input_type: string;
-  options?: any[]
+  options?: string[];
   is_required: number;
   section_name: string;
   subsection_name?: string;
   schema_name: string;
   created_at: string;
   updated_at: string;
-  question_id: number;
-  application_id: number;
-  response: string;
+  is_default: boolean;
 }
-
 // UPDATE APPLICATION STATUS
 export interface IApplicationStatus {
   id: number;
@@ -157,16 +173,24 @@ export interface ICreateDocComment {
   applicant_document_id: number;
   content: string;
 }
+// interface IGetProcessingStrategy {
+//   [key: string]: {
+//     strategy: string;
+//     steps: string;
+//   };
+// }
 
 // GET PROCESSING STRATEGY
 export interface IGetProcessingStrategy {
-  id: number;
-  strategy: string;
-  steps: string;
-  application_id: number;
-  user_id: number;
-  created_at: string;
-  updated_at: string;
+  [key: string]: {
+    id: number;
+    strategy: string;
+    steps: string;
+    application_id: number;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+  }
 }
 
 // CREATE PROCESSING STRATEGY
@@ -267,6 +291,7 @@ interface Dependant {
 export interface IApproveOrRejectDoc {
   approve?: string;
   decline?: string;
+  
   document_id: number;
 }
 

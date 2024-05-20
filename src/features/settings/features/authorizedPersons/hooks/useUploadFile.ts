@@ -21,6 +21,7 @@ export const postItemData = async ({ newData, url }: IPostProps) => {
   };
  
   const response = await axios.postForm(url, newData, config);
+
   return response;
 };
  

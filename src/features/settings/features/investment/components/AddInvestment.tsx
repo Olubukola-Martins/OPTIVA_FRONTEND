@@ -11,6 +11,7 @@ import { useQueryClient } from "react-query";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { QUERY_KEY_FOR_INVESTMENT_ROUTE } from "../hooks/useGetInvestmentRoute";
 import { useGetCountry } from "../../program-types/hooks/useGetCountry";
+import { useGetProgramType } from "../../program-types/hooks/useGetProgramType";
 
 export interface IAddInvestmentProps extends IdentifierProps {
   isEditing?: boolean;
@@ -24,12 +25,14 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
   const queryClient = useQueryClient();
   const { token } = useGetUserInfo();
   const { data } = useGetCountry();
+  const { data: programData } = useGetProgramType();
 
   const handleSubmit = (val: any) => {
     mutate(
       {
         country_id: val.country,
         investment_name: val.name,
+        programtype_id: val.programtype,
         token,
       },
       {
@@ -48,7 +51,7 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
             description: res.data.message,
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_INVESTMENT_ROUTE]);
-          form.resetFields()
+          form.resetFields();
           handleClose();
         },
       }
@@ -59,7 +62,7 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
       open={open}
       onCancel={() => handleClose()}
       footer={null}
-      title="Add Investment Route"
+      title="Add Route"
     >
       <Form
         layout="vertical"
@@ -70,7 +73,7 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
       >
         <Form.Item
           name="name"
-          label="Investment Name"
+          label="Route Name"
           rules={textInputValidationRules}
         >
           <Input placeholder="Enter..." />
@@ -84,6 +87,19 @@ export const AddInvestment = ({ handleClose, open }: IAddInvestmentProps) => {
             {data?.map((item) => (
               <Select.Option value={item.id} key={item.id}>
                 {item.country_name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="programtype"
+          label="Select Program Type"
+          rules={generalValidationRules}
+        >
+          <Select>
+            {programData?.map((item) => (
+              <Select.Option value={item.id} key={item.id}>
+                {item.program_name}
               </Select.Option>
             ))}
           </Select>

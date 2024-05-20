@@ -3,7 +3,7 @@ import { ProcessingSteps } from "./ProcessingSteps";
 import { ProcessingStrategy } from "./ProcessingStrategy";
 import { useEffect, useState } from "react";
 import { useCreateProcessingStrategy } from "../../hooks/Application hooks/useCreateProcessingStrategy";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppButton } from "src/components/button/AppButton";
 import {
   QUERY_KEY_FOR_PROCESSING_STRATEGY_AND_STEPS,
@@ -11,6 +11,7 @@ import {
 } from "../../hooks/Application hooks/useGetProcessingStrategy";
 import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
+import { appRoute } from "src/config/routeMgt/routePaths";
 
 export const ProcessingStrategyandStepsTab = () => {
   const { id } = useParams();
@@ -18,9 +19,9 @@ export const ProcessingStrategyandStepsTab = () => {
   const [form] = Form.useForm();
   const { mutate, isLoading } = useCreateProcessingStrategy();
   const queryClient = useQueryClient();
-
-  const { data, } = useGetProcessingStrategy(id as unknown as number);
-  console.log(data, 'straget')
+  const { data } = useGetProcessingStrategy(id as unknown as number);
+  const isViewing = !!id;
+  const navigate = useNavigate();
   const handleSubmit = (val: any) => {
     mutate(
       {
@@ -50,19 +51,27 @@ export const ProcessingStrategyandStepsTab = () => {
           if (currentTab < tabItems.length - 1) {
             setCurrentTab(currentTab + 1);
           }
+          navigate(appRoute.applications);
         },
       }
     );
   };
 
+  console.log("data", data);
+
   useEffect(() => {
-    if (data) {
-      form.setFieldsValue({
-        processingStrategy: data.strategy, 
-        processingSteps: data.steps, 
-      });
+    if (data && isViewing) {
+      const keys = Object.keys(data);
+      if (keys.length > 0) {
+        const lastKey = keys[keys.length - 1];
+        const lastItem = data[lastKey];
+        form.setFieldsValue({
+          processingStrategy: lastItem.strategy,
+          processingSteps: lastItem.steps,
+        });
+      }
     }
-  }, [data, form]);
+  }, [data, form, isViewing]);
 
   const tabItems: {
     label: string;

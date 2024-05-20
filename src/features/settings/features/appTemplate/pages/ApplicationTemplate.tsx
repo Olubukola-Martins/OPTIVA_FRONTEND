@@ -74,8 +74,8 @@ const ApplicationTemplate = () => {
                 <Menu.Item key="1">
                   <Link
                     to={
-                      appRoute.applicationTemplateDetails(
-                        val.key as unknown as number
+                      appRoute.newApplicationTemplate(
+                        val.key as number
                       ).path
                     }
                   >
@@ -122,7 +122,7 @@ const ApplicationTemplate = () => {
 
         <div >
          
-          <Link to={appRoute.newApplicationTemplate}>
+          <Link to={appRoute.newApplicationTemplate().path}>
             <AppButton
               label="Add New"
               // handleClick={showNewApplicationsModal}

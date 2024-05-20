@@ -1,6 +1,6 @@
 import { Skeleton } from "antd";
 import { useGetSingleTemplate } from "src/features/settings/features/contractsEmailTemplates/hooks/useGetSingleTemplate";
-import { removeHtmlTags } from "./OnboardingEmail";
+import { optivaAddr, removeHtmlTags } from "./OnboardingEmail";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { openNotification } from "src/utils/notification";
@@ -46,9 +46,10 @@ export const BankClearance = () => {
     <>
       <Skeleton active loading={isLoading}>
         <div className="bg-[url('https://optiva-backend.techmur.com/assets/watermark.png')]  bg-contain bg-center bg-no-repeat p-2 m-3 z-10">
-          <img src="https://optiva-backend.techmur.com/assets/optivaLogo.png" />
-          {/* <p className=" border-b-[#801d22]"/> */}
-          <div className="p-2 m-4 border-t border-t-[#801d22]">
+        <img src="https://optivateststorage.blob.core.windows.net/optiva/uploads/1713776055_new logo.png" className="object-contain p-3 h-32"/>
+          <img src="https://optivateststorage.blob.core.windows.net/optiva/uploads/1713776533_Group 1000001758.png" className="object-fill w-full"/>
+            {/* <p className=" border-b-[#801d22]"/> */}
+          <div className="p-2 m-4 ">
             <p className="mt-2">{todaysDate}</p>
             <p>{applicantData?.applicant_name} </p>
             <p>14th Floor, Churchgate Towers 2,</p>
@@ -63,11 +64,29 @@ export const BankClearance = () => {
             />
           ))}
         </div>
-        <div className="w-full">
-        <img
-          src="https://optiva-backend.techmur.com/assets/optivaAddr.png"
-          className="my-4 py-5 w-full"
-        />
+        <div>
+          {optivaAddr}
+
+          {/* <div className="flex justify-center my-5 gap-10 items-center p-3">
+            <p className="flex justify-center">
+              <i className="ri-smartphone-line"> +234 1 330 3100</i>
+            </p>
+
+            <p className="flex">
+              <i className="ri-smartphone-line"> +234 811 570 5056</i>
+            </p>
+            <p className="flex">
+              <i className="ri-mail-line"></i>
+              <a href="mailto:Legal@OptivaCP.com">Legal@OptivaCP.com</a>
+            </p>
+            <p>
+              <i className="ri-global-line">
+                <a href="www.OPTIVACP.com" target="_blank">
+                  www.OPTIVACP.com
+                </a>
+              </i>
+            </p>
+          </div> */}
         </div>
         
         <div className="flex justify-end items-center gap-5 my-4 py-5">

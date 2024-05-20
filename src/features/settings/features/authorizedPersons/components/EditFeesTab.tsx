@@ -77,11 +77,9 @@ export const EditFeesTab = () => {
       const countryName = getCountryName(singleFeeData.country_id);
 
       setCountryId(singleFeeData.country_id);
-      // setCountryName(countryName);
-
+    
       setInvestId(singleFeeData.investment_route_id);
-      // setInvestmentName(investmentRouteName);
-
+    
       if (singleFeeData?.grenada_donation_fee) {
         setInvestmentId(1);
         form.setFieldsValue({
@@ -103,7 +101,7 @@ export const EditFeesTab = () => {
         form.setFieldsValue({
           ...singleFeeData,
           ...singleFeeData.st_lucia_nefi_real_estate_fee,
-          // investment_route_id: investmentRouteName,
+          investment_route_id: investmentRouteName,
           country_id: countryName,
         });
       } else if (singleFeeData?.dominica_donation_fee) {
@@ -272,25 +270,7 @@ export const EditFeesTab = () => {
             </Tabs.TabPane>
           ))}
         </Tabs>
-        {/* <Tabs items={tabItems} /> */}
-
-        {/* <div className="flex items-center justify-end gap-4 mt-5">
-          <AppButton label="Cancel" type="reset" variant="transparent" />
-          <AppButton
-            label="Save"
-            type="submit"
-            isLoading={
-              antiguaDonationLoading ||
-              antiguaJointEstateLoading ||
-              antiguaSingleEstateLoading ||
-              grenadaEstateLoading ||
-              grenadaDonationLoading ||
-              stKittsLoading ||
-              stLuciaLoading ||
-              dominicaLoading
-            }
-          />
-        </div> */}
+       
       </Form>
     </Skeleton>
   );

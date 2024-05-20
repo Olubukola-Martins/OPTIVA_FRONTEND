@@ -31,6 +31,8 @@ import { createFileValidationRule } from "src/utils/formHelpers/validations";
 import useUploadApplicantFile from "../../hooks/Documet hooks/useUploadApplicantFile";
 import { useUpdateApplicantDoc } from "../../hooks/Documet hooks/useUpdateApplicantDoc";
 import { useAuditApproveOrRejectDoc } from "../../hooks/Documet hooks/useAuditApproveOrRejectDoc";
+import { useApproveOrRejectExternal } from "../../hooks/Documet hooks/useApproveOrRejectExternal";
+import { useApproveOrRejectInternal } from "../../hooks/Documet hooks/useApproveOrRejectInternal";
 
 export const AcademicQualifications: React.FC<IDocumentProps> = ({
   filterValue,
@@ -38,7 +40,6 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
   onPrev,
 }) => {
   const { data, isLoading } = useGetApplicantDocumentCategory(3);
-
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const [docUrl, setDocUrl] = useState<string>();
   const [docId, setDocId] = useState<number>();
@@ -46,11 +47,62 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
   const { mutate } = useHandoverDoc();
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { fileData, fileUploading } = useUploadApplicantFile();
-  const {
-    mutate: updateApplicantDocMutate,
-    isLoading: updateApplicantDocLoading,
-  } = useUpdateApplicantDoc();
-  const { mutate:auditMutate}=useAuditApproveOrRejectDoc()
+  const { mutate: auditMutate } = useAuditApproveOrRejectDoc();
+  const { mutate: internalMutate } = useApproveOrRejectInternal()
+  const { mutate: externalMutate } =useApproveOrRejectExternal()
+  const notifs = {
+    onError: (error: any) => {
+      openNotification({
+        state: "error",
+        title: "Error Occurred",
+        description: error.response.data.message,
+        duration: 5,
+      });
+    },
+    onSuccess: (res: any) => {
+      openNotification({
+        state: "success",
+        title: "Success",
+        description: res.data.message,
+      });
+      queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
+    },
+  };
+
+  const auditApprove = () => {
+    auditMutate({ approved: "approved", document_id: docId as number }, notifs);
+  };
+
+  const auditReject = () => {
+    auditMutate({ rejected: "rejected", document_id: docId as number }, notifs);
+  };
+
+  const internalApprove = () => {
+    internalMutate(
+      { approved: "approved", document_id: docId as number },
+      notifs
+    );
+  };
+  const internalReject = () => {
+    internalMutate(
+      { rejected: "rejected", document_id: docId as number },
+      notifs
+    );
+  };
+
+  const externalApprove = () => {
+    externalMutate(
+      { approved: "approved", document_id: docId as number },
+      notifs
+    );
+  };
+  const externalReject = () => {
+    externalMutate(
+      { rejected: "rejected", document_id: docId as number },
+      notifs
+    );
+  };
+
   const props: UploadProps = {
     onRemove: (file) => {
       const index = fileList.indexOf(file);
@@ -77,8 +129,6 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
           }
         })
         .map((item, index) => {
-          setDocUrl(item.path);
-
           return {
             key: item.id,
             sn: index + 1,
@@ -95,104 +145,25 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
             uploadedBy:
               item.uploader.name.charAt(0).toUpperCase() +
               item.uploader.name.slice(1),
+            path: item.path,
           };
         });
       setDataArray(identityDocument);
     }
+    // refetch()
   }, [data, filterValue]);
 
+  const {
+    mutate: updateApplicantDocMutate,
+    isLoading: updateApplicantDocLoading,
+  } = useUpdateApplicantDoc();
+
   const approveDoc = () => {
-    mutate(
-      { approve: "accepted", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
+    mutate({ approve: "accepted", document_id: docId as number }, notifs);
   };
 
   const rejectDoc = () => {
-    mutate(
-      { decline: "declined", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
-  const auditApprove = () => {
-    auditMutate(
-      { approved: "approved", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
-  };
-  const auditReject = () => {
-    auditMutate(
-      { rejected: "rejected", document_id: docId as unknown as number },
-      {
-        onError: (error: any) => {
-          openNotification({
-            state: "error",
-            title: "Error Occurred",
-            description: error.response.data.message,
-            duration: 5,
-          });
-        },
-        onSuccess: (res: any) => {
-          openNotification({
-            state: "success",
-            title: "Success",
-            description: res.data.message,
-          });
-          queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-        },
-      }
-    );
+    mutate({ decline: "declined", document_id: docId as number }, notifs);
   };
 
   const normFile = (e: any) => {
@@ -216,26 +187,9 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
         {
           _method: "PUT",
           file: val.chooseFile[0].originFileObj,
-          id: docId as unknown as number,
+          id: docId as number,
         },
-        {
-          onError: (error: any) => {
-            openNotification({
-              state: "error",
-              title: "Error Occurred",
-              description: error.response.data.message,
-              duration: 5,
-            });
-          },
-          onSuccess: (res: any) => {
-            openNotification({
-              state: "success",
-              title: "Success",
-              description: res.data.message,
-            });
-            queryClient.invalidateQueries([QUERY_KEY_FOR_APPLICANT_DOCUMENT]);
-          },
-        }
+        notifs
       );
     }
   };
@@ -292,6 +246,7 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
             trigger={["click"]}
             overlay={
               <Menu>
+                {/* DR cant see any of these actions, on handover */}
                 <Menu.Item
                   key="1"
                   onClick={() => {
@@ -303,10 +258,11 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
                     View Document
                   </a>
                 </Menu.Item>
+                {/* {userData?.id === 3 && ( */}
                 <Menu.Item
                   key="2"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -321,7 +277,7 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="3"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -333,8 +289,9 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
                     Decline Document
                   </Popconfirm>
                 </Menu.Item>
+                {/* )} */}
                 <Menu.Item key="4">
-                 
+                  {" "}
                   <Link
                     to={
                       appRoute.applicant_documents_comments(
@@ -369,7 +326,7 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="7"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -384,7 +341,7 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
                 <Menu.Item
                   key="8"
                   onClick={() => {
-                    setDocId(val.key as unknown as number);
+                    setDocId(val.key as number);
                   }}
                 >
                   <Popconfirm
@@ -396,6 +353,66 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
                     Decline Handover by DMS
                   </Popconfirm>
                 </Menu.Item>
+                <Menu.Item
+                  key="9"
+                  onClick={() => {
+                    setDocId(val.key as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Accept document"
+                    description={`Are you sure to accept this document?`}
+                    onConfirm={internalApprove}
+                    okType="default"
+                  >
+                    Accept document (internal reviewer)
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="10"
+                  onClick={() => {
+                    setDocId(val.key as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Decline document"
+                    description={`Are you sure to decline this document?`}
+                    onConfirm={internalReject}
+                    okType="default"
+                  >
+                    Decline document (internal reviewer)
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="11"
+                  onClick={() => {
+                    setDocId(val.key as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Accept document"
+                    description={`Are you sure to accept this document?`}
+                    onConfirm={externalApprove}
+                    okType="default"
+                  >
+                    Accept document (external reviewer)
+                  </Popconfirm>
+                </Menu.Item>
+                <Menu.Item
+                  key="12"
+                  onClick={() => {
+                    setDocId(val.key as number);
+                  }}
+                >
+                  <Popconfirm
+                    title="Decline document"
+                    description={`Are you sure to decline this document?`}
+                    onConfirm={externalReject}
+                    okType="default"
+                  >
+                    Decline document (external reviewer)
+                  </Popconfirm>
+                </Menu.Item>
               </Menu>
             }
           >
@@ -405,6 +422,7 @@ export const AcademicQualifications: React.FC<IDocumentProps> = ({
       ),
     },
   ];
+
   return (
     <>
       <Table

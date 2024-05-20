@@ -31,7 +31,7 @@ export const settingsLink: settingsLinkProps[] = [
     link: appRoute.documentRequirements,
   },
   {
-    name: "Define Investment Routes",
+    name: "Define Routes",
     link: appRoute.investment_route,
   },
   {

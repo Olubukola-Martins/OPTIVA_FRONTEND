@@ -1,9 +1,11 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { Dropdown,  Menu, Popconfirm, Table } from "antd";
+import { Dropdown, Menu, Popconfirm, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
+import { AppButton } from "src/components/button/AppButton";
+import { END_POINT } from "src/config/environment";
 import { appRoute } from "src/config/routeMgt/routePaths";
 import {
   DataSourceItem,
@@ -19,14 +21,22 @@ import { openNotification } from "src/utils/notification";
 
 export interface IPortfolioProps {
   searchTerm: string;
+  roleId?: number;
+  status?: string;
 }
 
-export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
+export const AuditPortfolio: React.FC<IPortfolioProps> = ({
+  searchTerm,
+  roleId,
+  status,
+}) => {
   const { onChange, pagination } = usePagination();
   const debouncedSearchTerm: string = useDebounce<string>(searchTerm);
   const { data, isLoading } = useFetchApplicantsByRole({
     pagination,
     search: debouncedSearchTerm,
+    role_id: roleId,
+    status: status,
   });
   const [dataArray, setDataArray] = useState<DataSourceItem[] | []>([]);
   const { mutate } = useAcceptApplicant();
@@ -45,7 +55,7 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
           applicantName: capitalizeName(item.applicant_name),
           country: item.country,
           programType: item.program_type,
-          numberOfDependents: item.no_of_dependents,
+          // numberOfDependents: item.no_of_dependents,
           validatedDocuments: item.validated,
           applicationStage: item.process,
           reviewStatus: item.status,
@@ -117,25 +127,25 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       key: "3",
     },
     {
-      title: "Country",
+      title: "Country Program",
       dataIndex: "country",
       key: "4",
     },
+    // {
+    //   title: "Program Type",
+    //   dataIndex: "programType",
+    //   key: "5",
+    // },
     {
-      title: "Program Type",
-      dataIndex: "programType",
-      key: "5",
-    },
-    {
-      title: "Investment Route",
+      title: "Route Name",
       dataIndex: "investmentRoute",
       key: "6",
     },
-    {
-      title: "Number Of Dependents",
-      dataIndex: "numberOfDependents",
-      key: "7",
-    },
+    // {
+    //   title: "Number Of Dependents",
+    //   dataIndex: "numberOfDependents",
+    //   key: "7",
+    // },
     {
       title: "Application Stage",
       dataIndex: "applicationStage",
@@ -160,23 +170,28 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
             trigger={["click"]}
             overlay={
               <Menu>
-                <Menu.Item
-                  key="1"
-                  onClick={() => {
-                    setApplicantId(val.key as unknown as number);
-                    // setOpenAcceptConfirm(true);
-                  }}
-                >
-                  <Popconfirm
-                    title="Accept Applicant"
-                    description={`Are you sure to accept ${val.applicantName}'s application?`}
-                    onConfirm={() => acceptApplicant()}
-                    okType="default"
-                    // open={openAcceptConfirm}
+                {status === "internal" && (
+                  <Menu.Item
+                    key="1"
+                    onClick={() => {
+                      setApplicantId(val.key as unknown as number);
+                      // setOpenAcceptConfirm(true);
+                    }}
                   >
-                    Accept Applicant
-                  </Popconfirm>
-                </Menu.Item>
+                    <Popconfirm
+                      title="Accept Applicant"
+                      description={`Are you sure to accept ${val.applicantName}'s application?`}
+                      onConfirm={() => acceptApplicant()}
+                      okType="default"
+                      // open={openAcceptConfirm}
+                    >
+                      Accept Applicant
+                    </Popconfirm>
+                  </Menu.Item>
+                )}
+                {status === "external" && (
+                  <Menu.Item key="8">Reason for review</Menu.Item>
+                )}
                 <Menu.Item key="2">
                   <Link
                     to={
@@ -197,42 +212,75 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
                     View Uploaded Documents
                   </Link>
                 </Menu.Item>
-                <Menu.Item
-                  key="4"
-                  onClick={() => {
-                    setApplicantId(val.key as unknown as number);
-                    // setOpenApproveConfirm(true);
-                  }}
-                >
-                  <Popconfirm
-                    title="Approve"
-                    description={`Are you sure to approve ${val.applicantName}'s application?`}
-                    onConfirm={approveApplicant}
-                    okType="default"
-                    // open={openApproveConfirm}
+                <Menu.Item key="9">
+                  <Link
+                    to={
+                      appRoute.timeline_extensions(val.key as unknown as number)
+                        .path
+                    }
                   >
-                    Approve
-                  </Popconfirm>
+                    Timeline Extensions
+                  </Link>
                 </Menu.Item>
+                {status === "internal" && (
+                  <Menu.Item
+                    key="4"
+                    onClick={() => {
+                      setApplicantId(val.key as unknown as number);
+                      // setOpenApproveConfirm(true);
+                    }}
+                  >
+                    <Popconfirm
+                      title="Approve"
+                      description={`Are you sure to approve ${val.applicantName}'s application?`}
+                      onConfirm={approveApplicant}
+                      okType="default"
+                      // open={openApproveConfirm}
+                    >
+                      Approve
+                    </Popconfirm>
+                  </Menu.Item>
+                )}
 
-                <Menu.Item
-                  key="5"
-                  onClick={() => {
-                    setApplicantId(val.key as unknown as number);
-                    // setOpenRejectConfirm(true)
-                  }}
-                >
-                  <Popconfirm
-                    title="Reject"
-                    description={`Are you sure to reject ${val.applicantName}'s application?`}
-                    onConfirm={rejectApplicant}
-                    okType="default"
-                    // open={openRejectConfirm}
+                {status === "internal" && (
+                  <Menu.Item
+                    key="5"
+                    onClick={() => {
+                      setApplicantId(val.key as unknown as number);
+                      // setOpenRejectConfirm(true)
+                    }}
                   >
-                    Reject
-                  </Popconfirm>
-                </Menu.Item>
-                <Menu.Item key="6">Submit to International Partners</Menu.Item>
+                    <Popconfirm
+                      title="Reject"
+                      description={`Are you sure to reject ${val.applicantName}'s application?`}
+                      onConfirm={rejectApplicant}
+                      okType="default"
+                      // open={openRejectConfirm}
+                    >
+                      Reject
+                    </Popconfirm>
+                  </Menu.Item>
+                )}
+
+                {status === "internal" && (
+                  <Menu.Item key="6">
+                    Submit to International Partners
+                  </Menu.Item>
+                ) }
+
+                {status === "external" && (
+                  <Menu.Item key="7">Mark as resolved</Menu.Item>
+                )}
+
+                {status === "submitted" && (
+                  <Menu.Item key="10">View softcopy passport</Menu.Item>
+                )}
+                {status === "submitted" && (
+                  <Menu.Item key="11">Submit softcopy passport</Menu.Item>
+                )}
+                {status === "submitted" && (
+                  <Menu.Item key="12">Mark as completed</Menu.Item>
+                )}
               </Menu>
             }
           >
@@ -242,32 +290,46 @@ export const AuditPortfolio: React.FC<IPortfolioProps> = ({ searchTerm }) => {
       ),
     },
   ];
+  const [selectedRows, setSelectedRows] = useState<any>([]);
 
-  // const handleClose = () => {
-  //   setOpenSubmitModal(false);
-  // };
+  const handleRowSelectionChange = (
+    selectedRows: any
+  ) => {
+ 
+    setSelectedRows(selectedRows);
+  };
+
+  
+  const renderActionButton = () => {
+    if (selectedRows.length > 0) {
+      return (
+        <a
+          href={`${END_POINT.BASE_URL}/admin/application/data/export`}
+          target="_blank"
+          download="Applicants information"
+          rel="noopener noreferrer"
+        >
+          <AppButton label="Export" variant="transparent" />
+        </a>
+      );
+    } 
+  };
 
   return (
     <>
-      {/* <div className="mt-6 py-4 border rounded-md border-[rgba(229, 231, 235, 1)]">
-        <div className="flex gap-2 sm:gap-4 flex-col sm:flex-row sm:items-start items-center sm:pl-5">
-          <Input.Search
-            placeholder="Search"
-            className=" w-52"
-            onSearch={(val) => setSearchTerm(val)}
-            onChange={(e) => e.target.value === "" && setSearchTerm("")}
-          />
-        </div>
-      </div> */}
-
+      {renderActionButton()}
       <Table
         columns={columns}
         dataSource={dataArray}
-        scroll={{ x: 700 }}
-        loading={isLoading}
         className="bg-white rounded-md shadow border mt-2"
+        scroll={{ x: 600 }}
+        loading={isLoading}
         pagination={{ ...pagination, total: data?.total }}
         onChange={onChange}
+        rowSelection={{
+          type: "checkbox",
+          onChange: handleRowSelectionChange,
+        }}
       />
     </>
   );

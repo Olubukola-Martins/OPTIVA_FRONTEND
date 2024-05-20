@@ -49,7 +49,6 @@ const Meetings = () => {
   const queryClient = useQueryClient();
   const [newForm] = useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  // const [iEditsModalVisible, setIsEditModalVisible] = useState(false);
   const { userInfo } = useGetUserInfo();
   const {
     data: userEvents,
@@ -157,7 +156,6 @@ const Meetings = () => {
 
   useEffect(() => {
     setNewFetch(refetch());
-    // if (editLoading) { refetch(); };
   }, [editLoading])
   
   

@@ -3,7 +3,7 @@ import { END_POINT } from "src/config/environment";
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { useQuery } from "react-query";
 
-export const QUERY_KEY_ELIGIBLE_DEPENDENTS = "EligibleDependents";
+export const QUERY_KEY_ELIGIBLE_DEPENDENTS = "EligibleDependents"; 
 
 const getData = async (props: { token: string }):Promise<IDependent[]> => {
   const url = `${END_POINT.BASE_URL}/admin/eligible-dependant`;

@@ -33,7 +33,7 @@ export const UploadProofofPaymentModal = (props: IModalProps) => {
             description: error.response.data.message,
             duration: 5,
           });
-          form.resetFields();
+
         },
         onSuccess: (res: any) => {
           console.log("success", res);

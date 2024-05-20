@@ -5,21 +5,32 @@ import { useFetchUserProfile } from "src/ExtraSettings/hooks/useFetchUserProfile
 
 export interface IRoleTabProps {
   onRoleSelect: (role: number) => void;
+  selectedRole?: number;
+  status?: string;
 }
 
-export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
+export const AuditTab: React.FC<IRoleTabProps> = ({
+  onRoleSelect,
+  selectedRole,
+}) => {
   const { data } = useFetchUserProfile();
   const [searchTerm, setSearchTerm] = useState<string>("");
-  
+  const [status, setStatus] = useState<string>("");
+
   const tabItems: {
     label: string;
     children: React.ReactNode;
     key: string;
   }[] = [
-  
     {
-      label: "All Applicants",
-      children:  <AuditPortfolio searchTerm={searchTerm} />,
+      label: "All Clients",
+      children: (
+        <AuditPortfolio
+          searchTerm={searchTerm}
+          roleId={selectedRole}
+          status={status}
+        />
+      ),
       key: "MyPortfolio",
     },
   ];
@@ -42,54 +53,55 @@ export const AuditTab: React.FC<IRoleTabProps> = ({ onRoleSelect }) => {
                 placeholder="Role"
                 className="md:flex hidden w-[250px]"
                 onChange={onRoleSelect}
+                value={selectedRole}
                 options={[
                   {
-                    value: 1,
-                    label: `DR's List`,
-                  },
-                  {
-                    value: 2,
-                    label: `DPO's List`,
-                  },
-                  {
-                    value: 3,
-                    label: `DMS's List`,
+                    value: 6,
+                    label: "DR's List",
                   },
                   {
                     value: 4,
-                    label: `Audit's List`,
+                    label: "DPO's List",
+                  },
+                  {
+                    value: 3,
+                    label: "DMS's List",
                   },
                   {
                     value: 5,
-                    label: `Operations  List`,
+                    label: "Audit's List",
                   },
                   {
-                    value: 6,
-                    label: `Service Manager's  List`,
+                    value: 1,
+                    label: "Operations List",
                   },
                   {
-                    value: 7,
-                    label: `Customer Engager's  List`,
+                    value: 2,
+                    label: "Service Manager's List",
+                  },
+                  {
+                    value: 9,
+                    label: "Customer Engager's List",
                   },
                 ]}
               />
             )}
-
             <Select
               allowClear
               placeholder="Filter"
               className="md:flex hidden w-[250px]"
+              onChange={(val) => setStatus(val)}
               options={[
                 {
-                  value: `1`,
+                  value: "internal",
                   label: `Internal Review`,
                 },
                 {
-                  value: `2`,
+                  value: "external",
                   label: `External Review`,
                 },
                 {
-                  value: `3`,
+                  value: "submitted",
                   label: `Submitted to Partners`,
                 },
               ]}

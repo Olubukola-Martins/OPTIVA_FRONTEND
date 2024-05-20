@@ -120,7 +120,7 @@ export const NewApplicationModal: React.FC<INewApplicationProps> = ({
             </div>
             <div>
               <h2 className="py-1">
-                Which investment route is the applicant interested in?
+                Which route name is the applicant interested in?
               </h2>
               <Form.Item
                 rules={generalValidationRules}

@@ -6,7 +6,7 @@ import { IAuditApproveOrRejectDoc } from "../../types/types";
 
 const postData = async (props: IAuditApproveOrRejectDoc) => {
     const token = useGetToken();
-    const url = `${END_POINT.BASE_URL}/admin/uupdate-audit-status`;
+    const url = `${END_POINT.BASE_URL}/admin/update-audit-status`;
   
     const config = {
       headers: {

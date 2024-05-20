@@ -4,8 +4,9 @@ import { END_POINT } from "src/config/environment";
 import { useGetToken } from "src/hooks/useGetToken";
 import { paginationAndFilterProps } from "src/types";
 import { IActiveAndInactiveApplications } from "../../types/types";
+import { QUERY_KEY_FOR_APPLICATIONS } from "./useGetApplication";
 
-export const QUERY_KEY_FOR_EMPLOYEES = "employees";
+
 
 const getData = async (
   props: paginationAndFilterProps
@@ -20,7 +21,7 @@ const getData = async (
       Authorization: `Bearer ${token}`,
     },
     params: {
-      name: search,
+      q: search,
       page: pagination?.current,
       limit: pagination?.pageSize,
     },
@@ -34,9 +35,8 @@ const getData = async (
 
   const ans = {
     data,
-    total: res.data.meta.total,
+    total: res.data.data.total,
   };
-
   return ans;
 };
 
@@ -46,7 +46,7 @@ export const useFetchActiveandInactiveApplicant = ({
   currentUrl,
 }: paginationAndFilterProps = {}) => {
   const queryData = useQuery(
-    [QUERY_KEY_FOR_EMPLOYEES, pagination, search, currentUrl],
+    [QUERY_KEY_FOR_APPLICATIONS, pagination, search, currentUrl],
     () => getData({ pagination, search, currentUrl }),
     {
       onError: () => {},

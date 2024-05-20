@@ -1,12 +1,11 @@
 import {
   Checkbox,
   DatePicker,
-  // DatePicker,
   Empty,
   Form,
   Input,
   InputNumber,
-  Select,
+  Radio,
   Skeleton,
 } from "antd";
 import { AppButton } from "src/components/button/AppButton";
@@ -16,8 +15,11 @@ import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useQueryClient } from "react-query";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
-// import { generalValidationRules } from "src/utils/formHelpers/validations";
 import React from "react";
+import {
+  generalValidationRules,
+  generalValidationRulesOpt,
+} from "src/utils/formHelpers/validations";
 
 export interface IProps {
   onNext: () => void;
@@ -28,16 +30,29 @@ export const renderInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "text_input") {
     return <Input className="w-1/2" />;
   } else if (inputType === "select") {
+    // return (
+    //   <div className="w-1/2">
+    //     <Select
+    //       className="w-1/2"
+    //       value={selectedOption} // Set the value of the Select component
+    //       onChange={(value) => setSelectedOption(value)} // Handle onChange event to update the selectedOption state
+    //     >
+    //       {options?.map((option, index) => (
+    //         <Select.Option key={index} value={option}>
+    //           {option.charAt(0).toUpperCase() + option.slice(1)}
+    //         </Select.Option>
+    //       ))}
+    //     </Select>
+    //   </div>
+    // );
     return (
-      <div className="w-1/2">
-        <Select className="w-1/2">
-          {options?.map((option, index) => (
-            <Select.Option key={index} value={option}>
-              {option.charAt(0).toUpperCase() + option.slice(1)}
-            </Select.Option>
-          ))}
-        </Select>
-      </div>
+      <Radio.Group className="w-full">
+        {options?.map((option, index) => (
+          <Radio key={index} value={option}>
+            {option.charAt(0).toUpperCase() + option.slice(1)}
+          </Radio>
+        ))}
+      </Radio.Group>
     );
   } else if (inputType === "check_box") {
     return (
@@ -52,14 +67,13 @@ export const renderInput = (inputType: string, options?: any[]) => {
   } else if (inputType === "number_input") {
     return <InputNumber className="w-1/2" />;
   } else if (inputType === "date_input") {
-    return <DatePicker className="w-1/2" format="YYYY-MM-DD"/>;
+    return <DatePicker className="w-1/2" format="YYYY-MM-DD" />;
   }
 };
 
 export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
   const { sharedData } = useGlobalContext();
   const { data, isLoading } = useGetSingleQuestion({
-
     id: sharedData.templateId as unknown as number,
     endpointUrl: "section-one",
   });
@@ -68,10 +82,12 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
     isLoading: postLoading,
     isSuccess,
   } = useCreateApplicationResponse("sectiononeresponse");
+
   const queryClient = useQueryClient();
 
   const [form] = Form.useForm();
   const handleSubmit = (val: any) => {
+    console.log("form vals", val);
     const applicationId = sharedData.applicantId as unknown as number;
 
     const payload = {
@@ -121,7 +137,11 @@ export const NewApplicantBrief: React.FC<IProps> = ({ onNext }) => {
               <div className="w-full">
                 <Form.Item
                   name={item.schema_name}
-                  // rules={generalValidationRules}
+                  rules={
+                    item.is_required === 1
+                      ? generalValidationRules
+                      : generalValidationRulesOpt
+                  }
                   label={
                     item.form_question.charAt(0).toUpperCase() +
                     item.form_question.slice(1)

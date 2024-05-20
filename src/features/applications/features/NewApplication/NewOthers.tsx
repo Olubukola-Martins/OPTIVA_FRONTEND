@@ -7,6 +7,7 @@ import { useQueryClient } from "react-query";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_APPLICATIONS } from "../../hooks/Application hooks/useGetApplication";
 import { useGlobalContext } from "src/stateManagement/GlobalContext";
+import { generalValidationRules, generalValidationRulesOpt } from "src/utils/formHelpers/validations";
 
 export const NewOthers = () => {
   const { sharedData } = useGlobalContext();
@@ -74,7 +75,8 @@ export const NewOthers = () => {
               <div className="w-full">
                 <Form.Item
                   name={item.schema_name}
-                  // rules={generalValidationRules}
+                  rules={item.is_required === 1 ? generalValidationRules : generalValidationRulesOpt}
+                   
                   label={
                     item.form_question.charAt(0).toUpperCase() +
                     item.form_question.slice(1)

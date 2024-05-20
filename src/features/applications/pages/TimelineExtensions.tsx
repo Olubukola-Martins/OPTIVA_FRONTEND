@@ -8,7 +8,6 @@ import {
   Input,
   Menu,
   Modal,
-  Select,
   Table,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
@@ -305,17 +304,17 @@ const TimelineExtensions = () => {
         <AppButton label="Request Extension" handleClick={showRequestModal} />
       </div>
 
-      <div className="bg-white rounded-md shadow border mt-8 p-4">
-        <div className="flex items-center gap-5 w-1/2 p-4">
+      <div>
+        {/* <div className="flex items-center gap-5 w-1/2 p-4">
           <Input.Search className="w-1/3" placeholder="Search" />
           <Select className="w-1/3" placeholder="Filter" />
-        </div>
+        </div> */}
         <Table
           columns={columns}
           dataSource={dataArray}
           scroll={{ x: 600 }}
           loading={isLoading}
-         
+          className="bg-white rounded-md shadow border mt-2"
         />
       </div>
     </>
