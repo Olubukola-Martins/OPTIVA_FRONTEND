@@ -1,16 +1,17 @@
 import { Form, Select } from "antd";
+import { SelectProps } from "antd/lib/select";
 import { useEffect, useState } from "react";
 import { useGetCountry } from "src/features/settings/features/program-types/hooks/useGetCountry";
 import { generalValidationRules, generalValidationRulesOpt } from "src/utils/formHelpers/validations";
 
-interface IProps {
-    multiple?: true;
-    extraStyles?: string;
-    name?: string;
-    label?: string;
-    hideLabel?: boolean;
-    optionalField?: boolean;
-  }
+interface IProps extends SelectProps<any> {
+  multiple?: true;
+  extraStyles?: string;
+  name?: string;
+  label?: string;
+  hideLabel?: boolean;
+  optionalField?: boolean;
+}
   
 
 const FormItemCountry = ({
@@ -19,7 +20,8 @@ const FormItemCountry = ({
     label,
     name,
     hideLabel,
-    optionalField=true,
+  optionalField = true,
+    ...restProps
   }: IProps) => {
     const [allCountriesData, setAllCountriesData] = useState<{
         value: number;
@@ -39,23 +41,20 @@ const {data,isLoading} = useGetCountry();
     
   return (
     <Form.Item
-    className={`${extraStyles}`}
-    name={name ? name : "country"}
-    label={label ? label : "Select Country"}
-    noStyle={hideLabel}
-    rules={
-      optionalField ? generalValidationRulesOpt : generalValidationRules
-    }
->
-    <Select           
-          mode={multiple ? "multiple" : undefined}
-          options={allCountriesData}
-          loading={isLoading}
->
-    </Select>
-  </Form.Item>
-
-  )
+      name={name ? name : "country"}
+      label={label ? label : "Select Country"}
+      noStyle={hideLabel}
+      rules={optionalField ? generalValidationRulesOpt : generalValidationRules}
+    >
+      <Select
+        mode={multiple ? "multiple" : undefined}
+        options={allCountriesData}
+        loading={isLoading}
+        className={`${extraStyles}`}
+        {...restProps}
+      ></Select>
+    </Form.Item>
+  );
 }
 
 export default FormItemCountry

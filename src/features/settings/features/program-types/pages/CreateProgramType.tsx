@@ -7,7 +7,6 @@ import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { openNotification } from "src/utils/notification";
 import { QUERY_KEY_FOR_PROGRAM_TYPE } from "../hooks/useGetProgramType";
 import { useQueryClient } from "react-query";
-import { useGetEligibleDependent } from "../hooks/useGetEligibleDependent";
 import type { SelectProps } from "antd";
 import { useGetDocumentRequirement } from "../hooks/useGetDocumentRequirement";
 import { useGetApplicationTemplate } from "../../appTemplate/hooks/useGetApplicationTemplate";
@@ -19,28 +18,20 @@ import {
   textInputValidationRules,
   textInputValidationRulesOpt,
 } from "src/utils/formHelpers/validations";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import FormItemDependents from "../../dependents/components/FormItemDependents";
 
 const CreateProgramType = () => {
   const [form] = Form.useForm();
   const { token } = useGetUserInfo();
   const queryClient = useQueryClient();
   const { mutate, isLoading: postLoading } = usePostProgramType();
-  const { data: dependentData } = useGetEligibleDependent();
   const { data: documentData } = useGetDocumentRequirement();
   const { data: applicationData } = useGetApplicationTemplate();
   const { data: milestoneData } = useGetMilestone();
   const { data: workflowData } = useGetWorkflow();
   const { data: countryData } = useGetCountry();
   const navigate = useNavigate();
-
-  // DEPENDENT OPTION
-  const dependentOptions: SelectProps["options"] =
-    dependentData?.map((item) => ({
-      value: item.id,
-      label: item.dependant,
-      key: item.id,
-    })) || [];
 
   // DOCUMENT OPTION
   const documentOptions: SelectProps["options"] =
@@ -112,7 +103,7 @@ const CreateProgramType = () => {
           });
           queryClient.invalidateQueries([QUERY_KEY_FOR_PROGRAM_TYPE]);
           form.resetFields();
-          navigate(appRoute.countryMilestonesProgram)
+          navigate(appRoute.countryMilestonesProgram);
         },
       }
     );
@@ -149,14 +140,13 @@ const CreateProgramType = () => {
               >
                 <Input />
               </Form.Item>
-
-              <Form.Item
+              <FormItemDependents
+                multiple={true}
+                allowClear={true}
+                optionalField={false}
                 label="Eligible Dependents"
                 name="eligibleDependents"
-                rules={generalValidationRules}
-              >
-                <Select mode="multiple" allowClear options={dependentOptions} />
-              </Form.Item>
+              />
               <Form.Item
                 label="Application Template"
                 name="applicationTemplate"

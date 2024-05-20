@@ -8,7 +8,7 @@ import {
   generalValidationRules,
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
-import { QUERY_KEY_ELIGIBLE_DEPENDENTS, eligibleDependentURL } from "../../dependents/hooks/useCreateEligibleDependents";
+import FormItemDependents from "../../dependents/components/FormItemDependents";
 
 interface IProps extends IdentifierProps {
   docType: string;
@@ -28,19 +28,6 @@ export const AddDocument = ({
       queryKey: "DocumentCategory",
       urlEndPoint: `${END_POINT.BASE_URL}/admin/document-category`,
     });
-  const { data: allDependentsData, isLoading: allDependentsLoading } =
-    useFetchAllItems({
-      queryKey: QUERY_KEY_ELIGIBLE_DEPENDENTS,
-      urlEndPoint: eligibleDependentURL,
-    });
-  // useEffect(() => {
-  //   if (
-  //     allDocRequirementData?.data &&
-  //     Array.isArray(allDocRequirementData?.data)
-  //   ) {
-  //     const responseData = allDocRequirementData.data;
-  //   }
-  // }, []);
   return (
     <Modal
       open={open}
@@ -78,27 +65,7 @@ export const AddDocument = ({
               allowClear
             />
           </Form.Item>
-          {/* <Form.Item
-            name="type"
-            label="Document type"
-            rules={generalValidationRules}
-          >
-            <Select
-              options={[
-                {
-                  label: "Supporting Document",
-                  value: "supporting",
-                },
-                {
-                  label: "Required Document",
-                  value: "required",
-                },
-              ]}
-              className="w-full"
-              placeholder="Select"
-              allowClear
-            />
-          </Form.Item> */}
+          <FormItemDependents label="Qualifying Dependents" optionalField={ false} multiple={true} />
           <Form.Item
             name="format"
             label="Format"
@@ -120,7 +87,7 @@ export const AddDocument = ({
           </Form.Item>
         </div>
 
-        <Form.Item
+        {/* <Form.Item
           name="dependents"
           label="Qualifying Dependents"
           rules={generalValidationRules}
@@ -140,7 +107,7 @@ export const AddDocument = ({
             allowClear
             placeholder="Select"
           />
-        </Form.Item>
+        </Form.Item> */}
 
         <AppButton type="submit" isLoading={postDocLoading} />
       </Form>

@@ -27,12 +27,12 @@ export const useFetchSingleItem = ({
   itemId,
   queryKey,
   urlEndPoint,
-  // onSuccessAction
+  onSuccess
 }: {
   itemId: number;
   queryKey: string;
   urlEndPoint: string;
-  // onSuccessAction?: any;
+  onSuccess?: ()=>void;
 }) => {
   // const queryClient = useQueryClient();
   const queryData = useQuery(
@@ -51,8 +51,8 @@ export const useFetchSingleItem = ({
         });
       },
       onSuccess: () => {
+        onSuccess && onSuccess();
         // {onSuccessAction}
-        // queryClient.invalidateQueries([queryKey,itemId])
       },
     }
   );

@@ -25,6 +25,7 @@ export interface INewMeeting {
   link?: string;
   attendees: number[];
   _method?: string;
+  category_id:number
 }
 
 export interface IUserMeetingsData {
@@ -45,6 +46,7 @@ export interface ISingleMeeting {
   link?: any;
   organizer_id: number;
   status: number;
+  category_id:number
   created_at: string;
   updated_at: string;
   attendees: AttendeeData[];
@@ -1065,6 +1067,28 @@ interface Comment {
   comment: string;
   application_id: number;
   user_id: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IMeetingCategoryData {
+  success: boolean;
+  data: IMeetingCategoryDatum[];
+  message: string;
+  meta: string;
+}
+
+export interface ISingleMeetingCategoryData {
+  success: boolean;
+  data: IMeetingCategoryDatum;
+  message: string;
+  meta: string;
+}
+
+export interface IMeetingCategoryDatum {
+  id: number;
+  name: string;
+  description: string;
   created_at: string;
   updated_at: string;
 }

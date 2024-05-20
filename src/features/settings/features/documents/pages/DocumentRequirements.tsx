@@ -87,7 +87,9 @@ const DocumentRequirements = () => {
       document_format: val.format,
       document_size: val.size,
       document_type: docType,
-      eligible_dependants: val.dependents,
+      eligible_dependants: Array.isArray(val.dependents)
+        ? val.dependents
+        : [val.dependents],
       other_requirement: "None",
     });
     handleNewDocumentCancel();
@@ -101,7 +103,9 @@ const DocumentRequirements = () => {
         document_format: val.format,
         document_size: val.size,
         document_type: docType,
-        eligible_dependants: val.dependents,
+        eligible_dependants: Array.isArray(val.dependents)
+          ? val.dependents
+          : [val.dependents],
         other_requirement: "None",
       });
     handleNewDocumentCancel();
@@ -235,14 +239,16 @@ const DocumentRequirements = () => {
   useEffect(() => {
     refetch();
   }, [submitted, editLoading]);
-  const rowSelectionRequiredDoc = {
-    onChange: (_: React.Key[], selectedRows: DataType[]) => {
-      selectedRows.length === 0 || !selectedRows
-        ? setHideDeleteBtn(true)
-        : setHideDeleteBtn(false);
-    },
-    getCheckboxProps: (_: DataType) => ({}),
-  };
+
+  // For the bulk delete button
+  // const rowSelectionRequiredDoc = {
+  //   onChange: (_: React.Key[], selectedRows: DataType[]) => {
+  //     selectedRows.length === 0 || !selectedRows
+  //       ? setHideDeleteBtn(true)
+  //       : setHideDeleteBtn(false);
+  //   },
+  //   getCheckboxProps: (_: DataType) => ({}),
+  // };
 
   // Supporting Documents table
   const columnsSupportDoc: ColumnsType<DataType> = [
@@ -336,10 +342,10 @@ const DocumentRequirements = () => {
           </div>
           <Table
             loading={allDocRequirementLoading}
-            rowSelection={{
-              type: "checkbox",
-              ...rowSelectionRequiredDoc,
-            }}
+            // rowSelection={{
+            //   type: "checkbox",
+            //   ...rowSelectionRequiredDoc,
+            // }}
             className="bg-white rounded-md shadow border mt-8"
             columns={columnsRequiredDoc}
             dataSource={dataRequiredDoc}
@@ -397,7 +403,6 @@ const DocumentRequirements = () => {
     setNewDocumentModal(false);
   };
   const onMenuClick: MenuProps["onClick"] = (e) => {
-    console.log("click", e);
     if (e.key === "required") {
       showNewgDocumentModal();
       setDocType("required");
@@ -428,7 +433,7 @@ const DocumentRequirements = () => {
         }}
         onDelete={() => {
           removeData(currentId as number);
-          setShowDeleteModal(false)
+          setShowDeleteModal(false);
         }}
       />
 
@@ -465,6 +470,7 @@ const DocumentRequirements = () => {
           <Dropdown.Button
             className="bg-secondary rounded-lg w-fit "
             arrow={true}
+            loading={editLoading || postDocLoading}
             icon={
               <DownOutlined className="text-white font-medium hover:text-white" />
             }

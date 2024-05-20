@@ -11,7 +11,7 @@ import {
   Popconfirm,
 } from "antd";
 import dayjs from "dayjs";
-import "../assets/style.css"
+import "../assets/style.css";
 import { AppButton } from "src/components/button/AppButton";
 import { IEvent } from "./Calendar";
 import { useContext, useEffect, useState } from "react";
@@ -24,15 +24,18 @@ import {
   generalValidationRules,
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
-import { MeetingContext, QUERY_KEY_MEETINGS, meetingsURL } from "../pages/Meetings";
+import {
+  MeetingContext,
+  QUERY_KEY_MEETINGS,
+  meetingsURL,
+} from "../pages/Meetings";
 import useEditMeeting from "../hooks/useEditMeeting";
 import { INewMeeting } from "../types/types";
 import { openNotification } from "src/utils/notification";
-import {
-  useQueryClient,
-} from "react-query";
+import { useQueryClient } from "react-query";
 import useRespondToMeeting from "../hooks/useRespondToMeeting";
 import useChangeMeetingStatus from "../hooks/useChangeMeetingStatus";
+import { FormItemMeetingCategory } from "../pages/MeetingCategories";
 
 export interface IMeetingData {
   // id: number;
@@ -45,6 +48,7 @@ export interface IMeetingData {
   link?: string;
   location?: string;
   description: string;
+  category_id: number;
 }
 
 export const NewMeetingModal: React.FC<{
@@ -63,13 +67,21 @@ export const NewMeetingModal: React.FC<{
     <>
       <Modal open={open} title="New Meeting" footer={null} onCancel={onCancel}>
         <Form form={newForm} layout="vertical" onFinish={onCreate}>
-          <Form.Item
-            name="title"
-            label="Meeting Title"
-            rules={textInputValidationRules}
-          >
-            <Input />
-          </Form.Item>
+          <div className="grid grid-cols-2 gap-3">
+            <Form.Item
+              name="title"
+              label="Meeting Title"
+              rules={textInputValidationRules}
+            >
+              <Input />
+            </Form.Item>
+            <FormItemMeetingCategory
+              extraStyles="w-full"
+              optionalField={false}
+              name="category_id"
+              restSelectProps={{ allowClear: true }}
+            />
+          </div>
           <FormEmployeeInput
             control={{ name: "attendees", label: "Attendee(s)" }}
             showLabel={true}
@@ -126,24 +138,20 @@ export const NewMeetingModal: React.FC<{
               label="Start Time"
               name="start_time"
               rules={generalValidationRules}
-              
             >
               <TimePicker
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
-              
               />
             </Form.Item>
             <Form.Item
               label="End Time"
               name="end_time"
               rules={generalValidationRules}
-            
             >
-              <TimePicker 
+              <TimePicker
                 defaultValue={dayjs("00:00:00", "HH:mm:ss")}
                 className="w-full"
-                
               />
             </Form.Item>
           </div>
@@ -264,12 +272,12 @@ export const EditMeetingModal: React.FC<{
   open?: boolean;
   onCancel: () => void;
 }> = ({ currentEvent, open, onCancel }) => {
-  const {  setEditLoading,newfetch } = useContext(MeetingContext);
+  const { setEditLoading, newfetch } = useContext(MeetingContext);
   const [typeMeeting, setTypeMeeting] = useState<string>("physical");
   const [meetingId, setMeetingId] = useState<number>(0);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(true);
 
-console.log(editModalVisible)
+  console.log(editModalVisible);
 
   const [editForm] = useForm();
   const queryClient = useQueryClient();
@@ -334,7 +342,10 @@ console.log(editModalVisible)
     return;
   }, [currentEvent, meetingId]);
 
-  useEffect(() => { onCancel(); setEditLoading(editMeetingLoading)}, [editMeetingLoading]);
+  useEffect(() => {
+    onCancel();
+    setEditLoading(editMeetingLoading);
+  }, [editMeetingLoading]);
 
   const handleEdit = (meetingData: IMeetingData) => {
     console.log("edit");
@@ -349,6 +360,7 @@ console.log(editModalVisible)
         title,
         link,
         location,
+        category_id,
       } = meetingData;
       editNewMeeting(
         {
@@ -360,6 +372,7 @@ console.log(editModalVisible)
           title,
           link,
           location,
+          category_id,
           _method: "PUT",
         },
         id
@@ -371,19 +384,27 @@ console.log(editModalVisible)
     <>
       <Modal
         // open={open && editModalVisible}
-        open={open }
+        open={open}
         title="Edit Meeting"
         footer={null}
         onCancel={onCancel}
       >
         <Form form={editForm} layout="vertical" onFinish={handleEdit}>
-          <Form.Item
-            name="title"
-            label="Meeting Title"
-            rules={textInputValidationRules}
-          >
-            <Input />
-          </Form.Item>
+          <div className="grid grid-cols-2 gap-3">
+            <Form.Item
+              name="title"
+              label="Meeting Title"
+              rules={textInputValidationRules}
+            >
+              <Input />
+            </Form.Item>
+            <FormItemMeetingCategory
+              extraStyles="w-full"
+              optionalField={false}
+              name="category_id"
+              restSelectProps={{ allowClear: true }}
+            />
+          </div>
           <FormEmployeeInput
             control={{ name: "attendees", label: "Attendee(s)" }}
             showLabel={true}
@@ -487,9 +508,9 @@ export const MeetingModalActions: React.FC<{
 }> = ({ open, onCancel, currentEvent, userInfo }) => {
   // console.log("useerInfo", userInfo);
   // console.log("currentEvent", currentEvent);
-      // const { newfetch } = useContext(MeetingContext);
+  // const { newfetch } = useContext(MeetingContext);
   const queryClient = useQueryClient();
-  const { mutate,responseLoading } = useRespondToMeeting();
+  const { mutate, responseLoading } = useRespondToMeeting();
   const { changeMeetingStatus } = useChangeMeetingStatus();
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const [cancelModalVisible, setCancelModalVisible] = useState<boolean>(false);
@@ -506,8 +527,6 @@ export const MeetingModalActions: React.FC<{
   const handleAcceptCancel = () => {
     setOpenAcceptModal(false);
   };
-
-  
 
   //Handle meeting response
   const respondMeeting = (meetingId: number, newData: { response: string }) =>
@@ -549,7 +568,6 @@ export const MeetingModalActions: React.FC<{
     }
   };
 
-
   const handleCancelModals = (action: string) => {
     if (action === "viewDetails") {
       setMeetingDetailModalVisible(false);
@@ -569,64 +587,68 @@ export const MeetingModalActions: React.FC<{
 
   return (
     <>
-        <Modal open={open} onCancel={onCancel} footer={null}>
-          <Card size="small" className="my-3 border-0" title="Meeting Actions">
-            <div className="p-1">
-              <button onClick={() => handleMenuClick("viewDetails")}>
-                View Meeting Details
-              </button>
-            </div>
-            {currentEvent.organizer_id === userInfo.id &&
-              currentEvent.status === 0 && (
+      <Modal open={open} onCancel={onCancel} footer={null}>
+        <Card size="small" className="my-3 border-0" title="Meeting Actions">
+          <div className="p-1">
+            <button onClick={() => handleMenuClick("viewDetails")}>
+              View Meeting Details
+            </button>
+          </div>
+          {currentEvent.organizer_id === userInfo.id &&
+            currentEvent.status === 0 && (
+              <div className="p-1">
+                <button
+                  onClick={() => {
+                    setEditModalVisible(true);
+                  }}
+                >
+                  Edit Meeting Details
+                </button>
+              </div>
+            )}
+          {currentEvent.organizer_id === userInfo.id &&
+            currentEvent.status === 0 && (
+              <Popconfirm
+                title="Cancel Meeting"
+                description="Are you sure you would like to cancel this meeting?"
+                onConfirm={() => {
+                  changeMeetingStatus(currentEvent.id, { response: 1 });
+                }}
+                okText="Yes"
+                cancelText="No"
+              >
                 <div className="p-1">
-                  <button onClick={() => {setEditModalVisible(true)}}>
-                    Edit Meeting Details
+                  <button onClick={() => handleMenuClick("cancel")}>
+                    Cancel Meeting
                   </button>
                 </div>
-              )}
-            {currentEvent.organizer_id === userInfo.id &&
-              currentEvent.status === 0 && (
-                <Popconfirm
-                  title="Cancel Meeting"
-                  description="Are you sure you would like to cancel this meeting?"
-                  onConfirm={() => {
-                    changeMeetingStatus(currentEvent.id, { response: 1 });
-                  }}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <div className="p-1">
-                    <button onClick={() => handleMenuClick("cancel")}>
-                      Cancel Meeting
-                    </button>
-                  </div>
-                </Popconfirm>
-              )}
+              </Popconfirm>
+            )}
 
-            {currentEvent.status === 0 && (
-              <div className="p-1">
-                <button
-                  onClick={() => {
-                    respondMeeting(currentEvent.id, { response: "accepted" });
-                  }}
-                >
-                  Accept Meeting
-                </button>
-              </div>
-            )}
-            {currentEvent.status === 0 && (
-              <div className="p-1">
-                <button
-                  onClick={() => {
-                    handleMenuClick("declineMeeting");
-                  }}
-                >
-                  Decline Meeting
-                </button>
-              </div>
-            )}
-          </Card>
-        </Modal>
+          {currentEvent.status === 0 && (
+            <div className="p-1">
+              <button
+                onClick={() => {
+                  respondMeeting(currentEvent.id, { response: "accepted" });
+                }}
+              >
+                Accept Meeting
+              </button>
+            </div>
+          )}
+          {currentEvent.status === 0 && (
+            <div className="p-1">
+              <button
+                onClick={() => {
+                  handleMenuClick("declineMeeting");
+                }}
+              >
+                Decline Meeting
+              </button>
+            </div>
+          )}
+        </Card>
+      </Modal>
       {/* Accept Meeting */}
       <Modal open={openAcceptModal} onCancel={handleAcceptCancel} footer={null}>
         <div className="p-3 flex flex-col items-center gap-5">
@@ -667,13 +689,13 @@ export const MeetingModalActions: React.FC<{
         />
       )}
       {/* {editModalVisible && ( */}
-        <EditMeetingModal
-          currentEvent={currentEvent}
-          open={editModalVisible}
-          onCancel={() => {
-            setEditModalVisible(false);
-          }}
-        />
+      <EditMeetingModal
+        currentEvent={currentEvent}
+        open={editModalVisible}
+        onCancel={() => {
+          setEditModalVisible(false);
+        }}
+      />
       {/* )} */}
       {meetingDeclineVisible && (
         <DeclineMeetingsModal
@@ -691,10 +713,10 @@ export const MeetingModalActions: React.FC<{
 
 export const DeclineMeetingsModal: React.FC<{
   open: boolean;
-  responseLoading:boolean;
+  responseLoading: boolean;
   onCancel: () => void;
   handleResponse: () => void;
-}> = ({ open, onCancel, handleResponse,responseLoading }) => {
+}> = ({ open, onCancel, handleResponse, responseLoading }) => {
   const [form] = Form.useForm();
   const handleSubmit = (val: any) => {
     console.log(val);
