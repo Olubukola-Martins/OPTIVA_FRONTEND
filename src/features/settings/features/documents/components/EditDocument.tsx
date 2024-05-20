@@ -9,10 +9,6 @@ import {
   textInputValidationRules,
 } from "src/utils/formHelpers/validations";
 import {
-  QUERY_KEY_ELIGIBLE_DEPENDENTS,
-  eligibleDependentURL,
-} from "../../dependents/hooks/useCreateEligibleDependents";
-import {
   QUERY_KEY_DOC_REQUIREMENT,
   documentRequirementURL,
 } from "../hooks/useCreateDocumentRequirement";
@@ -52,11 +48,6 @@ export const EditDocument = ({
     useFetchAllItems({
       queryKey: "DocumentCategory",
       urlEndPoint: `${END_POINT.BASE_URL}/admin/document-category`,
-    });
-  const { data: allDependentsData, isLoading: allDependentsLoading } =
-    useFetchAllItems({
-      queryKey: QUERY_KEY_ELIGIBLE_DEPENDENTS,
-      urlEndPoint: eligibleDependentURL,
     });
   const [editForm] = useForm();
   const [data, setData] = useState(singleDocRequirementData);
