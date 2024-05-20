@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Calendar, IEvent } from "../components/Calendar";
 import { PageIntro } from "src/components/PageIntro";
 import { AppButton } from "src/components/button/AppButton";
@@ -8,7 +8,12 @@ import {
 } from "../components/MeetingModals";
 import { IMeetingData } from "../components/MeetingModals";
 import { END_POINT } from "src/config/environment";
-import { QueryObserverResult, RefetchOptions, RefetchQueryFilters, useQueryClient } from "react-query";
+import {
+  QueryObserverResult,
+  RefetchOptions,
+  RefetchQueryFilters,
+  useQueryClient,
+} from "react-query";
 import useAddMeeting from "../hooks/useAddMeeting";
 import { INewMeeting, ISingleMeeting } from "../types/types";
 import { openNotification } from "src/utils/notification";
@@ -18,6 +23,9 @@ import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleIt
 import { useGetUserInfo } from "src/hooks/useGetUserInfo";
 import { Spin } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
+import { appRoute } from "src/config/routeMgt/routePaths";
+import { FormItemMeetingCategory } from "./MeetingCategories";
 
 export const QUERY_KEY_MEETINGS = "Meetings";
 export const meetingsURL = `${END_POINT.BASE_URL}/admin/meetings`;
@@ -39,13 +47,13 @@ export const MeetingContext = React.createContext<{
   ): void {
     throw new Error("Function not implemented.");
   },
-  newfetch: ()=>{},
+  newfetch: () => {},
 });
-
-
 
 const Meetings = () => {
   const [editLoading, setEditLoading] = useState(false);
+  // const [url, setUrl] = useState<string>(`${meetingsURL}/user`);
+  const [filterValue, setFilterValue] = useState<number | undefined>(undefined);
   const queryClient = useQueryClient();
   const [newForm] = useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -53,15 +61,18 @@ const Meetings = () => {
   const {
     data: userEvents,
     isLoading: userEventsLoading,
-    isFetching: userEventsFetching, refetch
+    isFetching: userEventsFetching,
+    refetch,
   } = useFetchSingleItem({
     itemId: userInfo?.id,
     queryKey: QUERY_KEY_MEETINGS,
-    urlEndPoint: `${meetingsURL}/user`,
+    urlEndPoint: filterValue
+      ? `${meetingsURL}/category/${filterValue}`
+      : `${meetingsURL}/user`,
+    // url,
   });
   const { mutate, isLoading: newMeetingLoading } = useAddMeeting();
-    const [newfetch, setNewFetch] = useState(refetch);
-
+  const [newfetch, setNewFetch] = useState(refetch);
 
   const addNewMeeting = (newData: INewMeeting) => {
     mutate(
@@ -106,9 +117,11 @@ const Meetings = () => {
             link,
             start_time,
             title,
-            organizer_id,status
+            organizer_id,
+            status,
+            category_id,
           } = event;
-          
+
           // Splitting the date string to extract year, month, and day
           const [year, month, day] = date.split("-").map(Number);
           // Splitting the time string to extract hour and minute
@@ -147,18 +160,26 @@ const Meetings = () => {
             attendees: allAttendees,
             organizer_id,
             status,
+            category_id,
           };
         }
       );
       setEvents(userEventsList);
     }
-  }, [ userEvents?.data, userInfo, userInfo?.id]);
+  }, [userEvents?.data, userInfo, userInfo?.id]);
+
+  useEffect(() => {
+    console.log("filterValue", filterValue)
+    refetch();
+    // filterValue
+    //   ? setUrl(`${meetingsURL}/category/${filterValue}`)
+    //   : setUrl(`${meetingsURL}/user`);
+  }, [filterValue]);
 
   useEffect(() => {
     setNewFetch(refetch());
-  }, [editLoading])
-  
-  
+  }, [editLoading]);
+
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -167,9 +188,7 @@ const Meetings = () => {
     setIsModalVisible(false);
   };
 
-
   const handleCreateMeeting = (meetingData: IMeetingData) => {
-    console.log("data", meetingData);
     const {
       attendees,
       date,
@@ -179,6 +198,7 @@ const Meetings = () => {
       title,
       link,
       location,
+      category_id,
     } = meetingData;
     addNewMeeting({
       attendees: [...attendees, userInfo.id],
@@ -189,13 +209,15 @@ const Meetings = () => {
       title,
       link,
       location,
+      category_id,
     });
-    // setIsModalVisible(false);
   };
 
   return (
     <>
-      <MeetingContext.Provider value={{ editLoading, setEditLoading , newfetch , setNewFetch}}>
+      <MeetingContext.Provider
+        value={{ editLoading, setEditLoading, newfetch, setNewFetch }}
+      >
         <Spin spinning={userEventsLoading || userEventsFetching} size="large">
           <div className="flex justify-between items-center py-4">
             <PageIntro
@@ -203,7 +225,26 @@ const Meetings = () => {
               title="Meetings"
               description="View  & Create New Bookings"
             />
-            <AppButton label="New Meeting" handleClick={showModal} />
+            <div className="flex gap-4">
+              <Link to={appRoute.meetingCategories}>
+                <AppButton label="Meeting Category" variant="transparent" />
+              </Link>
+              <AppButton label="New Meeting" handleClick={showModal} />
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <FormItemMeetingCategory
+              hideLabel={true}
+              restSelectProps={{
+                allowClear: true,
+                onChange: (val) => {
+                  setFilterValue(val);
+                  
+                },
+              }}
+              placeholder="Filter by Category"
+              extraStyles="mb-4  "
+            />
           </div>
           <Calendar events={events} />
           <NewMeetingModal

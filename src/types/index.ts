@@ -71,3 +71,5 @@ export interface paginationAndFilterProps {
 export interface searchValueProps {
   searchValue: string;
 }
+
+

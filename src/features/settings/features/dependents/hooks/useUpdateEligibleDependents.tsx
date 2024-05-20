@@ -10,7 +10,13 @@ import { openNotification } from "src/utils/notification";
 const useUpdateEligibleDependents = () => {
   const { mutate, isLoading, isSuccess } = useMutation(editItemData);
   const queryClient = useQueryClient();
-  const editEligibleDependents = (id: number, newData: IDependentsBody) => {
+
+  const editEligibleDependents = (
+    id: number,
+    newData: IDependentsBody,
+    onSuccess?: () => void,
+    onError?: () => void
+  ) => {
     mutate(
       { newData, id, url: eligibleDependentURL },
       {
@@ -21,6 +27,7 @@ const useUpdateEligibleDependents = () => {
             description: error.response.data.message,
             duration: 5,
           });
+          onError && onError()
         },
         onSuccess: (response: any) => {
           openNotification({
@@ -29,6 +36,7 @@ const useUpdateEligibleDependents = () => {
             state: "success",
           });
           queryClient.refetchQueries([QUERY_KEY_ELIGIBLE_DEPENDENTS]);
+          onSuccess && onSuccess();
         },
       }
     );

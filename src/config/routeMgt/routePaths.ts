@@ -133,6 +133,7 @@ export const appRoute = {
 
   // Meetings
   meetings: `/meetings`,
+  meetingCategories: `/meetingCategories`,
 
   // ROLES
   send_email: (id?: number, emailId?: number) => ({

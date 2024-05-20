@@ -28,6 +28,7 @@ export interface IEvent {
   color?: string;
   editable?: boolean;
   status: number;
+  category_id: number;
 }
 
 interface Attendee {

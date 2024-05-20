@@ -7,9 +7,9 @@ import { TablePaginationConfig } from "antd";
 const getData = async (props: {
   token: string;
   urlEndPoint: string;
-  pagination?:TablePaginationConfig;
+  pagination?: TablePaginationConfig;
   search?: string;
-  otherParams?:{ [key: string]: any }
+  otherParams?: { [key: string]: any };
 }): Promise<any> => {
   const url = `${props.urlEndPoint}`;
   const config = {
@@ -21,31 +21,35 @@ const getData = async (props: {
       name: props.search,
       page: props.pagination?.current,
       limit: props.pagination?.pageSize,
-      ...props.otherParams
+      ...props.otherParams,
     },
   };
 
   const res = await axios.get(url, config);
-    const item: any = res.data;
+  const item: any = res.data;
   return item;
 };
 
 export const useFetchAllItems = ({
   queryKey,
-  urlEndPoint,pagination, search,otherParams
+  urlEndPoint,
+  pagination,
+  search,
+  otherParams,
+  onSuccess,
 }: {
   queryKey: string;
   urlEndPoint: string;
-  pagination?: TablePaginationConfig; 
-  search?:string,
-  otherParams?:{ [key: string]: any }
+  pagination?: TablePaginationConfig;
+  search?: string;
+  otherParams?: { [key: string]: any };
+  onSuccess?: () => void;
 }) => {
   const { token } = useGetUserInfo();
   const otherParamValues = otherParams ? Object.values(otherParams) : [];
-    const queryData = useQuery(
-
-    [queryKey,pagination,...otherParamValues, search],
-    () => getData({ token, urlEndPoint,pagination, search , otherParams}),
+  const queryData = useQuery(
+    [queryKey, pagination, ...otherParamValues, search],
+    () => getData({ token, urlEndPoint, pagination, search, otherParams }),
     {
       onError: (error: any) => {
         openNotification({
@@ -56,7 +60,7 @@ export const useFetchAllItems = ({
         });
       },
       onSuccess: () => {
-
+        onSuccess && onSuccess();
       },
     }
   );

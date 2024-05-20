@@ -20,6 +20,7 @@ import { useFetchSingleItem } from "src/features/settings/hooks/useFetchSingleIt
 import { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { ISingleDocRequirement } from "src/features/settings/types/settingsType";
+import FormItemDependents from "../../dependents/components/FormItemDependents";
 
 interface IProps extends IdentifierProps {
   docType: string;
@@ -153,8 +154,13 @@ export const EditDocument = ({
             <InputNumber addonAfter="mb" min={1} max={20} className="w-full" />
           </Form.Item>
         </div>
+        <FormItemDependents
+          label="Qualifying Dependents"
+          optionalField={false}
+          multiple={true}
+        />
 
-        <Form.Item
+        {/* <Form.Item
           name="dependents"
           label="Qualifying Dependents"
           rules={generalValidationRules}
@@ -174,7 +180,7 @@ export const EditDocument = ({
             allowClear
             placeholder="Select"
           />
-        </Form.Item>
+        </Form.Item> */}
 
         <AppButton type="submit" isLoading={editLoading} />
       </Form>
